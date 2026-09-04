@@ -1,0 +1,17 @@
+# Dependências do Tailwind (reinstale com `npm install`)
+node_modules/
+
+# Configuração local do Claude Code, específica desta máquina
+.claude/settings.local.json
+
+# Sistema operacional / editores
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# NOTA: assets/css/app.css é gerado pelo Tailwind, mas vai versionado de
+# propósito — assim o site funciona ao subir num host PHP simples, sem
+# precisar rodar o build lá. Regere com `npm run build`.

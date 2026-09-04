@@ -1,0 +1,394 @@
+/* =============================================================
+   Dolce Delicias - folha de entrada do Tailwind CSS v4
+   Compile com:  npx @tailwindcss/cli -i assets/css/input.css -o assets/css/app.css --watch
+   ============================================================= */
+
+/* source(none) desliga a deteccao automatica de conteudo e deixa as fontes
+   explicitas abaixo -- assim o proprio app.css gerado nunca e escaneado. */
+@import "tailwindcss" source(none);
+
+@source "../../*.php";
+@source "../../partials/**/*.php";
+@source "../../assets/js/**/*.js";
+
+@plugin "daisyui";
+
+/* -------------------------------------------------------------
+   TEMA CLARO -- "dolce"
+   Cores tiradas da placa oval vermelha da marca.
+   ------------------------------------------------------------- */
+@plugin "daisyui/theme" {
+  name: "dolce";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  /* Convencao de superficies (vale para os dois temas):
+       base-100 = chao da pagina      -> body e secoes que casam com o fundo
+       papel    = superficie elevada  -> cards, paineis, dropdown, drawer
+       base-200 = superficie recuada  -> faixa creme, badges, campos
+       base-300 = bordas e divisores decorativos
+       campo    = borda de campo de formulario (contraste AA 3:1) */
+  --color-base-100: #ffffff; /* fundo padrao do site */
+  --color-base-200: #f9efe1; /* faixa creme suave */
+  --color-base-300: #e8d6bd; /* bordas e divisores */
+  --color-base-content: #2a1710; /* marrom torrado -- texto */
+
+  --color-primary: #e1051e; /* vermelho da placa */
+  --color-primary-content: #ffffff;
+  --color-secondary: #7a2e12; /* marrom assado */
+  --color-secondary-content: #fff6ea;
+  --color-accent: #fce24c; /* amarelo carimbo */
+  --color-accent-content: #2a1710;
+  --color-neutral: #2a1710;
+  --color-neutral-content: #f8e3cd;
+
+  --color-info: #1d4ed8;
+  --color-info-content: #ffffff;
+  --color-success: #1f6f3d;
+  --color-success-content: #ffffff;
+  --color-warning: #9a5b06;
+  --color-warning-content: #ffffff;
+  --color-error: #a4111f;
+  --color-error-content: #ffffff;
+
+  --radius-selector: 2rem; /* badges e toggles viram pilula */
+  --radius-field: 1rem; /* botoes, inputs, tabs */
+  --radius-box: 1rem; /* cards, modais, alertas */
+
+  --size-selector: 0.25rem;
+  --size-field: 0.28125rem; /* alvos de toque um pouco maiores (mobile-first) */
+
+  --border: 1px;
+  --depth: 0; /* sombra propria, definida abaixo -- mais suave que a padrao */
+  --noise: 0;
+}
+
+/* -------------------------------------------------------------
+   TEMA ESCURO -- "dolce-dark"
+   Marrom muito escuro no lugar de preto: mantem o clima de forno.
+   ------------------------------------------------------------- */
+@plugin "daisyui/theme" {
+  name: "dolce-dark";
+  default: false;
+  prefersdark: true;
+  color-scheme: dark;
+
+  /* Mesma convencao do claro. No escuro o card SOBE do fundo (--color-papel
+     e mais claro que base-100); no claro ele so ganha borda e sombra. */
+  --color-base-100: #1a0f0a; /* fundo padrao do site */
+  --color-base-200: #241610; /* faixa recuada */
+  --color-base-300: #432c1e; /* bordas e divisores */
+  --color-base-content: #f6e7d8;
+
+  --color-primary: #e1051e;
+  --color-primary-content: #ffffff;
+  --color-secondary: #e8b48a;
+  --color-secondary-content: #2a1710;
+  --color-accent: #fce24c;
+  --color-accent-content: #2a1710;
+  --color-neutral: #f6e7d8;
+  --color-neutral-content: #1a0f0a;
+
+  --color-info: #7dabff;
+  --color-info-content: #10203f;
+  --color-success: #74d99a;
+  --color-success-content: #0d2a17;
+  --color-warning: #f0bd5c;
+  --color-warning-content: #2b1c02;
+  --color-error: #ff8189;
+  --color-error-content: #2d0407;
+
+  --radius-selector: 2rem;
+  --radius-field: 1rem;
+  --radius-box: 1rem;
+
+  --size-selector: 0.25rem;
+  --size-field: 0.28125rem;
+
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+/* -------------------------------------------------------------
+   TOKENS DA MARCA (Tailwind @theme)
+   Geram utilitarios: bg-brand, text-cream, font-display, shadow-bandeja...
+   ------------------------------------------------------------- */
+@theme {
+  --color-brand: #e1051e;
+  --color-accent: #fce24c;
+  --color-cream: #f8e3cd;
+  --color-ink: #2a1710;
+  --color-crust: #7a2e12;
+  --color-papel: #ffffff; /* superficie elevada: cards, paineis, drawer */
+  --color-campo: #9c8069; /* borda de input/textarea -- 3.4:1 sobre branco */
+  --color-massa: #f3ddc4; /* fundo do placeholder de foto */
+
+  --font-display: "Baloo 2", "Trebuchet MS", ui-rounded, system-ui, sans-serif;
+  --font-sans: "Figtree", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+
+  --radius-bandeja: 1.75rem;
+
+  --shadow-bandeja: 0 1px 2px rgb(42 23 16 / 0.06), 0 12px 28px -14px rgb(42 23 16 / 0.28);
+  --shadow-bandeja-alta: 0 2px 4px rgb(42 23 16 / 0.08), 0 22px 44px -18px rgb(42 23 16 / 0.34);
+
+  --ease-massa: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* No escuro os mesmos tokens mudam de valor: o vermelho puro nao tem contraste
+   suficiente como TEXTO sobre fundo escuro, entao clareia; creme e ink invertem. */
+html[data-theme="dolce-dark"] {
+  --color-brand: #ff5566;
+  --color-cream: #180e09;
+  --color-ink: #f6e7d8;
+  --color-crust: #d9a880;
+  --color-papel: #2e1c13;
+  --color-campo: #a8886c;
+  --color-massa: #3d2718; /* mais claro que o card, para o vazio ser legivel */
+
+  --shadow-bandeja: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 28px -14px rgb(0 0 0 / 0.6);
+  --shadow-bandeja-alta: 0 2px 4px rgb(0 0 0 / 0.5), 0 22px 44px -18px rgb(0 0 0 / 0.7);
+}
+
+/* -------------------------------------------------------------
+   BASE
+   ------------------------------------------------------------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem; /* compensa o header sticky nos links-ancora */
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  h1,
+  h2,
+  h3,
+  .fonte-display {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.015em;
+  }
+
+  /* Foco visivel em tudo -- nunca removido, so substituido. */
+  :focus-visible {
+    outline: 3px solid var(--color-brand);
+    outline-offset: 3px;
+    border-radius: 0.5rem;
+  }
+
+  html[data-theme="dolce-dark"] :focus-visible {
+    outline-color: var(--color-accent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* -------------------------------------------------------------
+   RAIOS -- o motivo da placa oval da marca, virado dispositivo estrutural.
+   Aparece atras do heroi e como divisor de secao.
+   ------------------------------------------------------------- */
+.raios {
+  background-image: repeating-conic-gradient(
+    from 0deg at var(--raios-x, 50%) var(--raios-y, 50%),
+    rgb(255 255 255 / 0.1) 0deg 9deg,
+    transparent 9deg 23deg
+  );
+}
+
+/* Faixa fina de raios usada entre secoes. */
+.faixa-raios {
+  height: 0.875rem;
+  background-color: var(--color-primary);
+  background-image: repeating-linear-gradient(
+    115deg,
+    #fff 0 6px,
+    transparent 6px 22px
+  );
+}
+
+/* -------------------------------------------------------------
+   PLACEHOLDER DE IMAGEM (massa) -- textura enquanto nao ha foto real.
+   ------------------------------------------------------------- */
+.massa {
+  background-color: var(--color-massa);
+  background-image: radial-gradient(
+      circle at 22% 28%,
+      color-mix(in oklab, var(--color-crust) 16%, transparent) 0 2px,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 68% 62%,
+      color-mix(in oklab, var(--color-crust) 14%, transparent) 0 3px,
+      transparent 4px
+    ),
+    radial-gradient(
+      circle at 44% 82%,
+      color-mix(in oklab, var(--color-crust) 12%, transparent) 0 2px,
+      transparent 3px
+    );
+  background-size: 56px 56px, 84px 84px, 68px 68px;
+}
+
+/* -------------------------------------------------------------
+   REVELACAO NO SCROLL (IntersectionObserver em assets/js/ui.js)
+   ------------------------------------------------------------- */
+.revelar {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s var(--ease-massa), transform 0.5s var(--ease-massa);
+}
+
+.revelar.visivel {
+  opacity: 1;
+  transform: none;
+}
+
+/* Sem JS ou com movimento reduzido, o conteudo ja nasce visivel. */
+.sem-js .revelar,
+.revelar.visivel {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .revelar {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* -------------------------------------------------------------
+   PULO DO CARRINHO -- feedback ao adicionar um item.
+   ------------------------------------------------------------- */
+@keyframes pulo-carrinho {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.28) rotate(-6deg);
+  }
+  70% {
+    transform: scale(0.94) rotate(3deg);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pulando {
+  animation: pulo-carrinho 0.45s var(--ease-massa);
+}
+
+/* -------------------------------------------------------------
+   Corta a descricao em 2 linhas nos cards sem depender de plugin.
+   ------------------------------------------------------------- */
+.duas-linhas {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* -------------------------------------------------------------
+   ESCONDER -- unica classe que o JS liga/desliga.
+   Usa !important de proposito: assim nunca briga com o `flex`,
+   `grid` ou `block` que o elemento ja carrega.
+   ------------------------------------------------------------- */
+.oculto {
+  display: none !important;
+}
+
+/* -------------------------------------------------------------
+   CHIP -- botao de filtro do catalogo e seletor de variacao.
+   Vira componente porque se repete uma duzia de vezes.
+   ------------------------------------------------------------- */
+.chip {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  /* 44px de altura: alvo de toque confortavel no celular (WCAG 2.5.5). */
+  min-height: 2.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-base-300);
+  background-color: var(--color-base-200);
+  padding: 0.4375rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--color-crust);
+  transition: background-color 0.18s var(--ease-massa),
+    color 0.18s var(--ease-massa), border-color 0.18s var(--ease-massa);
+}
+
+.chip:hover {
+  border-color: var(--color-brand);
+  color: var(--color-brand);
+}
+
+.chip[aria-pressed="true"] {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary);
+  color: var(--color-primary-content);
+}
+
+/* -------------------------------------------------------------
+   Icones do botao de tema: lua no claro, sol no escuro.
+   ------------------------------------------------------------- */
+html[data-theme="dolce-dark"] .dark-oculta {
+  display: none;
+}
+
+html[data-theme="dolce-dark"] .dark-mostra {
+  display: block;
+}
+
+/* -------------------------------------------------------------
+   Carrossel de chips no celular: rola na horizontal sem mostrar
+   a barra, para a area fixa de filtros nao comer a tela.
+   ------------------------------------------------------------- */
+.sem-barra {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.sem-barra::-webkit-scrollbar {
+  display: none;
+}
+
+/* -------------------------------------------------------------
+   DROPDOWN FECHADO -- o daisyUI deixa o conteudo em
+   display:block/visibility:visible com opacity:0, entao o painel
+   fechado continua ocupando layout e sendo lido pelo leitor de tela
+   (e os botoes dele entram na ordem de tabulacao).
+   Esconder de verdade resolve foco, leitor de tela e layout.
+   ------------------------------------------------------------- */
+details.dropdown:not([open]) > .dropdown-content {
+  display: none;
+}
+
+/* -------------------------------------------------------------
+   MINIATURA -- foto (ou placeholder) do item no carrinho.
+   O icone vem do mesmo SVG usado no card; so o tamanho muda.
+   ------------------------------------------------------------- */
+.miniatura svg {
+  height: 1.625rem;
+  width: 1.625rem;
+}
