@@ -50,15 +50,17 @@ Os mesmos comandos estão no `package.json`: `npm run dev` (CSS em watch),
 
 ```
 dolce-delicias/
-├── index.php               home: herói, catálogo, como encomendar, unidades
+├── index.php               home: herói, catálogo e como encomendar
+├── unidades.php            uma seção por loja, com âncora #<slug>
 ├── produto.php             página de produto (lê ?slug=), com 404 amigável
 ├── carrinho.php            o pedido em página inteira
 ├── partials/
 │   ├── bootstrap.php       carrega os dados e define os helpers
-│   ├── header.php          abre o documento + topo fixo + seletor de unidade
+│   ├── header.php          abre o documento + topo fixo + menu de catálogos
+│   ├── catalog-menu.php    itens do menu Catálogo (desktop e celular)
 │   ├── footer.php          rodapé + fecha o drawer e o documento
 │   ├── product-card.php    um card do catálogo
-│   ├── unit-card.php       uma loja na seção de unidades
+│   ├── unit-section.php    uma loja inteira em unidades.php
 │   └── cart-drawer.php     carrinho lateral
 ├── data/
 │   ├── products.php        catálogo (return array)
@@ -69,7 +71,7 @@ dolce-delicias/
 │   ├── js/cart.js          estado do carrinho + mensagem do WhatsApp
 │   ├── js/ui.js            tema, unidade, drawer, busca, filtros, reveal, avisos
 │   └── img/                placeholders — veja assets/img/README.md
-├── catalogos/              PDFs por unidade — veja catalogos/README.md
+├── catalogos/              um PDF por unidade + completo.pdf — veja catalogos/README.md
 └── package.json
 ```
 
@@ -123,8 +125,7 @@ faixa e ele manda.
 
 ## Carrinho e WhatsApp
 
-- Estado em `localStorage['dolce_cart']`; unidade em `localStorage['dolce_unit']`;
-  tema em `localStorage['dolce_theme']`.
+- Estado em `localStorage['dolce_cart']`; unidade em `localStorage['dolce_unit']`.
 - `assets/js/cart.js` expõe `addToCart`, `updateQty`, `removeItem`,
   `renderDrawer`, `updateBadge` e `checkout`.
 - Os botões usam **delegação de eventos** num único listener no `document`, então
@@ -175,19 +176,19 @@ Tokens em `assets/css/input.css`:
 
 ### Convenção de superfícies
 
-O fundo padrão do site é **branco**. As quatro camadas valem igual nos dois temas:
+O fundo padrão do site é **branco**. São quatro camadas:
 
-| Token | Claro | Escuro | Onde entra |
-|---|---|---|---|
-| `base-100` | `#FFFFFF` | `#1A0F0A` | chão da página (`body`) e seções que casam com ele |
-| `papel` | `#FFFFFF` | `#2E1C13` | superfície elevada: cards, painéis, dropdown, drawer |
-| `base-200` | `#F9EFE1` | `#241610` | superfície recuada: faixa creme, badges, campos |
-| `base-300` | `#E8D6BD` | `#432C1E` | bordas e divisores decorativos |
-| `campo` | `#9C8069` | `#A8886C` | borda de `input`/`textarea` — precisa de 3:1 (WCAG 1.4.11) |
+| Token | Valor | Onde entra |
+|---|---|---|
+| `base-100` | `#FFFFFF` | chão da página (`body`) e seções que casam com ele |
+| `papel` | `#FFFFFF` | superfície elevada: cards, painéis, dropdown, drawer |
+| `base-200` | `#F9EFE1` | superfície recuada: faixa creme, badges, campos |
+| `base-300` | `#E8D6BD` | bordas e divisores decorativos |
+| `campo` | `#9C8069` | borda de `input`/`textarea` — precisa de 3:1 (WCAG 1.4.11) |
 
-No claro o card é branco sobre branco e se destaca por borda e sombra; no escuro
-ele **sobe** do fundo (`papel` é mais claro que `base-100`). Por isso card usa
-`bg-papel`, e não `bg-base-100` — senão sumiria no tema escuro.
+O card é branco sobre branco e se destaca por borda e sombra. Ele usa
+`bg-papel` (e não `bg-base-100`) para manter separada a ideia de *superfície
+elevada* da de *chão da página*.
 
 O creme não é mais o chão: virou faixa de acento (a seção "Como encomendar", a
 barra de filtros, os placeholders de foto).
@@ -198,16 +199,12 @@ Tipografia: **Baloo 2** nos títulos (redonda, cara de placa de padaria) e
 O motivo dos **raios** da logo vira dispositivo estrutural: `.raios` atrás do
 herói e `.faixa-raios` como divisor de seção.
 
-### Modo escuro
+### Um tema só
 
-Dois temas daisyUI: `dolce` (claro, padrão) e `dolce-dark`. O tema é resolvido
-**antes da primeira pintura** por um script inline no `<head>`, então não há
-flash branco. Segue a preferência do sistema até a pessoa usar o botão de
-alternar no topo — a partir daí a escolha manda e fica salva.
-
-Os tokens de marca trocam de valor no escuro (`html[data-theme="dolce-dark"]`):
-o vermelho puro não tem contraste suficiente como texto sobre fundo escuro, então
-`--color-brand` clareia.
+O site é **somente claro**: um tema daisyUI, `dolce`, fixo em
+`<html data-theme="dolce">`. Não há modo escuro, botão de alternar nem
+`prefers-color-scheme` — os tokens têm um valor único e o `color-scheme: light`
+do tema impede o navegador de escurecer controles nativos.
 
 ---
 
@@ -241,7 +238,7 @@ Todos estão comentados no código com `>>> INTEGRAÇÃO FUTURA <<<`:
 
 ## Acessibilidade
 
-- Contraste AA em texto e componentes, nos dois temas.
+- Contraste AA em texto e componentes.
 - Foco visível em tudo (anel de 3px), nunca removido — só substituído.
 - Drawer com `role="dialog"` e `aria-modal`, fecha no `Esc`, devolve o foco a
   quem abriu e usa `inert` enquanto está fechado.

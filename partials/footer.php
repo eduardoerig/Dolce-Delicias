@@ -47,7 +47,7 @@ $anoAtual = date('Y');
           <ul class="mt-4 space-y-2.5 text-sm">
             <li><a class="rounded opacity-80 transition-opacity hover:opacity-100" href="index.php#catalogo">Catálogo</a></li>
             <li><a class="rounded opacity-80 transition-opacity hover:opacity-100" href="index.php#encomendas">Como encomendar</a></li>
-            <li><a class="rounded opacity-80 transition-opacity hover:opacity-100" href="index.php#unidades">Nossas unidades</a></li>
+            <li><a class="rounded opacity-80 transition-opacity hover:opacity-100" href="unidades.php">Nossas unidades</a></li>
             <li><a class="rounded opacity-80 transition-opacity hover:opacity-100" href="carrinho.php">Meu pedido</a></li>
           </ul>
         </nav>

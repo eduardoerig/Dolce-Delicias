@@ -14,13 +14,8 @@ declare(strict_types=1);
 require_once __DIR__ . '/bootstrap.php';
 
 $unidades = dd_unidades();
-$matriz   = $unidades[0] ?? null;
-foreach ($unidades as $u) {
-    if (!empty($u['matriz'])) {
-        $matriz = $u;
-        break;
-    }
-}
+// Matriz primeiro, na mesma ordem usada em unidades.php.
+usort($unidades, static fn (array $a, array $b): int => (int) !empty($b['matriz']) <=> (int) !empty($a['matriz']));
 
 $tituloPagina    ??= 'Dolce Delícias — encomendas de salgados, assados e doces';
 $descricaoPagina ??= 'Padaria e panificadora que atende escolas, faculdades, eventos e encomendas. Peça o cento pelo WhatsApp da unidade mais perto de você.';
@@ -29,10 +24,36 @@ $descricaoPagina ??= 'Padaria e panificadora que atende escolas, faculdades, eve
 $naHome  = basename((string) ($_SERVER['SCRIPT_NAME'] ?? '')) === 'index.php';
 $ancora  = $naHome ? '' : 'index.php';
 
+/**
+ * Itens do menu "Catálogo".
+ * Cada unidade vende alguns produtos diferentes, então há um PDF por loja; o
+ * primeiro item leva à grade do site e o último ao catálogo da rede inteira.
+ * 'arquivo' => false marca o item que navega em vez de baixar.
+ */
+$itensCatalogo = [
+    [
+        'href'    => $ancora . '#catalogo',
+        'texto'   => 'Ver catálogo no site',
+        'arquivo' => false,
+        'tem'     => true,
+    ],
+];
+
+foreach ($unidades as $unidadeMenu) {
+    $itensCatalogo[] = [
+        'href'    => (string) ($unidadeMenu['catalogoPdf'] ?? ''),
+        'texto'   => $unidadeMenu['nome'],
+        'arquivo' => true,
+        'tem'     => dd_tem_pdf($unidadeMenu['catalogoPdf'] ?? null),
+    ];
+}
+
+$pdfCompleto = dd_catalogo_completo();
+
 $menu = [
-    ['href' => $ancora . '#catalogo',   'texto' => 'Catálogo'],
+    ['href' => $ancora . '#catalogo',   'texto' => 'Catálogo', 'catalogos' => true],
     ['href' => $ancora . '#encomendas', 'texto' => 'Encomendas'],
-    ['href' => $ancora . '#unidades',   'texto' => 'Unidades'],
+    ['href' => 'unidades.php',          'texto' => 'Unidades'],
     ['href' => $ancora . '#contato',    'texto' => 'Contato'],
 ];
 ?>
@@ -46,19 +67,9 @@ $menu = [
 <meta name="theme-color" content="#E1051E">
 <link rel="icon" href="/assets/img/logo.svg" type="image/svg+xml">
 
-<!-- Tema antes da primeira pintura: evita o flash branco no modo escuro. -->
-<script>
-  (function () {
-    var raiz = document.documentElement;
-    raiz.classList.remove('sem-js');
-    try {
-      var salvo = localStorage.getItem('dolce_theme');
-      var escuro = salvo ? salvo === 'dolce-dark'
-                         : matchMedia('(prefers-color-scheme: dark)').matches;
-      raiz.dataset.theme = escuro ? 'dolce-dark' : 'dolce';
-    } catch (e) { /* localStorage bloqueado: fica no tema claro */ }
-  })();
-</script>
+<?php // O site tem um tema só (claro). Isto apenas avisa que o JS está vivo:
+      // sem a classe .sem-js, o conteúdo com .revelar já nasce visível. ?>
+<script>document.documentElement.classList.remove('sem-js');</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -104,71 +115,29 @@ $menu = [
           <ul class="flex items-center gap-1">
             <?php foreach ($menu as $item): ?>
               <li>
-                <a href="<?= e($item['href']) ?>"
-                   class="rounded-xl px-3 py-2 text-[0.95rem] font-semibold text-crust transition-colors hover:bg-base-300/60 hover:text-brand">
-                  <?= e($item['texto']) ?>
-                </a>
+                <?php if (!empty($item['catalogos'])): ?>
+                  <?php // Catálogo é dropdown: cada unidade tem o PDF dela. ?>
+                  <details class="dropdown" data-catalog-dropdown>
+                    <summary class="flex cursor-pointer list-none items-center gap-1 rounded-xl px-3 py-2 text-[0.95rem] font-semibold text-crust transition-colors hover:bg-base-300/60 hover:text-brand [&::-webkit-details-marker]:hidden">
+                      <?= e($item['texto']) ?>
+                      <svg class="h-4 w-4 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                    </summary>
+                    <ul class="menu dropdown-content z-[60] mt-2 w-72 gap-0.5 rounded-2xl border border-base-300 bg-papel p-2 shadow-bandeja-alta">
+                      <?php include __DIR__ . '/catalog-menu.php'; ?>
+                    </ul>
+                  </details>
+                <?php else: ?>
+                  <a href="<?= e($item['href']) ?>"
+                     class="block rounded-xl px-3 py-2 text-[0.95rem] font-semibold text-crust transition-colors hover:bg-base-300/60 hover:text-brand">
+                    <?= e($item['texto']) ?>
+                  </a>
+                <?php endif; ?>
               </li>
             <?php endforeach; ?>
           </ul>
         </nav>
 
         <div class="ml-auto flex items-center gap-1.5 sm:gap-2">
-
-          <!-- ----------------------------------------------------------------
-               SELETOR DE UNIDADE
-               <details> nativo: abre/fecha e navega pelo teclado sem JS.
-               A escolha vai para localStorage['dolce_unit'] e define o WhatsApp
-               do checkout e o PDF do catálogo.
-               ---------------------------------------------------------------- -->
-          <details class="dropdown dropdown-end" data-unit-dropdown>
-            <summary
-              class="btn btn-ghost h-11 min-h-11 gap-1.5 rounded-2xl border border-base-300 bg-papel px-2.5 font-semibold shadow-bandeja sm:gap-2 sm:px-3"
-              aria-label="Escolher a unidade que vai atender seu pedido">
-              <svg class="h-[1.15rem] w-[1.15rem] shrink-0 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
-              </svg>
-              <span class="hidden max-w-[9rem] truncate text-sm sm:inline" data-unit-label><?= e($matriz['nome'] ?? 'Escolher unidade') ?></span>
-              <svg class="h-4 w-4 shrink-0 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-            </summary>
-
-            <div class="dropdown-content z-[60] mt-2 w-[19rem] rounded-2xl border border-base-300 bg-papel p-2 shadow-bandeja-alta">
-              <p class="px-3 pb-2 pt-1 text-xs font-semibold text-crust">
-                Qual unidade atende seu pedido?
-              </p>
-              <ul class="menu w-full gap-0.5 p-0" role="listbox" aria-label="Unidades da Dolce Delícias">
-                <?php foreach ($unidades as $unidade): ?>
-                  <li>
-                    <button type="button"
-                            role="option"
-                            aria-selected="false"
-                            data-unit-option="<?= e($unidade['slug']) ?>"
-                            class="flex-col items-start gap-0.5 rounded-xl px-3 py-2 text-left">
-                      <span class="flex w-full items-center gap-2 font-semibold">
-                        <?= e($unidade['nome']) ?>
-                        <?php if (!empty($unidade['matriz'])): ?>
-                          <span class="badge badge-sm border-none bg-accent text-accent-content">matriz</span>
-                        <?php endif; ?>
-                        <svg class="oculto ml-auto h-4 w-4 text-brand" data-unit-check viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 13 4 4L19 7"/></svg>
-                      </span>
-                      <span class="text-xs font-normal text-crust"><?= e($unidade['endereco']) ?></span>
-                    </button>
-                  </li>
-                <?php endforeach; ?>
-              </ul>
-            </div>
-          </details>
-
-          <!-- Alternar claro/escuro -->
-          <button type="button"
-                  data-theme-toggle
-                  class="btn btn-ghost h-11 min-h-11 w-11 rounded-2xl border border-base-300 bg-papel p-0 shadow-bandeja"
-                  aria-pressed="false"
-                  aria-label="Ativar modo escuro">
-            <svg class="dark-oculta h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
-            <svg class="dark-mostra hidden h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
-          </button>
-
           <!-- Carrinho -->
           <button type="button"
                   data-cart-open
@@ -192,11 +161,22 @@ $menu = [
                      aria-label="Abrir menu de navegação">
               <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
             </summary>
-            <ul class="menu dropdown-content z-[60] mt-2 w-56 gap-1 rounded-2xl border border-base-300 bg-papel p-2 shadow-bandeja-alta">
+            <ul class="menu dropdown-content z-[60] mt-2 max-h-[75vh] w-[19rem] flex-nowrap gap-1 overflow-y-auto rounded-2xl border border-base-300 bg-papel p-2 shadow-bandeja-alta">
               <?php foreach ($menu as $item): ?>
                 <li><a class="rounded-xl px-3 py-2.5 font-semibold" href="<?= e($item['href']) ?>"><?= e($item['texto']) ?></a></li>
               <?php endforeach; ?>
               <li><a class="rounded-xl px-3 py-2.5 font-semibold" href="/carrinho.php">Ver meu pedido</a></li>
+
+              <?php
+                // No celular não dá para aninhar <details>: a lista de PDFs entra
+                // achatada aqui embaixo. O link "Catálogo" acima já cobre a grade
+                // do site, então esse item sai da lista.
+                $somenteArquivos = true;
+              ?>
+              <li class="mx-3 my-1 border-t border-base-300" aria-hidden="true"></li>
+              <li class="px-3 pb-1 pt-1 text-xs font-semibold text-crust">Catálogos em PDF</li>
+              <?php include __DIR__ . '/catalog-menu.php'; ?>
+              <?php $somenteArquivos = false; ?>
             </ul>
           </details>
 

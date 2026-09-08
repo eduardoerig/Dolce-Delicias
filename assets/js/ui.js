@@ -3,55 +3,25 @@
  * assets/js/ui.js — comportamento da interface
  * =============================================================================
  * JavaScript puro, sem framework. Cuida de:
- *   1. tema claro/escuro
- *   2. seletor de unidade (persistido em localStorage['dolce_unit'])
- *   3. dropdowns <details> (fechar ao clicar fora / Esc)
- *   4. drawer do carrinho, com foco e teclado
- *   5. busca e filtros do catálogo
- *   6. revelação dos cards ao rolar (IntersectionObserver)
- *   7. avisos curtos (toasts)
+ *   1. escolha da unidade em unidades.php (persistida em localStorage['dolce_unit'])
+ *   2. dropdowns <details> (fechar ao clicar fora / Esc)
+ *   3. drawer do carrinho, com foco e teclado
+ *   4. busca e filtros do catálogo
+ *   5. revelação dos cards ao rolar (IntersectionObserver)
+ *   6. avisos curtos (toasts)
+ *   7. quantidade na página do produto
  *
  * O estado do carrinho em si mora em assets/js/cart.js.
  */
 
 import { lerUnidades, unidadeAtual } from './cart.js';
 
-const CHAVE_TEMA = 'dolce_theme';
 const CHAVE_UNIDADE = 'dolce_unit';
 
-const raiz = document.documentElement;
-
 /* ===========================================================================
- * 1. TEMA
- * ======================================================================== */
-
-function aplicarTema(tema) {
-  raiz.dataset.theme = tema;
-  const escuro = tema === 'dolce-dark';
-
-  document.querySelectorAll('[data-theme-toggle]').forEach((botao) => {
-    botao.setAttribute('aria-pressed', String(escuro));
-    botao.setAttribute('aria-label', escuro ? 'Voltar para o modo claro' : 'Ativar modo escuro');
-  });
-}
-
-document.querySelectorAll('[data-theme-toggle]').forEach((botao) => {
-  botao.addEventListener('click', () => {
-    const proximo = raiz.dataset.theme === 'dolce-dark' ? 'dolce' : 'dolce-dark';
-    try {
-      localStorage.setItem(CHAVE_TEMA, proximo);
-    } catch {
-      /* sem localStorage: vale só nesta página */
-    }
-    aplicarTema(proximo);
-  });
-});
-
-aplicarTema(raiz.dataset.theme || 'dolce');
-
-/* ===========================================================================
- * 2. SELETOR DE UNIDADE
- * A escolha define para qual WhatsApp o pedido vai e qual PDF é oferecido.
+ * 1. ESCOLHA DA UNIDADE
+ * Os botões [data-unit-option] vivem em unidades.php. A escolha define para qual
+ * WhatsApp o pedido vai e qual PDF é oferecido.
  * ======================================================================== */
 
 function escolherUnidade(slug, { avisar = false } = {}) {
@@ -111,7 +81,7 @@ document.addEventListener('click', (evento) => {
 })();
 
 /* ===========================================================================
- * 3. DROPDOWNS <details>
+ * 2. DROPDOWNS <details>
  * O <details> já abre, fecha e navega pelo teclado sozinho. Só falta fechar
  * quando o clique sai dele ou quando a pessoa aperta Esc.
  * ======================================================================== */
@@ -137,7 +107,7 @@ document.addEventListener('keydown', (evento) => {
 });
 
 /* ===========================================================================
- * 4. DRAWER DO CARRINHO
+ * 3. DRAWER DO CARRINHO
  * `inert` tira o painel fechado do foco e do leitor de tela.
  * ======================================================================== */
 
@@ -204,7 +174,7 @@ if (alavancaDrawer && painelCarrinho) {
 }
 
 /* ===========================================================================
- * 5. BUSCA E FILTROS DO CATÁLOGO
+ * 4. BUSCA E FILTROS DO CATÁLOGO
  * Filtragem no próprio DOM: o PHP já imprimiu todos os cards.
  * ======================================================================== */
 
@@ -214,7 +184,9 @@ if (grade) {
   const cards = Array.from(grade.querySelectorAll('[data-produto]'));
   const campoBusca = document.querySelector('[data-busca-input]');
   const semResultado = document.querySelector('[data-sem-resultado]');
-  const contagem = document.querySelector('[data-contagem]');
+  // Plural: a contagem aparece na barra completa E na barra fina.
+  const contagens = document.querySelectorAll('[data-contagem]');
+  const definirContagem = (texto) => contagens.forEach((el) => { el.textContent = texto; });
 
   let termo = '';
   let categoria = '';
@@ -242,15 +214,15 @@ if (grade) {
     if (semResultado) semResultado.classList.toggle('oculto', visiveis > 0);
     grade.classList.toggle('oculto', visiveis === 0);
 
-    if (contagem) {
-      if (visiveis === 0) {
-        contagem.textContent = 'Nenhum item encontrado';
-      } else if (filtrando) {
-        // A concordância segue o total, não o filtrado: "1 de 18 itens".
-        contagem.textContent = `${visiveis} de ${cards.length} ${cards.length === 1 ? 'item' : 'itens'}`;
-      } else {
-        contagem.textContent = `${cards.length} itens no catálogo`;
-      }
+    const plural = cards.length === 1 ? 'item' : 'itens';
+
+    if (visiveis === 0) {
+      definirContagem('Nenhum item encontrado');
+    } else if (filtrando) {
+      // A concordância segue o total, não o filtrado: "1 de 18 itens".
+      definirContagem(`${visiveis} de ${cards.length} ${plural}`);
+    } else {
+      definirContagem(`${cards.length} ${plural}`);
     }
   }
 
@@ -296,11 +268,62 @@ if (grade) {
       filtrar();
       campoBusca?.focus();
     }
+
+    // Lupa da barra fina: leva de volta ao campo de busca de verdade.
+    if (alvo.closest('[data-focar-busca]') && campoBusca) {
+      campoBusca.focus();
+      campoBusca.scrollIntoView({ block: 'center' });
+    }
   });
+
+  /* -------------------------------------------------------------------------
+   * BARRA FINA
+   * Entra quando a barra completa passa do topo e sai quando o catálogo
+   * acaba, para não pairar sobre "Como encomendar".
+   *
+   * Um listener de scroll com requestAnimationFrame em vez de
+   * IntersectionObserver: são duas condições combinadas (passou da barra E o
+   * catálogo ainda está na tela), e ler dois rects por quadro é mais simples
+   * e mais exato do que sincronizar dois observadores.
+   * ---------------------------------------------------------------------- */
+  const barraFina = document.querySelector('[data-barra-fina]');
+  const barraCheia = document.querySelector('[data-barra-filtros]');
+  const secaoCatalogo = document.getElementById('catalogo');
+
+  if (barraFina && barraCheia && secaoCatalogo) {
+    const ALTURA_HEADER = 72; // h-[4.5rem] do header fixo
+    let agendado = false;
+
+    function avaliarBarraFina() {
+      agendado = false;
+      const passouDaBarra = barraCheia.getBoundingClientRect().bottom < ALTURA_HEADER;
+      // Uma folga para a barra sumir antes de encostar no fim da seção.
+      const catalogoNaTela = secaoCatalogo.getBoundingClientRect().bottom > ALTURA_HEADER + 96;
+      barraFina.classList.toggle('oculto', !(passouDaBarra && catalogoNaTela));
+    }
+
+    function agendarAvaliacao() {
+      if (agendado) return;
+      agendado = true;
+      requestAnimationFrame(avaliarBarraFina);
+    }
+
+    window.addEventListener('scroll', agendarAvaliacao, { passive: true });
+    window.addEventListener('resize', agendarAvaliacao, { passive: true });
+
+    // Aba em segundo plano não roda requestAnimationFrame, então a barra pode
+    // ficar com o estado velho enquanto ninguém olha. Ao voltar, reavalia na
+    // hora, sem esperar um scroll.
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') avaliarBarraFina();
+    });
+
+    avaliarBarraFina();
+  }
 }
 
 /* ===========================================================================
- * 6. REVELAÇÃO AO ROLAR
+ * 5. REVELAÇÃO AO ROLAR
  * Uma passada só: o card aparece e o observador o solta.
  * ======================================================================== */
 
@@ -333,7 +356,7 @@ if (aRevelar.length) {
 }
 
 /* ===========================================================================
- * 7. AVISOS CURTOS
+ * 6. AVISOS CURTOS
  * ======================================================================== */
 
 const areaAvisos = document.querySelector('[data-toast-area]');
@@ -383,7 +406,7 @@ document.addEventListener('dolce:removido', () => mostrarAviso('Pedido atualizad
 document.addEventListener('dolce:aviso', (evento) => mostrarAviso(evento.detail.mensagem));
 
 /* ===========================================================================
- * 8. QUANTIDADE NA PÁGINA DO PRODUTO
+ * 7. QUANTIDADE NA PÁGINA DO PRODUTO
  * ======================================================================== */
 
 const campoQtd = document.querySelector('[data-qty-input]');

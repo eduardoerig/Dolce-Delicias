@@ -19,7 +19,6 @@ $eager ??= false;
 
 $faixa       = dd_faixa_principal($produto);
 $linha       = dd_linha($produto);
-$rotuloLinha = dd_rotulo_linha($linha);
 $disponivel  = ($produto['disponivel'] ?? true) !== false;
 $imagem      = dd_imagem($produto['imagem'] ?? null);
 $url         = 'produto.php?slug=' . rawurlencode((string) $produto['slug']);
@@ -47,12 +46,8 @@ $url         = 'produto.php?slug=' . rawurlencode((string) $produto['slug']);
       </div>
     <?php endif; ?>
 
-    <?php if ($rotuloLinha !== ''): ?>
-      <span class="absolute left-3 top-3 rounded-full bg-papel/90 px-2.5 py-1 text-[0.7rem] font-bold text-crust backdrop-blur-sm">
-        <?= e($rotuloLinha) ?>
-      </span>
-    <?php endif; ?>
-
+    <?php // Um selo só na foto. A linha (encomenda x balcão) desceu para o
+       // preço, onde ela já aparece como "/ cento" ou "/ un". ?>
     <?php if (!empty($produto['destaque'])): ?>
       <span class="absolute right-3 top-3 rounded-full bg-accent px-2.5 py-1 text-[0.7rem] font-bold text-accent-content shadow-sm">
         mais pedido
@@ -61,8 +56,6 @@ $url         = 'produto.php?slug=' . rawurlencode((string) $produto['slug']);
   </figure>
 
   <div class="card-body gap-2.5 p-5">
-    <p class="text-xs font-semibold text-crust"><?= e($produto['categoria'] ?? '') ?></p>
-
     <h3 class="text-xl leading-tight">
       <a href="<?= e($url) ?>" class="rounded transition-colors hover:text-brand">
         <?= e($produto['nome']) ?>
@@ -77,18 +70,16 @@ $url         = 'produto.php?slug=' . rawurlencode((string) $produto['slug']);
       <span class="duas-linhas"><?= e($produto['descricao'] ?? '') ?></span>
     </p>
 
-    <!-- Preço: número grande, base pequena — como quadro de preço de balcão. -->
-    <p class="mt-1 flex items-baseline gap-1.5">
+    <?php // Preço: número grande, base pequena — como quadro de preço de balcão.
+       // O mínimo entra na mesma linha em vez de virar um selo à parte. ?>
+    <p class="mt-1 flex flex-wrap items-baseline gap-x-1.5">
       <span class="text-sm font-semibold text-crust">R$</span>
       <span class="fonte-display text-3xl leading-none text-brand"><?= e(number_format($faixa['valor'], 2, ',', '.')) ?></span>
       <span class="text-sm font-semibold text-crust">/ <?= e($faixa['porCurto']) ?></span>
+      <?php if ($faixa['temMinimo']): ?>
+        <span class="text-xs text-crust">· mín. <?= e((string) $faixa['min']) ?> un</span>
+      <?php endif; ?>
     </p>
-
-    <?php if ($faixa['temMinimo']): ?>
-      <p class="w-fit rounded-full bg-base-200 px-2.5 py-1 text-xs font-semibold text-crust">
-        a partir de <?= e((string) $faixa['min']) ?> un
-      </p>
-    <?php endif; ?>
 
     <?php // mt-auto alinha os botões na base, mesmo com descrições de tamanhos diferentes. ?>
     <div class="card-actions mt-auto items-center gap-2 pt-3">
@@ -114,7 +105,7 @@ $url         = 'produto.php?slug=' . rawurlencode((string) $produto['slug']);
       <?php endif; ?>
 
       <a href="<?= e($url) ?>"
-         class="btn btn-ghost border border-base-300 font-semibold text-crust hover:border-brand hover:text-brand">
+         class="btn btn-ghost px-3 font-semibold text-crust hover:bg-transparent hover:text-brand">
         Detalhes<span class="sr-only"> de <?= e($produto['nome']) ?></span>
       </a>
     </div>

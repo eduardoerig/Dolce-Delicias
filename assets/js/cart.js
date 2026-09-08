@@ -187,41 +187,39 @@ function linhaItem(item) {
   const link = `produto.php?slug=${encodeURIComponent(item.slug || item.id)}`;
 
   return `
-    <li class="flex gap-3 p-4" data-item="${esc(item.id)}">
+    <li class="flex gap-3 py-3.5" data-item="${esc(item.id)}">
       <a href="${link}" tabindex="-1" aria-hidden="true"
-         class="miniatura h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-base-300 sm:h-16 sm:w-16">
+         class="miniatura h-14 w-14 shrink-0 overflow-hidden rounded-xl">
         ${miniatura(item)}
       </a>
 
-      <div class="flex min-w-0 flex-1 flex-col gap-2.5">
+      <div class="flex min-w-0 flex-1 flex-col gap-2">
         <div class="flex items-start gap-2">
-          <div class="min-w-0 flex-1">
-            <p class="font-bold leading-tight">
-              <a class="rounded hover:text-brand" href="${link}">${nome}</a>
-            </p>
-            <p class="mt-0.5 text-xs text-crust">${esc(item.por)}</p>
-          </div>
-          <button type="button" data-item-remove
-                  class="btn btn-ghost btn-xs h-8 w-8 shrink-0 rounded-lg p-0 text-crust hover:text-brand"
-                  aria-label="Remover ${nome} do pedido">
-            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
-          </button>
+          <p class="min-w-0 flex-1 font-bold leading-tight">
+            <a class="rounded hover:text-brand" href="${link}">${nome}</a>
+            <span class="block text-xs font-normal text-crust">${esc(item.por)}</span>
+          </p>
+          <span class="fonte-display shrink-0 text-lg leading-tight">${subtotal}</span>
         </div>
 
-        <div class="flex flex-wrap items-center justify-between gap-2">
-          <div class="flex items-center rounded-xl border border-campo bg-base-200">
+        <div class="flex items-center gap-2">
+          <div class="flex items-center rounded-lg border border-campo">
             <button type="button" data-item-menos
-                    class="btn btn-ghost h-9 w-9 rounded-xl p-0 text-lg font-bold"
+                    class="btn btn-ghost h-8 w-8 rounded-lg p-0 text-base font-bold"
                     aria-label="Diminuir a quantidade de ${nome}">−</button>
             <input type="number" data-item-qtd inputmode="numeric"
-                   class="h-9 w-14 border-0 bg-transparent text-center text-sm font-bold focus:outline-none"
+                   class="h-8 w-12 border-0 bg-transparent text-center text-sm font-bold focus:outline-none"
                    value="${Number(item.qtd)}" min="${Number(item.min) || 1}" step="${Number(item.passo) || 1}"
                    aria-label="Quantidade de ${nome}, em unidades">
             <button type="button" data-item-mais
-                    class="btn btn-ghost h-9 w-9 rounded-xl p-0 text-lg font-bold"
+                    class="btn btn-ghost h-8 w-8 rounded-lg p-0 text-base font-bold"
                     aria-label="Aumentar a quantidade de ${nome}">+</button>
           </div>
-          <span class="fonte-display text-lg">${subtotal}</span>
+          <button type="button" data-item-remove
+                  class="btn btn-ghost btn-xs ml-auto h-8 rounded-lg px-2 text-xs font-semibold text-crust hover:text-brand"
+                  aria-label="Remover ${nome} do pedido">
+            Remover
+          </button>
         </div>
       </div>
     </li>`;

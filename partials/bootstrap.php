@@ -42,6 +42,38 @@ function dd_unidades(): array
 }
 
 /* -----------------------------------------------------------------------------
+ * CATÁLOGOS EM PDF
+ * O arquivo pode não existir ainda (ver catalogos/README.md), então todo lugar
+ * que oferece download passa por aqui antes de desenhar o link.
+ * -------------------------------------------------------------------------- */
+
+/**
+ * O PDF existe no disco?
+ *
+ * @param string|null $caminho caminho absoluto do site, como '/catalogos/matriz.pdf'
+ */
+function dd_tem_pdf(?string $caminho): bool
+{
+    $caminho = trim((string) $caminho);
+
+    return $caminho !== '' && is_file(DD_BASE . '/' . ltrim($caminho, '/'));
+}
+
+/**
+ * Catálogo da rede inteira — não pertence a nenhuma unidade, por isso o caminho
+ * é fixo aqui em vez de sair de data/units.php.
+ *
+ * >>> INTEGRAÇÃO FUTURA <<<
+ * Com back-end, devolva a URL vinda do banco.
+ *
+ * @return string|null null quando o arquivo não existe: quem chama esconde o item.
+ */
+function dd_catalogo_completo(): ?string
+{
+    return dd_tem_pdf('/catalogos/completo.pdf') ? '/catalogos/completo.pdf' : null;
+}
+
+/* -----------------------------------------------------------------------------
  * SAÍDA SEGURA
  * -------------------------------------------------------------------------- */
 

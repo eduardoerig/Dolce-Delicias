@@ -22,9 +22,9 @@ declare(strict_types=1);
          aria-labelledby="titulo-carrinho"
          class="flex h-full w-[min(24rem,100vw)] flex-col bg-papel text-base-content shadow-bandeja-alta">
 
-    <header class="flex items-center gap-3 border-b border-base-300 px-5 py-4">
+    <header class="flex items-center gap-2.5 px-5 pb-3 pt-4">
       <h2 id="titulo-carrinho" class="text-xl">Seu pedido</h2>
-      <span class="badge border-none bg-base-200 font-semibold text-crust" data-cart-count>0 itens</span>
+      <span class="text-sm font-semibold text-crust" data-cart-count>0 itens</span>
       <button type="button" data-cart-close
               class="btn btn-ghost btn-sm ml-auto h-9 w-9 rounded-xl p-0"
               aria-label="Fechar o pedido">
@@ -32,50 +32,45 @@ declare(strict_types=1);
       </button>
     </header>
 
-    <!-- Unidade escolhida: define o WhatsApp para onde o pedido vai. -->
-    <div class="border-b border-base-300 bg-base-200 px-5 py-3">
-      <p class="text-xs font-semibold text-crust">Unidade que vai atender</p>
-      <p class="mt-0.5 flex items-center gap-2 text-sm font-bold" data-unit-label>Escolher unidade</p>
-      <p class="mt-1 text-xs text-crust">
-        Troque no seletor de unidade, lá no topo.
-      </p>
-    </div>
+    <?php // Unidade em uma linha só: é para o WhatsApp dela que o pedido vai. ?>
+    <p class="border-b border-base-300 px-5 pb-3 text-xs text-crust">
+      Pedido pela <span class="font-bold text-base-content" data-unit-label>Matriz</span> ·
+      <a href="/unidades.php" class="underline decoration-base-300 underline-offset-2 hover:text-brand">trocar</a>
+    </p>
 
     <!-- Estado vazio -->
     <div data-cart-empty class="flex flex-1 flex-col items-center justify-center gap-3 px-8 text-center">
-      <div class="massa flex h-24 w-24 items-center justify-center rounded-full text-crust/40">
-        <svg class="h-11 w-11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/><circle cx="10" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/>
-        </svg>
-      </div>
-      <p class="text-lg font-bold">Nenhum item por aqui</p>
-      <p class="text-sm leading-relaxed text-crust">
-        Escolha os salgados no catálogo e eles aparecem nesta lista.
-      </p>
-      <a href="index.php#catalogo" class="btn btn-primary btn-sm mt-1 font-bold">
-        Ver o catálogo
-      </a>
+      <svg class="h-10 w-10 text-crust/35" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/><circle cx="10" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/>
+      </svg>
+      <p class="text-sm text-crust">Nenhum item por aqui ainda.</p>
+      <a href="index.php#catalogo" class="btn btn-primary btn-sm font-bold">Ver o catálogo</a>
     </div>
 
     <!-- Itens (desenhados por assets/js/cart.js) -->
-    <ul data-cart-items class="oculto flex-1 divide-y divide-base-300 overflow-y-auto px-2 py-1"></ul>
+    <ul data-cart-items class="oculto flex-1 divide-y divide-base-300 overflow-y-auto px-5"></ul>
 
     <!-- Fechamento -->
     <footer data-cart-footer class="oculto border-t border-base-300 px-5 py-4">
-      <label class="block">
-        <span class="text-xs font-semibold text-crust">Observação (opcional)</span>
-        <textarea data-cart-obs rows="2"
-                  class="textarea mt-1.5 w-full resize-none rounded-xl border-campo bg-base-200 text-sm"
-                  placeholder="Data da entrega, sabores, endereço…"></textarea>
-      </label>
+      <?php // Observação fica recolhida: quase ninguém preenche, e aberta ela
+         // dominava o rodapé. <details> abre e navega pelo teclado sem JS. ?>
+      <details class="group">
+        <summary class="flex w-fit cursor-pointer list-none items-center gap-1 text-xs font-semibold text-crust hover:text-brand [&::-webkit-details-marker]:hidden">
+          <svg class="h-3.5 w-3.5 transition-transform group-open:rotate-90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+          Adicionar observação
+        </summary>
+        <label>
+          <span class="sr-only">Observação sobre o pedido</span>
+          <textarea data-cart-obs rows="2"
+                    class="textarea mt-2 w-full resize-none rounded-xl border-campo bg-base-200 text-sm"
+                    placeholder="Data da entrega, sabores, endereço…"></textarea>
+        </label>
+      </details>
 
       <div class="mt-3 flex items-baseline justify-between">
         <span class="text-sm font-semibold text-crust">Total estimado</span>
         <span class="fonte-display text-2xl text-brand" data-cart-total>R$ 0,00</span>
       </div>
-      <p class="mt-1 text-xs leading-relaxed text-crust">
-        Valor de referência. A unidade confirma preço, prazo e frete na conversa.
-      </p>
 
       <button type="button" data-cart-checkout
               class="btn btn-primary mt-3 w-full font-bold">
@@ -85,13 +80,13 @@ declare(strict_types=1);
         Finalizar no WhatsApp
       </button>
 
-      <div class="mt-2 flex items-center justify-between">
-        <a href="carrinho.php" class="rounded text-xs font-semibold text-crust underline decoration-base-300 underline-offset-4 hover:text-brand">
+      <div class="mt-2.5 flex items-center justify-between text-xs font-semibold text-crust">
+        <a href="carrinho.php" class="rounded underline decoration-base-300 underline-offset-4 hover:text-brand">
           Abrir em página inteira
         </a>
         <button type="button" data-cart-clear
-                class="rounded text-xs font-semibold text-crust underline decoration-base-300 underline-offset-4 hover:text-brand">
-          Esvaziar pedido
+                class="rounded underline decoration-base-300 underline-offset-4 hover:text-brand">
+          Esvaziar
         </button>
       </div>
     </footer>

@@ -23,7 +23,7 @@
   prefersdark: false;
   color-scheme: light;
 
-  /* Convencao de superficies (vale para os dois temas):
+  /* Convencao de superficies:
        base-100 = chao da pagina      -> body e secoes que casam com o fundo
        papel    = superficie elevada  -> cards, paineis, dropdown, drawer
        base-200 = superficie recuada  -> faixa creme, badges, campos
@@ -65,53 +65,6 @@
 }
 
 /* -------------------------------------------------------------
-   TEMA ESCURO -- "dolce-dark"
-   Marrom muito escuro no lugar de preto: mantem o clima de forno.
-   ------------------------------------------------------------- */
-@plugin "daisyui/theme" {
-  name: "dolce-dark";
-  default: false;
-  prefersdark: true;
-  color-scheme: dark;
-
-  /* Mesma convencao do claro. No escuro o card SOBE do fundo (--color-papel
-     e mais claro que base-100); no claro ele so ganha borda e sombra. */
-  --color-base-100: #1a0f0a; /* fundo padrao do site */
-  --color-base-200: #241610; /* faixa recuada */
-  --color-base-300: #432c1e; /* bordas e divisores */
-  --color-base-content: #f6e7d8;
-
-  --color-primary: #e1051e;
-  --color-primary-content: #ffffff;
-  --color-secondary: #e8b48a;
-  --color-secondary-content: #2a1710;
-  --color-accent: #fce24c;
-  --color-accent-content: #2a1710;
-  --color-neutral: #f6e7d8;
-  --color-neutral-content: #1a0f0a;
-
-  --color-info: #7dabff;
-  --color-info-content: #10203f;
-  --color-success: #74d99a;
-  --color-success-content: #0d2a17;
-  --color-warning: #f0bd5c;
-  --color-warning-content: #2b1c02;
-  --color-error: #ff8189;
-  --color-error-content: #2d0407;
-
-  --radius-selector: 2rem;
-  --radius-field: 1rem;
-  --radius-box: 1rem;
-
-  --size-selector: 0.25rem;
-  --size-field: 0.28125rem;
-
-  --border: 1px;
-  --depth: 0;
-  --noise: 0;
-}
-
-/* -------------------------------------------------------------
    TOKENS DA MARCA (Tailwind @theme)
    Geram utilitarios: bg-brand, text-cream, font-display, shadow-bandeja...
    ------------------------------------------------------------- */
@@ -134,21 +87,6 @@
   --shadow-bandeja-alta: 0 2px 4px rgb(42 23 16 / 0.08), 0 22px 44px -18px rgb(42 23 16 / 0.34);
 
   --ease-massa: cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* No escuro os mesmos tokens mudam de valor: o vermelho puro nao tem contraste
-   suficiente como TEXTO sobre fundo escuro, entao clareia; creme e ink invertem. */
-html[data-theme="dolce-dark"] {
-  --color-brand: #ff5566;
-  --color-cream: #180e09;
-  --color-ink: #f6e7d8;
-  --color-crust: #d9a880;
-  --color-papel: #2e1c13;
-  --color-campo: #a8886c;
-  --color-massa: #3d2718; /* mais claro que o card, para o vazio ser legivel */
-
-  --shadow-bandeja: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 28px -14px rgb(0 0 0 / 0.6);
-  --shadow-bandeja-alta: 0 2px 4px rgb(0 0 0 / 0.5), 0 22px 44px -18px rgb(0 0 0 / 0.7);
 }
 
 /* -------------------------------------------------------------
@@ -179,10 +117,6 @@ html[data-theme="dolce-dark"] {
     outline: 3px solid var(--color-brand);
     outline-offset: 3px;
     border-radius: 0.5rem;
-  }
-
-  html[data-theme="dolce-dark"] :focus-visible {
-    outline-color: var(--color-accent);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -350,19 +284,47 @@ html[data-theme="dolce-dark"] {
 }
 
 /* -------------------------------------------------------------
-   Icones do botao de tema: lua no claro, sol no escuro.
+   SEGMENTO -- encomendas x balcao. Sao tres opcoes de UMA escolha,
+   entao viram um controle unico em vez de tres chips soltos: assim
+   nao ficam dois botoes vermelhos acesos ao lado do filtro de
+   categoria, que confundia com estado quebrado.
+
+   O alvo de toque de 44px vale para o GRUPO (36px do botao + o
+   padding de 4px da trilha em volta).
    ------------------------------------------------------------- */
-html[data-theme="dolce-dark"] .dark-oculta {
-  display: none;
+.segmento {
+  display: inline-flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.25rem;
+  white-space: nowrap;
+  border-radius: 999px;
+  padding: 0.25rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--color-crust);
+  transition: background-color 0.18s var(--ease-massa),
+    color 0.18s var(--ease-massa), box-shadow 0.18s var(--ease-massa);
 }
 
-html[data-theme="dolce-dark"] .dark-mostra {
-  display: block;
+.segmento:hover {
+  color: var(--color-brand);
+}
+
+/* Ativo: pastilha branca sobre a trilha creme -- le como "aqui estou"
+   sem gritar como o vermelho cheio do chip. */
+.segmento[aria-pressed="true"] {
+  background-color: var(--color-papel);
+  color: var(--color-brand);
+  box-shadow: 0 1px 2px rgb(42 23 16 / 0.14);
 }
 
 /* -------------------------------------------------------------
    Carrossel de chips no celular: rola na horizontal sem mostrar
-   a barra, para a area fixa de filtros nao comer a tela.
+   a barra de rolagem, para as categorias nao virarem seis linhas
+   de chips empilhados na tela pequena.
    ------------------------------------------------------------- */
 .sem-barra {
   scrollbar-width: none;
