@@ -23,78 +23,24 @@ include __DIR__ . '/partials/header.php';
 <!-- ============================================================
      HERÓI
      ============================================================ -->
-<section class="relative overflow-hidden bg-primary text-primary-content">
-  <!-- Os raios da placa da marca, saindo de trás da foto. -->
-  <div class="raios pointer-events-none absolute inset-0" style="--raios-x:74%;--raios-y:42%" aria-hidden="true"></div>
-  <div class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-black/15" aria-hidden="true"></div>
-
-  <div class="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:px-8 lg:py-20">
-
-    <div class="max-w-xl">
-      <h1 class="text-4xl leading-[1.05] sm:text-5xl lg:text-6xl">
-        Encomende o cento.<br>
-        <span class="text-accent">A gente cuida do resto.</span>
-      </h1>
-
-      <p class="mt-5 max-w-lg text-lg leading-relaxed text-white">
-        Salgados, assados e doces feitos todo dia em <?= e((string) count($unidades)) ?> unidades.
-        Monte o pedido aqui e feche no WhatsApp da loja mais perto de você.
-      </p>
-
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a href="#catalogo" class="btn h-12 min-h-12 border-none bg-accent px-6 text-base font-bold text-accent-content hover:bg-accent/85">
-          Ver catálogo
-        </a>
-        <a href="#encomendas" class="btn h-12 min-h-12 border-2 border-white/70 bg-transparent px-6 text-base font-bold text-white hover:border-white hover:bg-white/10">
-          Fazer encomenda
-        </a>
-      </div>
-
-      <!-- Selo pedido no briefing -->
-      <p class="mt-8 inline-flex items-center gap-2.5 rounded-full bg-black/15 px-4 py-2.5 text-sm font-semibold">
-        <svg class="h-5 w-5 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12 5 5L20 6"/></svg>
-        Atendemos escolas, faculdades e eventos
-      </p>
-    </div>
-
-    <!-- ------------------------------------------------------------------
-         ESPAÇO RESERVADO PARA A IMAGEM DO BANNER
-         >>> INTEGRAÇÃO FUTURA <<<
-         Hoje é placeholder. Quando existir back-end (ou uma foto fixa), troque
-         o miolo deste contêiner por uma tag img com object-cover, mantendo a
-         mesma proporção (4/3) e o mesmo arredondamento.
-         ------------------------------------------------------------------ -->
-    <div class="relative">
-      <div class="flex aspect-[4/3] flex-col items-center justify-center gap-3 rounded-bandeja border-2 border-dashed border-white/60 bg-black/20 px-6 text-center backdrop-blur-[2px]">
-        <svg class="h-12 w-12 text-white/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="m4 18 5-5 4 4 3-3 4 4"/>
-        </svg>
-        <p class="text-base font-bold text-white">Imagem do banner entra aqui</p>
-        <p class="max-w-xs text-sm leading-relaxed text-white">
-          Espaço reservado. A foto virá do back-end (ainda não existe) — o layout já está no tamanho final.
-        </p>
-        <code class="rounded-lg bg-black/25 px-2.5 py-1 text-xs text-white/90">index.php · bloco “ESPAÇO RESERVADO”</code>
-      </div>
-    </div>
-  </div>
-</section>
+<?php include __DIR__ . '/partials/hero-cartaz.php'; ?>
 
 <div class="faixa-raios" aria-hidden="true"></div>
 
 <!-- Três fatos que o cliente pergunta antes de qualquer coisa. -->
 <section class="border-b border-base-300 bg-base-100" aria-label="Resumo do atendimento">
   <dl class="mx-auto grid max-w-7xl gap-px bg-base-300 px-4 sm:grid-cols-3 sm:px-6 lg:px-8">
-    <div class="bg-base-100 px-2 py-6 text-center sm:px-6">
+    <div class="bg-base-100 px-2 py-4 text-center sm:px-6 sm:py-6">
       <dt class="text-sm font-semibold text-crust">Encomendas</dt>
-      <dd class="fonte-display mt-1 text-2xl text-brand"><?= e((string) $totalEncomenda) ?> itens no cardápio</dd>
+      <dd class="fonte-display mt-0.5 text-lg text-brand sm:mt-1 sm:text-2xl"><?= e((string) $totalEncomenda) ?> itens no cardápio</dd>
     </div>
-    <div class="bg-base-100 px-2 py-6 text-center sm:px-6">
+    <div class="bg-base-100 px-2 py-4 text-center sm:px-6 sm:py-6">
       <dt class="text-sm font-semibold text-crust">Onde retirar</dt>
-      <dd class="fonte-display mt-1 text-2xl text-brand"><?= e((string) count($unidades)) ?> unidades</dd>
+      <dd class="fonte-display mt-0.5 text-lg text-brand sm:mt-1 sm:text-2xl"><?= e((string) count($unidades)) ?> unidades</dd>
     </div>
-    <div class="bg-base-100 px-2 py-6 text-center sm:px-6">
+    <div class="bg-base-100 px-2 py-4 text-center sm:px-6 sm:py-6">
       <dt class="text-sm font-semibold text-crust">Como fechar</dt>
-      <dd class="fonte-display mt-1 text-2xl text-brand">Direto no WhatsApp</dd>
+      <dd class="fonte-display mt-0.5 text-lg text-brand sm:mt-1 sm:text-2xl">Direto no WhatsApp</dd>
     </div>
   </dl>
 </section>
@@ -102,7 +48,7 @@ include __DIR__ . '/partials/header.php';
 <!-- ============================================================
      CATÁLOGO
      ============================================================ -->
-<section id="catalogo" class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+<section id="catalogo" class="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
 
   <div class="max-w-2xl">
     <h2 class="text-3xl sm:text-4xl">Catálogo</h2>
@@ -186,7 +132,7 @@ include __DIR__ . '/partials/header.php';
   <?php $compacto = false; ?>
 
   <!-- Grade -->
-  <div data-grade-produtos class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+  <div data-grade-produtos class="mt-6 grid grid-cols-2 gap-3 sm:mt-8 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
     <?php foreach ($produtos as $i => $produto): ?>
       <?php
         $eager = $i < 4; // os primeiros cards carregam sem lazy
@@ -214,7 +160,7 @@ include __DIR__ . '/partials/header.php';
      COMO ENCOMENDAR — sequência de verdade, por isso vai numerada
      ============================================================ -->
 <section id="encomendas" class="border-y border-base-300 bg-base-200">
-  <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+  <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
 
     <div class="max-w-2xl">
       <h2 class="text-3xl sm:text-4xl">Como encomendar</h2>

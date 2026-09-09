@@ -71,9 +71,23 @@ $menu = [
       // sem a classe .sem-js, o conteúdo com .revelar já nasce visível. ?>
 <script>document.documentElement.classList.remove('sem-js');</script>
 
+<?php
+/**
+ * Alfa Slab One  — todos os títulos e preços (--font-display). Peso único.
+ * Figtree        — corpo de texto e interface (--font-sans).
+ * Baloo 2 em 800 — SÓ a placa desenhada por dd_logo() (--font-logo). Um peso
+ *                  só de propósito: a marca é o único lugar que ainda usa.
+ */
+$familiasDeFonte = [
+    'Alfa+Slab+One',
+    'Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400',
+    'Baloo+2:wght@800',
+];
+$urlDasFontes = 'https://fonts.googleapis.com/css2?family=' . implode('&family=', $familiasDeFonte) . '&display=swap';
+?>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link href="<?= e($urlDasFontes) ?>" rel="stylesheet">
 
 <link rel="stylesheet" href="/assets/css/app.css">
 

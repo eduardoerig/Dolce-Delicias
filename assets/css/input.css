@@ -78,8 +78,14 @@
   --color-campo: #9c8069; /* borda de input/textarea -- 3.4:1 sobre branco */
   --color-massa: #f3ddc4; /* fundo do placeholder de foto */
 
-  --font-display: "Baloo 2", "Trebuchet MS", ui-rounded, system-ui, sans-serif;
+  /* Tipo de madeira em TODO titulo do site: heroi, secoes, precos.
+     ATENCAO: peso unico 400. Nao peca 700/800 em cima dele -- o navegador
+     engorda a mao (faux bold) e o desenho borra. Ver a camada base. */
+  --font-display: "Alfa Slab One", Rockwell, Georgia, serif;
   --font-sans: "Figtree", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+  /* A placa da marca fica de fora da troca: dd_logo() desenha "Dolce" em
+     italico, e Alfa Slab One nao tem italico -- viraria italico falso. */
+  --font-logo: "Baloo 2", "Trebuchet MS", ui-rounded, system-ui, sans-serif;
 
   --radius-bandeja: 1.75rem;
 
@@ -108,8 +114,11 @@
   h3,
   .fonte-display {
     font-family: var(--font-display);
-    font-weight: 800;
-    letter-spacing: -0.015em;
+    /* 400 porque Alfa Slab One so tem esse peso; pedir mais gera faux bold. */
+    font-weight: 400;
+    /* Zero: o slab ja e apertado por natureza, e o -0.015em que servia a
+       Baloo 2 grudava as letras nos titulos pequenos (h3 dos cards). */
+    letter-spacing: 0;
   }
 
   /* Foco visivel em tudo -- nunca removido, so substituido. */

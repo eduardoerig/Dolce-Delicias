@@ -31,7 +31,7 @@ include __DIR__ . '/partials/header.php';
 <section class="relative overflow-hidden bg-primary text-primary-content">
   <div class="raios pointer-events-none absolute inset-0" style="--raios-x:82%;--raios-y:30%" aria-hidden="true"></div>
 
-  <div class="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+  <div class="relative mx-auto max-w-7xl px-4 py-9 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
     <h1 class="max-w-2xl text-4xl leading-[1.05] sm:text-5xl">
       Nossas unidades.<br>
       <span class="text-accent">Escolha a sua.</span>
@@ -74,7 +74,7 @@ include __DIR__ . '/partials/header.php';
      FECHAMENTO
      ============================================================ -->
 <section class="border-t border-base-300 bg-base-200">
-  <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
     <div class="flex flex-col gap-5 rounded-bandeja bg-neutral p-7 text-neutral-content sm:flex-row sm:items-center sm:p-9">
       <div class="flex-1">
         <h2 class="text-2xl">Não sabe qual escolher?</h2>

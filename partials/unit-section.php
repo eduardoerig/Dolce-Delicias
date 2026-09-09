@@ -32,9 +32,9 @@ $fotoDireita = $indice % 2 === 1;
 // Mensagem inicial do WhatsApp da unidade (sem carrinho — é o contato direto).
 $msgUnidade = rawurlencode('Olá! Vim pelo site da Dolce Delícias e quero falar com a ' . ($unidade['nome'] ?? 'unidade') . '.');
 ?>
-<section id="<?= e($unidade['slug']) ?>" class="revelar border-t border-base-300 py-12 lg:py-16"
+<section id="<?= e($unidade['slug']) ?>" class="revelar border-t border-base-300 py-8 sm:py-12 lg:py-16"
          aria-labelledby="titulo-<?= e($unidade['slug']) ?>">
-  <div class="grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
+  <div class="grid items-center gap-5 sm:gap-8 lg:grid-cols-2 lg:gap-14">
 
     <figure class="<?= $fotoDireita ? 'lg:order-2' : '' ?> relative overflow-hidden rounded-bandeja border border-base-300 shadow-bandeja">
       <?php if ($foto): ?>
@@ -56,7 +56,7 @@ $msgUnidade = rawurlencode('Olá! Vim pelo site da Dolce Delícias e quero falar
     </figure>
 
     <div class="<?= $fotoDireita ? 'lg:order-1' : '' ?>">
-      <h2 id="titulo-<?= e($unidade['slug']) ?>" class="text-2xl sm:text-3xl"><?= e($unidade['nome']) ?></h2>
+      <h2 id="titulo-<?= e($unidade['slug']) ?>" class="text-xl sm:text-3xl"><?= e($unidade['nome']) ?></h2>
 
       <?php if ($sobre !== ''): ?>
         <p class="mt-3 max-w-prose leading-relaxed text-crust"><?= e($sobre) ?></p>

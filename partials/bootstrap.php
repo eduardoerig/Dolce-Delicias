@@ -381,8 +381,8 @@ function dd_logo(string $classes = 'h-11 w-auto'): string
     <g transform="translate(150,80)">{$raios}</g>
   </g>
   <ellipse cx="150" cy="80" rx="132" ry="63" fill="none" stroke="#ffffff" stroke-width="3.5"/>
-  <text x="150" y="72" text-anchor="middle" fill="#ffffff" font-family="var(--font-display, 'Trebuchet MS'), sans-serif" font-size="46" font-weight="800" font-style="italic">Dolce</text>
-  <text x="150" y="116" text-anchor="middle" fill="#FCE24C" font-family="var(--font-display, 'Trebuchet MS'), sans-serif" font-size="38" font-weight="800">delícias</text>
+  <text x="150" y="72" text-anchor="middle" fill="#ffffff" font-family="var(--font-logo, 'Trebuchet MS'), sans-serif" font-size="46" font-weight="800" font-style="italic">Dolce</text>
+  <text x="150" y="116" text-anchor="middle" fill="#FCE24C" font-family="var(--font-logo, 'Trebuchet MS'), sans-serif" font-size="38" font-weight="800">delícias</text>
 </svg>
 SVG;
 }

@@ -57,7 +57,9 @@ dolce-delicias/
 ├── partials/
 │   ├── bootstrap.php       carrega os dados e define os helpers
 │   ├── header.php          abre o documento + topo fixo + menu de catálogos
+│   ├── hero-cartaz.php     o herói da home, em tipo de madeira
 │   ├── catalog-menu.php    itens do menu Catálogo (desktop e celular)
+│   ├── filtro-linha.php    segmentado encomendas x balcão (2 lugares)
 │   ├── footer.php          rodapé + fecha o drawer e o documento
 │   ├── product-card.php    um card do catálogo
 │   ├── unit-section.php    uma loja inteira em unidades.php
