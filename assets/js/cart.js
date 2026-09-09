@@ -3,10 +3,10 @@
  * assets/js/cart.js — carrinho da Dolce Delícias
  * =============================================================================
  * JavaScript puro, sem framework. O estado inteiro vive em
- * localStorage['dolce_cart'] e a unidade escolhida em localStorage['dolce_unit'].
+ * localStorage['dolce_cart'].
  *
  * Não existe back-end nem pagamento: o pedido é fechado abrindo o WhatsApp da
- * unidade com a mensagem já escrita.
+ * MATRIZ com a mensagem já escrita — pedido pelo site é só com ela.
  *
  * Formato de um item guardado:
  *   {
@@ -24,7 +24,6 @@
  */
 
 const CHAVE_CARRINHO = 'dolce_cart';
-const CHAVE_UNIDADE = 'dolce_unit';
 
 const brl = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
 
@@ -121,23 +120,20 @@ export function lerUnidades() {
   }
 }
 
-/** Unidade escolhida; cai na matriz (ou na primeira) quando não houver escolha. */
-export function unidadeAtual() {
+/**
+ * A unidade que recebe o pedido — sempre a matriz.
+ *
+ * REGRA DE NEGÓCIO: pedido feito pelo site vai só para a matriz. As outras
+ * lojas continuam com catálogo próprio em PDF e WhatsApp de contato direto
+ * em unidades.php, mas não recebem carrinho.
+ *
+ * Se um dia cada loja receber pedido, é aqui que a escolha volta a entrar.
+ */
+export function matriz() {
   const unidades = lerUnidades();
   if (!unidades.length) return null;
 
-  let slug = null;
-  try {
-    slug = localStorage.getItem(CHAVE_UNIDADE);
-  } catch {
-    /* sem localStorage: usa o padrão */
-  }
-
-  return (
-    unidades.find((u) => u.slug === slug) ||
-    unidades.find((u) => u.matriz) ||
-    unidades[0]
-  );
+  return unidades.find((u) => u.matriz) || unidades[0];
 }
 
 /* ---------------------------------------------------------------------------
@@ -287,7 +283,7 @@ export function checkout() {
     return;
   }
 
-  const unidade = unidadeAtual();
+  const unidade = matriz();
   if (!unidade) {
     avisar('Nenhuma unidade cadastrada. Confira data/units.php.');
     return;
@@ -295,7 +291,7 @@ export function checkout() {
 
   const numero = String(unidade.whatsapp || '').replace(/\D+/g, '');
   if (!numero) {
-    avisar('Esta unidade ainda não tem WhatsApp cadastrado.');
+    avisar('A matriz ainda não tem WhatsApp cadastrado.');
     return;
   }
 

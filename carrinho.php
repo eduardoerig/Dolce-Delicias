@@ -7,13 +7,13 @@ declare(strict_types=1);
  *
  * A lista é montada por assets/js/cart.js a partir do localStorage['dolce_cart'],
  * exatamente como no drawer lateral: os mesmos data-* servem os dois.
- * Sem pagamento e sem back-end — o fechamento é pelo WhatsApp da unidade.
+ * Sem pagamento e sem back-end — o fechamento é pelo WhatsApp da matriz.
  */
 
 require_once __DIR__ . '/partials/bootstrap.php';
 
 $tituloPagina    = 'Seu pedido — Dolce Delícias';
-$descricaoPagina = 'Revise os itens da sua encomenda e feche no WhatsApp da unidade escolhida.';
+$descricaoPagina = 'Revise os itens da sua encomenda e feche no WhatsApp da matriz da Dolce Delícias.';
 
 include __DIR__ . '/partials/header.php';
 ?>
@@ -68,10 +68,10 @@ include __DIR__ . '/partials/header.php';
     <aside class="rounded-bandeja border border-base-300 bg-papel p-6 shadow-bandeja lg:sticky lg:top-24">
       <h2 class="text-xl">Resumo</h2>
 
-      <?php // Unidade em uma linha: é para o WhatsApp dela que o pedido vai. ?>
+      <?php // Pedido pelo site é sempre com a matriz — ver matriz() em cart.js.
+         // O nome sai de data/units.php, escrito por ui.js. ?>
       <p class="mt-3 text-sm text-crust">
-        Pedido pela <span class="font-bold text-base-content" data-unit-label>Matriz</span> ·
-        <a href="/unidades.php" class="underline decoration-base-300 underline-offset-2 hover:text-brand">trocar</a>
+        Pedido pela <span class="font-bold text-base-content" data-unit-label>Matriz</span>
       </p>
 
       <details class="group mt-4">
@@ -101,7 +101,7 @@ include __DIR__ . '/partials/header.php';
       </button>
 
       <p class="mt-3 text-xs leading-relaxed text-crust">
-        Valor de referência: a unidade confirma preço, prazo e frete na conversa.
+        Valor de referência: a matriz confirma preço, prazo e frete na conversa.
       </p>
     </aside>
   </div>

@@ -2,7 +2,7 @@
 
 Vitrine e catálogo de encomendas da Dolce Delícias. **Só front-end**: não há
 back-end, login nem pagamento. O pedido é montado no navegador e fechado no
-WhatsApp da unidade escolhida.
+WhatsApp da matriz.
 
 - **PHP puro** (sem framework), templates `.php` com includes reutilizáveis
 - **Tailwind CSS v4** com config CSS-first (`@theme` em `assets/css/input.css`)
@@ -57,7 +57,7 @@ dolce-delicias/
 ├── partials/
 │   ├── bootstrap.php       carrega os dados e define os helpers
 │   ├── header.php          abre o documento + topo fixo + menu de catálogos
-│   ├── hero-cartaz.php     o herói da home, em tipo de madeira
+│   ├── hero.php            o herói de cartaz (home e unidades)
 │   ├── catalog-menu.php    itens do menu Catálogo (desktop e celular)
 │   ├── filtro-linha.php    segmentado encomendas x balcão (2 lugares)
 │   ├── footer.php          rodapé + fecha o drawer e o documento
@@ -127,12 +127,13 @@ faixa e ele manda.
 
 ## Carrinho e WhatsApp
 
-- Estado em `localStorage['dolce_cart']`; unidade em `localStorage['dolce_unit']`.
+- Estado em `localStorage['dolce_cart']`. Não há escolha de unidade: pedido
+  pelo site vai sempre para a matriz (`matriz()` em `assets/js/cart.js`).
 - `assets/js/cart.js` expõe `addToCart`, `updateQty`, `removeItem`,
   `renderDrawer`, `updateBadge` e `checkout`.
 - Os botões usam **delegação de eventos** num único listener no `document`, então
   qualquer card impresso depois já funciona.
-- `checkout()` lê a unidade escolhida no `<script type="application/json" id="units-data">`
+- `checkout()` lê a matriz no `<script type="application/json" id="units-data">`
   publicado pelo PHP, monta a mensagem e abre `https://wa.me/<numero>?text=…`.
 
 Mensagem gerada:

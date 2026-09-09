@@ -3,7 +3,7 @@
  * assets/js/ui.js — comportamento da interface
  * =============================================================================
  * JavaScript puro, sem framework. Cuida de:
- *   1. escolha da unidade em unidades.php (persistida em localStorage['dolce_unit'])
+ *   1. nome da matriz nos rótulos do carrinho
  *   2. dropdowns <details> (fechar ao clicar fora / Esc)
  *   3. drawer do carrinho, com foco e teclado
  *   4. busca e filtros do catálogo
@@ -14,70 +14,22 @@
  * O estado do carrinho em si mora em assets/js/cart.js.
  */
 
-import { lerUnidades, unidadeAtual } from './cart.js';
-
-const CHAVE_UNIDADE = 'dolce_unit';
+import { matriz } from './cart.js';
 
 /* ===========================================================================
- * 1. ESCOLHA DA UNIDADE
- * Os botões [data-unit-option] vivem em unidades.php. A escolha define para qual
- * WhatsApp o pedido vai e qual PDF é oferecido.
+ * 1. NOME DA MATRIZ
+ * O pedido pelo site vai só para a matriz (ver matriz() em cart.js), então
+ * aqui não há escolha: é só escrever o nome dela onde o carrinho mostra
+ * para quem o pedido vai. O nome vive em data/units.php, não no HTML.
  * ======================================================================== */
 
-function escolherUnidade(slug, { avisar = false } = {}) {
-  const unidade = lerUnidades().find((u) => u.slug === slug);
-  if (!unidade) return;
-
-  try {
-    localStorage.setItem(CHAVE_UNIDADE, unidade.slug);
-  } catch {
-    /* sem localStorage: vale só nesta página */
-  }
-
-  refletirUnidade();
-  if (avisar) mostrarAviso(`Pedido pela ${unidade.nome}.`);
-}
-
-function refletirUnidade() {
-  const unidade = unidadeAtual();
-  if (!unidade) return;
+(function escreverMatriz() {
+  const loja = matriz();
+  if (!loja) return;
 
   document.querySelectorAll('[data-unit-label]').forEach((el) => {
-    el.textContent = unidade.nome;
+    el.textContent = loja.nome;
   });
-
-  document.querySelectorAll('[data-unit-option]').forEach((opcao) => {
-    const escolhida = opcao.dataset.unitOption === unidade.slug;
-    if (opcao.hasAttribute('role')) opcao.setAttribute('aria-selected', String(escolhida));
-    const check = opcao.querySelector('[data-unit-check]');
-    if (check) check.classList.toggle('oculto', !escolhida);
-  });
-
-  // Mantém o PDF do catálogo apontando para a unidade escolhida.
-  document.querySelectorAll('[data-unit-pdf]').forEach((link) => {
-    link.href = unidade.catalogoPdf || '#';
-  });
-}
-
-document.addEventListener('click', (evento) => {
-  const opcao = evento.target instanceof Element ? evento.target.closest('[data-unit-option]') : null;
-  if (!opcao) return;
-  escolherUnidade(opcao.dataset.unitOption, { avisar: true });
-  fecharDropdowns();
-});
-
-// Primeira visita: grava a matriz para que a unidade mostrada e a usada no
-// checkout sejam sempre a mesma coisa.
-(function inicializarUnidade() {
-  let salva = null;
-  try {
-    salva = localStorage.getItem(CHAVE_UNIDADE);
-  } catch {
-    /* ignora */
-  }
-  const unidade = unidadeAtual();
-  if (unidade && salva !== unidade.slug) escolherUnidade(unidade.slug);
-  refletirUnidade();
 })();
 
 /* ===========================================================================

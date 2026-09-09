@@ -10,7 +10,7 @@ declare(strict_types=1);
  * Alimenta a página de unidades (unidades.php), o menu de catálogos do topo e o
  * link de WhatsApp do checkout. O array inteiro também é publicado como JSON dentro
  * da página (<script id="units-data">) para o JavaScript montar o link do WhatsApp
- * da unidade escolhida.
+ * da matriz, que é quem recebe pedido pelo site.
  *
  * >>> TUDO QUE ESTÁ MARCADO COM "PREENCHER" É PLACEHOLDER <<<
  * Substitua pelos dados reais antes de publicar. Em especial:

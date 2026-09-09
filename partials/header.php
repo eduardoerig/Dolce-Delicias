@@ -18,7 +18,7 @@ $unidades = dd_unidades();
 usort($unidades, static fn (array $a, array $b): int => (int) !empty($b['matriz']) <=> (int) !empty($a['matriz']));
 
 $tituloPagina    ??= 'Dolce Delícias — encomendas de salgados, assados e doces';
-$descricaoPagina ??= 'Padaria e panificadora que atende escolas, faculdades, eventos e encomendas. Peça o cento pelo WhatsApp da unidade mais perto de você.';
+$descricaoPagina ??= 'Padaria e panificadora que atende escolas, faculdades, eventos e encomendas. Peça o cento pelo WhatsApp da matriz.';
 
 // Os atalhos-âncora vivem na home; nas outras páginas eles voltam para lá.
 $naHome  = basename((string) ($_SERVER['SCRIPT_NAME'] ?? '')) === 'index.php';
@@ -104,7 +104,8 @@ $urlDasFontes = 'https://fonts.googleapis.com/css2?family=' . implode('&family='
 <?php
 /**
  * Unidades publicadas para o JavaScript.
- * O checkout lê daqui o WhatsApp da unidade escolhida em localStorage['dolce_unit'].
+ * O checkout lê daqui o WhatsApp da MATRIZ — pedido pelo site é só com ela.
+ * As outras entram por causa do menu de catálogos em PDF.
  */
 ?>
 <script type="application/json" id="units-data"><?= json_encode($unidades, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?></script>

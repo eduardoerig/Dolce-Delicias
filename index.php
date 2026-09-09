@@ -15,7 +15,7 @@ $unidades   = dd_unidades(); // aqui só para contar: a lista vive em unidades.p
 $totalEncomenda = count(array_filter($produtos, static fn (array $p): bool => dd_linha($p) === 'atacado'));
 
 $tituloPagina    = 'Dolce Delícias — encomendas de salgados, assados e doces';
-$descricaoPagina = 'Padaria e panificadora que atende escolas, faculdades, eventos e encomendas. Monte seu pedido e feche no WhatsApp da unidade mais perto de você.';
+$descricaoPagina = 'Padaria e panificadora que atende escolas, faculdades, eventos e encomendas. Monte seu pedido no site e feche no WhatsApp da matriz.';
 
 include __DIR__ . '/partials/header.php';
 ?>
@@ -23,13 +23,29 @@ include __DIR__ . '/partials/header.php';
 <!-- ============================================================
      HERÓI
      ============================================================ -->
-<?php include __DIR__ . '/partials/hero-cartaz.php'; ?>
+<?php
+$heroEtiqueta  = 'Padaria e confeitaria · ' . count($unidades) . ' unidades';
+$heroLinhas    = [
+    ['texto' => 'Encomende'],
+    ['texto' => 'o cento.'],
+    ['texto' => 'A gente cuida', 'destaque' => true],
+    ['texto' => 'do resto.',     'destaque' => true],
+];
+$heroTexto     = $totalEncomenda . ' itens de encomenda, feitos todo dia. Monte o pedido aqui e feche no WhatsApp da matriz';
+$heroTextoLink = ['href' => '#encomendas', 'texto' => 'veja como funciona'];
+$heroCta       = ['href' => '#catalogo',   'texto' => 'Ver catálogo'];
+// Duplicado para a faixa não ter fim visível.
+$nomesDaTira   = array_slice(array_column($produtos, 'nome'), 0, 8);
+$heroTira      = array_merge($nomesDaTira, $nomesDaTira);
+
+include __DIR__ . '/partials/hero.php';
+?>
 
 <div class="faixa-raios" aria-hidden="true"></div>
 
 <!-- Três fatos que o cliente pergunta antes de qualquer coisa. -->
-<section class="border-b border-base-300 bg-base-100" aria-label="Resumo do atendimento">
-  <dl class="mx-auto grid max-w-7xl gap-px bg-base-300 px-4 sm:grid-cols-3 sm:px-6 lg:px-8">
+<section class="border-b border-base-300 bg-base-100 px-4 sm:px-6 lg:px-8" aria-label="Resumo do atendimento">
+  <dl class="mx-auto grid max-w-7xl gap-px bg-base-300 sm:grid-cols-3">
     <div class="bg-base-100 px-2 py-4 text-center sm:px-6 sm:py-6">
       <dt class="text-sm font-semibold text-crust">Encomendas</dt>
       <dd class="fonte-display mt-0.5 text-lg text-brand sm:mt-1 sm:text-2xl"><?= e((string) $totalEncomenda) ?> itens no cardápio</dd>
@@ -64,7 +80,7 @@ include __DIR__ . '/partials/header.php';
   <div data-barra-filtros class="mt-8 flex flex-col gap-4">
 
     <div class="flex flex-wrap items-center gap-3">
-      <div class="relative min-w-0 flex-1 sm:max-w-sm">
+      <div class="relative w-full min-w-0 sm:w-auto sm:max-w-sm sm:flex-1">
         <label for="busca" class="sr-only">Buscar no catálogo</label>
         <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-crust" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <input id="busca" type="search" data-busca-input
@@ -165,7 +181,7 @@ include __DIR__ . '/partials/header.php';
     <div class="max-w-2xl">
       <h2 class="text-3xl sm:text-4xl">Como encomendar</h2>
       <p class="mt-3 text-lg leading-relaxed text-crust">
-        Três passos, sem cadastro e sem pagamento pelo site. O acerto final é com a unidade.
+        Três passos, sem cadastro e sem pagamento pelo site. O acerto final é com a matriz.
       </p>
     </div>
 
@@ -177,8 +193,8 @@ include __DIR__ . '/partials/header.php';
               'texto'  => 'Adicione os itens do catálogo. A quantidade respeita o mínimo de cada produto e o total vai aparecendo.',
           ],
           [
-              'titulo' => 'Escolha a unidade',
-              'texto'  => 'Em Unidades, veja o endereço e o catálogo de cada loja e diga qual vai atender você. É ela que recebe o pedido.',
+              'titulo' => 'Confira o total',
+              'texto'  => 'O carrinho soma tudo enquanto você escolhe. Nada é cobrado aqui — o valor é referência até a matriz confirmar.',
           ],
           [
               'titulo' => 'Feche no WhatsApp',

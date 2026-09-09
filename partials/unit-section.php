@@ -99,16 +99,14 @@ $msgUnidade = rawurlencode('Olá! Vim pelo site da Dolce Delícias e quero falar
         </p>
       <?php endif; ?>
 
-      <div class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-semibold">
+      <?php // Não há "pedir por esta unidade": o carrinho do site fecha sempre
+         // com a matriz. Esta loja atende por WhatsApp direto e tem o
+         // catálogo dela em PDF, que são os dois botões acima. ?>
+      <div class="mt-5 text-sm font-semibold">
         <a href="<?= e((string) ($unidade['mapaUrl'] ?? '#')) ?>" target="_blank" rel="noopener noreferrer"
            class="rounded text-crust underline decoration-base-300 underline-offset-4 hover:text-brand">
           Ver no mapa
         </a>
-        <?php // É por aqui que se escolhe a unidade do pedido: ui.js escuta [data-unit-option]. ?>
-        <button type="button" data-unit-option="<?= e($unidade['slug']) ?>"
-                class="rounded text-crust underline decoration-base-300 underline-offset-4 hover:text-brand">
-          Pedir por esta unidade
-        </button>
       </div>
     </div>
   </div>

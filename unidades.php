@@ -26,22 +26,22 @@ include __DIR__ . '/partials/header.php';
 ?>
 
 <!-- ============================================================
-     ABERTURA
+     HERÓI — mesmo desenho da home, via partials/hero.php
      ============================================================ -->
-<section class="relative overflow-hidden bg-primary text-primary-content">
-  <div class="raios pointer-events-none absolute inset-0" style="--raios-x:82%;--raios-y:30%" aria-hidden="true"></div>
+<?php
+$heroEtiqueta  = 'Nossas lojas · ' . count($unidades) . ' unidades';
+$heroLinhas    = [
+    ['texto' => 'Toda loja'],
+    ['texto' => 'tem a dela.', 'destaque' => true],
+];
+$heroTexto     = 'Cada unidade vende alguns itens diferentes, então cada uma tem o catálogo dela. Baixe o da sua loja ou fale com ela direto no WhatsApp';
+$heroTextoLink = ['href' => '#' . ($unidades[0]['slug'] ?? 'matriz'), 'texto' => 'comece pela matriz'];
+// Sem faixa e sem botão: os atalhos em pastilha logo abaixo já fazem esse papel.
+$heroCta       = null;
+$heroTira      = [];
 
-  <div class="relative mx-auto max-w-7xl px-4 py-9 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
-    <h1 class="max-w-2xl text-4xl leading-[1.05] sm:text-5xl">
-      Nossas unidades.<br>
-      <span class="text-accent">Escolha a sua.</span>
-    </h1>
-    <p class="mt-5 max-w-xl text-lg leading-relaxed text-white">
-      São <?= e((string) count($unidades)) ?> lojas. Cada uma tem o catálogo dela — alguns itens mudam de
-      uma para outra. Fale direto com quem vai preparar o seu pedido.
-    </p>
-  </div>
-</section>
+include __DIR__ . '/partials/hero.php';
+?>
 
 <div class="faixa-raios" aria-hidden="true"></div>
 
@@ -79,8 +79,8 @@ include __DIR__ . '/partials/header.php';
       <div class="flex-1">
         <h2 class="text-2xl">Não sabe qual escolher?</h2>
         <p class="mt-2 max-w-xl leading-relaxed opacity-85">
-          Monte o pedido no catálogo e decida a loja depois — dá para trocar a qualquer
-          momento aqui nesta página, antes de fechar no WhatsApp.
+          O pedido pelo site é fechado com a matriz. Estas páginas servem para você ver
+          o catálogo de cada loja e falar direto com ela quando precisar.
         </p>
       </div>
       <a href="index.php#catalogo" class="btn h-12 min-h-12 shrink-0 border-none bg-accent px-6 font-bold text-accent-content hover:bg-accent/85">

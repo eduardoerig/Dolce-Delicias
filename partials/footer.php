@@ -71,7 +71,7 @@ $anoAtual = date('Y');
 
       <div class="border-t border-white/10">
         <p class="mx-auto max-w-7xl px-4 py-6 text-xs opacity-60 sm:px-6 lg:px-8">
-          © <?= e((string) $anoAtual) ?> Dolce Delícias. Vitrine online — os pedidos são fechados por WhatsApp com a unidade escolhida.
+          © <?= e((string) $anoAtual) ?> Dolce Delícias. Vitrine online — os pedidos são fechados por WhatsApp com a matriz.
         </p>
       </div>
     </footer>

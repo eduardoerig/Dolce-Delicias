@@ -34,8 +34,7 @@ declare(strict_types=1);
 
     <?php // Unidade em uma linha só: é para o WhatsApp dela que o pedido vai. ?>
     <p class="border-b border-base-300 px-5 pb-3 text-xs text-crust">
-      Pedido pela <span class="font-bold text-base-content" data-unit-label>Matriz</span> ·
-      <a href="/unidades.php" class="underline decoration-base-300 underline-offset-2 hover:text-brand">trocar</a>
+      Pedido pela <span class="font-bold text-base-content" data-unit-label>Matriz</span>
     </p>
 
     <!-- Estado vazio -->
