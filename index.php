@@ -48,15 +48,15 @@ include __DIR__ . '/partials/hero.php';
   <dl class="mx-auto grid max-w-7xl gap-px bg-base-300 sm:grid-cols-3">
     <div class="bg-base-100 px-2 py-4 text-center sm:px-6 sm:py-6">
       <dt class="text-sm font-semibold text-crust">Encomendas</dt>
-      <dd class="fonte-display mt-0.5 text-lg text-brand sm:mt-1 sm:text-2xl"><?= e((string) $totalEncomenda) ?> itens no cardápio</dd>
+      <dd class="fonte-display mt-0.5 text-lg text-brand sm:mt-1 sm:text-2xl"><?= e((string) $totalEncomenda) ?> itens por cento</dd>
     </div>
     <div class="bg-base-100 px-2 py-4 text-center sm:px-6 sm:py-6">
-      <dt class="text-sm font-semibold text-crust">Onde retirar</dt>
-      <dd class="fonte-display mt-0.5 text-lg text-brand sm:mt-1 sm:text-2xl"><?= e((string) count($unidades)) ?> unidades</dd>
+      <dt class="text-sm font-semibold text-crust">Como receber</dt>
+      <dd class="fonte-display mt-0.5 text-lg text-brand sm:mt-1 sm:text-2xl">Retira ou entrega</dd>
     </div>
     <div class="bg-base-100 px-2 py-4 text-center sm:px-6 sm:py-6">
       <dt class="text-sm font-semibold text-crust">Como fechar</dt>
-      <dd class="fonte-display mt-0.5 text-lg text-brand sm:mt-1 sm:text-2xl">Direto no WhatsApp</dd>
+      <dd class="fonte-display mt-0.5 text-lg text-brand sm:mt-1 sm:text-2xl">WhatsApp da matriz</dd>
     </div>
   </dl>
 </section>
@@ -198,7 +198,7 @@ include __DIR__ . '/partials/hero.php';
           ],
           [
               'titulo' => 'Feche no WhatsApp',
-              'texto'  => 'O botão abre a conversa com o pedido já escrito. Vocês combinam data, retirada ou entrega, e o pagamento.',
+              'texto'  => 'O botão abre a conversa com o pedido já escrito. Vocês combinam data, pagamento e se você retira na matriz ou paga a entrega.',
           ],
       ];
       foreach ($passos as $i => $passo): ?>
