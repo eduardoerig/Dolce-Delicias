@@ -30,7 +30,9 @@ declare(strict_types=1);
  *   $heroTexto      string       parágrafo abaixo da régua
  *   $heroTextoLink  array|null   ['href','texto'] anexado ao parágrafo após " — "
  *   $heroCta        array|null   ['href','texto'] botão à direita da régua
- *   $heroTira       array        nomes da faixa de baixo; vazio esconde a faixa
+ *   $heroTira       array        nomes da faixa de baixo; vazio esconde a faixa.
+ *                                Passe a lista uma vez só — quem duplica para
+ *                                o desfile não ter emenda é este arquivo.
  */
 
 require_once __DIR__ . '/bootstrap.php';
@@ -81,11 +83,19 @@ $respiroDeBaixo = $heroTira === [] ? ' pb-10 lg:pb-14' : '';
   </div>
 
   <?php if ($heroTira !== []): ?>
-    <?php /* FAIXA — lugar da foto no futuro. Ver docblock. */ ?>
-    <div class="relative mt-10 select-none overflow-hidden border-t-2 border-white/20 py-4" aria-hidden="true">
-      <p class="fonte-display whitespace-nowrap text-[clamp(2rem,5vw,3.75rem)] uppercase leading-none text-white/20">
-        <?php foreach ($heroTira as $nomeDaTira): ?><?= e($nomeDaTira) ?> &nbsp;·&nbsp; <?php endforeach; ?>
-      </p>
+    <?php /* FAIXA — lugar da foto no futuro. Ver docblock.
+       Os nomes desfilam sozinhos. O bloco sai duas vezes porque a
+       animação anda exatamente a largura de um deles: na virada, a
+       segunda cópia já ocupa o lugar da primeira e não há emenda.
+       Passar o mouse pausa, para quem quiser ler. */ ?>
+    <div class="tira relative mt-10 select-none overflow-hidden border-t-2 border-white/20 py-4" aria-hidden="true">
+      <div class="tira-desfile">
+        <?php for ($copia = 0; $copia < 2; $copia++): ?>
+          <p class="fonte-display whitespace-nowrap text-[clamp(2rem,5vw,3.75rem)] uppercase leading-none text-white/20">
+            <?php foreach ($heroTira as $nomeDaTira): ?><?= e($nomeDaTira) ?> &nbsp;·&nbsp; <?php endforeach; ?>
+          </p>
+        <?php endfor; ?>
+      </div>
     </div>
   <?php endif; ?>
 </section>

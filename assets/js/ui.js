@@ -142,10 +142,6 @@ if (grade) {
   const definirContagem = (texto) => contagens.forEach((el) => { el.textContent = texto; });
 
   let termo = '';
-  let categoria = '';
-  let linha = '';
-  // RF-24: acumula, não substitui — "vegano" + "sem lactose" pede as duas coisas.
-  const restricoes = new Set();
 
   /** minúsculas e sem acento, igual ao índice gerado pelo PHP */
   const marcasDeAcento = new RegExp('[\\u0300-\\u036f]', 'g');
@@ -155,23 +151,13 @@ if (grade) {
     let visiveis = 0;
 
     cards.forEach((card) => {
-      // O PHP escreve data-restricoes com espaço nas pontas (" vegano sem
-      // lactose "), então testar " vegano " nunca casa por engano com o pedaço
-      // de outra tag. Ver dd_restricoes_do_produto() em partials/bootstrap.php.
-      const doCard = card.dataset.restricoes || '';
-      const atendeRestricoes = [...restricoes].every((r) => doCard.includes(` ${r} `));
-
-      const combina =
-        (termo === '' || (card.dataset.busca || '').includes(termo)) &&
-        (categoria === '' || card.dataset.categoria === categoria) &&
-        (linha === '' || card.dataset.linha === linha) &&
-        atendeRestricoes;
+      const combina = termo === '' || (card.dataset.busca || '').includes(termo);
 
       card.classList.toggle('oculto', !combina);
       if (combina) visiveis += 1;
     });
 
-    const filtrando = termo !== '' || categoria !== '' || linha !== '' || restricoes.size > 0;
+    const filtrando = termo !== '';
 
     if (semResultado) semResultado.classList.toggle('oculto', visiveis > 0);
     grade.classList.toggle('oculto', visiveis === 0);
@@ -188,13 +174,6 @@ if (grade) {
     }
   }
 
-  function marcarGrupo(seletor, valorAtivo) {
-    document.querySelectorAll(seletor).forEach((botao) => {
-      const chave = seletor.includes('categoria') ? botao.dataset.filtroCategoria : botao.dataset.filtroLinha;
-      botao.setAttribute('aria-pressed', String(chave === valorAtivo));
-    });
-  }
-
   campoBusca?.addEventListener('input', () => {
     termo = normalizar(campoBusca.value.trim());
     filtrar();
@@ -204,50 +183,9 @@ if (grade) {
     const alvo = evento.target;
     if (!(alvo instanceof Element)) return;
 
-    const porCategoria = alvo.closest('[data-filtro-categoria]');
-    if (porCategoria) {
-      categoria = porCategoria.dataset.filtroCategoria;
-      marcarGrupo('[data-filtro-categoria]', categoria);
-      filtrar();
-      return;
-    }
-
-    const porLinha = alvo.closest('[data-filtro-linha]');
-    if (porLinha) {
-      linha = porLinha.dataset.filtroLinha;
-      marcarGrupo('[data-filtro-linha]', linha);
-      filtrar();
-      return;
-    }
-
-    // RF-24: cada chip liga e desliga sozinho, por isso não passa por
-    // marcarGrupo() — vários podem ficar acesos ao mesmo tempo.
-    const porRestricao = alvo.closest('[data-filtro-restricao]');
-    if (porRestricao) {
-      const chave = porRestricao.dataset.filtroRestricao;
-      const ligando = !restricoes.has(chave);
-
-      if (ligando) {
-        restricoes.add(chave);
-      } else {
-        restricoes.delete(chave);
-      }
-      porRestricao.setAttribute('aria-pressed', String(ligando));
-      filtrar();
-      return;
-    }
-
     if (alvo.closest('[data-limpar-filtros]')) {
       termo = '';
-      categoria = '';
-      linha = '';
-      restricoes.clear();
       if (campoBusca) campoBusca.value = '';
-      marcarGrupo('[data-filtro-categoria]', '');
-      marcarGrupo('[data-filtro-linha]', '');
-      document.querySelectorAll('[data-filtro-restricao]').forEach((chip) => {
-        chip.setAttribute('aria-pressed', 'false');
-      });
       filtrar();
       campoBusca?.focus();
     }
