@@ -1,0 +1,16 @@
+# Normaliza texto para LF no repositório (o site roda em host Linux).
+* text=auto eol=lf
+
+# Binários: NUNCA converter fim de linha — em PDF isso quebra os offsets
+# da tabela xref e o arquivo deixa de abrir.
+*.pdf   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.ico   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary

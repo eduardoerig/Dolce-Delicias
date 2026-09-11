@@ -1,0 +1,2 @@
+Fotos dos produtos entram aqui, nomeadas com o slug do cadastro.
+Ex.: pao-de-queijo.jpg (ver data/products.php e ../README.md).

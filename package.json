@@ -1,0 +1,16 @@
+{
+  "name": "dolce-delicias",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Front-end do catalogo e encomendas da Dolce Delicias (PHP puro + Tailwind v4 + daisyUI + JS vanilla)",
+  "scripts": {
+    "dev": "tailwindcss -i assets/css/input.css -o assets/css/app.css --watch",
+    "build": "tailwindcss -i assets/css/input.css -o assets/css/app.css --minify",
+    "serve": "php -S localhost:8000"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.13",
+    "daisyui": "^5.1.7",
+    "tailwindcss": "^4.1.13"
+  }
+}
