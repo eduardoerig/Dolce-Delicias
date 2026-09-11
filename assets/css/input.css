@@ -331,6 +331,54 @@
 }
 
 /* -------------------------------------------------------------
+   OPCAO -- escolha unica na confirmacao do pedido: retirada x
+   entrega, e forma de pagamento.
+
+   NAO reaproveita o .chip de proposito, e essa e a parte
+   importante. O chip do catalogo e um FILTRO: aceso quer dizer
+   "estou vendo so isto". Aqui a pessoa esta DECLARANDO uma escolha
+   que vai junto no pedido. Com o mesmo desenho nos dois, o cartao
+   aceso lia como filtro ligado -- e, com o <input> em sr-only, nao
+   sobrava nenhuma marca dizendo o que estava selecionado: so a cor
+   de fundo, que e exatamente o sinal que o filtro ja usava.
+
+   Por isso o radio fica VISIVEL. A bolinha marcada e o unico
+   elemento que diz "esta e a sua escolha" sem depender de cor --
+   serve para daltonico, para tela no sol e para quem so bateu o
+   olho. A cor da borda reforca, nao carrega sozinha.
+   ------------------------------------------------------------- */
+.opcao {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+  border-radius: 1rem;
+  /* A borda ja nasce com 2px: marcar troca a cor, nunca a espessura,
+     entao o cartao nao "pula" 1px quando e selecionado. */
+  border: 2px solid var(--color-base-300);
+  background-color: var(--color-papel);
+  padding: 0.875rem 1rem;
+  transition: border-color 0.18s var(--ease-massa),
+    background-color 0.18s var(--ease-massa);
+}
+
+.opcao:hover {
+  border-color: var(--color-campo);
+}
+
+.opcao:has(:checked) {
+  border-color: var(--color-primary);
+  background-color: color-mix(in oklab, var(--color-primary) 5%, var(--color-papel));
+}
+
+/* O foco do teclado precisa aparecer no CARTAO inteiro: e ele que
+   recebe o clique, nao so a bolinha de 20px dentro dele. */
+.opcao:has(:focus-visible) {
+  outline: 3px solid var(--color-brand);
+  outline-offset: 3px;
+}
+
+/* -------------------------------------------------------------
    Carrossel de chips no celular: rola na horizontal sem mostrar
    a barra de rolagem, para as categorias nao virarem seis linhas
    de chips empilhados na tela pequena.

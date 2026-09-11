@@ -177,6 +177,13 @@ function miniatura(item) {
   return `<div class="massa flex h-full w-full items-center justify-center text-crust">${iconeDaCategoria(item.categoria || '')}</div>`;
 }
 
+/**
+ * Uma linha do carrinho.
+ *
+ * Os controles de quantidade têm 44px: é aqui que se corrige o pedido no
+ * celular, e os 32px de antes ficavam abaixo do alvo que o resto do site adota
+ * (ver o comentário de .chip em assets/css/input.css).
+ */
 function linhaItem(item) {
   const nome = esc(item.nome);
   const subtotal = brl.format(Number(item.preco) * Number(item.qtd));
@@ -201,18 +208,18 @@ function linhaItem(item) {
         <div class="flex items-center gap-2">
           <div class="flex items-center rounded-lg border border-campo">
             <button type="button" data-item-menos
-                    class="btn btn-ghost h-8 w-8 rounded-lg p-0 text-base font-bold"
+                    class="btn btn-ghost h-11 min-h-11 w-11 rounded-lg p-0 text-base font-bold"
                     aria-label="Diminuir a quantidade de ${nome}">−</button>
             <input type="number" data-item-qtd inputmode="numeric"
-                   class="h-8 w-12 border-0 bg-transparent text-center text-sm font-bold focus:outline-none"
+                   class="h-11 w-12 border-0 bg-transparent text-center text-sm font-bold focus:outline-none"
                    value="${Number(item.qtd)}" min="${Number(item.min) || 1}" step="${Number(item.passo) || 1}"
                    aria-label="Quantidade de ${nome}, em unidades">
             <button type="button" data-item-mais
-                    class="btn btn-ghost h-8 w-8 rounded-lg p-0 text-base font-bold"
+                    class="btn btn-ghost h-11 min-h-11 w-11 rounded-lg p-0 text-base font-bold"
                     aria-label="Aumentar a quantidade de ${nome}">+</button>
           </div>
           <button type="button" data-item-remove
-                  class="btn btn-ghost btn-xs ml-auto h-8 rounded-lg px-2 text-xs font-semibold text-crust hover:text-brand"
+                  class="btn btn-ghost ml-auto h-11 min-h-11 rounded-lg px-3 text-xs font-semibold text-crust hover:text-brand"
                   aria-label="Remover ${nome} do pedido">
             Remover
           </button>
@@ -275,6 +282,36 @@ function sincronizar() {
  * Fechamento no WhatsApp
  * ------------------------------------------------------------------------ */
 
+/**
+ * Lê a confirmação do pedido — retirada/entrega, endereço e pagamento.
+ *
+ * Os campos vivem só em carrinho.php (partials/pedido-validacao.php). Quando o
+ * checkout é chamado de outra página, eles não existem e valem os padrões: a
+ * opção mais conservadora de cada pergunta, nunca uma promessa que a padaria
+ * não fez.
+ *
+ * @returns {{entrega: string, endereco: string, pagamento: string}}
+ */
+function lerConfirmacao() {
+  const marcado = (seletor, padrao) =>
+    document.querySelector(`${seletor}:checked`)?.value?.trim() || padrao;
+
+  const entrega = marcado('[data-pedido-entrega]', 'Retirar na matriz');
+
+  // O endereço só acompanha quando a escolha é entrega — se a pessoa digitou e
+  // depois voltou para "retirar", o texto órfão não entra na comanda.
+  const ehEntrega = entrega.toLowerCase().startsWith('entrega');
+  const endereco = ehEntrega
+    ? document.querySelector('[data-pedido-endereco]')?.value.trim() || ''
+    : '';
+
+  return {
+    entrega,
+    endereco,
+    pagamento: marcado('[data-pedido-pagamento]', 'A combinar no WhatsApp'),
+  };
+}
+
 export function checkout() {
   const itens = lerCarrinho();
 
@@ -301,6 +338,8 @@ export function checkout() {
     if (!observacao && campo.value.trim()) observacao = campo.value.trim();
   });
 
+  const confirmacao = lerConfirmacao();
+
   const linhas = itens.map(
     (i) => `• ${i.qtd}x ${i.nome} (${i.por}) — ${brl.format(Number(i.preco) * Number(i.qtd))}`
   );
@@ -309,11 +348,26 @@ export function checkout() {
     'Olá! Quero fazer uma encomenda pelo site da Dolce Delícias.',
     '',
     `Unidade: ${unidade.nome}`,
+    `Como receber: ${confirmacao.entrega}`,
+  ];
+
+  if (confirmacao.endereco) {
+    partes.push(`Endereço: ${confirmacao.endereco}`);
+  }
+
+  partes.push(
     '',
     ...linhas,
     '',
     `Total estimado: ${brl.format(totalCarrinho(itens))}`,
-  ];
+    `Forma de pagamento: ${confirmacao.pagamento}`
+  );
+
+  // RF-30: o prazo vai escrito na mensagem para os dois lados combinarem a data
+  // sabendo do que se trata. Vem de data/units.php, não de texto no JavaScript.
+  if (unidade.preparo) {
+    partes.push(`Preparo mínimo: ${unidade.preparo}`);
+  }
 
   if (observacao) {
     partes.push('', `Observação: ${observacao}`);

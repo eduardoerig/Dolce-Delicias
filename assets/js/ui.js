@@ -10,6 +10,7 @@
  *   5. revelação dos cards ao rolar (IntersectionObserver)
  *   6. avisos curtos (toasts)
  *   7. quantidade na página do produto
+ *   8. confirmação do pedido (carrinho.php)
  *
  * O estado do carrinho em si mora em assets/js/cart.js.
  */
@@ -143,6 +144,8 @@ if (grade) {
   let termo = '';
   let categoria = '';
   let linha = '';
+  // RF-24: acumula, não substitui — "vegano" + "sem lactose" pede as duas coisas.
+  const restricoes = new Set();
 
   /** minúsculas e sem acento, igual ao índice gerado pelo PHP */
   const marcasDeAcento = new RegExp('[\\u0300-\\u036f]', 'g');
@@ -152,16 +155,23 @@ if (grade) {
     let visiveis = 0;
 
     cards.forEach((card) => {
+      // O PHP escreve data-restricoes com espaço nas pontas (" vegano sem
+      // lactose "), então testar " vegano " nunca casa por engano com o pedaço
+      // de outra tag. Ver dd_restricoes_do_produto() em partials/bootstrap.php.
+      const doCard = card.dataset.restricoes || '';
+      const atendeRestricoes = [...restricoes].every((r) => doCard.includes(` ${r} `));
+
       const combina =
         (termo === '' || (card.dataset.busca || '').includes(termo)) &&
         (categoria === '' || card.dataset.categoria === categoria) &&
-        (linha === '' || card.dataset.linha === linha);
+        (linha === '' || card.dataset.linha === linha) &&
+        atendeRestricoes;
 
       card.classList.toggle('oculto', !combina);
       if (combina) visiveis += 1;
     });
 
-    const filtrando = termo !== '' || categoria !== '' || linha !== '';
+    const filtrando = termo !== '' || categoria !== '' || linha !== '' || restricoes.size > 0;
 
     if (semResultado) semResultado.classList.toggle('oculto', visiveis > 0);
     grade.classList.toggle('oculto', visiveis === 0);
@@ -210,13 +220,34 @@ if (grade) {
       return;
     }
 
+    // RF-24: cada chip liga e desliga sozinho, por isso não passa por
+    // marcarGrupo() — vários podem ficar acesos ao mesmo tempo.
+    const porRestricao = alvo.closest('[data-filtro-restricao]');
+    if (porRestricao) {
+      const chave = porRestricao.dataset.filtroRestricao;
+      const ligando = !restricoes.has(chave);
+
+      if (ligando) {
+        restricoes.add(chave);
+      } else {
+        restricoes.delete(chave);
+      }
+      porRestricao.setAttribute('aria-pressed', String(ligando));
+      filtrar();
+      return;
+    }
+
     if (alvo.closest('[data-limpar-filtros]')) {
       termo = '';
       categoria = '';
       linha = '';
+      restricoes.clear();
       if (campoBusca) campoBusca.value = '';
       marcarGrupo('[data-filtro-categoria]', '');
       marcarGrupo('[data-filtro-linha]', '');
+      document.querySelectorAll('[data-filtro-restricao]').forEach((chip) => {
+        chip.setAttribute('aria-pressed', 'false');
+      });
       filtrar();
       campoBusca?.focus();
     }
@@ -420,4 +451,51 @@ if (campoQtd) {
       atualizarSubtotal();
     });
   });
+}
+
+/* ===========================================================================
+ * 8. CONFIRMAÇÃO DO PEDIDO (carrinho.php)
+ *
+ * Duas coisas, as duas sobre deixar a escolha visível:
+ *   - o campo de endereço aparece quando a escolha é entrega;
+ *   - a linha "Você escolheu" repete, por extenso, o que está marcado.
+ *
+ * A linha de resumo existe porque os rádios ficam no alto do bloco e o botão do
+ * WhatsApp na outra coluna — no celular, duas telas depois. Ela é a última
+ * coisa que se lê antes de sair daqui.
+ *
+ * Quem lê os valores no fechamento é checkout(), em cart.js. Aqui é só interface.
+ * ======================================================================== */
+
+const escolhasDoPedido = document.querySelectorAll('[data-pedido-entrega], [data-pedido-pagamento]');
+
+if (escolhasDoPedido.length) {
+  const campoEndereco = document.querySelector('[data-pedido-endereco-campo]');
+  const saidaResumo = document.querySelector('[data-pedido-resumo]');
+
+  /** O texto do cartão marcado — o rótulo que a pessoa leu, não o value. */
+  const rotuloMarcado = (seletor) => {
+    const marcado = document.querySelector(`${seletor}:checked`);
+    return marcado?.closest('.opcao')?.querySelector('span span')?.textContent.trim() || '';
+  };
+
+  function aplicarEscolhasDoPedido() {
+    const entrega = document.querySelector('[data-pedido-entrega]:checked');
+    const ehEntrega = (entrega?.value || '').toLowerCase().startsWith('entrega');
+
+    campoEndereco?.classList.toggle('oculto', !ehEntrega);
+
+    if (saidaResumo) {
+      const partes = [rotuloMarcado('[data-pedido-entrega]'), rotuloMarcado('[data-pedido-pagamento]')];
+      saidaResumo.textContent = partes.filter(Boolean).join(' · ');
+    }
+  }
+
+  escolhasDoPedido.forEach((radio) => {
+    radio.addEventListener('change', aplicarEscolhasDoPedido);
+  });
+
+  // O HTML nasce com "retirar" e "Pix" marcados, mas o navegador restaura a
+  // escolha anterior num F5 — então o estado inicial é lido, não presumido.
+  aplicarEscolhasDoPedido();
 }

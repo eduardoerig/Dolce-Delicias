@@ -127,13 +127,43 @@ include __DIR__ . '/partials/header.php';
       <!-- Preço -->
       <div class="mt-7 rounded-bandeja border border-base-300 bg-papel p-6 shadow-bandeja">
 
+        <?php
+        /**
+         * ESCOLHA DA EMBALAGEM
+         *
+         * Usa o mesmo .opcao da confirmação do pedido, e não o .chip: as duas
+         * telas fazem a MESMA coisa — escolher uma entre várias — então têm de
+         * ter o mesmo desenho. O chip é o filtro do catálogo, onde aceso quer
+         * dizer "estou vendo só isto"; com o <input> em sr-only, não sobrava
+         * nenhuma marca dizendo qual embalagem estava selecionada.
+         *
+         * Aqui o cartão ganha ainda mais do que lá: a embalagem é uma decisão
+         * de preço, e a linha de ajuda mostra de uma vez o valor da caixa, o
+         * preço por unidade e o pedido mínimo. No chip só cabia uma string.
+         */
+        ?>
         <?php if ($temVariacoes): ?>
           <fieldset>
-            <legend class="text-sm font-semibold text-crust">Escolha a embalagem</legend>
-            <div class="mt-3 flex flex-wrap gap-2">
+            <legend class="text-base font-bold text-base-content">Escolha a embalagem</legend>
+
+            <div class="mt-3 grid gap-2.5">
               <?php foreach ($faixas as $i => $f): ?>
-                <label class="chip cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-primary has-[:checked]:text-primary-content">
-                  <input type="radio" name="faixa" class="sr-only" data-faixa
+                <?php
+                // Quando a faixa tem nome próprio ("Caixa 200"), o preço desce
+                // para a linha de ajuda — senão o cartão não mostraria quanto custa.
+                $ajuda = [];
+                if ($f['rotulo'] !== '') {
+                    $ajuda[] = $f['exibicao'];
+                }
+                if ($f['base'] > 1) {
+                    $ajuda[] = dd_moeda($f['unitario']) . ' por unidade';
+                }
+                if ($f['temMinimo']) {
+                    $ajuda[] = 'mínimo ' . $f['min'] . ' un';
+                }
+                ?>
+                <label class="opcao">
+                  <input type="radio" name="faixa" class="radio radio-primary mt-0.5 shrink-0" data-faixa
                          value="<?= e((string) $i) ?>"
                          data-preco="<?= e(number_format($f['unitario'], 4, '.', '')) ?>"
                          data-por="<?= e($f['exibicao']) ?>"
@@ -141,7 +171,16 @@ include __DIR__ . '/partials/header.php';
                          data-passo="<?= e((string) $f['passo']) ?>"
                          data-valor="<?= e(number_format($f['valor'], 2, '.', '')) ?>"
                          <?= $i === 0 ? 'checked' : '' ?>>
-                  <?= e($f['rotulo'] !== '' ? $f['rotulo'] : $f['exibicao']) ?>
+                  <span class="min-w-0">
+                    <span class="block font-bold leading-tight">
+                      <?= e($f['rotulo'] !== '' ? $f['rotulo'] : $f['exibicao']) ?>
+                    </span>
+                    <?php if ($ajuda !== []): ?>
+                      <span class="mt-1 block text-xs leading-relaxed text-crust">
+                        <?= e(implode(' · ', $ajuda)) ?>
+                      </span>
+                    <?php endif; ?>
+                  </span>
                 </label>
               <?php endforeach; ?>
             </div>

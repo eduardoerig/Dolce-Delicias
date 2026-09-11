@@ -61,6 +61,17 @@ include __DIR__ . '/partials/hero.php';
   </dl>
 </section>
 
+<?php
+/**
+ * PROMOÇÕES — RF-14 (quarta-feira) e RF-20 (baixa temporada).
+ *
+ * Antes do catálogo de propósito: no celular é a segunda coisa depois do herói,
+ * e oferta que aparece depois de dezoito cards já não muda a decisão de ninguém.
+ * Sem promoção cadastrada, o partial não desenha nada.
+ */
+include __DIR__ . '/partials/promocoes.php';
+?>
+
 <!-- ============================================================
      CATÁLOGO
      ============================================================ -->
@@ -107,6 +118,31 @@ include __DIR__ . '/partials/hero.php';
                 class="chip"><?= e($categoria) ?></button>
       <?php endforeach; ?>
     </div>
+
+    <?php
+    /**
+     * RF-24 — restrições alimentares.
+     *
+     * Grupo separado do de categoria porque a lógica é outra: categoria é UMA
+     * escolha ("Doces" OU "Bebidas"), restrição é um acúmulo de exigências
+     * ("vegano E sem lactose"). Misturar os dois na mesma trilha faria um chip
+     * apagar o outro sem explicação.
+     *
+     * A lista sai de dd_restricoes(), que só devolve o que existe nos dados —
+     * catálogo sem nenhum produto marcado não desenha faixa nenhuma.
+     */
+    $restricoes = dd_restricoes($produtos);
+    ?>
+    <?php if ($restricoes !== []): ?>
+      <div class="sem-barra -mx-4 flex items-center gap-2 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0"
+           role="group" aria-label="Restrições alimentares">
+        <span class="shrink-0 text-sm font-semibold text-crust">Filtrar por:</span>
+        <?php foreach ($restricoes as $restricao): ?>
+          <button type="button" data-filtro-restricao="<?= e(dd_ascii($restricao)) ?>" aria-pressed="false"
+                  class="chip"><?= e($restricao) ?></button>
+        <?php endforeach; ?>
+      </div>
+    <?php endif; ?>
   </div>
 
   <?php
@@ -193,12 +229,14 @@ include __DIR__ . '/partials/hero.php';
               'texto'  => 'Adicione os itens do catálogo. A quantidade respeita o mínimo de cada produto e o total vai aparecendo.',
           ],
           [
-              'titulo' => 'Confira o total',
-              'texto'  => 'O carrinho soma tudo enquanto você escolhe. Nada é cobrado aqui — o valor é referência até a matriz confirmar.',
+              'titulo' => 'Confirme como recebe',
+              'texto'  => 'Na revisão do pedido você diz se retira na matriz ou quer entrega, e como pretende pagar. Nada é cobrado aqui — o valor é referência até a matriz confirmar.',
           ],
+          // RF-18 fora do escopo: o site não fala em frete. Escolher entrega é
+          // RF-17; o combinado sobre ela acontece na conversa.
           [
               'titulo' => 'Feche no WhatsApp',
-              'texto'  => 'O botão abre a conversa com o pedido já escrito. Vocês combinam data, pagamento e se você retira na matriz ou paga a entrega.',
+              'texto'  => 'O botão abre a conversa com o pedido já escrito, junto do que você escolheu. Vocês combinam a data e fecham por lá.',
           ],
       ];
       foreach ($passos as $i => $passo): ?>
@@ -214,14 +252,15 @@ include __DIR__ . '/partials/hero.php';
 
     <div class="mt-10 flex flex-col gap-5 rounded-bandeja bg-neutral p-7 text-neutral-content sm:flex-row sm:items-center sm:p-9">
       <div class="flex-1">
-        <h3 class="text-2xl">Evento grande, escola ou faculdade?</h3>
+        <h3 class="text-2xl">Evento grande, escola ou empresa?</h3>
         <p class="mt-2 max-w-xl leading-relaxed opacity-85">
           Fazemos coffee break, formatura, feira e lanche escolar com bandeja montada.
           Fale com a matriz e a gente monta o orçamento com você.
         </p>
       </div>
-      <a href="unidades.php" class="btn h-12 min-h-12 shrink-0 border-none bg-accent px-6 font-bold text-accent-content hover:bg-accent/85">
-        Falar com uma unidade
+      <?php // RF-19 — o atendimento a empresas tem página própria agora. ?>
+      <a href="sobre.php#empresas" class="btn h-12 min-h-12 shrink-0 border-none bg-accent px-6 font-bold text-accent-content hover:bg-accent/85">
+        Ver atendimento a empresas
       </a>
     </div>
   </div>

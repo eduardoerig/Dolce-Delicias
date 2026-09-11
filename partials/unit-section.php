@@ -25,6 +25,11 @@ $temZap   = $whatsapp !== '' && $whatsapp !== '55000000000';
 $pdf      = (string) ($unidade['catalogoPdf'] ?? '');
 $temPdf   = dd_tem_pdf($pdf);
 $sobre    = trim((string) ($unidade['sobre'] ?? ''));
+$preparo  = trim((string) ($unidade['preparo'] ?? '')); // RF-30
+$canais   = array_values(array_filter(                  // RF-26
+    (array) ($unidade['canais'] ?? []),
+    static fn ($canal): bool => is_array($canal) && trim((string) ($canal['url'] ?? '')) !== ''
+));
 
 // Foto à direita nas faixas ímpares: quebra o ritmo de uma lista longa.
 $fotoDireita = $indice % 2 === 1;
@@ -71,7 +76,39 @@ $msgUnidade = rawurlencode('Olá! Vim pelo site da Dolce Delícias e quero falar
           <svg class="mt-0.5 h-5 w-5 shrink-0 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
           <span><?= e($unidade['horario']) ?></span>
         </p>
+
+        <?php // RF-30 — tempo mínimo de preparo desta loja. Vazio esconde a linha. ?>
+        <?php if ($preparo !== ''): ?>
+          <p class="flex gap-2.5">
+            <svg class="mt-0.5 h-5 w-5 shrink-0 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v4"/><path d="M8 3h8"/><path d="M6 21h12"/><path d="M6 21a6 6 0 0 1 12 0"/><path d="M12 7a7 7 0 0 0-7 7"/></svg>
+            <span><?= e($preparo) ?></span>
+          </p>
+        <?php endif; ?>
       </address>
+
+      <?php
+      /**
+       * RF-26 — outros canais de venda desta loja (iFood e afins).
+       * Lista vazia não desenha nada: mesma regra do catálogo em PDF, que só
+       * vira botão quando o arquivo existe de verdade.
+       */
+      ?>
+      <?php if ($canais !== []): ?>
+        <div class="mt-5">
+          <h3 class="text-sm font-semibold text-base-content">Peça também por</h3>
+          <ul class="mt-2 flex flex-wrap gap-2">
+            <?php foreach ($canais as $canal): ?>
+              <li>
+                <a href="<?= e((string) ($canal['url'] ?? '#')) ?>" target="_blank" rel="noopener noreferrer"
+                   class="chip hover:border-brand hover:text-brand">
+                  <?= e((string) ($canal['nome'] ?? 'Canal')) ?>
+                  <svg class="h-3.5 w-3.5 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+                </a>
+              </li>
+            <?php endforeach; ?>
+          </ul>
+        </div>
+      <?php endif; ?>
 
       <div class="mt-6 flex flex-wrap gap-2.5">
         <a href="https://wa.me/<?= e($whatsapp) ?>?text=<?= $msgUnidade ?>"

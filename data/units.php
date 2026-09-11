@@ -35,11 +35,20 @@ declare(strict_types=1);
  *   'nome'        string
  *   'endereco'    string
  *   'whatsapp'    string  só dígitos: 55 + DDD + número
- *   'horario'     string
+ *   'horario'     string  RF-29. Texto livre — aparece em unidades.php, no rodapé
+ *                         e na confirmação do pedido (partials/pedido-validacao.php)
+ *   'preparo'     string  RF-30. Tempo mínimo para o pedido ficar pronto. Texto
+ *                         livre, exibido junto do horário. Vazio esconde a linha.
  *   'sobre'       string  parágrafo de apresentação, mostrado em unidades.php
  *   'mapaUrl'     string
  *   'imagem'      string
  *   'catalogoPdf' string
+ *   'avaliacao'   string  RF-27. Link onde o cliente avalia o ATENDIMENTO desta
+ *                         loja (Google Maps, por exemplo). Vazio: o rodapé cai
+ *                         para o WhatsApp da matriz.
+ *   'canais'      array   RF-26. Outras plataformas de venda da loja, cada uma
+ *                         ['nome' => string, 'url' => string]. Lista vazia
+ *                         esconde o bloco inteiro — nada de link quebrado.
  *   'matriz'      bool    exatamente uma unidade deve ter true
  */
 
@@ -51,10 +60,13 @@ return [
         'endereco'    => 'PREENCHER: Rua Exemplo, 000 — Centro, Cidade/UF',
         'whatsapp'    => '55000000000', // PREENCHER
         'horario'     => 'Seg a sex, 6h às 20h · Sáb e dom, 6h às 14h', // PREENCHER
+        'preparo'     => '48 horas para encomendas · balcão na hora', // PREENCHER
         'sobre'       => 'PREENCHER: um parágrafo sobre esta loja — o que ela faz de melhor, se tem mesa e café, estacionamento, quais escolas e empresas da região ela atende.', // PREENCHER
         'mapaUrl'     => 'https://maps.google.com/?q=PREENCHER', // PREENCHER
         'imagem'      => '/assets/img/unidades/matriz.jpg', // PREENCHER
         'catalogoPdf' => '/catalogos/matriz.pdf',
+        'avaliacao'   => '', // PREENCHER: link de avaliação da loja (Google Maps)
+        'canais'      => [], // PREENCHER: [['nome' => 'iFood', 'url' => 'https://...']]
         'matriz'      => true,
     ],
 
@@ -65,10 +77,13 @@ return [
         'endereco'    => 'PREENCHER: Av. Exemplo, 000 — Bairro, Cidade/UF',
         'whatsapp'    => '55000000000', // PREENCHER
         'horario'     => 'Seg a sáb, 6h às 20h', // PREENCHER
+        'preparo'     => '48 horas para encomendas · balcão na hora', // PREENCHER
         'sobre'       => 'PREENCHER: um parágrafo sobre esta loja — o que ela faz de melhor, se tem mesa e café, estacionamento, quais escolas e empresas da região ela atende.', // PREENCHER
         'mapaUrl'     => 'https://maps.google.com/?q=PREENCHER', // PREENCHER
         'imagem'      => '/assets/img/unidades/unidade-1.jpg', // PREENCHER
         'catalogoPdf' => '/catalogos/unidade-1.pdf',
+        'avaliacao'   => '', // PREENCHER: link de avaliação da loja (Google Maps)
+        'canais'      => [], // PREENCHER: [['nome' => 'iFood', 'url' => 'https://...']]
         'matriz'      => false,
     ],
 
@@ -79,10 +94,13 @@ return [
         'endereco'    => 'PREENCHER: Rua Exemplo, 000 — Bairro, Cidade/UF',
         'whatsapp'    => '55000000000', // PREENCHER
         'horario'     => 'Seg a sáb, 6h às 20h', // PREENCHER
+        'preparo'     => '48 horas para encomendas · balcão na hora', // PREENCHER
         'sobre'       => 'PREENCHER: um parágrafo sobre esta loja — o que ela faz de melhor, se tem mesa e café, estacionamento, quais escolas e empresas da região ela atende.', // PREENCHER
         'mapaUrl'     => 'https://maps.google.com/?q=PREENCHER', // PREENCHER
         'imagem'      => '/assets/img/unidades/unidade-2.jpg', // PREENCHER
         'catalogoPdf' => '/catalogos/unidade-2.pdf',
+        'avaliacao'   => '', // PREENCHER: link de avaliação da loja (Google Maps)
+        'canais'      => [], // PREENCHER: [['nome' => 'iFood', 'url' => 'https://...']]
         'matriz'      => false,
     ],
 
@@ -93,10 +111,13 @@ return [
         'endereco'    => 'PREENCHER: Rua Exemplo, 000 — Bairro, Cidade/UF',
         'whatsapp'    => '55000000000', // PREENCHER
         'horario'     => 'Seg a sáb, 6h às 20h', // PREENCHER
+        'preparo'     => '48 horas para encomendas · balcão na hora', // PREENCHER
         'sobre'       => 'PREENCHER: um parágrafo sobre esta loja — o que ela faz de melhor, se tem mesa e café, estacionamento, quais escolas e empresas da região ela atende.', // PREENCHER
         'mapaUrl'     => 'https://maps.google.com/?q=PREENCHER', // PREENCHER
         'imagem'      => '/assets/img/unidades/unidade-3.jpg', // PREENCHER
         'catalogoPdf' => '/catalogos/unidade-3.pdf',
+        'avaliacao'   => '', // PREENCHER: link de avaliação da loja (Google Maps)
+        'canais'      => [], // PREENCHER: [['nome' => 'iFood', 'url' => 'https://...']]
         'matriz'      => false,
     ],
 
@@ -107,10 +128,13 @@ return [
         'endereco'    => 'PREENCHER: Av. Exemplo, 000 — Bairro, Cidade/UF',
         'whatsapp'    => '55000000000', // PREENCHER
         'horario'     => 'Seg a sáb, 6h às 20h', // PREENCHER
+        'preparo'     => '48 horas para encomendas · balcão na hora', // PREENCHER
         'sobre'       => 'PREENCHER: um parágrafo sobre esta loja — o que ela faz de melhor, se tem mesa e café, estacionamento, quais escolas e empresas da região ela atende.', // PREENCHER
         'mapaUrl'     => 'https://maps.google.com/?q=PREENCHER', // PREENCHER
         'imagem'      => '/assets/img/unidades/unidade-4.jpg', // PREENCHER
         'catalogoPdf' => '/catalogos/unidade-4.pdf',
+        'avaliacao'   => '', // PREENCHER: link de avaliação da loja (Google Maps)
+        'canais'      => [], // PREENCHER: [['nome' => 'iFood', 'url' => 'https://...']]
         'matriz'      => false,
     ],
 
@@ -121,10 +145,13 @@ return [
         'endereco'    => 'PREENCHER: Rua Exemplo, 000 — Bairro, Cidade/UF',
         'whatsapp'    => '55000000000', // PREENCHER
         'horario'     => 'Seg a sáb, 6h às 20h', // PREENCHER
+        'preparo'     => '48 horas para encomendas · balcão na hora', // PREENCHER
         'sobre'       => 'PREENCHER: um parágrafo sobre esta loja — o que ela faz de melhor, se tem mesa e café, estacionamento, quais escolas e empresas da região ela atende.', // PREENCHER
         'mapaUrl'     => 'https://maps.google.com/?q=PREENCHER', // PREENCHER
         'imagem'      => '/assets/img/unidades/unidade-5.jpg', // PREENCHER
         'catalogoPdf' => '/catalogos/unidade-5.pdf',
+        'avaliacao'   => '', // PREENCHER: link de avaliação da loja (Google Maps)
+        'canais'      => [], // PREENCHER: [['nome' => 'iFood', 'url' => 'https://...']]
         'matriz'      => false,
     ],
 ];

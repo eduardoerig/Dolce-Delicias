@@ -28,6 +28,8 @@ $url         = 'produto.php?slug=' . rawurlencode((string) $produto['slug']);
   data-produto
   data-categoria="<?= e($produto['categoria'] ?? '') ?>"
   data-linha="<?= e($linha) ?>"
+  <?php // RF-24: vazio quando o produto não tem nenhuma restrição declarada. ?>
+  data-restricoes="<?= e(dd_restricoes_do_produto($produto)) ?>"
   data-busca="<?= e(dd_indice_busca($produto)) ?>">
 
   <figure class="relative aspect-[4/3] overflow-hidden rounded-t-box">
@@ -99,7 +101,7 @@ $url         = 'produto.php?slug=' . rawurlencode((string) $produto['slug']);
     <div class="card-actions mt-auto items-center gap-2 pt-2 sm:pt-3">
       <?php if ($disponivel): ?>
         <button type="button"
-                class="btn btn-primary h-9 min-h-9 w-full text-xs font-bold sm:h-12 sm:min-h-12 sm:w-auto sm:flex-1 sm:text-sm"
+                class="btn btn-primary h-11 min-h-11 w-full text-xs font-bold sm:h-12 sm:min-h-12 sm:w-auto sm:flex-1 sm:text-sm"
                 data-add
                 data-id="<?= e($produto['slug']) ?>"
                 data-slug="<?= e($produto['slug']) ?>"
@@ -115,7 +117,7 @@ $url         = 'produto.php?slug=' . rawurlencode((string) $produto['slug']);
           Adicionar
         </button>
       <?php else: ?>
-        <button type="button" class="btn btn-disabled h-9 min-h-9 w-full text-xs sm:h-12 sm:min-h-12 sm:w-auto sm:flex-1 sm:text-sm" disabled>Indisponível hoje</button>
+        <button type="button" class="btn btn-disabled h-11 min-h-11 w-full text-xs sm:h-12 sm:min-h-12 sm:w-auto sm:flex-1 sm:text-sm" disabled>Indisponível hoje</button>
       <?php endif; ?>
 
       <?php // "Detalhes" só a partir de sm: no card de dois por linha não cabe

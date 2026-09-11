@@ -62,6 +62,19 @@ include __DIR__ . '/partials/header.php';
           Esvaziar pedido
         </button>
       </div>
+
+      <?php
+      /**
+       * A confirmação do pedido (horário, prazo, retirada/entrega, pagamento).
+       * Fica junto da lista, e não dentro do resumo à direita: no celular as
+       * duas colunas viram uma só, e assim as perguntas aparecem na ordem
+       * natural — o que você pediu, depois como recebe e como paga, depois o
+       * total e o botão. Some junto com a lista quando o pedido está vazio.
+       */
+      ?>
+      <div data-cart-footer class="oculto">
+        <?php include __DIR__ . '/partials/pedido-validacao.php'; ?>
+      </div>
     </div>
 
     <!-- Resumo -->
@@ -100,8 +113,10 @@ include __DIR__ . '/partials/header.php';
         Finalizar no WhatsApp
       </button>
 
+      <?php // RF-18 fora do escopo: nada de frete aqui. O que a matriz confirma
+         // na conversa é preço e prazo. ?>
       <p class="mt-3 text-xs leading-relaxed text-crust">
-        Valor de referência: a matriz confirma preço, prazo e frete na conversa.
+        Valor de referência: a matriz confirma preço e prazo na conversa.
       </p>
     </aside>
   </div>

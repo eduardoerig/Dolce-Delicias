@@ -50,8 +50,9 @@ Os mesmos comandos estão no `package.json`: `npm run dev` (CSS em watch),
 
 ```
 dolce-delicias/
-├── index.php               home: herói, catálogo e como encomendar
+├── index.php               home: herói, promoções, catálogo e como encomendar
 ├── unidades.php            uma seção por loja, com âncora #<slug>
+├── sobre.php               a empresa: quem somos, história, portfólio, empresas
 ├── produto.php             página de produto (lê ?slug=), com 404 amigável
 ├── carrinho.php            o pedido em página inteira
 ├── partials/
@@ -63,15 +64,19 @@ dolce-delicias/
 │   ├── footer.php          rodapé + fecha o drawer e o documento
 │   ├── product-card.php    um card do catálogo
 │   ├── unit-section.php    uma loja inteira em unidades.php
+│   ├── promocoes.php       faixa de ofertas da home (RF-14 e RF-20)
+│   ├── pedido-validacao.php  confirmação: horário, prazo, entrega, pagamento
 │   └── cart-drawer.php     carrinho lateral
 ├── data/
 │   ├── products.php        catálogo (return array)
-│   └── units.php           matriz + 5 unidades (return array)
+│   ├── units.php           matriz + 5 unidades (return array)
+│   ├── promocoes.php       ofertas com agenda (semanal, mensal, período)
+│   └── empresa.php         textos institucionais que alimentam sobre.php
 ├── assets/
 │   ├── css/input.css       fonte do Tailwind: tokens, temas daisyUI, componentes
 │   ├── css/app.css         GERADO pelo Tailwind CLI
 │   ├── js/cart.js          estado do carrinho + mensagem do WhatsApp
-│   ├── js/ui.js            tema, unidade, drawer, busca, filtros, reveal, avisos
+│   ├── js/ui.js            unidade, drawer, busca, filtros, reveal, avisos, confirmação
 │   └── img/                placeholders — veja assets/img/README.md
 ├── catalogos/              um PDF por unidade + completo.pdf — veja catalogos/README.md
 └── package.json
@@ -123,6 +128,81 @@ O site deriva o resto sozinho, em `dd_faixa()` (`partials/bootstrap.php`):
 Se o passo automático não servir para algum item, declare `'passo' => 10` na
 faixa e ele manda.
 
+**O preço é único para toda a rede** (RF-06 revisado). A relação produto↔unidade
+existe só como recorte de catálogo, no campo `unidades` — nunca como preço
+diferente por loja.
+
+### Restrições alimentares (RF-24)
+
+Escreva `'vegano'` ou `'sem lactose'` nas `tags` de um produto e o chip de filtro
+aparece sozinho no catálogo. A lista de tags reconhecidas está em
+`dd_restricoes()` (`partials/bootstrap.php`) — hoje `vegano`, `sem lactose`,
+`sem glúten` e `sem carne`. O chip só é desenhado quando **algum** produto
+carrega a tag, então o filtro nunca promete um recorte vazio.
+
+Diferente da categoria, as restrições **acumulam**: ligar "vegano" e
+"sem lactose" pede as duas coisas ao mesmo tempo.
+
+### Promoções (RF-14 e RF-20)
+
+`data/promocoes.php` guarda as duas coisas, porque as duas são "uma oferta com
+uma data": a promoção de quarta-feira e as campanhas de baixa temporada. O que
+muda entre elas é só o campo `quando`:
+
+```php
+['tipo' => 'semanal', 'dias'  => [3]]           // toda quarta (0=domingo)
+['tipo' => 'mensal',  'meses' => [7, 12, 1]]    // julho, dezembro e janeiro
+['tipo' => 'periodo', 'de' => '2026-12-01', 'ate' => '2026-12-24']
+['tipo' => 'sempre']
+```
+
+**Vigente e visível não são a mesma coisa**, e é isso que faz a divulgação
+funcionar:
+
+| Agenda | Quando aparece na home |
+|---|---|
+| `semanal`, `sempre` | todo dia, com selo **"é hoje"** no dia certo |
+| `mensal`, `periodo` | só dentro da janela |
+
+Uma promoção de quarta anunciada só na quarta não divulga nada — quem monta a
+encomenda na segunda precisa saber. Já a campanha de julho anunciada em março é
+ruído. Quem decide isso é `dd_promocoes_visiveis()`, em `partials/bootstrap.php`;
+`partials/promocoes.php` não tem nenhuma regra de calendário.
+
+Para conferir julho e dezembro sem esperar julho e dezembro, o partial aceita uma
+data:
+
+```php
+$promocoesEm = new DateTimeImmutable('2026-12-16');
+include __DIR__ . '/partials/promocoes.php';
+```
+
+Sem nada cadastrado (ou tudo com `'ativo' => false`), a seção inteira some — a
+home não fica com um título "Promoções" e vazio embaixo.
+
+O desconto **não** é calculado pelo site: o total continua sendo o preço cheio, e
+quem aplica a oferta é a matriz no fechamento.
+
+### A empresa (RF-19, RF-21, RF-22, RF-31)
+
+`sobre.php` responde quatro perguntas da mesma conversa, na ordem em que alguém
+faria: quem somos (RF-31), de onde viemos (RF-21), o que fazemos (RF-22) e o que
+fazemos pela sua empresa (RF-19). Quatro páginas separadas dariam quatro páginas
+curtas e um menu inchado.
+
+Todo o texto vem de `data/empresa.php` — a página só tem estrutura. Cada seção
+some sozinha quando a chave dela está vazia, então dá para publicar com metade
+preenchida sem ficar buraco na tela. O total de unidades é **contado** de
+`data/units.php`, nunca cadastrado, para os dois não divergirem quando abrir a
+próxima loja.
+
+### Produtos por unidade (RF-25)
+
+Cada produto pode declarar `'unidades' => ['matriz', 'unidade-2']` com os slugs
+das lojas que o vendem. **Isso não muda nada na interface**: o catálogo do site
+é único. O campo existe para a geração futura do PDF por unidade. Ausente ou
+vazio quer dizer "todas as lojas".
+
 ---
 
 ## Carrinho e WhatsApp
@@ -136,19 +216,53 @@ faixa e ele manda.
 - `checkout()` lê a matriz no `<script type="application/json" id="units-data">`
   publicado pelo PHP, monta a mensagem e abre `https://wa.me/<numero>?text=…`.
 
+### O caminho do pedido
+
+```
+catálogo → drawer (resumo) → carrinho.php (confirmação) → WhatsApp
+```
+
+O drawer **não fecha o pedido**: o botão dele leva para `carrinho.php`, onde
+fica a confirmação (`partials/pedido-validacao.php`) com as quatro perguntas que
+a padaria precisa responder antes da conversa:
+
+| Pergunta | RF | De onde vem |
+|---|---|---|
+| Horário de funcionamento | RF-29 | `horario` da matriz |
+| Tempo mínimo de preparo | RF-30 | `preparo` da matriz |
+| Retirar na matriz ou entrega | RF-17 | escolha da pessoa (padrão: retirar) |
+| Forma de pagamento | — | escolha da pessoa (padrão: Pix) |
+
+Os campos vivem **só** em `carrinho.php` — no painel de 24rem do drawer viraria
+formulário rolando dentro de formulário, e duplicá-los seria manter duas cópias
+em sincronia. `checkout()` lê os quatro por `[data-pedido-*]`; chamado de
+qualquer outra página, cai nos padrões conservadores (retirar na matriz,
+pagamento a combinar).
+
+**Nada é pago pelo site.** A forma de pagamento é só declarada. E **RF-18 está
+fora do escopo**: não há valor, faixa nem condição de frete em lugar nenhum —
+perguntar "entrega?" é RF-17, cobrar por ela não é deste site.
+
 Mensagem gerada:
 
 ```
 Olá! Quero fazer uma encomenda pelo site da Dolce Delícias.
 
 Unidade: Matriz — PREENCHER bairro
+Como receber: Entrega
+Endereço: Rua das Flores, 42 — perto da escola
 
 • 150x Pão de Queijo (R$ 120,00 / 100 un) — R$ 180,00
 
 Total estimado: R$ 180,00
+Forma de pagamento: Pix
+Preparo mínimo: 48 horas para encomendas
 
 Observação: entrega dia 12
 ```
+
+A linha `Endereço:` só aparece quando a escolha é entrega — voltar para
+"retirar" descarta o que foi digitado, em vez de mandar um endereço órfão.
 
 O drawer lateral e a página `carrinho.php` usam os **mesmos** `data-*`, então
 `cart.js` desenha os dois com o mesmo código.
@@ -220,10 +334,13 @@ Todos estão comentados no código com `>>> INTEGRAÇÃO FUTURA <<<`:
 | Imagem do herói | `index.php`, bloco "ESPAÇO RESERVADO" |
 | Fonte dos produtos | `dd_produtos()` em `partials/bootstrap.php` |
 | Fonte das unidades | `dd_unidades()` em `partials/bootstrap.php` |
+| Fonte das promoções | `dd_promocoes()` em `partials/bootstrap.php` |
+| Textos institucionais | `dd_empresa()` em `partials/bootstrap.php` |
 | Fotos de produto | campo `imagem` em `data/products.php` + `dd_imagem()` |
 | Fotos de fachada | campo `imagem` em `data/units.php` |
 | Números de WhatsApp | campo `whatsapp` em `data/units.php` (hoje `55000000000`) |
-| PDFs por unidade | `catalogos/` + campo `catalogoPdf` |
+| Tempo de preparo / avaliação / canais | campos `preparo`, `avaliacao` e `canais` em `data/units.php` |
+| PDFs por unidade | `catalogos/` + campo `catalogoPdf` (recorte pelo campo `unidades` do produto) |
 | Galeria do produto | `produto.php`, bloco "GALERIA" (hoje uma imagem só) |
 | Logo oficial | `assets/img/logo.svg` + `dd_logo()` em `partials/bootstrap.php` |
 
@@ -232,10 +349,64 @@ Todos estão comentados no código com `>>> INTEGRAÇÃO FUTURA <<<`:
 1. **Números de WhatsApp** das 6 unidades. Enquanto forem `55000000000`, o card
    avisa na tela que o número não está cadastrado.
 2. **Endereços, horários e links de mapa** — hoje marcados como `PREENCHER`.
-3. **Fotos** de produtos e fachadas (veja `assets/img/README.md`).
-4. **PDFs reais** dos catálogos (veja `catalogos/README.md`).
-5. **Resto do cardápio.** O catálogo atual é uma amostra; os sabores marcados
-   com `// conferir` em `data/products.php` são exemplo e precisam de confirmação.
+3. **Tempo de preparo** (`preparo`) de cada unidade — hoje um exemplo. É o que
+   aparece na confirmação do pedido e no rodapé.
+4. **Link de avaliação** (`avaliacao`) de cada loja. Vazio, o rodapé cai para o
+   WhatsApp da matriz.
+5. **Canais de venda** (`canais`) — iFood e afins. Lista vazia não desenha nada.
+6. **Fotos** de produtos e fachadas (veja `assets/img/README.md`).
+7. **PDFs reais** dos catálogos (veja `catalogos/README.md`).
+8. **Resto do cardápio.** O catálogo atual é uma amostra; os sabores e as tags de
+   restrição marcados com `// conferir` em `data/products.php` são exemplo e
+   precisam de confirmação da padaria.
+9. **Relação produto↔unidade** (`unidades`) — hoje todos os itens apontam para
+   todas as lojas.
+10. **As promoções** em `data/promocoes.php` — nome, selo e regra de cada oferta.
+    As três cadastradas são exemplo; a agenda (quarta-feira, julho/janeiro e
+    dezembro) veio do requisito, o resto não.
+11. **Os textos da empresa** em `data/empresa.php` — história, números, portfólio
+    e o atendimento a empresas. **Nada ali é informação real**: datas e trajetória
+    precisam vir do cliente, porque inventar história de empresa é pior do que
+    deixar o espaço em branco.
+
+---
+
+## Requisitos (ER v01.00)
+
+Só a **área pública** — os RF de administração (RF-01, 07, 08, 12, 13 e RNF-01,
+04) estão fora do escopo deste front-end.
+
+Revisões acordadas com o cliente: **RF-06** preço único para a rede; **RF-18**
+entrega/frete cortados; **RF-27** generalizado para feedback de serviço;
+**RF-32** e **RF-33** fora de escopo.
+
+| RF | Requisito | Onde está |
+|---|---|---|
+| 02, 28 | Unidades e locais de atendimento | `unidades.php` |
+| 03 | Mapa | link "Ver no mapa" em `partials/unit-section.php` |
+| 04, 09, 25 | Cardápio por unidade | PDF por loja em `catalogos/` + campo `unidades` |
+| 05 | Cardápio por tipo | chips de categoria, derivados de `categoria` |
+| 06 | Preço único | `data/products.php` |
+| 10, 23 | Vitrine e apresentação | `partials/product-card.php`, `produto.php` |
+| 11, 15, 16 | Carrinho, WhatsApp e comanda | `assets/js/cart.js` |
+| 14, 20 | Promoção de quarta e sazonalidade | `data/promocoes.php` + `partials/promocoes.php` |
+| 17 | Entrega e retirada | `partials/pedido-validacao.php` |
+| 19 | Divulgação para empresas | `sobre.php#empresas` |
+| 21 | História da empresa | `sobre.php#historia` |
+| 22 | Portfólio | `sobre.php#portfolio` |
+| 24 | Filtro vegano / sem lactose | `dd_restricoes()` + chips no catálogo |
+| 26 | Canais de venda | campo `canais` em `data/units.php` |
+| 27 | Feedback de serviço | bloco no rodapé (`partials/footer.php`) |
+| 29, 30 | Horário e tempo mínimo | `horario` e `preparo`, na confirmação do pedido |
+| 31 | Institucional | `sobre.php#institucional` |
+
+Toda a área pública está coberta. O que falta agora é **conteúdo real**, não
+código — veja "O que falta preencher" acima.
+
+**Fora de escopo, por decisão do cliente:** RF-01, 07, 08, 12 e 13 (área
+administrativa, junto de RNF-01 e 04), RF-18 (entrega e frete), RF-32 (divulgação
+da expansão) e RF-33 (fábrica de congelados). Se RF-32 ou RF-33 voltarem, viram
+duas chaves novas em `data/empresa.php` e uma seção em `sobre.php`.
 
 ---
 

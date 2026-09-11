@@ -54,6 +54,7 @@ $menu = [
     ['href' => $ancora . '#catalogo',   'texto' => 'Catálogo', 'catalogos' => true],
     ['href' => $ancora . '#encomendas', 'texto' => 'Encomendas'],
     ['href' => 'unidades.php',          'texto' => 'Unidades'],
+    ['href' => 'sobre.php',             'texto' => 'A empresa'],
     ['href' => $ancora . '#contato',    'texto' => 'Contato'],
 ];
 ?>

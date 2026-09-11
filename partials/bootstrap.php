@@ -41,6 +41,47 @@ function dd_unidades(): array
     return $cache;
 }
 
+function dd_promocoes(): array
+{
+    static $cache = null;
+    if ($cache === null) {
+        $cache = require DD_BASE . '/data/promocoes.php';
+    }
+    return $cache;
+}
+
+function dd_empresa(): array
+{
+    static $cache = null;
+    if ($cache === null) {
+        $cache = require DD_BASE . '/data/empresa.php';
+    }
+    return $cache;
+}
+
+/**
+ * A unidade que recebe o pedido do site — sempre a matriz.
+ *
+ * REGRA DE NEGÓCIO: pedido feito pelo site vai só para a matriz. As outras lojas
+ * atendem por WhatsApp direto e têm o catálogo delas em PDF. É a mesma regra que
+ * matriz() aplica em assets/js/cart.js — se um dia cada loja receber pedido, os
+ * dois lugares mudam juntos.
+ *
+ * @return array|null null quando não há nenhuma unidade cadastrada.
+ */
+function dd_matriz(): ?array
+{
+    $unidades = dd_unidades();
+
+    foreach ($unidades as $unidade) {
+        if (!empty($unidade['matriz'])) {
+            return $unidade;
+        }
+    }
+
+    return $unidades[0] ?? null;
+}
+
 /* -----------------------------------------------------------------------------
  * CATÁLOGOS EM PDF
  * O arquivo pode não existir ainda (ver catalogos/README.md), então todo lugar
@@ -71,6 +112,125 @@ function dd_tem_pdf(?string $caminho): bool
 function dd_catalogo_completo(): ?string
 {
     return dd_tem_pdf('/catalogos/completo.pdf') ? '/catalogos/completo.pdf' : null;
+}
+
+/* -----------------------------------------------------------------------------
+ * PROMOÇÕES — RF-14 (quarta-feira) e RF-20 (baixa temporada)
+ *
+ * A agenda de cada oferta é um array 'quando'; o formato está documentado em
+ * data/promocoes.php. Aqui só se responde a duas perguntas: "vale hoje?" e
+ * "deve aparecer na página hoje?" — que NÃO são a mesma pergunta.
+ * -------------------------------------------------------------------------- */
+
+/** A promoção está valendo na data informada? */
+function dd_promocao_vigente(array $promocao, ?DateTimeInterface $quando = null): bool
+{
+    $quando = $quando ?? new DateTimeImmutable('today');
+    $agenda = (array) ($promocao['quando'] ?? []);
+
+    return match ((string) ($agenda['tipo'] ?? 'sempre')) {
+        'semanal' => in_array((int) $quando->format('w'), array_map('intval', $agenda['dias'] ?? []), true),
+        'mensal'  => in_array((int) $quando->format('n'), array_map('intval', $agenda['meses'] ?? []), true),
+        'periodo' => dd_dentro_do_periodo($agenda, $quando),
+        default   => true, // 'sempre'
+    };
+}
+
+/** 'periodo' com 'de' e/ou 'ate' em AAAA-MM-DD. Ponta ausente = aberta. */
+function dd_dentro_do_periodo(array $agenda, DateTimeInterface $quando): bool
+{
+    $dia = $quando->format('Y-m-d');
+    $de  = trim((string) ($agenda['de'] ?? ''));
+    $ate = trim((string) ($agenda['ate'] ?? ''));
+
+    return ($de === '' || $dia >= $de) && ($ate === '' || $dia <= $ate);
+}
+
+/**
+ * As promoções que devem APARECER na página hoje, já enriquecidas.
+ *
+ * A regra de exibição não é a de vigência: uma oferta semanal se divulga a
+ * semana toda (quem planeja a encomenda na segunda precisa saber da quarta),
+ * enquanto uma campanha de julho anunciada em março é só ruído. Ver o comentário
+ * em data/promocoes.php.
+ *
+ * Cada item ganha:
+ *   'vigente'  bool    vale hoje
+ *   'agenda'   string  "Toda quarta-feira", "Em julho e janeiro"…
+ *
+ * As vigentes vêm primeiro; o resto mantém a ordem do cadastro.
+ */
+function dd_promocoes_visiveis(?DateTimeInterface $quando = null): array
+{
+    $quando  = $quando ?? new DateTimeImmutable('today');
+    $lista   = [];
+
+    foreach (dd_promocoes() as $promocao) {
+        if (($promocao['ativo'] ?? true) === false) {
+            continue;
+        }
+
+        $tipo    = (string) ($promocao['quando']['tipo'] ?? 'sempre');
+        $vigente = dd_promocao_vigente($promocao, $quando);
+
+        // Só as datadas somem fora da janela. Ver o docblock.
+        if (!$vigente && in_array($tipo, ['mensal', 'periodo'], true)) {
+            continue;
+        }
+
+        $promocao['vigente'] = $vigente;
+        $promocao['agenda']  = dd_agenda_em_texto((array) ($promocao['quando'] ?? []));
+        $lista[] = $promocao;
+    }
+
+    // A vigente sobe; o resto mantém a ordem do cadastro, porque a ordenação do
+    // PHP 8 é estável — não precisa de critério de desempate.
+    usort($lista, static fn (array $a, array $b): int => (int) $b['vigente'] <=> (int) $a['vigente']);
+
+    return $lista;
+}
+
+/** A agenda em português: "Toda quarta-feira", "Em julho e janeiro". */
+function dd_agenda_em_texto(array $agenda): string
+{
+    $juntar = static function (array $itens): string {
+        if (count($itens) <= 1) {
+            return (string) ($itens[0] ?? '');
+        }
+        $ultimo = array_pop($itens);
+        return implode(', ', $itens) . ' e ' . $ultimo;
+    };
+
+    switch ((string) ($agenda['tipo'] ?? 'sempre')) {
+        case 'semanal':
+            $nomes = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
+            $dias  = array_map(static fn ($d): string => $nomes[(int) $d] ?? '', (array) ($agenda['dias'] ?? []));
+            $dias  = array_values(array_filter($dias));
+            return $dias === [] ? '' : 'Toda ' . $juntar($dias);
+
+        case 'mensal':
+            $nomes = [1 => 'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
+                      'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+            $meses = array_map(static fn ($m): string => $nomes[(int) $m] ?? '', (array) ($agenda['meses'] ?? []));
+            $meses = array_values(array_filter($meses));
+            return $meses === [] ? '' : 'Em ' . $juntar($meses);
+
+        case 'periodo':
+            $formatar = static function (string $iso): string {
+                $data = DateTimeImmutable::createFromFormat('Y-m-d', $iso);
+                return $data ? $data->format('d/m') : '';
+            };
+            $de  = $formatar(trim((string) ($agenda['de'] ?? '')));
+            $ate = $formatar(trim((string) ($agenda['ate'] ?? '')));
+
+            if ($de !== '' && $ate !== '') {
+                return 'De ' . $de . ' a ' . $ate;
+            }
+            return $ate !== '' ? 'Até ' . $ate : ($de !== '' ? 'A partir de ' . $de : '');
+
+        default:
+            return 'O ano inteiro';
+    }
 }
 
 /* -----------------------------------------------------------------------------
@@ -234,6 +394,56 @@ function dd_categorias(?array $produtos = null): array
         }
     }
     return $categorias;
+}
+
+/**
+ * RF-24 — restrições alimentares que o catálogo sabe filtrar.
+ *
+ * A lista de tags reconhecidas é fixa (uma tag livre qualquer não vira filtro),
+ * mas o chip só aparece quando ALGUM produto carrega a tag — assim o filtro
+ * nunca promete um recorte que devolveria a grade vazia.
+ *
+ * @return array<string> na ordem de RESTRICOES, só as presentes no catálogo
+ */
+function dd_restricoes(?array $produtos = null): array
+{
+    // Ordem dos chips na tela. Para reconhecer uma tag nova, acrescente aqui.
+    $conhecidas = ['vegano', 'sem lactose', 'sem glúten', 'sem carne'];
+
+    $presentes = [];
+    foreach ($produtos ?? dd_produtos() as $produto) {
+        foreach ($produto['tags'] ?? [] as $tag) {
+            $tag = dd_ascii(trim((string) $tag));
+            foreach ($conhecidas as $conhecida) {
+                if ($tag === dd_ascii($conhecida) && !in_array($conhecida, $presentes, true)) {
+                    $presentes[] = $conhecida;
+                }
+            }
+        }
+    }
+
+    // Devolve na ordem de $conhecidas, não na ordem em que apareceram nos dados.
+    return array_values(array_filter($conhecidas, static fn (string $r): bool => in_array($r, $presentes, true)));
+}
+
+/**
+ * As restrições DESTE produto, prontas para o atributo data-restricoes do card.
+ * Sem acento e em minúsculas, porque é assim que o JS compara (assets/js/ui.js).
+ */
+function dd_restricoes_do_produto(array $produto): string
+{
+    $tags  = array_map(static fn ($t): string => dd_ascii(trim((string) $t)), $produto['tags'] ?? []);
+    $delas = [];
+
+    foreach (dd_restricoes() as $restricao) {
+        if (in_array(dd_ascii($restricao), $tags, true)) {
+            $delas[] = dd_ascii($restricao);
+        }
+    }
+
+    // Espaço nas pontas para o JS poder testar " vegano " sem casar por engano
+    // com um pedaço de outra tag.
+    return $delas === [] ? '' : ' ' . implode(' ', $delas) . ' ';
 }
 
 /** Produtos da mesma categoria, sem repetir o próprio produto. */
