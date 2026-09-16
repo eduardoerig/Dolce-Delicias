@@ -1,7 +1,11 @@
-   {
-     "functions": { "api/*.php": { "runtime": "vercel-php@0.7.3" } },
-     "routes": [
-       { "src": "/assets/(.*)", "dest": "/assets/$1" },
-       { "src": "/(.*)", "dest": "/api/index.php" }
-     ]
-   }
+{
+  "buildCommand": "npm run build && mkdir -p public && cp -r assets public/",
+  "outputDirectory": "public",
+  "functions": {
+    "api/index.php": { "runtime": "vercel-php@0.7.3" }
+  },
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/api/index.php" }
+  ]
+}
