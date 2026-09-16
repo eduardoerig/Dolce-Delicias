@@ -115,9 +115,6 @@ include __DIR__ . '/partials/header.php';
         <?php if ($rotuloLinha !== ''): ?>
           <span class="badge border-none bg-base-300 font-semibold text-crust"><?= e($rotuloLinha) ?></span>
         <?php endif; ?>
-        <?php if (!empty($produto['destaque'])): ?>
-          <span class="badge border-none bg-accent font-bold text-accent-content">mais pedido</span>
-        <?php endif; ?>
       </div>
 
       <h1 class="mt-3 text-4xl leading-[1.08] sm:text-5xl"><?= e($produto['nome']) ?></h1>

@@ -396,56 +396,6 @@ function dd_categorias(?array $produtos = null): array
     return $categorias;
 }
 
-/**
- * RF-24 — restrições alimentares que o catálogo sabe filtrar.
- *
- * A lista de tags reconhecidas é fixa (uma tag livre qualquer não vira filtro),
- * mas o chip só aparece quando ALGUM produto carrega a tag — assim o filtro
- * nunca promete um recorte que devolveria a grade vazia.
- *
- * @return array<string> na ordem de RESTRICOES, só as presentes no catálogo
- */
-function dd_restricoes(?array $produtos = null): array
-{
-    // Ordem dos chips na tela. Para reconhecer uma tag nova, acrescente aqui.
-    $conhecidas = ['vegano', 'sem lactose', 'sem glúten', 'sem carne'];
-
-    $presentes = [];
-    foreach ($produtos ?? dd_produtos() as $produto) {
-        foreach ($produto['tags'] ?? [] as $tag) {
-            $tag = dd_ascii(trim((string) $tag));
-            foreach ($conhecidas as $conhecida) {
-                if ($tag === dd_ascii($conhecida) && !in_array($conhecida, $presentes, true)) {
-                    $presentes[] = $conhecida;
-                }
-            }
-        }
-    }
-
-    // Devolve na ordem de $conhecidas, não na ordem em que apareceram nos dados.
-    return array_values(array_filter($conhecidas, static fn (string $r): bool => in_array($r, $presentes, true)));
-}
-
-/**
- * As restrições DESTE produto, prontas para o atributo data-restricoes do card.
- * Sem acento e em minúsculas, porque é assim que o JS compara (assets/js/ui.js).
- */
-function dd_restricoes_do_produto(array $produto): string
-{
-    $tags  = array_map(static fn ($t): string => dd_ascii(trim((string) $t)), $produto['tags'] ?? []);
-    $delas = [];
-
-    foreach (dd_restricoes() as $restricao) {
-        if (in_array(dd_ascii($restricao), $tags, true)) {
-            $delas[] = dd_ascii($restricao);
-        }
-    }
-
-    // Espaço nas pontas para o JS poder testar " vegano " sem casar por engano
-    // com um pedaço de outra tag.
-    return $delas === [] ? '' : ' ' . implode(' ', $delas) . ' ';
-}
-
 /** Produtos da mesma categoria, sem repetir o próprio produto. */
 function dd_relacionados(array $produto, int $limite = 3): array
 {

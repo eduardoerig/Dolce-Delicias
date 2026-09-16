@@ -217,6 +217,43 @@
 }
 
 /* -------------------------------------------------------------
+   DESFILE DA FAIXA DO HEROI -- os nomes do catalogo passando sozinhos.
+
+   Sao dois blocos identicos lado a lado. A animacao anda -50% da
+   largura total, ou seja, exatamente um bloco: quando ela reinicia,
+   o segundo bloco esta no lugar em que o primeiro comecou e a
+   emenda nao aparece.
+
+   A faixa e aria-hidden no HTML -- e decoracao, nao conteudo.
+   ------------------------------------------------------------- */
+@keyframes desfile {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.tira-desfile {
+  display: flex;
+  width: max-content;
+  animation: desfile 42s linear infinite;
+}
+
+/* Parar no hover deixa o nome legivel para quem quiser ler. */
+.tira:hover .tira-desfile {
+  animation-play-state: paused;
+}
+
+/* Movimento reduzido: a faixa fica parada, sem perder o desenho. */
+@media (prefers-reduced-motion: reduce) {
+  .tira-desfile {
+    animation: none;
+  }
+}
+
+/* -------------------------------------------------------------
    PULO DO CARRINHO -- feedback ao adicionar um item.
    ------------------------------------------------------------- */
 @keyframes pulo-carrinho {

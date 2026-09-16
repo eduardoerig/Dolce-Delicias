@@ -9,7 +9,6 @@ declare(strict_types=1);
 require_once __DIR__ . '/partials/bootstrap.php';
 
 $produtos   = dd_produtos();
-$categorias = dd_categorias($produtos); // derivadas dos dados, nunca fixas
 $unidades   = dd_unidades(); // aqui só para contar: a lista vive em unidades.php
 
 $totalEncomenda = count(array_filter($produtos, static fn (array $p): bool => dd_linha($p) === 'atacado'));
@@ -34,9 +33,8 @@ $heroLinhas    = [
 $heroTexto     = $totalEncomenda . ' itens de encomenda, feitos todo dia. Monte o pedido aqui e feche no WhatsApp da matriz';
 $heroTextoLink = ['href' => '#encomendas', 'texto' => 'veja como funciona'];
 $heroCta       = ['href' => '#catalogo',   'texto' => 'Ver catálogo'];
-// Duplicado para a faixa não ter fim visível.
-$nomesDaTira   = array_slice(array_column($produtos, 'nome'), 0, 8);
-$heroTira      = array_merge($nomesDaTira, $nomesDaTira);
+// O catálogo inteiro desfila na faixa. A cópia que fecha o ciclo sai do hero.
+$heroTira      = array_column($produtos, 'nome');
 
 include __DIR__ . '/partials/hero.php';
 ?>
@@ -93,7 +91,9 @@ include __DIR__ . '/partials/promocoes.php';
     <div class="flex flex-wrap items-center gap-3">
       <div class="relative w-full min-w-0 sm:w-auto sm:max-w-sm sm:flex-1">
         <label for="busca" class="sr-only">Buscar no catálogo</label>
-        <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-crust" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <?php // z-10 obrigatorio: o .input do daisyUI e position:relative e vem
+           // depois no DOM, entao sem z-index o fundo branco dele cobre a lupa. ?>
+        <svg class="pointer-events-none absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-crust" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <input id="busca" type="search" data-busca-input
                class="input h-11 w-full rounded-full border-campo bg-papel pl-11 pr-4 text-base"
                placeholder="Buscar por coxinha, cupcake, bebida…"
@@ -101,48 +101,11 @@ include __DIR__ . '/partials/promocoes.php';
                aria-describedby="contagem-catalogo">
       </div>
 
-      <!-- Encomendas x Balcão: uma escolha só, por isso controle segmentado -->
-      <?php include __DIR__ . '/partials/filtro-linha.php'; ?>
-
       <p id="contagem-catalogo" class="ml-auto shrink-0 text-sm text-crust" data-contagem aria-live="polite">
         <?= e((string) count($produtos)) ?> itens
       </p>
     </div>
 
-    <!-- Categorias derivadas de data/products.php -->
-    <div class="sem-barra -mx-4 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0" role="group" aria-label="Categoria">
-      <button type="button" data-filtro-categoria="" aria-pressed="true"
-              class="chip">Todas</button>
-      <?php foreach ($categorias as $categoria): ?>
-        <button type="button" data-filtro-categoria="<?= e($categoria) ?>" aria-pressed="false"
-                class="chip"><?= e($categoria) ?></button>
-      <?php endforeach; ?>
-    </div>
-
-    <?php
-    /**
-     * RF-24 — restrições alimentares.
-     *
-     * Grupo separado do de categoria porque a lógica é outra: categoria é UMA
-     * escolha ("Doces" OU "Bebidas"), restrição é um acúmulo de exigências
-     * ("vegano E sem lactose"). Misturar os dois na mesma trilha faria um chip
-     * apagar o outro sem explicação.
-     *
-     * A lista sai de dd_restricoes(), que só devolve o que existe nos dados —
-     * catálogo sem nenhum produto marcado não desenha faixa nenhuma.
-     */
-    $restricoes = dd_restricoes($produtos);
-    ?>
-    <?php if ($restricoes !== []): ?>
-      <div class="sem-barra -mx-4 flex items-center gap-2 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0"
-           role="group" aria-label="Restrições alimentares">
-        <span class="shrink-0 text-sm font-semibold text-crust">Filtrar por:</span>
-        <?php foreach ($restricoes as $restricao): ?>
-          <button type="button" data-filtro-restricao="<?= e(dd_ascii($restricao)) ?>" aria-pressed="false"
-                  class="chip"><?= e($restricao) ?></button>
-        <?php endforeach; ?>
-      </div>
-    <?php endif; ?>
   </div>
 
   <?php
@@ -152,15 +115,10 @@ include __DIR__ . '/partials/promocoes.php';
    * sai quando o catálogo acaba — assim não paira sobre as outras seções.
    * Quem liga e desliga é assets/js/ui.js (seção 4), pela classe .oculto.
    *
-   * Leva só o segmentado: as categorias ficariam com onze chips numa faixa
-   * fixa, que era exatamente o problema da barra antiga. A busca vira um
-   * botão que rola de volta e põe o foco no campo de verdade — um campo só,
-   * sem duas caixas de busca para manter em sincronia.
-   *
-   * O $compacto aperta a trilha do segmentado; o include é o mesmo da barra
-   * completa, então as duas cópias nunca divergem.
+   * Leva a lupa e a contagem. A busca é um botão que rola de volta e põe o
+   * foco no campo de verdade — um campo só, sem duas caixas para manter em
+   * sincronia.
    */
-  $compacto = true;
   ?>
   <div data-barra-fina
        class="oculto fixed inset-x-0 top-[4.5rem] z-40 border-b border-base-300 bg-base-100/90 backdrop-blur-md">
@@ -172,8 +130,6 @@ include __DIR__ . '/partials/promocoes.php';
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
       </button>
 
-      <?php include __DIR__ . '/partials/filtro-linha.php'; ?>
-
       <?php // Cópia visual da contagem. O aria-live fica só no original, senão
          // o leitor de tela anuncia a mesma mudança duas vezes. ?>
       <p class="ml-auto hidden shrink-0 text-sm text-crust sm:block" data-contagem aria-hidden="true">
@@ -181,7 +137,6 @@ include __DIR__ . '/partials/promocoes.php';
       </p>
     </div>
   </div>
-  <?php $compacto = false; ?>
 
   <!-- Grade -->
   <div data-grade-produtos class="mt-6 grid grid-cols-2 gap-3 sm:mt-8 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">

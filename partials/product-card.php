@@ -9,7 +9,7 @@ declare(strict_types=1);
  *   $produto  array  item vindo de data/products.php
  *   $eager    bool   opcional. true carrega a imagem sem lazy (use nos primeiros cards).
  *
- * A busca e os filtros do catálogo leem os data-* deste elemento — não os remova.
+ * A busca do catálogo lê o data-busca deste elemento — não o remova.
  */
 
 require_once __DIR__ . '/bootstrap.php';
@@ -18,18 +18,13 @@ require_once __DIR__ . '/bootstrap.php';
 $eager ??= false;
 
 $faixa       = dd_faixa_principal($produto);
-$linha       = dd_linha($produto);
 $disponivel  = ($produto['disponivel'] ?? true) !== false;
 $imagem      = dd_imagem($produto['imagem'] ?? null);
 $url         = 'produto.php?slug=' . rawurlencode((string) $produto['slug']);
 ?>
 <article
-  class="card revelar group border border-base-300 bg-papel shadow-bandeja transition-shadow duration-300 hover:shadow-bandeja-alta<?= $disponivel ? '' : ' opacity-60' ?><?= !empty($produto['destaque']) ? ' border-t-4 border-t-brand' : '' ?>"
+  class="card revelar group border border-base-300 bg-papel shadow-bandeja transition-shadow duration-300 hover:shadow-bandeja-alta<?= $disponivel ? '' : ' opacity-60' ?>"
   data-produto
-  data-categoria="<?= e($produto['categoria'] ?? '') ?>"
-  data-linha="<?= e($linha) ?>"
-  <?php // RF-24: vazio quando o produto não tem nenhuma restrição declarada. ?>
-  data-restricoes="<?= e(dd_restricoes_do_produto($produto)) ?>"
   data-busca="<?= e(dd_indice_busca($produto)) ?>">
 
   <figure class="relative aspect-[4/3] overflow-hidden rounded-t-box">
@@ -56,13 +51,8 @@ $url         = 'produto.php?slug=' . rawurlencode((string) $produto['slug']);
     <?php endif; ?>
     </a>
 
-    <?php // Um selo só na foto. A linha (encomenda x balcão) desceu para o
-       // preço, onde ela já aparece como "/ cento" ou "/ un". ?>
-    <?php if (!empty($produto['destaque'])): ?>
-      <span class="absolute right-3 top-3 rounded-full bg-accent px-2.5 py-1 text-[0.7rem] font-bold text-accent-content shadow-sm">
-        mais pedido
-      </span>
-    <?php endif; ?>
+    <?php // Sem selo na foto: todos os cards do catálogo saem iguais. A linha
+       // (encomenda x balcão) aparece no preço, como "/ cento" ou "/ un". ?>
   </figure>
 
   <div class="card-body gap-2 p-3 sm:gap-2.5 sm:p-5">
