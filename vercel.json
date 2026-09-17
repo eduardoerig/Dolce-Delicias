@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build && mkdir -p public && cp -r assets public/",
+  "buildCommand": "npm run build && mkdir -p public && cp -r assets public/ && mkdir -p public/catalogos && cp catalogos/*.pdf public/catalogos/",
   "outputDirectory": "public",
   "functions": {
     "api/index.php": { "runtime": "vercel-php@0.7.3" }
