@@ -238,7 +238,7 @@
 .tira-desfile {
   display: flex;
   width: max-content;
-  animation: desfile 42s linear infinite;
+  animation: desfile 80s linear infinite;
 }
 
 /* Parar no hover deixa o nome legivel para quem quiser ler. */
