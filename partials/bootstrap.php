@@ -17,17 +17,19 @@ define('DD_BASE', dirname(__DIR__));
 
 /* -----------------------------------------------------------------------------
  * FONTES DE DADOS
- * >>> INTEGRAÇÃO FUTURA <<<
- * Estas duas funções são o único ponto de contato entre o site e os dados.
- * Para plugar um back-end, troque o `require` por uma consulta ao banco/API que
- * devolva um array no mesmo formato — nada mais no projeto precisa mudar.
+ * Estas funções são o único ponto de contato entre o site e os dados.
+ * Produtos, unidades e promoções vêm do Sanity (partials/sanity.php); os
+ * arquivos de data/*.php só entram se a API do Sanity falhar.
+ * A empresa (sobre.php) continua em data/empresa.php.
  * -------------------------------------------------------------------------- */
+
+require_once __DIR__ . '/sanity.php';
 
 function dd_produtos(): array
 {
     static $cache = null;
     if ($cache === null) {
-        $cache = require DD_BASE . '/data/products.php';
+        $cache = dd_sanity_produtos() ?? require DD_BASE . '/data/products.php';
     }
     return $cache;
 }
@@ -36,7 +38,7 @@ function dd_unidades(): array
 {
     static $cache = null;
     if ($cache === null) {
-        $cache = require DD_BASE . '/data/units.php';
+        $cache = dd_sanity_unidades() ?? require DD_BASE . '/data/units.php';
     }
     return $cache;
 }
@@ -45,7 +47,7 @@ function dd_promocoes(): array
 {
     static $cache = null;
     if ($cache === null) {
-        $cache = require DD_BASE . '/data/promocoes.php';
+        $cache = dd_sanity_promocoes() ?? require DD_BASE . '/data/promocoes.php';
     }
     return $cache;
 }
@@ -466,13 +468,15 @@ function dd_indice_busca(array $produto): string
  * É isso que permite deixar os caminhos das fotos já cadastrados em data/ antes
  * de as fotos chegarem: o site desenha um placeholder no lugar, sem quebrar.
  *
- * >>> INTEGRAÇÃO FUTURA <<<
- * Com back-end, troque por uma checagem de URL/CDN.
+ * Fotos enviadas pelo Sanity Studio já chegam como URL do CDN e passam direto.
  */
 function dd_imagem(?string $caminho): ?string
 {
     if (!$caminho) {
         return null;
+    }
+    if (str_starts_with($caminho, 'https://')) {
+        return $caminho;
     }
     $arquivo = DD_BASE . '/' . ltrim($caminho, '/');
     return is_file($arquivo) ? $caminho : null;

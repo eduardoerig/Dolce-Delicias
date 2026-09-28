@@ -23,9 +23,9 @@ declare(strict_types=1);
  *   - 'catalogoPdf' : PDF do catálogo daquela unidade, em /catalogos/.
  *                     Veja catalogos/README.md.
  *
- * >>> INTEGRAÇÃO FUTURA <<<
- * Trocar este `return [...]` por uma consulta ao banco mantém o site funcionando
- * sem nenhuma outra alteração, desde que o formato dos campos seja o mesmo.
+ * >>> FONTE OFICIAL: SANITY <<<
+ * As unidades agora são editadas no Sanity Studio (studio-dolce-delícias/).
+ * Este arquivo só é usado se a API do Sanity falhar — editar aqui NÃO muda o site.
  *
  * -----------------------------------------------------------------------------
  * ESQUEMA

@@ -11,10 +11,10 @@ declare(strict_types=1);
  * de categoria e a página de produto são gerados a partir daqui — não existe
  * lista de categorias fixa em lugar nenhum do código.
  *
- * >>> INTEGRAÇÃO FUTURA <<<
- * Quando existir back-end, troque este `return [...]` por uma consulta ao banco
- * ou por uma chamada de API que devolva um array com o MESMO formato. Nenhuma
- * outra parte do site precisa mudar.
+ * >>> FONTE OFICIAL: SANITY <<<
+ * Os produtos agora são editados no Sanity Studio (studio-dolce-delícias/) e
+ * lidos por partials/sanity.php. Este arquivo só é usado se a API do Sanity
+ * falhar — editar aqui NÃO muda o site.
  *
  * -----------------------------------------------------------------------------
  * ESQUEMA DE CADA PRODUTO

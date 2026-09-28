@@ -16,10 +16,10 @@ declare(strict_types=1);
  * As ofertas abaixo são exemplo. Confirme com a padaria o que vale de verdade,
  * qual o desconto e em quais itens, antes de publicar.
  *
- * >>> INTEGRAÇÃO FUTURA <<<
- * Trocar este `return [...]` por uma consulta ao banco mantém tudo funcionando,
- * desde que o formato dos campos seja o mesmo. É por aqui que a área
- * administrativa (RF-12) vai cadastrar promoção sem tocar em template.
+ * >>> FONTE OFICIAL: SANITY <<<
+ * As promoções agora são cadastradas no Sanity Studio (studio-dolce-delícias/),
+ * que faz o papel da área administrativa (RF-12). Este arquivo só é usado se a
+ * API do Sanity falhar — editar aqui NÃO muda o site.
  *
  * -----------------------------------------------------------------------------
  * ESQUEMA
