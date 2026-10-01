@@ -1532,6 +1532,12 @@ details.dropdown:not([open]) > .dropdown-content {
   color: var(--color-brand);
 }
 
+/* No painel lateral os itens ganham um pouco mais de ar entre foto, texto e linhas. */
+.gaveta-carrinho .item-pedido {
+  gap: 1rem;
+  padding: 1.125rem 0;
+}
+
 /* Celular estreito: só a lixeira (o nome acessível continua "Remover … do pedido"). */
 @media (max-width: 30rem) {
   .item-pedido-remover {

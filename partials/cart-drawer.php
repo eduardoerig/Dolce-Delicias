@@ -20,9 +20,9 @@ declare(strict_types=1);
          role="dialog"
          aria-modal="true"
          aria-labelledby="titulo-carrinho"
-         class="flex h-full w-[min(24rem,100vw)] flex-col bg-papel text-base-content shadow-bandeja-alta">
+         class="gaveta-carrinho flex h-full w-[min(30rem,100vw)] flex-col bg-papel text-base-content shadow-bandeja-alta">
 
-    <header class="flex items-center gap-2.5 px-5 pb-3 pt-4">
+    <header class="flex items-center gap-2.5 px-6 pb-3 pt-5">
       <h2 id="titulo-carrinho" class="text-xl">Seu pedido</h2>
       <span class="text-sm font-semibold text-crust" data-cart-count>0 itens</span>
       <button type="button" data-cart-close
@@ -33,7 +33,7 @@ declare(strict_types=1);
     </header>
 
     <?php // Unidade em uma linha só: é para o WhatsApp dela que o pedido vai. ?>
-    <p class="border-b border-linha px-5 pb-3 text-xs text-crust">
+    <p class="border-b border-linha px-6 pb-4 text-xs text-crust">
       Pedido pela <span class="font-bold text-base-content" data-unit-label>Matriz</span>
     </p>
 
@@ -47,10 +47,10 @@ declare(strict_types=1);
     </div>
 
     <!-- Itens (desenhados por assets/js/cart.js) -->
-    <ul data-cart-items class="oculto flex-1 divide-y divide-linha overflow-y-auto px-5"></ul>
+    <ul data-cart-items class="oculto flex-1 divide-y divide-linha overflow-y-auto px-6"></ul>
 
     <!-- Fechamento -->
-    <footer data-cart-footer class="oculto border-t border-linha px-5 py-4">
+    <footer data-cart-footer class="oculto border-t border-linha px-6 py-5">
       <?php // Observação fica recolhida: quase ninguém preenche, e aberta ela
          // dominava o rodapé. <details> abre e navega pelo teclado sem JS. ?>
       <details class="group">
@@ -76,7 +76,7 @@ declare(strict_types=1);
        * O drawer NÃO fecha o pedido: ele leva para carrinho.php, onde ficam as
        * quatro perguntas da confirmação (horário, prazo, retirada/entrega e
        * pagamento — ver partials/pedido-validacao.php). Cabiam aqui? Não: são
-       * quatro decisões num painel de 24rem que já rola. E duplicar os campos
+       * quatro decisões num painel de 30rem que já rola. E duplicar os campos
        * nos dois lugares seria manter duas cópias em sincronia para sempre.
        *
        * Por ser navegação, é <a> e não <button>: abre em nova aba, aparece no
