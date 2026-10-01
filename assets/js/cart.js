@@ -174,17 +174,20 @@ function iconeDaCategoria(categoria) {
  */
 function miniatura(item) {
   if (item.imagem) {
-    return `<img src="${esc(item.imagem)}" alt="" class="h-full w-full object-cover">`;
+    return `<img src="${esc(item.imagem)}" alt="">`;
   }
-  return `<div class="massa flex h-full w-full items-center justify-center text-crust">${iconeDaCategoria(item.categoria || '')}</div>`;
+  return `<span class="item-pedido-sem-foto">${iconeDaCategoria(item.categoria || '')}</span>`;
 }
 
+const ICONE_MENOS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg>';
+const ICONE_MAIS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+const ICONE_LIXEIRA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13h10l1-13"/><path d="M9 7V4h6v3"/></svg>';
+
 /**
- * Uma linha do carrinho.
+ * Uma linha do carrinho: foto, nome e embalagem, subtotal; embaixo o seletor
+ * de quantidade (o mesmo da página do produto) e "Remover".
  *
- * Os controles de quantidade têm 44px: é aqui que se corrige o pedido no
- * celular, e os 32px de antes ficavam abaixo do alvo que o resto do site adota
- * (ver o comentário de .chip em assets/css/input.css).
+ * Os controles têm 44px: é aqui que se corrige o pedido no celular.
  */
 function linhaItem(item) {
   const nome = esc(item.nome);
@@ -192,38 +195,30 @@ function linhaItem(item) {
   const link = `/produtos/${encodeURIComponent(item.slug || item.id)}`;
 
   return `
-    <li class="flex gap-3 py-3.5" data-item="${esc(item.id)}">
-      <a href="${link}" tabindex="-1" aria-hidden="true"
-         class="miniatura h-14 w-14 shrink-0 overflow-hidden rounded-xl">
+    <li class="item-pedido" data-item="${esc(item.id)}">
+      <a href="${link}" tabindex="-1" aria-hidden="true" class="item-pedido-foto">
         ${miniatura(item)}
       </a>
 
-      <div class="flex min-w-0 flex-1 flex-col gap-2">
-        <div class="flex items-start gap-2">
-          <p class="min-w-0 flex-1 font-bold leading-tight">
-            <a class="rounded hover:text-brand" href="${link}">${nome}</a>
-            <span class="block text-xs font-normal text-crust">${esc(item.por)}</span>
+      <div class="item-pedido-corpo">
+        <div class="item-pedido-topo">
+          <p class="item-pedido-nome">
+            <a href="${link}">${nome}</a>
+            <span>${esc(item.por)}</span>
           </p>
-          <span class="fonte-display shrink-0 text-lg leading-tight">${subtotal}</span>
+          <span class="item-pedido-subtotal">${subtotal}</span>
         </div>
 
-        <div class="flex items-center gap-2">
-          <div class="flex items-center rounded-lg border border-campo">
-            <button type="button" data-item-menos
-                    class="btn btn-ghost h-11 min-h-11 w-11 rounded-lg p-0 text-base font-bold"
-                    aria-label="Diminuir a quantidade de ${nome}">−</button>
+        <div class="item-pedido-acoes">
+          <div class="seletor-qtd seletor-qtd-sm">
+            <button type="button" data-item-menos aria-label="Diminuir a quantidade de ${nome}">${ICONE_MENOS}</button>
             <input type="number" data-item-qtd inputmode="numeric"
-                   class="h-11 w-12 border-0 bg-transparent text-center text-sm font-bold focus:outline-none"
                    value="${Number(item.qtd)}" min="${Number(item.min) || 1}" step="${Number(item.passo) || 1}"
                    aria-label="Quantidade de ${nome}, em unidades">
-            <button type="button" data-item-mais
-                    class="btn btn-ghost h-11 min-h-11 w-11 rounded-lg p-0 text-base font-bold"
-                    aria-label="Aumentar a quantidade de ${nome}">+</button>
+            <button type="button" data-item-mais aria-label="Aumentar a quantidade de ${nome}">${ICONE_MAIS}</button>
           </div>
-          <button type="button" data-item-remove
-                  class="btn btn-ghost ml-auto h-11 min-h-11 rounded-lg px-3 text-xs font-semibold text-crust hover:text-brand"
-                  aria-label="Remover ${nome} do pedido">
-            Remover
+          <button type="button" data-item-remove class="item-pedido-remover" aria-label="Remover ${nome} do pedido">
+            ${ICONE_LIXEIRA}<span>Remover</span>
           </button>
         </div>
       </div>
@@ -419,6 +414,8 @@ document.addEventListener('click', (evento) => {
     return;
   }
   if (alvo.closest('[data-cart-clear]')) {
+    // Esvaziar não tem volta: pergunta antes, dizendo o que acontece.
+    if (!window.confirm('Tirar todos os itens do pedido? Essa ação não pode ser desfeita.')) return;
     limparCarrinho();
     document.dispatchEvent(new CustomEvent('dolce:removido'));
   }

@@ -624,11 +624,11 @@ if (campoQtd) {
  *
  * Duas coisas, as duas sobre deixar a escolha visível:
  *   - o campo de endereço aparece quando a escolha é entrega;
- *   - a linha "Você escolheu" repete, por extenso, o que está marcado.
+ *   - o resumo (Recebimento e Pagamento) repete, por extenso, o que está marcado.
  *
- * A linha de resumo existe porque os rádios ficam no alto do bloco e o botão do
- * WhatsApp na outra coluna — no celular, duas telas depois. Ela é a última
- * coisa que se lê antes de sair daqui.
+ * O resumo existe porque os rádios ficam nas etapas e o botão do WhatsApp na
+ * outra coluna — no celular, duas telas depois. Ele fica logo acima do botão,
+ * é a última coisa que se lê antes de mandar.
  *
  * Quem lê os valores no fechamento é checkout(), em cart.js. Aqui é só interface.
  * ======================================================================== */
@@ -637,7 +637,8 @@ const escolhasDoPedido = document.querySelectorAll('[data-pedido-entrega], [data
 
 if (escolhasDoPedido.length) {
   const campoEndereco = document.querySelector('[data-pedido-endereco-campo]');
-  const saidaResumo = document.querySelector('[data-pedido-resumo]');
+  const saidaEntrega = document.querySelector('[data-pedido-resumo-entrega]');
+  const saidaPagamento = document.querySelector('[data-pedido-resumo-pagamento]');
 
   /** O texto do cartão marcado — o rótulo que a pessoa leu, não o value. */
   const rotuloMarcado = (seletor) => {
@@ -651,10 +652,9 @@ if (escolhasDoPedido.length) {
 
     campoEndereco?.classList.toggle('oculto', !ehEntrega);
 
-    if (saidaResumo) {
-      const partes = [rotuloMarcado('[data-pedido-entrega]'), rotuloMarcado('[data-pedido-pagamento]')];
-      saidaResumo.textContent = partes.filter(Boolean).join(' · ');
-    }
+    // O resumo ao lado repete o que está marcado, cada coisa na sua linha.
+    if (saidaEntrega) saidaEntrega.textContent = rotuloMarcado('[data-pedido-entrega]');
+    if (saidaPagamento) saidaPagamento.textContent = rotuloMarcado('[data-pedido-pagamento]');
   }
 
   escolhasDoPedido.forEach((radio) => {
