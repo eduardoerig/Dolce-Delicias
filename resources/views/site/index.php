@@ -20,17 +20,16 @@ include DD_BASE . '/partials/header.php';
      HERÓI
      ============================================================ -->
 <?php
-// Herói curto: o cartaz diz a proposta, o parágrafo diz como funciona, um botão leva ao catálogo.
-// Sem etiqueta, sem faixa rolante e sem faixa de fatos: o que elas diziam cabe na frase abaixo.
-$heroEtiqueta  = '';
-$heroLinhas    = [
+// Herói: o cartaz diz a proposta, a frase diz como funciona, um botão leva ao
+// catálogo; a bandeja mostra o que chega e os atalhos levam direto à categoria.
+$heroLinhas  = [
     ['texto' => 'Encomende o cento.'],
     ['texto' => 'A gente cuida do resto.', 'destaque' => true],
 ];
-$heroTexto     = 'Monte o pedido aqui, escolha retirar ou receber e feche pelo WhatsApp da matriz. Sem cadastro e sem pagamento pelo site.';
-$heroTextoLink = null;
-$heroCta       = ['href' => '#catalogo', 'texto' => 'Ver catálogo'];
-$heroTira      = [];
+$heroTexto   = 'Monte o pedido aqui, escolha retirar ou receber e feche pelo WhatsApp da matriz. Sem cadastro e sem pagamento pelo site.';
+$heroCta     = ['href' => '#catalogo', 'texto' => 'Ver catálogo'];
+$heroLink    = ['href' => '#encomendas', 'texto' => 'Como encomendar'];
+$heroAtalhos = dd_categorias($produtos);
 
 include DD_BASE . '/partials/hero.php';
 ?>

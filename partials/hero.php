@@ -3,98 +3,75 @@
 declare(strict_types=1);
 
 /**
- * partials/hero.php — o herói de cartaz, no topo das páginas.
+ * partials/hero.php — o herói da home.
  *
- * A ideia: tipo gordo de madeira em escala de viewport fazendo todo o
- * trabalho, como cartaz de preço de feira. Sem split 50/50, sem par de
- * botões, sem pílula de selo.
+ * A placa vermelha da marca, com os raios do logo, em duas metades: à
+ * esquerda o que se faz aqui (título de cartaz, uma frase, um botão); à
+ * direita o que a pessoa recebe — a bandeja do cento, desenhada enquanto não
+ * há foto (partials/hero-bandeja.php). Embaixo, atalhos para as categorias:
+ * quem já sabe o que quer entra comprando, sem rolar até o catálogo.
  *
- * Hoje só a home usa: as outras páginas abrem com a faixa clara de caminho e
- * título. Continua partial para que uma segunda página de cartaz use este
- * arquivo em vez de uma cópia que diverge na primeira mudança.
+ * O único movimento sem clique do site está aqui: as peças entram na bandeja
+ * uma vez, no carregamento. Movimento reduzido mostra a bandeja pronta.
  *
- * Tipografia: nada de especial aqui. Alfa Slab One é a --font-display do
- * site, então o h1 já nasce com ela pela camada base.
- *
- * >>> INTEGRAÇÃO FUTURA — FOTO <<<
- * A faixa de baixo ($heroTira) é o lugar da foto. Hoje ela carrega uma tira
- * de nomes, que é elemento de design de verdade e não buraco. Quando houver
- * foto, troque o miolo da faixa por uma <img> com object-cover na mesma
- * altura — nada mais no bloco precisa mudar.
+ * Tipografia: Alfa Slab One é a --font-display do site, então o h1 já nasce
+ * com ela pela camada base.
  *
  * Espera:
- *   $heroEtiqueta   string       linha pequena em caixa alta acima do título
- *   $heroLinhas     array        linhas do h1, cada uma
+ *   $heroLinhas    array        linhas do h1, cada uma
  *                                ['texto' => string, 'destaque' => bool]
  *                                'destaque' pinta de amarelo
- *   $heroTexto      string       parágrafo abaixo da régua
- *   $heroTextoLink  array|null   ['href','texto'] anexado ao parágrafo após " — "
- *   $heroCta        array|null   ['href','texto'] botão à direita da régua
- *   $heroTira       array        nomes da faixa de baixo; vazio esconde a faixa.
- *                                Passe a lista uma vez só — quem duplica para
- *                                o desfile não ter emenda é este arquivo.
+ *   $heroTexto     string       parágrafo abaixo do título
+ *   $heroCta       array|null   ['href','texto'] botão principal
+ *   $heroLink      array|null   ['href','texto'] link discreto ao lado do botão
+ *   $heroAtalhos   string[]     categorias para os atalhos; vazio esconde a fila
  */
 
 require_once __DIR__ . '/bootstrap.php';
 
-$heroEtiqueta  = $heroEtiqueta  ?? '';
-$heroLinhas    = $heroLinhas    ?? [];
-$heroTexto     = $heroTexto     ?? '';
-$heroTextoLink = $heroTextoLink ?? null;
-$heroCta       = $heroCta       ?? null;
-$heroTira      = $heroTira      ?? [];
-
-// Sem faixa embaixo, o bloco precisa fechar com o próprio respiro.
-$respiroDeBaixo = $heroTira === [] ? ' pb-10 lg:pb-14' : '';
+$heroLinhas  = $heroLinhas  ?? [];
+$heroTexto   = $heroTexto   ?? '';
+$heroCta     = $heroCta     ?? null;
+$heroLink    = $heroLink    ?? null;
+$heroAtalhos = $heroAtalhos ?? [];
 ?>
-<section class="relative overflow-hidden bg-primary text-primary-content">
-  <div class="raios pointer-events-none absolute inset-0 opacity-70" style="--raios-x:88%;--raios-y:14%" aria-hidden="true"></div>
+<section class="heroi relative overflow-hidden bg-primary text-primary-content" aria-labelledby="heroi-titulo">
+  <div class="raios pointer-events-none absolute inset-0 opacity-70" style="--raios-x:72%;--raios-y:46%" aria-hidden="true"></div>
 
-  <div class="relative mx-auto max-w-7xl px-4 pt-10 sm:px-6 lg:px-8 lg:pt-14<?= $respiroDeBaixo ?>">
+  <div class="relative mx-auto grid max-w-7xl items-center gap-6 px-4 pb-8 pt-9 sm:px-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-10 lg:px-8 lg:pb-10 lg:pt-12">
+    <div>
+      <?php // leading abaixo de 1 é o que dá cara de cartaz: as linhas se tocam. ?>
+      <h1 id="heroi-titulo" class="text-[clamp(2.25rem,5.6vw,4.6rem)] uppercase leading-[0.9]">
+        <?php foreach ($heroLinhas as $linha): ?>
+          <span class="block<?= !empty($linha['destaque']) ? ' text-accent' : '' ?>"><?= e($linha['texto']) ?></span>
+        <?php endforeach; ?>
+      </h1>
 
-    <?php if ($heroEtiqueta !== ''): ?>
-      <p class="text-sm font-semibold text-white">
-        <?= e($heroEtiqueta) ?>
-      </p>
-    <?php endif; ?>
+      <p class="mt-5 max-w-md text-lg leading-relaxed text-white"><?= e($heroTexto) ?></p>
 
-    <?php // leading abaixo de 1 é o que dá cara de cartaz: as linhas se tocam. ?>
-    <h1 class="<?= $heroEtiqueta !== '' ? 'mt-5 ' : '' ?>text-[clamp(2.1rem,7vw,5.5rem)] uppercase leading-[0.88]">
-      <?php foreach ($heroLinhas as $linha): ?>
-        <span class="block<?= !empty($linha['destaque']) ? ' text-accent' : '' ?>"><?= e($linha['texto']) ?></span>
-      <?php endforeach; ?>
-    </h1>
-
-    <div class="mt-6 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between lg:mt-8">
-      <p class="max-w-md text-base leading-relaxed text-white">
-        <?= e($heroTexto) ?><?php if ($heroTextoLink !== null): ?> —
-          <a href="<?= e($heroTextoLink['href']) ?>" class="font-semibold text-accent underline decoration-accent/50 underline-offset-4 hover:decoration-accent"><?= e($heroTextoLink['texto']) ?></a>.
+      <div class="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
+        <?php if ($heroCta !== null): ?>
+          <a href="<?= e($heroCta['href']) ?>" class="botao-amarelo heroi-cta"><?= e($heroCta['texto']) ?></a>
         <?php endif; ?>
-      </p>
+        <?php if ($heroLink !== null): ?>
+          <a href="<?= e($heroLink['href']) ?>" class="inline-flex min-h-11 items-center font-semibold text-white underline decoration-white/60 decoration-2 underline-offset-4 hover:decoration-white"><?= e($heroLink['texto']) ?></a>
+        <?php endif; ?>
+      </div>
+    </div>
 
-      <?php if ($heroCta !== null): ?>
-        <a href="<?= e($heroCta['href']) ?>"
-           class="btn h-14 min-h-14 shrink-0 gap-2 border-none bg-accent px-8 text-base font-bold text-accent-content hover:bg-accent/85">
-          <?= e($heroCta['texto']) ?>
-        </a>
-      <?php endif; ?>
+    <div class="heroi-arte mx-auto w-full max-w-[38rem] lg:-mr-4">
+      <?php include __DIR__ . '/hero-bandeja.php'; ?>
     </div>
   </div>
 
-  <?php if ($heroTira !== []): ?>
-    <?php /* FAIXA — lugar da foto no futuro. Ver docblock.
-       Os nomes desfilam sozinhos. O bloco sai duas vezes porque a
-       animação anda exatamente a largura de um deles: na virada, a
-       segunda cópia já ocupa o lugar da primeira e não há emenda.
-       Passar o mouse pausa, para quem quiser ler. */ ?>
-    <div class="tira relative mt-10 select-none overflow-hidden border-t-2 border-white/20 py-4" aria-hidden="true">
-      <div class="tira-desfile">
-        <?php for ($copia = 0; $copia < 2; $copia++): ?>
-          <p class="fonte-display whitespace-nowrap text-[clamp(2rem,5vw,3.75rem)] uppercase leading-none text-white/20">
-            <?php foreach ($heroTira as $nomeDaTira): ?><?= e($nomeDaTira) ?> &nbsp;·&nbsp; <?php endforeach; ?>
-          </p>
-        <?php endfor; ?>
+  <?php if ($heroAtalhos !== []): ?>
+    <nav class="relative border-t border-white/20" aria-label="Categorias do catálogo">
+      <div class="mx-auto flex max-w-7xl flex-wrap items-center gap-2 px-4 py-4 sm:px-6 lg:px-8">
+        <span class="mr-1 text-sm font-semibold text-white">Comece por</span>
+        <?php foreach ($heroAtalhos as $categoriaAtalho): ?>
+          <a href="/?categoria=<?= e(rawurlencode($categoriaAtalho)) ?>#catalogo" class="heroi-atalho"><?= e($categoriaAtalho) ?></a>
+        <?php endforeach; ?>
       </div>
-    </div>
+    </nav>
   <?php endif; ?>
 </section>

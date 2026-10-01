@@ -163,43 +163,6 @@
 }
 
 /* -------------------------------------------------------------
-   DESFILE DA FAIXA DO HEROI -- os nomes do catalogo passando sozinhos.
-
-   Sao dois blocos identicos lado a lado. A animacao anda -50% da
-   largura total, ou seja, exatamente um bloco: quando ela reinicia,
-   o segundo bloco esta no lugar em que o primeiro comecou e a
-   emenda nao aparece.
-
-   A faixa e aria-hidden no HTML -- e decoracao, nao conteudo.
-   ------------------------------------------------------------- */
-@keyframes desfile {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.tira-desfile {
-  display: flex;
-  width: max-content;
-  animation: desfile 80s linear infinite;
-}
-
-/* Parar no hover deixa o nome legivel para quem quiser ler. */
-.tira:hover .tira-desfile {
-  animation-play-state: paused;
-}
-
-/* Movimento reduzido: a faixa fica parada, sem perder o desenho. */
-@media (prefers-reduced-motion: reduce) {
-  .tira-desfile {
-    animation: none;
-  }
-}
-
-/* -------------------------------------------------------------
    PULO DO CARRINHO -- feedback ao adicionar um item.
    ------------------------------------------------------------- */
 @keyframes pulo-carrinho {
@@ -1695,5 +1658,86 @@ details.dropdown:not([open]) > .dropdown-content {
 
 .botao-amarelo:hover {
   background-color: color-mix(in oklab, var(--color-accent) 86%, var(--color-ink));
+}
+
+/* ---------- Herói da home ---------- */
+
+/* Sobre o vermelho, o contorno de foco vermelho sumiria. */
+.heroi :focus-visible {
+  outline-color: #fff;
+}
+
+.heroi-cta {
+  min-height: 3.5rem;
+  padding-inline: 2rem;
+  font-size: 1.0625rem;
+}
+
+.bandeja {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 18px 24px rgb(90 2 14 / 0.25));
+}
+
+/* O cento chegando: cada peça cai no lugar, uma vez, em sequência. */
+@keyframes peca-chega {
+  from {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.bandeja .peca {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: peca-chega 0.42s var(--ease-massa) both;
+  animation-delay: calc(var(--i) * 11ms + 120ms);
+}
+
+@keyframes etiqueta-balanca {
+  0%, 100% { rotate: 0deg; }
+  40% { rotate: -5deg; }
+  70% { rotate: 2deg; }
+}
+
+.bandeja .etiqueta {
+  transform-box: fill-box;
+  transform-origin: 0% 50%;
+}
+
+.bandeja .etiqueta > * {
+  animation: etiqueta-balanca 1.2s var(--ease-massa) 1.6s 1 both;
+  transform-box: view-box;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bandeja .peca,
+  .bandeja .etiqueta > * {
+    animation: none;
+  }
+}
+
+/* Atalho de categoria no rodapé do herói. */
+.heroi-atalho {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 1px solid rgb(255 255 255 / 0.55);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  transition: background-color 0.15s var(--ease-massa), color 0.15s var(--ease-massa);
+}
+
+.heroi-atalho:hover {
+  background-color: #fff;
+  color: var(--color-brand);
 }
 }
