@@ -20,7 +20,7 @@ final class AdminController {
   $units=$this->repo->all('unidades');
   $matriz=array_values(array_filter($units,fn($u)=>$u['tipo_unidade']==='MATRIZ' && $u['ativa']))[0]??null;
   if(!$matriz) $attention[]=['danger','Nenhuma matriz ativa','Os pedidos do site precisam de uma matriz ativa com WhatsApp.','/admin/unidades','Ver unidades'];
-  elseif(self::placeholderPhone($matriz['whatsapp']??'')) $attention[]=['danger','WhatsApp da matriz não configurado','Os pedidos do site estão indo para um número de exemplo.','/admin/unidades/'.$matriz['id_unidade'].'/editar','Corrigir agora'];
+  elseif(\App\Models\AdminUi::placeholderPhone($matriz['whatsapp']??'')) $attention[]=['danger','WhatsApp da matriz não configurado','Os pedidos do site estão indo para um número de exemplo.','/admin/unidades/'.$matriz['id_unidade'].'/editar','Corrigir agora'];
   $sample=count(array_filter($units,fn($u)=>$u['ativa'] && (str_contains(mb_strtoupper($u['nome'].' '.($u['endereco']??'')),'PREENCHER'))));
   if($sample) $attention[]=['warning',$sample.($sample>1?' unidades com dados de exemplo':' unidade com dados de exemplo'),'Troque nome e endereço pelos dados reais.','/admin/unidades','Revisar'];
   $noPhoto=count(array_filter($this->repo->activeProducts(),fn($p)=>!dd_imagem($p['imagem'])));
@@ -56,7 +56,12 @@ final class AdminController {
     $saved=$this->service->save($entity,$input,$id,(int)$user['id_usuario'],$_FILES);
     $_SESSION['flash']=$id?'Alterações salvas.':'Cadastro salvo.';
     Session::redirect('/admin/'.$entity.'/'.$saved.'/editar');
-   }catch(ValidationException $e){$errors=$e->errors;$record=$input+($id?['imagem'=>$record['imagem']??null,'pdf_url'=>$record['pdf_url']??null]:[]);http_response_code(422);}
+   }catch(ValidationException $e){
+    $errors=$e->errors;$record=$input+($id?['imagem'=>$record['imagem']??null,'pdf_url'=>$record['pdf_url']??null]:[]);
+    // Interruptor desligado não vem no POST; sem isto ele voltaria ligado depois do erro.
+    foreach($config['fields'] as $key=>$field) if($field[1]==='bool') $record[$key]=isset($input[$key]);
+    http_response_code(422);
+   }
   }
   unset($record['senha_hash']);
   $choices=['categorias'=>$this->repo->all('categorias'),'unidades'=>$this->repo->all('unidades'),'produtos'=>$this->repo->all('produtos')];
@@ -66,12 +71,20 @@ final class AdminController {
  }
  public function status(string $entity,int $id): void {
   $user=$this->auth->requireUser($entity==='usuarios');
-  $this->service->status($entity,$id,(int)$user['id_usuario']);
-  $row=$this->repo->find($entity,$id);
-  $config=Entity::config($entity);$suffix=$config['new']==='nova'?'a.':'o.';
-  $_SESSION['flash']=$row['nome'].' '.($row[$config['status']]?'ativad':'desativad').$suffix;
+  $config=Entity::config($entity);$suffix=$config['new']==='nova'?'a':'o';
   $back=is_string($_POST['voltar']??null)?$_POST['voltar']:'';
-  Session::redirect(preg_match('~^/admin/'.$entity.'(\?[\w=&%+.-]*)?$~D',$back)?$back:'/admin/'.$entity);
+  $back=preg_match('~^/admin/'.$entity.'(\?[\w=&%+.-]*)?$~D',$back)?$back:'/admin/'.$entity;
+  try {
+   $this->service->status($entity,$id,(int)$user['id_usuario']);
+  } catch(ValidationException $e) {
+   // Cadastro incompleto (ex.: promoção sem produto): explica e oferece o caminho, sem página de erro.
+   $row=$this->repo->find($entity,$id);
+   $_SESSION['flash_error']=['Não deu para mudar '.$row['nome'].'. '.implode(' ',array_unique(array_values($e->errors))),'/admin/'.$entity.'/'.$id.'/editar'];
+   Session::redirect($back);
+  }
+  $row=$this->repo->find($entity,$id);
+  $_SESSION['flash']=$row['nome'].' '.($row[$config['status']]?'ativad':'desativad').$suffix.'.';
+  Session::redirect($back);
  }
  public function archive(int $id): void {
   $this->auth->requireUser();$p=$this->repo->find('produtos',$id);
@@ -93,7 +106,13 @@ final class AdminController {
    if($type==='SEMPRE'){$input['data_inicio']='';$input['data_fim']='';}
   }
   if($entity==='unidades' && is_string($input['whatsapp']??null)) $input['whatsapp']=preg_replace('/\D+/','',$input['whatsapp']);
-  foreach(['preco','valor_desconto'] as $key) if(is_string($input[$key]??null)) $input[$key]=str_replace([' ','R$','%'],'',$input[$key]);
+  // Dinheiro no jeito brasileiro: "R$ 1.234,50" vira "1234.50"; "1.234" (só milhar) vira "1234".
+  foreach(['preco','valor_desconto'] as $key) if(is_string($input[$key]??null)) {
+   $v=str_replace([' ',"\u{A0}",'R$','%'],'',$input[$key]);
+   if(str_contains($v,',')) $v=str_replace(['.',','],['','.'],$v);
+   elseif(preg_match('/^\d{1,3}(\.\d{3})+$/D',$v)) $v=str_replace('.','',$v);
+   $input[$key]=$v;
+  }
   return $input;
  }
  private static function matches(array $row,string $filter,string $status): bool {
@@ -105,6 +124,4 @@ final class AdminController {
    default=>true,
   };
  }
- /** Número vazio ou de exemplo (ex.: 55000000000). */
- private static function placeholderPhone(string $phone): bool {return !preg_match('/^\d{10,15}$/D',$phone) || preg_match('/^\d{0,3}0{8,}$/D',$phone)===1;}
 }

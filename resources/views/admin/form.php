@@ -21,15 +21,19 @@ $head=function(string $key,bool $legend=false) use($label,$required,$fields): st
 $hint=fn(string $key)=>AdminUi::hint($entity,$key)!==''?'<p class="adm-hint" id="'.e($key).'-ajuda">'.e(AdminUi::hint($entity,$key)).'</p>':'';
 
 /** Desenha um campo de Entity::config pelo tipo. */
-$render=function(string $key) use($entity,$fields,$value,$head,$hint,$error,$describedBy,$required,$choices): void {
+$render=function(string $key,bool $quietLegend=false) use($entity,$fields,$value,$head,$hint,$error,$describedBy,$required,$choices): void {
  [, $type]=$fields[$key];$v=$value($key);$max=(int)($fields[$key][2]??0);$desc=$describedBy($key);
  $aria=$desc!==''?' aria-describedby="'.e($desc).'"':'';$inv=$desc!=='' && str_contains($desc,'-erro')?' aria-invalid="true"':'';
+ // Dinheiro aparece no formato brasileiro (o Validator aceita vírgula).
+ if($type==='money' && is_string($v) && preg_match('/^\d+\.\d{1,2}$/D',$v)) $v=str_replace('.',',',$v);
  if($type==='select' && count($fields[$key][2])<=4) {
-  echo '<fieldset class="adm-field">'.$head($key,true).'<div class="adm-seg">';
+  // Três ou mais opções ocupam a linha toda para não quebrar no meio do grupo.
+  $legend=$head($key,true);if($quietLegend)$legend=str_replace('<legend>','<legend class="sr-only">',$legend);
+  echo '<fieldset class="adm-field'.(count($fields[$key][2])>2?' is-wide':'').'">'.$legend.'<div class="adm-seg">';
   foreach($fields[$key][2] as $opt) echo '<label><input type="radio" name="'.e($key).'" value="'.e($opt).'"'.((string)$v===$opt?' checked':'').'><span>'.e(AdminUi::option($key,$opt)).'</span></label>';
   echo '</div>'.$hint($key).$error($key).'</fieldset>';return;
  }
- echo '<div class="adm-field'.($type==='textarea'?' is-wide':'').'">'.$head($key);
+ echo '<div class="adm-field'.($type==='textarea'||in_array($key,AdminUi::WIDE,true)?' is-wide':'').'">'.$head($key);
  if($type==='category') {
   echo '<select id="'.e($key).'" name="'.e($key).'" required'.$aria.$inv.'><option value="">Escolha…</option>';
   foreach($choices['categorias'] as $c) echo '<option value="'.(int)$c['id_categoria'].'"'.((string)$v===(string)$c['id_categoria']?' selected':'').'>'.e($c['nome'].(!$c['ativa']?' (oculta)':'')).'</option>';
@@ -54,6 +58,7 @@ $render=function(string $key) use($entity,$fields,$value,$head,$hint,$error,$des
   if($prefix||$suffix) echo '<div class="adm-input-group">'.($prefix?'<span class="adm-affix">'.$prefix.'</span>':'').'<input'.$attrs.'>'.$suffix.'</div>';
   else echo '<input'.$attrs.'>';
  }
+ if($key==='whatsapp' && is_string($v) && $v!=='' && AdminUi::placeholderPhone($v)) echo '<p class="adm-field-warning">Número de exemplo. Troque pelo WhatsApp real da unidade.</p>';
  echo $hint($key).$error($key).'</div>';
 };
 
@@ -87,7 +92,9 @@ $special=function(string $key) use($entity,$record,$render,$relation,$chips,$val
   case 'sabores':
    echo '<div class="adm-field"><label for="sabores">Sabores <span class="adm-optional">opcional</span></label><textarea id="sabores" name="sabores" rows="4" placeholder="Um por linha">'.e(is_string($record['sabores']??null)?$record['sabores']:'').'</textarea>'.$error('sabores').'</div>';return;
   case 'tags':
-   echo '<div class="adm-field"><label for="tags">Restrições alimentares <span class="adm-optional">opcional</span></label><input id="tags" name="tags" value="'.e(is_string($record['tags']??null)?$record['tags']:'').'" placeholder="vegano, sem lactose"><p class="adm-hint">Separe por vírgula. Confirme com a cozinha.</p>'.$error('tags').'</div>';return;
+   // 'atacado'/'varejo' são calculadas pelo "Como é vendido"; mostrá-las aqui só confundiria.
+   $tags=array_filter(array_map('trim',explode(',',is_string($record['tags']??null)?$record['tags']:'')),fn($t)=>$t!=='' && !in_array(mb_strtolower($t),AdminUi::SYSTEM_TAGS,true));
+   echo '<div class="adm-field"><label for="tags">Etiquetas <span class="adm-optional">opcional</span></label><input id="tags" name="tags" value="'.e(implode(', ',$tags)).'" placeholder="vegano, sem lactose" aria-describedby="tags-ajuda"><p class="adm-hint" id="tags-ajuda">Separe por vírgula. Vegano, sem lactose, sem glúten e sem carne viram filtro no site.</p>'.$error('tags').'</div>';return;
   case 'imagem':
    $img=dd_imagem($record['imagem']??null);
    echo '<div class="adm-field is-wide"><label class="adm-upload" for="imagem"><span class="adm-upload-preview" data-preview>'.($img?'<img src="'.e($img).'" alt="Foto atual">':AdminUi::icon('image')).'</span><span class="adm-upload-text"><strong>'.($img?'Trocar foto':'Escolher foto').'</strong><small>JPG, PNG ou WebP, até 5 MB.</small></span></label><input class="sr-only" id="imagem" type="file" name="imagem" accept="image/jpeg,image/png,image/webp" data-preview-input>'.$error('imagem').'</div>';return;
@@ -97,7 +104,8 @@ $special=function(string $key) use($entity,$record,$render,$relation,$chips,$val
    if($has && !empty($record['ativa'])) echo '<p class="adm-hint"><a href="/catalogos/'.e($record['slug']).'/download">Baixar catálogo atual</a></p>';
    echo $error('pdf_url').'</div>';return;
   case 'agenda':
-   $render('tipo_agenda');
+   // A seção já se chama "Quando vale": a legenda fica só para leitor de tela.
+   $render('tipo_agenda',true);
    $t=$value('tipo_agenda');
    echo '<div class="adm-agenda" data-agenda="SEMANAL"'.($t==='SEMANAL'?'':' hidden').'>';$chips('dias_semana',AdminUi::DAYS);echo '</div>';
    echo '<div class="adm-agenda" data-agenda="MENSAL"'.($t==='MENSAL'?'':' hidden').'>';$chips('meses',AdminUi::MONTHS);echo '</div>';

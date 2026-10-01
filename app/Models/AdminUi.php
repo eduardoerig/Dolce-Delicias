@@ -16,13 +16,17 @@ final class AdminUi {
  ];
  /** Valores gravados no banco => texto que a pessoa lê. */
  public const OPTIONS=[
-  'linha'=>['AMBOS'=>'Encomenda e balcão','ENCOMENDA'=>'Só encomenda','BALCAO'=>'Só balcão'],
-  'tipo_atendimento'=>['AMBOS'=>'Encomenda e balcão','ENCOMENDA'=>'Só encomenda','BALCAO'=>'Só balcão'],
+  'linha'=>['AMBOS'=>'Os dois','ENCOMENDA'=>'Encomenda','BALCAO'=>'Balcão'],
+  'tipo_atendimento'=>['AMBOS'=>'Os dois','ENCOMENDA'=>'Encomenda','BALCAO'=>'Balcão'],
   'tipo_unidade'=>['MATRIZ'=>'Matriz','FILIAL'=>'Filial'],
-  'tipo_desconto'=>['PERCENTUAL'=>'Porcentagem (%)','VALOR_FIXO'=>'Valor em reais (R$)'],
+  'tipo_desconto'=>['PERCENTUAL'=>'Porcentagem','VALOR_FIXO'=>'Reais'],
   'tipo_agenda'=>['SEMPRE'=>'Sempre','SEMANAL'=>'Dias da semana','MENSAL'=>'Meses do ano','PERIODO'=>'Entre datas'],
   'perfil'=>['ADMIN'=>'Administrador','GESTOR'=>'Gestor (sem acesso a Acessos)'],
  ];
+ /** Campos de texto longo que ocupam a linha inteira do formulário. */
+ public const WIDE=['endereco','horario_funcionamento','tempo_preparo','mapa_url','avaliacao_url'];
+ /** Etiquetas calculadas pelo sistema a partir de "Como é vendido"; não aparecem para edição. */
+ public const SYSTEM_TAGS=['atacado','varejo'];
  public const DAYS=[0=>'Dom',1=>'Seg',2=>'Ter',3=>'Qua',4=>'Qui',5=>'Sex',6=>'Sáb'];
  public const MONTHS=[1=>'Jan',2=>'Fev',3=>'Mar',4=>'Abr',5=>'Mai',6=>'Jun',7=>'Jul',8=>'Ago',9=>'Set',10=>'Out',11=>'Nov',12=>'Dez'];
 
@@ -36,7 +40,7 @@ final class AdminUi {
    'rotulo_preco'=>['Esse preço vale para','Ex.: 100 unidades, 1 unidade, 45 peças.'],
    'pedido_minimo'=>['Pedido mínimo','Menor quantidade de peças que o cliente pode pedir.'],
    'passo_quantidade'=>['Vende de quanto em quanto','Ex.: 25 permite pedir 50, 75, 100…'],
-   'linha'=>['Como é vendido',''],
+   'linha'=>['Como é vendido','Encomenda: pedido antecipado pelo site. Balcão: venda na loja.'],
    'destaque'=>['Destaque','Aparece primeiro no catálogo.'],
    'ativo'=>['Ativo','Desligado, o produto some do site.'],
    'slug'=>['Endereço da página','Gerado pelo nome. Só mude se souber o que está fazendo.'],
@@ -54,7 +58,7 @@ final class AdminUi {
    'whatsapp'=>['WhatsApp','Com código do país e DDD. Ex.: 55 11 98765-4321.'],
    'horario_funcionamento'=>['Horário','Ex.: Seg a sáb, 6h às 20h.'],
    'tempo_preparo'=>['Prazo das encomendas','Ex.: Pedidos com 48h de antecedência.'],
-   'descricao'=>['Sobre a unidade',''],
+   'descricao'=>['Descrição','Aparece na página de unidades.'],
    'mapa_url'=>['Link do Google Maps',''],
    'avaliacao_url'=>['Link para avaliações',''],
    'ativa'=>['Ativa','Desligada, some do site.'],
@@ -70,8 +74,8 @@ final class AdminUi {
    'tipo_agenda'=>['Quando vale',''],
    'dias_semana'=>['Dias da semana',''],
    'meses'=>['Meses',''],
-   'data_inicio'=>['De',''],
-   'data_fim'=>['Até',''],
+   'data_inicio'=>['A partir de','Em branco, já vale.'],
+   'data_fim'=>['Até','Em branco, não tem data para acabar.'],
    'ativa'=>['Ativa','Desligada, fica como rascunho.'],
    'slug'=>['Endereço','Gerado pelo nome.'],
   ],
@@ -95,7 +99,7 @@ final class AdminUi {
    ['Preço e quantidade','',['preco','rotulo_preco','pedido_minimo','passo_quantidade']],
    ['Foto','',['imagem']],
    ['Onde vende','Marque as unidades que têm este produto.',['linha','unidades']],
-   ['Sabores e restrições','Opcional.',['sabores','tags']],
+   ['Sabores e etiquetas','Opcional.',['sabores','tags']],
   ],
   'categorias'=>[['Categoria','',['nome']]],
   'unidades'=>[
@@ -125,6 +129,8 @@ final class AdminUi {
  public static function option(string $key,string $value): string {return self::OPTIONS[$key][$value]??$value;}
  /** "Nova promoção", "Novo produto". */
  public static function newLabel(string $entity): string {return (Entity::config($entity)['new']==='nova'?'Nova ':'Novo ').self::singular($entity);}
+ /** WhatsApp vazio ou de exemplo (ex.: 55000000000). */
+ public static function placeholderPhone(?string $phone): bool {return !preg_match('/^\d{10,15}$/D',(string)$phone) || preg_match('/^\d{0,3}0{8,}$/D',(string)$phone)===1;}
  /** Lista de inteiros a partir de "1,3", "{1,3}" ou ['1','3']. */
  public static function numbers(mixed $value): array {
   if(is_array($value))return array_map('intval',array_filter($value,'is_scalar'));

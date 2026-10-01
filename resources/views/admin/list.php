@@ -3,13 +3,15 @@ $pageTitle=AdminUi::plural($entity); require __DIR__.'/header.php';
 $status=$config['status'];$hasThumb=in_array($entity,['produtos','unidades'],true);
 $query=fn(array $extra)=>'?'.http_build_query(array_filter(['q'=>$search,'filtro'=>$filter==='todos'?null:$filter]+$extra,fn($v)=>$v!==null&&$v!==''));
 $here=rtrim('/admin/'.$entity.$query(['page'=>$page>1?$page:null]),'?');
+/** Agenda da promoção em português ("Toda quarta-feira"), com o tipo como reserva. */
+$agenda=fn(array $r)=>dd_agenda_em_texto(['tipo'=>strtolower($r['tipo_agenda']),'dias'=>AdminUi::numbers($r['dias_semana']),'meses'=>AdminUi::numbers($r['meses']),'de'=>(string)$r['data_inicio'],'ate'=>(string)$r['data_fim']])?:AdminUi::option('tipo_agenda',$r['tipo_agenda']);
 /** Detalhes curtos da linha, cada um no seu espaço. */
-$subtitle=function(array $r) use($entity): array {
+$subtitle=function(array $r) use($entity,$agenda): array {
  return array_values(array_filter(match($entity) {
   'produtos'=>[$r['categoria'],dd_moeda((float)$r['preco']).' por '.$r['rotulo_preco']],
   'categorias'=>[(int)$r['produtos_ativos'].((int)$r['produtos_ativos']===1?' produto ativo':' produtos ativos')],
   'unidades'=>[AdminUi::option('tipo_unidade',$r['tipo_unidade']),$r['endereco']??''],
-  'promocoes'=>[(float)$r['valor_desconto']>0?($r['tipo_desconto']==='PERCENTUAL'?rtrim(rtrim($r['valor_desconto'],'0'),'.').'% de desconto':dd_moeda((float)$r['valor_desconto']).' de desconto'):'Sem desconto definido',AdminUi::option('tipo_agenda',$r['tipo_agenda'])],
+  'promocoes'=>[(float)$r['valor_desconto']>0?($r['tipo_desconto']==='PERCENTUAL'?str_replace('.',',',rtrim(rtrim($r['valor_desconto'],'0'),'.')).'% de desconto':dd_moeda((float)$r['valor_desconto']).' de desconto'):'Sem desconto definido',$agenda($r)],
   'usuarios'=>[$r['login'],AdminUi::option('perfil',$r['perfil'])],
   default=>[],
  }));
@@ -29,7 +31,7 @@ $subtitle=function(array $r) use($entity): array {
  </form>
  <nav class="adm-tabs" aria-label="Filtrar">
   <?php foreach($filters as $key=>$label): ?>
-   <a href="<?= e('/admin/'.$entity.'?'.http_build_query(array_filter(['q'=>$search,'filtro'=>$key==='todos'?null:$key]))) ?>" <?= $filter===$key?'aria-current="true"':'' ?>><?= e($label) ?> <span><?= (int)$counts[$key] ?></span></a>
+   <a href="<?= e(rtrim('/admin/'.$entity.'?'.http_build_query(array_filter(['q'=>$search,'filtro'=>$key==='todos'?null:$key])),'?')) ?>" <?= $filter===$key?'aria-current="true"':'' ?>><?= e($label) ?> <span><?= (int)$counts[$key] ?></span></a>
   <?php endforeach ?>
  </nav>
 </div>
@@ -56,14 +58,17 @@ $subtitle=function(array $r) use($entity): array {
     <span class="adm-row-badges">
      <?php if($entity==='produtos' && $on && !empty($row['destaque'])): ?><span class="adm-badge is-accent">Destaque</span><?php endif ?>
      <?php if($entity==='produtos' && $on && !empty($row['indisponivel'])): ?><span class="adm-badge is-warning">Sem unidade</span><?php endif ?>
-     <?php if($hasThumb && $on && !$img): ?><span class="adm-badge">Sem foto</span><?php endif ?>
      <?php if($entity==='promocoes'): ?><span class="adm-badge <?= !empty($siteStatus[$id])?'is-success':'' ?>"><?= !empty($siteStatus[$id])?'No site':($on?'Fora do site':'Rascunho') ?></span><?php endif ?>
     </span>
+    <?php if($entity==='usuarios' && $id===(int)$user['id_usuario']): // A própria conta não se desativa pelo painel. ?>
+     <span class="adm-badge adm-row-toggle">Você</span>
+    <?php else: ?>
     <form class="adm-row-toggle" method="post" action="/admin/<?= e($entity) ?>/<?= $id ?>/status">
      <input type="hidden" name="_csrf" value="<?= e(Csrf::token()) ?>">
      <input type="hidden" name="voltar" value="<?= e($here) ?>">
      <button class="adm-switch" type="submit" role="switch" aria-checked="<?= $on?'true':'false' ?>" aria-label="<?= e(($on?'Desativar ':'Ativar ').$row['nome']) ?>" title="<?= $on?'Ativo — clique para desativar':'Inativo — clique para ativar' ?>"><span></span></button>
     </form>
+    <?php endif ?>
     <span class="adm-row-chevron" aria-hidden="true"><?= AdminUi::icon('chevron') ?></span>
    </li>
   <?php endforeach ?>

@@ -43,4 +43,5 @@ $nav=['produtos','promocoes','categorias','unidades'];
    <button class="adm-icon-btn" type="button" data-menu-toggle aria-controls="menu-lateral" aria-expanded="false" aria-label="Abrir menu"><?= AdminUi::icon('menu') ?></button>
   </header>
   <main id="conteudo" class="adm-main">
-<?php if(isset($_SESSION['flash'])): ?><div class="adm-toast" role="status" data-toast><?= AdminUi::icon('check') ?><span><?= e($_SESSION['flash']) ?></span></div><?php unset($_SESSION['flash']);endif ?>
+<?php if(isset($_SESSION['flash'])): ?><div class="adm-toast" role="status"><?= AdminUi::icon('check') ?><span><?= e($_SESSION['flash']) ?></span></div><?php unset($_SESSION['flash']);endif ?>
+<?php if(isset($_SESSION['flash_error'])): [$flashText,$flashHref]=$_SESSION['flash_error']; ?><div class="adm-alert" role="alert"><?= AdminUi::icon('alert') ?><div><strong><?= e($flashText) ?></strong> <a href="<?= e($flashHref) ?>">Abrir cadastro</a></div></div><?php unset($_SESSION['flash_error']);endif ?>
