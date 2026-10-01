@@ -154,18 +154,26 @@ function esc(texto) {
  * não guarda uma segunda cópia deles.
  */
 let iconesPorCategoria = null;
+let iconesPorProduto = null;
 
-function iconeDaCategoria(categoria) {
+/** O desenho do próprio produto; se não houver, o da categoria. */
+function iconeDoItem(item) {
   if (iconesPorCategoria === null) {
     iconesPorCategoria = new Map();
+    iconesPorProduto = new Map();
     const molde = document.getElementById('icones-produto');
     if (molde) {
       molde.content.querySelectorAll('[data-icone-categoria]').forEach((no) => {
         iconesPorCategoria.set(no.dataset.iconeCategoria, no.innerHTML);
       });
+      molde.content.querySelectorAll('[data-icone-produto]').forEach((no) => {
+        iconesPorProduto.set(no.dataset.iconeProduto, no.innerHTML);
+      });
     }
   }
-  return iconesPorCategoria.get(categoria) || iconesPorCategoria.get('') || '';
+  return iconesPorProduto.get(item.slug || item.id || '')
+    || iconesPorCategoria.get(item.categoria || '')
+    || iconesPorCategoria.get('') || '';
 }
 
 /**
@@ -176,7 +184,7 @@ function miniatura(item) {
   if (item.imagem) {
     return `<img src="${esc(item.imagem)}" alt="">`;
   }
-  return `<span class="item-pedido-sem-foto">${iconeDaCategoria(item.categoria || '')}</span>`;
+  return `<span class="item-pedido-sem-foto">${iconeDoItem(item)}</span>`;
 }
 
 const ICONE_MENOS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg>';

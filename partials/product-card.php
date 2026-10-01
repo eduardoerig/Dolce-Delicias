@@ -59,7 +59,7 @@ $comoCompra = match ($linhaCard) {
            width="480" height="360">
     <?php else: ?>
       <?php // INTEGRAÇÃO FUTURA: assim que o arquivo em 'imagem' existir, ele entra aqui sozinho. ?>
-      <span class="cartao-sem-foto"><?= dd_icone_categoria((string) ($produto['categoria'] ?? '')) ?></span>
+      <span class="cartao-sem-foto"><?= dd_icone_categoria((string) ($produto['categoria'] ?? ''), (string) ($produto['nome'] ?? '')) ?></span>
     <?php endif; ?>
   </a>
 

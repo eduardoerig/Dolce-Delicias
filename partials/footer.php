@@ -154,7 +154,8 @@ $temOpiniao = $linkFeedback !== '' || $canaisRodape !== [];
 
 <?php
 /**
- * Ícones de placeholder, um por categoria — os MESMOS que o card do catálogo usa.
+ * Desenhos de placeholder, um por produto e um por categoria (reserva) — os
+ * MESMOS que o card do catálogo usa.
  * O carrinho lê daqui quando o item ainda não tem foto, em vez de o JavaScript
  * carregar uma segunda cópia dos SVGs.
  */
@@ -164,6 +165,9 @@ $temOpiniao = $linkFeedback !== '' || $canaisRodape !== [];
     <div data-icone-categoria="<?= e($categoriaIcone) ?>"><?= dd_icone_categoria($categoriaIcone) ?></div>
   <?php endforeach; ?>
   <div data-icone-categoria=""><?= dd_icone_categoria('') ?></div>
+  <?php foreach (dd_produtos() as $produtoIcone): ?>
+    <div data-icone-produto="<?= e((string) $produtoIcone['slug']) ?>"><?= dd_icone_categoria((string) $produtoIcone['categoria'], (string) $produtoIcone['nome']) ?></div>
+  <?php endforeach; ?>
 </template>
 
 <!-- Avisos curtos (item adicionado, item removido). Preenchido por assets/js/ui.js. -->

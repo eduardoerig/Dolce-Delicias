@@ -686,8 +686,9 @@ details.dropdown:not([open]) > .dropdown-content {
 }
 
 .cartao-sem-foto svg {
-  width: 3rem;
-  height: 3rem;
+  width: 5.5rem;
+  height: 5.5rem;
+  filter: drop-shadow(0 6px 6px rgb(122 46 18 / 0.18));
 }
 
 .cartao-selos {
@@ -1017,8 +1018,9 @@ details.dropdown:not([open]) > .dropdown-content {
 }
 
 .produto-sem-foto svg {
-  width: 6rem;
-  height: 6rem;
+  width: 11rem;
+  height: 11rem;
+  filter: drop-shadow(0 12px 12px rgb(122 46 18 / 0.18));
 }
 
 /* Pílula: atributo do produto (categoria, como compra, etiquetas, sabores). */
@@ -1260,8 +1262,8 @@ details.dropdown:not([open]) > .dropdown-content {
 }
 
 .item-pedido-sem-foto svg {
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 2.75rem;
+  height: 2.75rem;
 }
 
 .item-pedido-corpo {

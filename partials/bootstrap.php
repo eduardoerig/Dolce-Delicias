@@ -493,35 +493,87 @@ function dd_imagem(?string $caminho): ?string
  * Ícone de linha para o placeholder, escolhido pela categoria do produto.
  * Retorna SVG inline em currentColor.
  */
-function dd_icone_categoria(string $categoria): string
+function dd_icone_categoria(string $categoria, string $nome = ''): string
 {
     $c = dd_ascii($categoria);
+    $n = dd_ascii($nome);
 
-    $comum = 'fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"';
+    // Desenhos coloridos no mesmo traço da bandeja do herói (hero-bandeja.php):
+    // dourado de fritura, contorno de crosta, vermelho e amarelo da marca.
+    $crosta = 'stroke="#a9561a" stroke-width="1.8" stroke-linejoin="round"';
 
-    // Coxinha / salgado frito: gota.
-    $salgado = '<path ' . $comum . ' d="M32 8c7 9 12 15 12 23a12 12 0 0 1-24 0c0-8 5-14 12-23Z"/><path ' . $comum . ' d="M25 31c3 2 11 2 14 0"/>';
-    // Doce: cupcake.
-    $doce = '<path ' . $comum . ' d="M20 30h24l-3 22a3 3 0 0 1-3 3H26a3 3 0 0 1-3-3L20 30Z"/><path ' . $comum . ' d="M20 30c-1-6 4-8 6-7 0-6 6-9 10-6 4-2 9 1 8 6 3 0 5 3 4 7"/>';
-    // Bebida: copo.
-    $bebida = '<path ' . $comum . ' d="M22 16h20l-2 34a4 4 0 0 1-4 4h-8a4 4 0 0 1-4-4L22 16Z"/><path ' . $comum . ' d="M23 28h18"/>';
-    // Almoço: prato e talher.
-    $almoco = '<circle ' . $comum . ' cx="32" cy="34" r="16"/><circle ' . $comum . ' cx="32" cy="34" r="8"/>';
-    // Combo: bandeja.
-    $combo = '<rect ' . $comum . ' x="10" y="30" width="44" height="10" rx="5"/><circle ' . $comum . ' cx="22" cy="22" r="6"/><circle ' . $comum . ' cx="34" cy="20" r="7"/><circle ' . $comum . ' cx="45" cy="24" r="5"/>';
-    // Assado / lanche / padrão: pãozinho com corte.
-    $assado = '<path ' . $comum . ' d="M11 36c0-9 9-15 21-15s21 6 21 15-9 12-21 12-21-3-21-12Z"/><path ' . $comum . ' d="M22 30l4 6M32 28l4 7M42 30l3 6"/>';
+    $salgado = '<path d="M32 7c8 10 15 19 15 28a15 15 0 0 1-30 0c0-9 7-18 15-28Z" fill="#e39a3b" ' . $crosta . '/>'
+        . '<path d="M25 33c-1 5 0 10 4 13" fill="none" stroke="#f7c46a" stroke-width="3.5" stroke-linecap="round"/>'
+        . '<circle cx="37" cy="35" r="1.4" fill="#b8661f"/><circle cx="40" cy="42" r="1.2" fill="#b8661f"/><circle cx="33" cy="46" r="1.2" fill="#b8661f"/>';
+    $assado = '<path d="M9 38c0-10 10-17 23-17s23 7 23 17-10 13-23 13S9 48 9 38Z" fill="#e7a446" ' . $crosta . '/>'
+        . '<path d="M20 31l5 7M31 28l5 8M42 31l4 7" fill="none" stroke="#f7c46a" stroke-width="3" stroke-linecap="round"/>';
+    $lanche = '<path d="M12 30c0-9 9-14 20-14s20 5 20 14Z" fill="#e7a446" ' . $crosta . '/>'
+        . '<rect x="11" y="30" width="42" height="5" rx="2.5" fill="#fce24c" stroke="#c08a2e" stroke-width="1.4"/>'
+        . '<rect x="12" y="35" width="40" height="5" rx="2.5" fill="#e1051e"/>'
+        . '<path d="M12 41h40v3a6 6 0 0 1-6 6H18a6 6 0 0 1-6-6Z" fill="#e39a3b" ' . $crosta . '/>'
+        . '<circle cx="25" cy="22" r="1" fill="#fbf4ee"/><circle cx="33" cy="20" r="1" fill="#fbf4ee"/><circle cx="40" cy="23" r="1" fill="#fbf4ee"/>';
+    $doce = '<path d="M19 33h26l-3 20a3 3 0 0 1-3 3H25a3 3 0 0 1-3-3Z" fill="#e1051e" stroke="#9e0315" stroke-width="1.6"/>'
+        . '<path d="M26 34l1 21M32 34v21M38 34l-1 21" stroke="#ff6b7a" stroke-width="1.6"/>'
+        . '<path d="M17 33c-2-6 3-10 7-9 1-6 8-9 12-6 5-2 10 2 9 7 4 0 6 4 4 8Z" fill="#fbf4ee" stroke="#c9a27e" stroke-width="1.6" stroke-linejoin="round"/>'
+        . '<circle cx="34" cy="14" r="4" fill="#e1051e" stroke="#9e0315" stroke-width="1.4"/>';
+    $bebida = '<path d="M38 6l-4 14" stroke="#e1051e" stroke-width="3" stroke-linecap="round"/>'
+        . '<path d="M20 18h24l-3 34a4 4 0 0 1-4 4H27a4 4 0 0 1-4-4Z" fill="#fbf4ee" stroke="#a9561a" stroke-width="1.8" stroke-linejoin="round"/>'
+        . '<path d="M21.4 30h21.2l-1.8 21.6a3 3 0 0 1-3 2.8H26.2a3 3 0 0 1-3-2.8Z" fill="#f2a33a"/>'
+        . '<circle cx="28" cy="38" r="1.6" fill="#fce24c"/><circle cx="35" cy="44" r="1.3" fill="#fce24c"/>';
+    $almoco = '<circle cx="32" cy="34" r="22" fill="#fff" stroke="#c5ac98" stroke-width="1.8"/>'
+        . '<circle cx="32" cy="34" r="15" fill="none" stroke="#eadacb" stroke-width="1.4"/>'
+        . '<path d="M20 34c0-6 5-10 11-10 0 6-1 12-11 10Z" fill="#fbf4ee" stroke="#d8c3ad" stroke-width="1.2"/>'
+        . '<circle cx="38" cy="30" r="6" fill="#6b3a1f"/><path d="M28 40c3 4 9 5 13 1" fill="none" stroke="#5f9e4a" stroke-width="4" stroke-linecap="round"/>';
+    $combo = '<ellipse cx="32" cy="40" rx="27" ry="13" fill="#fbf4ee" stroke="#c5ac98" stroke-width="1.8"/>'
+        . '<path d="M20 25c4 5 7 9 7 13a7 7 0 0 1-14 0c0-4 3-8 7-13Z" fill="#e39a3b" ' . $crosta . '/>'
+        . '<circle cx="33" cy="37" r="7" fill="#e7a446" ' . $crosta . '/>'
+        . '<circle cx="45" cy="39" r="7" fill="#f2d48a" stroke="#c08a2e" stroke-width="1.6"/><circle cx="43" cy="38" r="1.3" fill="#d9a441"/><circle cx="47" cy="41" r="1.1" fill="#d9a441"/>';
+
+    $paoQueijo = '<circle cx="32" cy="34" r="18" fill="#f2d48a" stroke="#c08a2e" stroke-width="1.8"/>'
+        . '<path d="M22 28c3-4 8-6 12-5" fill="none" stroke="#fbe7b0" stroke-width="3" stroke-linecap="round"/>'
+        . '<circle cx="27" cy="36" r="2.6" fill="#d9a441"/><circle cx="37" cy="30" r="2" fill="#d9a441"/><circle cx="36" cy="41" r="2.3" fill="#d9a441"/><circle cx="25" cy="44" r="1.5" fill="#d9a441"/>';
+    $pizza = '<circle cx="32" cy="34" r="19" fill="#e7a446" ' . $crosta . '/>'
+        . '<circle cx="32" cy="34" r="14" fill="#e1051e"/><path d="M22 30c4-3 7 2 11-1s6 3 10 1M21 39c4-2 8 3 12 0s7 2 10 0" fill="none" stroke="#fce24c" stroke-width="3.2" stroke-linecap="round"/>'
+        . '<circle cx="27" cy="34" r="1.8" fill="#2a1710"/><circle cx="38" cy="36" r="1.8" fill="#2a1710"/><circle cx="33" cy="27" r="1.6" fill="#5f9e4a"/>';
+    $empada = '<path d="M14 34h36l-4 16a4 4 0 0 1-4 3H22a4 4 0 0 1-4-3Z" fill="#e7a446" ' . $crosta . '/>'
+        . '<path d="M20 36l1 16M27 36l.5 17M34 36v17M41 36l-.5 17" stroke="#c97b2d" stroke-width="1.4"/>'
+        . '<ellipse cx="32" cy="33" rx="19" ry="9" fill="#eab35a" stroke="#a9561a" stroke-width="1.8" stroke-dasharray="3 2"/>'
+        . '<ellipse cx="32" cy="32" rx="9" ry="4" fill="#f7c46a"/>';
+    $esfirra = '<path d="M32 12 54 50H10Z" fill="#e7a446" ' . $crosta . '/>'
+        . '<path d="M32 26 43 45H21Z" fill="#c2412c"/><circle cx="30" cy="38" r="1.6" fill="#7a2e12"/><circle cx="35" cy="41" r="1.4" fill="#7a2e12"/><circle cx="33" cy="33" r="1.2" fill="#5f9e4a"/>';
+    $cookie = '<circle cx="32" cy="33" r="18" fill="#d9a05a" stroke="#8a4a18" stroke-width="1.8"/>'
+        . '<circle cx="25" cy="28" r="2.8" fill="#4a2512"/><circle cx="37" cy="26" r="2.4" fill="#4a2512"/><circle cx="35" cy="38" r="3" fill="#4a2512"/><circle cx="24" cy="39" r="2.2" fill="#4a2512"/><circle cx="42" cy="34" r="1.8" fill="#4a2512"/>';
+    $bolo = '<path d="M10 44 52 26v16L10 54Z" fill="#fbf4ee" stroke="#c9a27e" stroke-width="1.6" stroke-linejoin="round"/>'
+        . '<path d="M10 44 52 26l-6-8L10 34Z" fill="#7a3a1a" stroke="#4a2512" stroke-width="1.6" stroke-linejoin="round"/>'
+        . '<path d="M10 44 52 26v5L10 49Z" fill="#e1051e"/><circle cx="44" cy="17" r="3.4" fill="#e1051e" stroke="#9e0315" stroke-width="1.2"/>';
+    $cafe = '<path d="M14 26h30v12a13 13 0 0 1-13 13h-4a13 13 0 0 1-13-13Z" fill="#fbf4ee" stroke="#a9561a" stroke-width="1.8" stroke-linejoin="round"/>'
+        . '<path d="M44 30h3a5 5 0 0 1 0 10h-4" fill="none" stroke="#a9561a" stroke-width="1.8"/>'
+        . '<ellipse cx="29" cy="27" rx="14" ry="3.5" fill="#6b3a1f"/><path d="M24 20c-2-3 2-5 0-8M32 20c-2-3 2-5 0-8" fill="none" stroke="#c5ac98" stroke-width="2" stroke-linecap="round"/>'
+        . '<ellipse cx="29" cy="54" rx="20" ry="3.5" fill="#eadacb"/>';
+    $lata = '<rect x="20" y="12" width="24" height="42" rx="4" fill="#e1051e" stroke="#9e0315" stroke-width="1.8"/>'
+        . '<path d="M20 18h24M20 48h24" stroke="#c9c9c9" stroke-width="3"/><path d="M24 30c4 3 12-3 16 0" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>';
 
     $glifo = match (true) {
+        str_contains($n, 'pao de queijo') => $paoQueijo,
+        str_contains($n, 'pizza')   => $pizza,
+        str_contains($n, 'empad')   => $empada,
+        str_contains($n, 'esfirr')  => $esfirra,
+        str_contains($n, 'cookie')  => $cookie,
+        str_contains($n, 'bolo')    => $bolo,
+        str_contains($n, 'cafe')    => $cafe,
+        str_contains($n, 'lata') || str_contains($n, 'coca') => $lata,
+        str_contains($n, 'hamburg') || str_contains($n, 'sandu') => $lanche,
+        str_contains($n, 'cupcake') => $doce,
         str_contains($c, 'salgad') => $salgado,
         str_contains($c, 'doce')   => $doce,
         str_contains($c, 'bebid')  => $bebida,
         str_contains($c, 'almoc')  => $almoco,
         str_contains($c, 'combo')  => $combo,
+        str_contains($c, 'lanche') => $lanche,
         default                    => $assado,
     };
 
-    return '<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false" class="h-14 w-14">' . $glifo . '</svg>';
+    return '<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">' . $glifo . '</svg>';
 }
 
 /* -----------------------------------------------------------------------------

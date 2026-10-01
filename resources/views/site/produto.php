@@ -117,7 +117,7 @@ include DD_BASE . '/partials/header.php';
         <img src="<?= e($imagem) ?>" alt="<?= e((string) $produto['nome']) ?>" width="960" height="720">
       <?php else: ?>
         <span class="produto-sem-foto" role="img" aria-label="Foto de <?= e((string) $produto['nome']) ?> ainda não cadastrada">
-          <?= dd_icone_categoria((string) ($produto['categoria'] ?? '')) ?>
+          <?= dd_icone_categoria((string) ($produto['categoria'] ?? ''), (string) ($produto['nome'] ?? '')) ?>
         </span>
       <?php endif; ?>
     </figure>
