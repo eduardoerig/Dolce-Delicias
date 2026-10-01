@@ -1,0 +1,33 @@
+const {chromium}=require(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES ? process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES+'/playwright' : 'playwright');
+const assert=require('node:assert/strict');
+(async()=>{
+ const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH||undefined,args:['--no-sandbox','--disable-dev-shm-usage','--disable-gpu']});
+ const context=await browser.newContext({viewport:{width:1440,height:1000}});
+ const page=await context.newPage();page.setDefaultTimeout(10000);page.setDefaultNavigationTimeout(15000);const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const base=process.env.TEST_BASE_URL||'http://127.0.0.1:8000';
+ async function go(path){const response=await page.goto(base+path);assert.ok(response.status()<400,`${path}: ${response.status()}`);}
+ await go('/admin');assert.ok(page.url().endsWith('/login'));
+ await page.fill('#login',process.env.ADMIN_LOGIN||'admin');await page.fill('#senha',process.env.ADMIN_PASSWORD);await page.click('.login-card button[type=submit]');await page.waitForURL('**/admin');
+ await page.screenshot({path:'/tmp/dolce-dashboard.png',fullPage:true});
+ for(const e of ['categorias','produtos','unidades','promocoes','usuarios'])await go('/admin/'+e);
+ await go('/admin/categorias/nova');await page.fill('#nome','Categoria de teste');await page.click('.admin-form button[type=submit]');await page.waitForURL('**/editar');
+ const categoryId=page.url().match(/categorias\/(\d+)/)[1];await page.fill('#nome','Categoria atualizada');await page.click('.admin-form button[type=submit]');await page.waitForURL('**/editar');
+ await go('/admin/produtos/novo');await page.fill('#nome','Produto de teste');await page.selectOption('#id_categoria',categoryId);await page.fill('#preco','120.00');await page.fill('#rotulo_preco','100 unidades');await page.fill('#pedido_minimo','50');await page.fill('#passo_quantidade','50');await page.check('input[name="unidades[]"][value="1"]');await page.fill('#sabores','Queijo\nFrango');await page.fill('#tags','sem carne');
+ await page.setInputFiles('#imagem',{name:'foto.png',mimeType:'image/png',buffer:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jfZkAAAAASUVORK5CYII=','base64')});
+ await page.click('.admin-form button[type=submit]');await page.waitForURL('**/editar');const productId=page.url().match(/produtos\/(\d+)/)[1];
+ await go('/produtos/produto-de-teste');assert.ok((await page.textContent('body')).includes('Produto de teste'));await page.click('[data-add]');await go('/carrinho');assert.ok((await page.locator('[data-cart-total]').first().textContent()).includes('60,00'));
+ await go('/admin/promocoes/nova');await page.fill('#nome','Promo teste');await page.fill('#selo','20% OFF');await page.fill('#valor_desconto','20');await page.fill('#dias_semana','3');await page.check(`input[name="produtos[]"][value="${productId}"]`);await page.check('input[name="unidades[]"][value="1"]');await page.selectOption('#tipo_atendimento','ENCOMENDA');await page.click('.admin-form button[type=submit]');await page.waitForURL('**/editar');
+ await go('/produtos/produto-de-teste');assert.ok((await page.textContent('body')).includes('20% OFF'));await go('/');assert.equal(await page.locator('#promocoes').count(),1);assert.ok((await page.locator('#promocoes').textContent()).includes('Promo teste'));assert.equal(await page.locator('a[href="#promocoes"]').count()>0,true);await go('/carrinho');assert.ok((await page.locator('[data-cart-total]').first().textContent()).includes('60,00'));
+ await go('/admin/unidades/nova');await page.fill('#nome','Filial de teste');await page.selectOption('#tipo_unidade','FILIAL');await page.setInputFiles('#pdf_url',{name:'catalogo.pdf',mimeType:'application/pdf',buffer:Buffer.from('%PDF-1.4\n1 0 obj\n<<>>\nendobj\n%%EOF')});await page.click('.admin-form button[type=submit]');await page.waitForURL('**/editar');
+ let pdf=await context.request.get(base+'/catalogos/filial-de-teste/download');assert.equal(pdf.status(),200);assert.equal(pdf.headers()['content-type'],'application/pdf');
+ await page.setInputFiles('#pdf_url',{name:'novo.pdf',mimeType:'application/pdf',buffer:Buffer.from('%PDF-1.4\n%substituido\n%%EOF')});await page.click('.admin-form button[type=submit]');await page.waitForURL('**/editar');pdf=await context.request.get(base+'/catalogos/filial-de-teste/download');assert.ok((await pdf.text()).includes('substituido'));
+ const csrf=await page.inputValue('input[name=_csrf]');const bad=await context.request.post(base+'/admin/categorias/nova',{form:{nome:'invalido'}});assert.equal(bad.status(),403);
+ await go('/admin/usuarios/novo');await page.fill('#nome','Gestor de teste');await page.fill('#login','gestor-teste');await page.fill('#senha','SenhaGestor123!');await page.click('.admin-form button[type=submit]');await page.waitForURL('**/editar');
+ await go('/');await page.selectOption('[data-filter-category]','Categoria atualizada');assert.equal(await page.locator('[data-produto]:visible').count(),1);await page.screenshot({path:'/tmp/dolce-catalogo.png',fullPage:true});
+ await page.setViewportSize({width:390,height:844});await go('/admin');await page.screenshot({path:'/tmp/dolce-mobile.png',fullPage:true});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+ const logout=await context.request.post(base+'/logout',{form:{_csrf:csrf}});assert.equal(logout.status(),200);
+ await go('/login');await page.fill('#login','gestor-teste');await page.fill('#senha','SenhaGestor123!');await page.click('.login-card button[type=submit]');await page.waitForURL('**/admin');const forbidden=await context.request.get(base+'/admin/usuarios');assert.equal(forbidden.status(),403);
+ for(const path of ['/.env','/data/products.php','/storage/logs/app.log','/catalogos/../../etc/passwd/download'])assert.equal((await context.request.get(base+path)).status(),404);
+ assert.deepEqual(errors,[]);console.log('Fluxos aprovados: login, visitante, 5 cadastros, edição, N:N, imagem, substituição PDF, promoção, preço cheio, filtros, mobile, CSRF, autorização e arquivos privados.');
+ await browser.close();
+})().catch(e=>{console.error(e);process.exit(1)});

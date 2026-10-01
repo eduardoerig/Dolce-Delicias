@@ -1,0 +1,2 @@
+Fotos das fachadas entram aqui, nomeadas com o slug da unidade.
+Ex.: matriz.jpg (ver data/units.php e ../README.md).
