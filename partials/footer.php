@@ -38,8 +38,6 @@ $canaisRodape = array_values(array_filter(
 ?>
     </main>
 
-    <div class="faixa-raios" aria-hidden="true"></div>
-
     <footer id="contato" class="bg-neutral text-neutral-content">
       <div class="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.2fr_1fr_1fr] lg:px-8">
 
@@ -83,10 +81,8 @@ $canaisRodape = array_values(array_filter(
             <?php if (dd_promocoes_visiveis() !== []): ?>
               <li><a class="rounded opacity-80 transition-opacity hover:opacity-100" href="/#promocoes">Promoções</a></li>
             <?php endif; ?>
-            <li><a class="rounded opacity-80 transition-opacity hover:opacity-100" href="/#encomendas">Como encomendar</a></li>
             <li><a class="rounded opacity-80 transition-opacity hover:opacity-100" href="/unidades">Nossas unidades</a></li>
             <li><a class="rounded opacity-80 transition-opacity hover:opacity-100" href="/sobre">A empresa</a></li>
-            <li><a class="rounded opacity-80 transition-opacity hover:opacity-100" href="/sobre#empresas">Para empresas</a></li>
             <li><a class="rounded opacity-80 transition-opacity hover:opacity-100" href="/carrinho">Meu pedido</a></li>
           </ul>
 
@@ -129,7 +125,7 @@ $canaisRodape = array_values(array_filter(
 
       <div class="border-t border-white/10">
         <p class="mx-auto max-w-7xl px-4 py-6 text-xs opacity-60 sm:px-6 lg:px-8">
-          © <?= e((string) $anoAtual) ?> Dolce Delícias. Vitrine online — os pedidos são fechados por WhatsApp com a matriz.
+          © <?= e((string) $anoAtual) ?> Dolce Delícias. Os pedidos são fechados pelo WhatsApp da matriz.
         </p>
       </div>
     </footer>

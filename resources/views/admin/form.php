@@ -1,16 +1,171 @@
-<?php declare(strict_types=1); use App\Core\Csrf; require __DIR__.'/header.php'; ?>
-<a class="back-link" href="/admin/<?= e($entity) ?>">← Voltar para <?= e($entity) ?></a><h1><?= $id?'Editar cadastro':'Novo cadastro' ?></h1><p class="admin-subtitle">As alterações salvas aparecem no site público conforme o status e a disponibilidade.</p>
-<?php if($errors): ?><div class="admin-error" role="alert"><strong>Revise os campos abaixo.</strong><ul><?php foreach($errors as $key=>$message): ?><li><?= e(($config['fields'][$key][0]??ucfirst($key)).': '.$message) ?></li><?php endforeach ?></ul></div><?php endif ?>
-<form method="post" enctype="multipart/form-data" class="admin-form"><input type="hidden" name="_csrf" value="<?= e(Csrf::token()) ?>"><div class="form-grid">
-<?php foreach($config['fields'] as $key=>$field): [$label,$type]=$field;$value=$record[$key]??($type==='bool'?($id===null && $key!=='destaque'):($type==='integer'?'1':($key==='rotulo_preco'?'unidade':'')));if($type==='password')$value='';if(is_array($value))$value=''; ?>
-<div class="form-field <?= $type==='textarea'?'wide':'' ?>"><label for="<?= e($key) ?>"><?= e($label) ?><?= ($field[3]??false)?' *':'' ?></label>
-<?php if($type==='select'||$type==='category'): ?><select id="<?= e($key) ?>" name="<?= e($key) ?>" required><?php if($type==='category'): ?><option value="">Selecione</option><?php foreach($choices['categorias'] as $c): ?><option value="<?= (int)$c['id_categoria'] ?>" <?= (string)$value===(string)$c['id_categoria']?'selected':'' ?>><?= e($c['nome'].(!$c['ativa']?' (inativa)':'')) ?></option><?php endforeach ?><?php else: foreach($field[2] as $option): ?><option value="<?= e($option) ?>" <?= $value===$option?'selected':'' ?>><?= e($option) ?></option><?php endforeach;endif ?></select>
-<?php elseif($type==='textarea'): ?><textarea id="<?= e($key) ?>" name="<?= e($key) ?>" rows="4" maxlength="<?= (int)$field[2] ?>"><?= e((string)$value) ?></textarea>
-<?php elseif($type==='bool'): ?><input id="<?= e($key) ?>" name="<?= e($key) ?>" type="checkbox" value="1" <?= $value?'checked':'' ?>>
-<?php else: ?><input id="<?= e($key) ?>" name="<?= e($key) ?>" type="<?= e(match($type){'password'=>'password','date'=>'date','url'=>'url','integer'=>'number',default=>'text'}) ?>" value="<?= e((string)$value) ?>" <?= ($field[3]??false)?'required':'' ?> <?= in_array($type,['text','phone','url','password'],true)?'maxlength="'.(int)$field[2].'"':'' ?> <?= $type==='integer'?'min="1" step="1"':'' ?> <?= $type==='password'?'autocomplete="new-password"':'' ?>><?php endif ?>
-<?php if(isset($errors[$key])): ?><p class="field-error"><?= e($errors[$key]) ?></p><?php endif ?></div><?php endforeach ?>
-<?php if($entity==='produtos'): ?><div class="form-field"><label for="sabores">Sabores (um por linha)</label><textarea id="sabores" name="sabores" rows="4"><?= e(is_string($record['sabores']??'')?$record['sabores']??'':'') ?></textarea></div><div class="form-field"><label for="tags">Tags e restrições (separadas por vírgula)</label><textarea id="tags" name="tags" rows="4"><?= e(is_string($record['tags']??'')?$record['tags']??'':'') ?></textarea><small>Ex.: vegano, sem lactose. Confirme as restrições com a cozinha.</small></div><?php endif ?>
-<?php if(in_array($entity,['produtos','promocoes'],true)): foreach($entity==='produtos'?['unidades']:['unidades','produtos'] as $relation): $key=$relation==='unidades'?'id_unidade':'id_produto'; ?><fieldset class="form-field"><legend><?= $relation==='unidades'?'Unidades participantes / disponíveis':'Produtos participantes' ?></legend><div class="checkbox-list"><?php foreach($choices[$relation] as $choice): ?><label><input type="checkbox" name="<?= e($relation) ?>[]" value="<?= (int)$choice[$key] ?>" <?= in_array((int)$choice[$key],array_map('intval',is_array($record[$relation]??null)?$record[$relation]:[]),true)?'checked':'' ?>> <?= e($choice['nome']) ?></label><?php endforeach ?></div></fieldset><?php endforeach;endif ?>
-<?php if(in_array($entity,['produtos','unidades'],true)): ?><div class="form-field"><label for="imagem">Imagem (JPEG, PNG ou WebP; até 5 MB)</label><input id="imagem" type="file" name="imagem" accept="image/jpeg,image/png,image/webp"><?php if(!empty($record['imagem']) && dd_imagem($record['imagem'])): ?><img class="upload-preview" alt="Imagem atual" src="<?= e($record['imagem']) ?>"><?php endif ?><small>Deixe vazio para manter a imagem atual.</small></div><?php endif ?>
-<?php if($entity==='unidades'): ?><div class="form-field"><label for="pdf_url">Catálogo PDF (até 10 MB)</label><input id="pdf_url" type="file" name="pdf_url" accept="application/pdf"><small>O arquivo anterior só é removido após a gravação do novo catálogo.</small><?php if($id && !empty($record['pdf_url']) && !empty($record['ativa'])): ?><a href="/catalogos/<?= e($record['slug']) ?>/download">Baixar catálogo atual</a><?php endif ?></div><?php endif ?>
-</div><div class="form-footer"><a class="btn" href="/admin/<?= e($entity) ?>">Cancelar</a><button class="btn btn-primary" type="submit">Salvar alterações</button></div></form><?php if($entity==='produtos'&&$id): ?><form method="post" action="/admin/produtos/<?= $id ?>/excluir" data-confirm="Desativar este produto e preservar seus vínculos?"><input type="hidden" name="_csrf" value="<?= e(Csrf::token()) ?>"><button class="btn btn-sm mt-4" type="submit">Arquivar produto</button></form><?php endif ?><?php require __DIR__.'/footer.php'; ?>
+<?php declare(strict_types=1); use App\Core\Csrf; use App\Models\AdminUi;
+$pageTitle=$id?($record['nome']??AdminUi::plural($entity)):AdminUi::newLabel($entity); require __DIR__.'/header.php';
+$fields=$config['fields'];
+$defaults=['linha'=>'AMBOS','tipo_unidade'=>'FILIAL','tipo_desconto'=>'PERCENTUAL','tipo_atendimento'=>'AMBOS','tipo_agenda'=>'SEMPRE','perfil'=>'GESTOR','rotulo_preco'=>'1 unidade','pedido_minimo'=>'1','passo_quantidade'=>'1'];
+$value=function(string $key) use($record,$fields,$id,$defaults) {
+ $type=$fields[$key][1]??'text';
+ if($type==='password') return '';
+ if(array_key_exists($key,$record)) return $record[$key];
+ if($type==='bool') return $id===null && $key!=='destaque';
+ return $defaults[$key]??'';
+};
+$label=fn(string $key)=>AdminUi::label($entity,$key,$fields[$key][0]??ucfirst($key));
+$required=fn(string $key)=>(($fields[$key][3]??false) && $key!=='slug') || ($key==='senha' && $id===null);
+$error=fn(string $key)=>isset($errors[$key])?'<p class="adm-field-error" id="'.e($key).'-erro">'.e($errors[$key]).'</p>':'';
+$describedBy=fn(string $key)=>trim((AdminUi::hint($entity,$key)!==''?$key.'-ajuda ':'').(isset($errors[$key])?$key.'-erro':''));
+$head=function(string $key,bool $legend=false) use($label,$required,$fields): string {
+ $optional=!$required($key) && !in_array($key,['senha','slug','data_inicio','data_fim'],true) && !in_array($fields[$key][1]??'',['select','category'],true);
+ $text=e($label($key)).($optional?' <span class="adm-optional">opcional</span>':'');
+ return $legend?'<legend>'.$text.'</legend>':'<label for="'.e($key).'">'.$text.'</label>';
+};
+$hint=fn(string $key)=>AdminUi::hint($entity,$key)!==''?'<p class="adm-hint" id="'.e($key).'-ajuda">'.e(AdminUi::hint($entity,$key)).'</p>':'';
+
+/** Desenha um campo de Entity::config pelo tipo. */
+$render=function(string $key) use($entity,$fields,$value,$head,$hint,$error,$describedBy,$required,$choices): void {
+ [, $type]=$fields[$key];$v=$value($key);$max=(int)($fields[$key][2]??0);$desc=$describedBy($key);
+ $aria=$desc!==''?' aria-describedby="'.e($desc).'"':'';$inv=$desc!=='' && str_contains($desc,'-erro')?' aria-invalid="true"':'';
+ if($type==='select' && count($fields[$key][2])<=4) {
+  echo '<fieldset class="adm-field">'.$head($key,true).'<div class="adm-seg">';
+  foreach($fields[$key][2] as $opt) echo '<label><input type="radio" name="'.e($key).'" value="'.e($opt).'"'.((string)$v===$opt?' checked':'').'><span>'.e(AdminUi::option($key,$opt)).'</span></label>';
+  echo '</div>'.$hint($key).$error($key).'</fieldset>';return;
+ }
+ echo '<div class="adm-field'.($type==='textarea'?' is-wide':'').'">'.$head($key);
+ if($type==='category') {
+  echo '<select id="'.e($key).'" name="'.e($key).'" required'.$aria.$inv.'><option value="">Escolha…</option>';
+  foreach($choices['categorias'] as $c) echo '<option value="'.(int)$c['id_categoria'].'"'.((string)$v===(string)$c['id_categoria']?' selected':'').'>'.e($c['nome'].(!$c['ativa']?' (oculta)':'')).'</option>';
+  echo '</select>';
+ } elseif($type==='select') {
+  echo '<select id="'.e($key).'" name="'.e($key).'"'.$aria.$inv.'>';
+  foreach($fields[$key][2] as $opt) echo '<option value="'.e($opt).'"'.((string)$v===$opt?' selected':'').'>'.e(AdminUi::option($key,$opt)).'</option>';
+  echo '</select>';
+ } elseif($type==='textarea') {
+  echo '<textarea id="'.e($key).'" name="'.e($key).'" rows="3" maxlength="'.$max.'"'.$aria.$inv.'>'.e(is_string($v)?$v:'').'</textarea>';
+ } else {
+  $input=match($type){'password'=>'password','date'=>'date','url'=>'url','integer'=>'number','phone'=>'tel',default=>'text'};
+  $attrs=' id="'.e($key).'" name="'.e($key).'" type="'.$input.'" value="'.e(is_scalar($v)?(string)$v:'').'"'.($required($key)?' required':'').$aria.$inv;
+  if(in_array($type,['text','url','password'],true)) $attrs.=' maxlength="'.$max.'"';
+  if($type==='phone') $attrs.=' inputmode="tel" autocomplete="off" placeholder="55 11 98765-4321"';
+  if($type==='integer') $attrs.=' min="1" step="1" inputmode="numeric"';
+  if($type==='money') $attrs.=' inputmode="decimal" placeholder="0,00"';
+  if($type==='password') $attrs.=' autocomplete="new-password"';
+  if($key==='login') $attrs.=' autocomplete="off" autocapitalize="none" spellcheck="false"';
+  $prefix=$type==='money'?($key==='valor_desconto'?'':'R$'):'';
+  $suffix=$key==='valor_desconto'?'<span class="adm-affix" data-discount-unit>'.(($value('tipo_desconto'))==='VALOR_FIXO'?'R$':'%').'</span>':(in_array($key,['pedido_minimo','passo_quantidade'],true)?'<span class="adm-affix">peças</span>':'');
+  if($prefix||$suffix) echo '<div class="adm-input-group">'.($prefix?'<span class="adm-affix">'.$prefix.'</span>':'').'<input'.$attrs.'>'.$suffix.'</div>';
+  else echo '<input'.$attrs.'>';
+ }
+ echo $hint($key).$error($key).'</div>';
+};
+
+/** Lista de marcar (unidades/produtos) com busca quando é longa. */
+$relation=function(string $relation) use($record,$choices,$entity): void {
+ $key=$relation==='unidades'?'id_unidade':'id_produto';
+ $checked=array_map('intval',is_array($record[$relation]??null)?$record[$relation]:[]);
+ $items=$choices[$relation];$long=count($items)>8;
+ echo '<fieldset class="adm-field is-wide" data-checklist><legend class="sr-only">'.($relation==='unidades'?'Unidades':'Produtos').'</legend>';
+ echo '<div class="adm-checklist-bar">';
+ if($long) echo '<input type="search" class="adm-checklist-search" placeholder="Filtrar…" aria-label="Filtrar lista" data-checklist-filter>';
+ echo '<button type="button" class="adm-link" data-checklist-all>Marcar todos</button><button type="button" class="adm-link" data-checklist-none>Limpar</button></div>';
+ echo '<div class="adm-checklist">';
+ foreach($items as $c) {
+  $off=!($c['ativa']??$c['ativo']??true);
+  echo '<label data-name="'.e(mb_strtolower(dd_ascii($c['nome']))).'"><input type="checkbox" name="'.e($relation).'[]" value="'.(int)$c[$key].'"'.(in_array((int)$c[$key],$checked,true)?' checked':'').'><span>'.e($c['nome']).($off?' <em>(inativo)</em>':'').'</span></label>';
+ }
+ echo '</div></fieldset>';
+};
+
+$chips=function(string $key,array $options) use($value,$label,$error): void {
+ $selected=AdminUi::numbers($value($key));
+ echo '<fieldset class="adm-field is-wide"><legend>'.e($label($key)).'</legend><div class="adm-chips">';
+ foreach($options as $n=>$text) echo '<label><input type="checkbox" name="'.e($key).'[]" value="'.$n.'"'.(in_array($n,$selected,true)?' checked':'').'><span>'.e($text).'</span></label>';
+ echo '</div>'.$error($key).'</fieldset>';
+};
+
+$special=function(string $key) use($entity,$record,$render,$relation,$chips,$value,$error,$id): void {
+ switch($key) {
+  case 'unidades': case 'produtos': $relation($key);return;
+  case 'sabores':
+   echo '<div class="adm-field"><label for="sabores">Sabores <span class="adm-optional">opcional</span></label><textarea id="sabores" name="sabores" rows="4" placeholder="Um por linha">'.e(is_string($record['sabores']??null)?$record['sabores']:'').'</textarea>'.$error('sabores').'</div>';return;
+  case 'tags':
+   echo '<div class="adm-field"><label for="tags">Restrições alimentares <span class="adm-optional">opcional</span></label><input id="tags" name="tags" value="'.e(is_string($record['tags']??null)?$record['tags']:'').'" placeholder="vegano, sem lactose"><p class="adm-hint">Separe por vírgula. Confirme com a cozinha.</p>'.$error('tags').'</div>';return;
+  case 'imagem':
+   $img=dd_imagem($record['imagem']??null);
+   echo '<div class="adm-field is-wide"><label class="adm-upload" for="imagem"><span class="adm-upload-preview" data-preview>'.($img?'<img src="'.e($img).'" alt="Foto atual">':AdminUi::icon('image')).'</span><span class="adm-upload-text"><strong>'.($img?'Trocar foto':'Escolher foto').'</strong><small>JPG, PNG ou WebP, até 5 MB.</small></span></label><input class="sr-only" id="imagem" type="file" name="imagem" accept="image/jpeg,image/png,image/webp" data-preview-input>'.$error('imagem').'</div>';return;
+  case 'pdf_url':
+   $has=$id && !empty($record['pdf_url']);
+   echo '<div class="adm-field is-wide"><label class="adm-upload" for="pdf_url"><span class="adm-upload-preview">'.AdminUi::icon('file').'</span><span class="adm-upload-text"><strong>'.($has?'Trocar catálogo PDF':'Enviar catálogo PDF').'</strong><small data-file-name>Até 10 MB.</small></span></label><input class="sr-only" id="pdf_url" type="file" name="pdf_url" accept="application/pdf" data-file-input>';
+   if($has && !empty($record['ativa'])) echo '<p class="adm-hint"><a href="/catalogos/'.e($record['slug']).'/download">Baixar catálogo atual</a></p>';
+   echo $error('pdf_url').'</div>';return;
+  case 'agenda':
+   $render('tipo_agenda');
+   $t=$value('tipo_agenda');
+   echo '<div class="adm-agenda" data-agenda="SEMANAL"'.($t==='SEMANAL'?'':' hidden').'>';$chips('dias_semana',AdminUi::DAYS);echo '</div>';
+   echo '<div class="adm-agenda" data-agenda="MENSAL"'.($t==='MENSAL'?'':' hidden').'>';$chips('meses',AdminUi::MONTHS);echo '</div>';
+   echo '<div class="adm-agenda adm-grid" data-agenda="PERIODO SEMANAL MENSAL"'.(in_array($t,['PERIODO','SEMANAL','MENSAL'],true)?'':' hidden').'>';$render('data_inicio');$render('data_fim');echo '</div>';
+   return;
+  default: $render($key);
+ }
+};
+$general=array_diff_key($errors,$config['fields']+['sabores'=>1,'tags'=>1,'imagem'=>1,'pdf_url'=>1]);
+?>
+<a class="adm-back" href="/admin/<?= e($entity) ?>"><?= AdminUi::icon('back') ?><?= e(AdminUi::plural($entity)) ?></a>
+<div class="adm-head">
+ <h1><?= e($id?($record['nome']??'Editar'):AdminUi::newLabel($entity)) ?></h1>
+ <?php if($id && $entity==='produtos' && !empty($record['slug']) && !empty($record['ativo'])): ?><a class="adm-btn adm-btn-sm" href="/produtos/<?= e($record['slug']) ?>" target="_blank" rel="noopener"><?= AdminUi::icon('external') ?>Ver no site</a><?php endif ?>
+</div>
+
+<?php if($errors): ?>
+ <div class="adm-alert" role="alert"><?= AdminUi::icon('alert') ?><div><strong>Não deu para salvar. Confira os campos marcados.</strong><?php if($general): ?><ul><?php foreach($general as $message): ?><li><?= e($message) ?></li><?php endforeach ?></ul><?php endif ?></div></div>
+<?php endif ?>
+
+<form method="post" enctype="multipart/form-data" class="adm-form" data-form>
+ <input type="hidden" name="_csrf" value="<?= e(Csrf::token()) ?>">
+ <div class="adm-form-main">
+  <?php foreach(AdminUi::sections($entity) as [$title,$intro,$keys]): ?>
+   <section class="adm-card">
+    <h2><?= e($title) ?></h2><?php if($intro): ?><p class="adm-card-intro"><?= e($intro) ?></p><?php endif ?>
+    <div class="adm-grid">
+     <?php foreach($keys as $key) $special($key); ?>
+    </div>
+   </section>
+  <?php endforeach ?>
+ </div>
+
+ <aside class="adm-form-side">
+  <section class="adm-card">
+   <h2>Publicação</h2>
+   <?php foreach(AdminUi::statusFields($entity) as $key): $hintText=AdminUi::hint($entity,$key); ?>
+    <label class="adm-toggle"><span><strong><?= e($label($key)) ?></strong><?php if($hintText): ?><small><?= e($hintText) ?></small><?php endif ?></span><input id="<?= e($key) ?>" type="checkbox" name="<?= e($key) ?>" value="1" role="switch" <?= $value($key)?'checked':'' ?>></label>
+   <?php endforeach ?>
+  </section>
+
+  <?php if($entity==='promocoes'): ?>
+   <section class="adm-card">
+    <h2>Aparece no site?</h2>
+    <?php if(!$checklist): ?>
+     <p class="adm-card-intro">Salve para conferir.</p>
+    <?php else: ?>
+     <p class="adm-site-status <?= $checklist['no_site']?'is-on':'' ?>"><?= $checklist['no_site']?'Sim, está no site'.($checklist['vigente']?' e valendo hoje.':' (divulgando; vale nos dias marcados).'):'Ainda não.' ?></p>
+     <ul class="adm-checks">
+      <?php foreach($checklist['items'] as [$ok,$text,$fix]): ?>
+       <li class="<?= $ok?'is-ok':'' ?>"><?= AdminUi::icon($ok?'check':'x') ?><span><?= e($text) ?><?php if(!$ok): ?><small><?= e($fix) ?></small><?php endif ?></span></li>
+      <?php endforeach ?>
+     </ul>
+    <?php endif ?>
+   </section>
+  <?php endif ?>
+
+  <?php if(isset($fields['slug'])): ?>
+   <details class="adm-card adm-advanced" <?= isset($errors['slug'])?'open':'' ?>>
+    <summary>Avançado</summary>
+    <div class="adm-grid"><?php $render('slug'); ?></div>
+   </details>
+  <?php endif ?>
+ </aside>
+
+ <div class="adm-savebar">
+  <a class="adm-btn" href="/admin/<?= e($entity) ?>">Cancelar</a>
+  <button class="adm-btn adm-btn-primary" type="submit">Salvar</button>
+ </div>
+</form>
+<?php require __DIR__.'/footer.php'; ?>

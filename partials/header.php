@@ -54,10 +54,8 @@ $temPromocoes = dd_promocoes_visiveis() !== [];
 $menu = [
     ['href' => $ancora . '#catalogo',   'texto' => 'Catálogo', 'catalogos' => true],
     ...($temPromocoes ? [['href' => $ancora . '#promocoes', 'texto' => 'Promoções']] : []),
-    ['href' => $ancora . '#encomendas', 'texto' => 'Encomendas'],
     ['href' => '/unidades',          'texto' => 'Unidades'],
     ['href' => '/sobre',             'texto' => 'A empresa'],
-    ['href' => $ancora . '#contato',    'texto' => 'Contato'],
 ];
 ?>
 <!doctype html>

@@ -21,6 +21,15 @@ final class Repository {
   $rows=$this->query("SELECT * FROM $entity WHERE nome ILIKE :search ORDER BY $pk DESC LIMIT 15 OFFSET :offset",$params+['offset'=>($page-1)*15])->fetchAll();
   return ['rows'=>$rows,'total'=>$total];
  }
+ /** Todos os registros com o resumo exibido na listagem do painel (volumes pequenos). */
+ public function listing(string $entity): array {
+  Entity::config($entity);
+  return $this->query(match($entity) {
+   'produtos'=>"SELECT p.*, c.nome categoria, NOT EXISTS (SELECT 1 FROM produto_unidade pu JOIN unidades u USING(id_unidade) WHERE pu.id_produto=p.id_produto AND pu.disponivel AND u.ativa) indisponivel FROM produtos p JOIN categorias c USING(id_categoria) ORDER BY p.nome",
+   'categorias'=>'SELECT c.*, (SELECT count(*) FROM produtos p WHERE p.id_categoria=c.id_categoria AND p.ativo) produtos_ativos FROM categorias c ORDER BY c.nome',
+   default=>"SELECT * FROM $entity ORDER BY nome",
+  })->fetchAll();
+ }
  public function save(string $entity,array $data,?int $id): int {
   $c=Entity::config($entity);$pk=$c['id'];
   $allowed=array_merge(array_keys($c['fields']),['senha_hash','imagem','pdf_url','canais','criado_por','atualizado_por']);
@@ -64,6 +73,8 @@ final class Repository {
  public function dashboard(): array {
   return $this->query("SELECT (SELECT count(*) FROM produtos WHERE ativo) produtos, (SELECT count(*) FROM categorias) categorias, (SELECT count(*) FROM unidades WHERE ativa) unidades, (SELECT count(*) FROM promocoes WHERE ativa) promocoes, (SELECT count(*) FROM produtos p WHERE ativo AND NOT EXISTS (SELECT 1 FROM produto_unidade pu JOIN unidades u USING(id_unidade) WHERE pu.id_produto=p.id_produto AND pu.disponivel AND u.ativa)) indisponiveis")->fetch();
  }
+ /** Produtos ativos (id, nome, imagem) para conferir fotos na visão geral. */
+ public function activeProducts(): array {return $this->query('SELECT id_produto,nome,imagem FROM produtos WHERE ativo ORDER BY nome')->fetchAll();}
  public function consumeLoginAttempt(string $key): bool {
   $n=$this->query("INSERT INTO login_tentativas(chave,tentativas,inicio) VALUES (?,1,NOW()) ON CONFLICT(chave) DO UPDATE SET tentativas=CASE WHEN login_tentativas.inicio<NOW()-INTERVAL '15 minutes' THEN 1 ELSE login_tentativas.tentativas+1 END, inicio=CASE WHEN login_tentativas.inicio<NOW()-INTERVAL '15 minutes' THEN NOW() ELSE login_tentativas.inicio END RETURNING tentativas",[$key])->fetchColumn();
   return (int)$n<=10;

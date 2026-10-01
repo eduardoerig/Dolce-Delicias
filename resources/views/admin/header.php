@@ -1,4 +1,46 @@
-<?php declare(strict_types=1); use App\Core\Csrf; ?>
-<!doctype html><html lang="pt-BR" data-theme="dolce"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Gestão — Dolce Delícias</title><link rel="stylesheet" href="/assets/css/app.css"><link rel="stylesheet" href="/assets/css/admin.css"><script type="module" src="/assets/js/admin.js"></script></head>
-<body class="admin-shell"><a class="skip-link" href="#conteudo">Pular para o conteúdo</a><aside class="admin-sidebar"><a class="admin-brand" href="/admin">Dolce <span>delícias</span><small>PAINEL DE GESTÃO</small></a><nav aria-label="Administração"><a href="/admin">Visão geral</a><?php foreach(['produtos'=>'Produtos','categorias'=>'Categorias','unidades'=>'Unidades','promocoes'=>'Promoções','usuarios'=>'Usuários'] as $key=>$label): if($key==='usuarios' && $user['perfil']!=='ADMIN')continue; ?><a href="/admin/<?= e($key) ?>" <?= ($entity??'')===$key?'aria-current="page"':'' ?>><?= e($label) ?></a><?php endforeach ?></nav><a href="/">↗ Ver site público</a><div class="admin-account"><strong><?= e($user['nome']) ?></strong><small><?= e($user['perfil']) ?></small><form method="post" action="/logout"><input type="hidden" name="_csrf" value="<?= e(Csrf::token()) ?>"><button class="btn btn-sm" type="submit">Sair</button></form></div></aside><main id="conteudo" class="admin-main"><div class="admin-topline">DOLCE DELÍCIAS <span>Administração</span></div>
-<?php if(isset($_SESSION['flash'])): ?><p class="admin-success" role="status"><?= e($_SESSION['flash']) ?></p><?php unset($_SESSION['flash']);endif ?>
+<?php declare(strict_types=1); use App\Core\Csrf; use App\Models\AdminUi;
+$current=$entity??'';
+$nav=['produtos','promocoes','categorias','unidades'];
+?>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title><?= e(($pageTitle??'Painel').' — Dolce Delícias') ?></title>
+<link rel="icon" href="/assets/img/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Figtree:wght@400;500;600;700&family=Baloo+2:wght@800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/admin.css">
+<script type="module" src="/assets/js/admin.js"></script>
+</head>
+<body class="adm">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<div class="adm-shell">
+ <aside class="adm-side" id="menu-lateral">
+  <a class="adm-brand" href="/admin" aria-label="Painel Dolce Delícias, início"><?= dd_logo('adm-logo') ?><span>Painel</span></a>
+  <nav class="adm-nav" aria-label="Painel">
+   <a href="/admin" <?= $current===''&&($pageTitle??'')==='Início'?'aria-current="page"':'' ?>><?= AdminUi::icon('home') ?>Início</a>
+   <?php foreach($nav as $key): ?>
+    <a href="/admin/<?= e($key) ?>" <?= $current===$key?'aria-current="page"':'' ?>><?= AdminUi::icon(AdminUi::ENTITIES[$key][2]) ?><?= e(AdminUi::plural($key)) ?></a>
+   <?php endforeach ?>
+  </nav>
+  <div class="adm-side-foot">
+   <a class="adm-nav-link" href="/" target="_blank" rel="noopener"><?= AdminUi::icon('external') ?>Ver o site</a>
+   <?php if($user['perfil']==='ADMIN'): ?><a class="adm-nav-link" href="/admin/usuarios" <?= $current==='usuarios'?'aria-current="page"':'' ?>><?= AdminUi::icon('user') ?>Acessos</a><?php endif ?>
+   <form method="post" action="/logout" class="adm-account">
+    <input type="hidden" name="_csrf" value="<?= e(Csrf::token()) ?>">
+    <span class="adm-avatar" aria-hidden="true"><?= e(mb_strtoupper(mb_substr($user['nome'],0,1))) ?></span>
+    <span class="adm-account-name"><?= e($user['nome']) ?></span>
+    <button class="adm-icon-btn" type="submit" title="Sair" aria-label="Sair"><?= AdminUi::icon('logout') ?></button>
+   </form>
+  </div>
+ </aside>
+ <div class="adm-body">
+  <header class="adm-topbar">
+   <a class="adm-brand" href="/admin" aria-label="Painel Dolce Delícias, início"><?= dd_logo('adm-logo') ?></a>
+   <button class="adm-icon-btn" type="button" data-menu-toggle aria-controls="menu-lateral" aria-expanded="false" aria-label="Abrir menu"><?= AdminUi::icon('menu') ?></button>
+  </header>
+  <main id="conteudo" class="adm-main">
+<?php if(isset($_SESSION['flash'])): ?><div class="adm-toast" role="status" data-toast><?= AdminUi::icon('check') ?><span><?= e($_SESSION['flash']) ?></span></div><?php unset($_SESSION['flash']);endif ?>

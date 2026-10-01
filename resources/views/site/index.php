@@ -23,41 +23,20 @@ include DD_BASE . '/partials/header.php';
      HERÓI
      ============================================================ -->
 <?php
-$heroEtiqueta  = 'Padaria e confeitaria · ' . count($unidades) . ' unidades';
+// Herói curto: o cartaz diz a proposta, o parágrafo diz como funciona, um botão leva ao catálogo.
+// Sem etiqueta, sem faixa rolante e sem faixa de fatos: o que elas diziam cabe na frase abaixo.
+$heroEtiqueta  = '';
 $heroLinhas    = [
-    ['texto' => 'Encomende'],
-    ['texto' => 'o cento.'],
-    ['texto' => 'A gente cuida', 'destaque' => true],
-    ['texto' => 'do resto.',     'destaque' => true],
+    ['texto' => 'Encomende o cento.'],
+    ['texto' => 'A gente cuida do resto.', 'destaque' => true],
 ];
-$heroTexto     = $totalEncomenda . ' itens de encomenda, feitos todo dia. Monte o pedido aqui e feche no WhatsApp da matriz';
-$heroTextoLink = ['href' => '#encomendas', 'texto' => 'veja como funciona'];
-$heroCta       = ['href' => '#catalogo',   'texto' => 'Ver catálogo'];
-// O catálogo inteiro desfila na faixa. A cópia que fecha o ciclo sai do hero.
-$heroTira      = array_column($produtos, 'nome');
+$heroTexto     = 'Monte o pedido aqui, escolha retirar ou receber e feche pelo WhatsApp da matriz. Sem cadastro e sem pagamento pelo site.';
+$heroTextoLink = null;
+$heroCta       = ['href' => '#catalogo', 'texto' => 'Ver catálogo'];
+$heroTira      = [];
 
 include DD_BASE . '/partials/hero.php';
 ?>
-
-<div class="faixa-raios" aria-hidden="true"></div>
-
-<!-- Três fatos que o cliente pergunta antes de qualquer coisa. -->
-<section class="border-b border-base-300 bg-base-100 px-4 sm:px-6 lg:px-8" aria-label="Resumo do atendimento">
-  <dl class="mx-auto grid max-w-7xl gap-px bg-base-300 sm:grid-cols-3">
-    <div class="bg-base-100 px-2 py-4 text-center sm:px-6 sm:py-6">
-      <dt class="text-sm font-semibold text-crust">Encomendas</dt>
-      <dd class="fonte-display mt-0.5 text-lg text-brand sm:mt-1 sm:text-2xl"><?= e((string) $totalEncomenda) ?> itens por cento</dd>
-    </div>
-    <div class="bg-base-100 px-2 py-4 text-center sm:px-6 sm:py-6">
-      <dt class="text-sm font-semibold text-crust">Como receber</dt>
-      <dd class="fonte-display mt-0.5 text-lg text-brand sm:mt-1 sm:text-2xl">Retira ou entrega</dd>
-    </div>
-    <div class="bg-base-100 px-2 py-4 text-center sm:px-6 sm:py-6">
-      <dt class="text-sm font-semibold text-crust">Como fechar</dt>
-      <dd class="fonte-display mt-0.5 text-lg text-brand sm:mt-1 sm:text-2xl">WhatsApp da matriz</dd>
-    </div>
-  </dl>
-</section>
 
 <?php
 /**
@@ -78,8 +57,7 @@ include DD_BASE . '/partials/promocoes.php';
   <div class="max-w-2xl">
     <h2 class="text-3xl sm:text-4xl">Catálogo</h2>
     <p class="mt-3 text-lg leading-relaxed text-crust">
-      Os preços de encomenda são por cento. No balcão, a venda é por unidade.
-      Adicione o que quiser e feche tudo numa conversa só.
+      Encomenda é por cento; balcão, por unidade.
     </p>
   </div>
 
@@ -101,7 +79,7 @@ include DD_BASE . '/partials/promocoes.php';
                aria-describedby="contagem-catalogo">
       </div>
 
-      <p id="contagem-catalogo" class="ml-auto shrink-0 text-sm text-crust" data-contagem aria-live="polite">
+      <p id="contagem-catalogo" class="sr-only ml-auto shrink-0 text-sm text-crust sm:not-sr-only" data-contagem aria-live="polite">
         <?= e((string) count($produtos)) ?> itens
       </p>
     </div>
@@ -138,10 +116,48 @@ include DD_BASE . '/partials/promocoes.php';
     </div>
   </div>
 
-  <div class="flex flex-wrap gap-3 mt-5">
-    <label>Categoria <select data-filter-category class="select"><option value="">Todas</option><?php foreach(dd_categorias() as $category): ?><option><?= e($category) ?></option><?php endforeach ?></select></label>
-    <label>Atendimento <select data-filter-line class="select"><option value="">Todos</option><option value="ENCOMENDA">Encomenda</option><option value="BALCAO">Balcão</option></select></label>
-    <fieldset class="flex flex-wrap gap-3"><legend>Restrições alimentares</legend><?php foreach(['vegano','sem lactose','sem glúten','sem carne'] as $tag): if(!array_filter($produtos,fn($p)=>in_array($tag,$p['tags'],true)))continue; ?><label class="flex items-center gap-2"><input type="checkbox" data-filter-tag value="<?= e($tag) ?>"> <?= e($tag) ?></label><?php endforeach ?></fieldset>
+  <?php
+  // Categoria é o filtro que todo mundo usa: fica à vista, em chips.
+  // Atendimento e restrições são casos de nicho: ficam dentro de "Filtros".
+  // O campo escondido guarda a categoria escolhida; ui.js lê dele.
+  $restricoes = array_values(array_filter(['vegano', 'sem lactose', 'sem glúten', 'sem carne'],
+      static fn (string $tag): bool => (bool) array_filter($produtos, static fn (array $p): bool => in_array($tag, $p['tags'], true))));
+  ?>
+  <input type="hidden" data-filter-category value="">
+  <div class="mt-5 flex items-center gap-2">
+    <div class="sem-barra -mx-4 flex flex-1 gap-2 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0" role="group" aria-label="Categorias">
+      <button type="button" class="chip" data-chip-categoria="" aria-pressed="true">Tudo</button>
+      <?php foreach (dd_categorias() as $categoria): ?>
+        <button type="button" class="chip" data-chip-categoria="<?= e($categoria) ?>" aria-pressed="false"><?= e($categoria) ?></button>
+      <?php endforeach; ?>
+    </div>
+
+    <details class="dropdown dropdown-end shrink-0">
+      <summary class="chip cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+        Filtros
+        <span data-filtros-contagem class="oculto rounded-full bg-primary px-1.5 text-xs leading-5 text-primary-content"></span>
+      </summary>
+      <div class="dropdown-content z-30 mt-2 w-72 rounded-2xl border border-base-300 bg-papel p-4 shadow-bandeja-alta">
+        <label for="filtro-linha" class="text-sm font-semibold">Atendimento</label>
+        <select id="filtro-linha" data-filter-line class="select mt-1 w-full border-campo">
+          <option value="">Encomenda e balcão</option>
+          <option value="ENCOMENDA">Só encomenda (por cento)</option>
+          <option value="BALCAO">Só balcão (por unidade)</option>
+        </select>
+        <?php if ($restricoes !== []): ?>
+          <fieldset class="mt-4">
+            <legend class="text-sm font-semibold">Restrições alimentares</legend>
+            <?php foreach ($restricoes as $tag): ?>
+              <label class="mt-2 flex min-h-9 cursor-pointer items-center gap-2.5">
+                <input type="checkbox" class="checkbox checkbox-sm checkbox-primary" data-filter-tag value="<?= e($tag) ?>">
+                <span class="first-letter:uppercase"><?= e($tag) ?></span>
+              </label>
+            <?php endforeach; ?>
+          </fieldset>
+        <?php endif; ?>
+      </div>
+    </details>
   </div>
   <!-- Grade -->
   <div data-grade-produtos class="mt-6 grid grid-cols-2 gap-3 sm:mt-8 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
@@ -171,58 +187,36 @@ include DD_BASE . '/partials/promocoes.php';
 <!-- ============================================================
      COMO ENCOMENDAR — sequência de verdade, por isso vai numerada
      ============================================================ -->
-<section id="encomendas" class="border-y border-base-300 bg-base-200">
-  <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+<section id="encomendas" class="border-t border-base-300 bg-base-200">
+  <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+    <h2 class="text-3xl sm:text-4xl">Como encomendar</h2>
 
-    <div class="max-w-2xl">
-      <h2 class="text-3xl sm:text-4xl">Como encomendar</h2>
-      <p class="mt-3 text-lg leading-relaxed text-crust">
-        Três passos, sem cadastro e sem pagamento pelo site. O acerto final é com a matriz.
-      </p>
-    </div>
-
-    <ol class="mt-10 grid gap-6 md:grid-cols-3">
+    <ol class="mt-8 grid gap-x-8 gap-y-6 md:grid-cols-3">
       <?php
       $passos = [
-          [
-              'titulo' => 'Monte o pedido',
-              'texto'  => 'Adicione os itens do catálogo. A quantidade respeita o mínimo de cada produto e o total vai aparecendo.',
-          ],
-          [
-              'titulo' => 'Confirme como recebe',
-              'texto'  => 'Na revisão do pedido você diz se retira na matriz ou quer entrega, e como pretende pagar. Nada é cobrado aqui — o valor é referência até a matriz confirmar.',
-          ],
-          // RF-18 fora do escopo: o site não fala em frete. Escolher entrega é
-          // RF-17; o combinado sobre ela acontece na conversa.
-          [
-              'titulo' => 'Feche no WhatsApp',
-              'texto'  => 'O botão abre a conversa com o pedido já escrito, junto do que você escolheu. Vocês combinam a data e fecham por lá.',
-          ],
+          ['titulo' => 'Monte o pedido',        'texto' => 'Adicione os itens. O mínimo de cada produto já vem respeitado.'],
+          ['titulo' => 'Diga como quer receber', 'texto' => 'Retirada na matriz ou entrega, e a forma de pagamento. Nada é cobrado no site.'],
+          // RF-18 fora do escopo: o site não fala em frete.
+          ['titulo' => 'Feche no WhatsApp',     'texto' => 'A conversa abre com o pedido escrito. A data e o valor final são combinados ali.'],
       ];
       foreach ($passos as $i => $passo): ?>
-        <li class="relative rounded-bandeja border border-base-300 bg-papel p-6">
-          <span class="fonte-display absolute -top-4 left-6 flex h-10 w-10 items-center justify-center rounded-full bg-primary text-lg text-primary-content shadow-bandeja">
+        <li class="flex gap-4">
+          <span class="fonte-display flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-lg text-primary-content">
             <?= e((string) ($i + 1)) ?>
           </span>
-          <h3 class="mt-4 text-xl"><?= e($passo['titulo']) ?></h3>
-          <p class="mt-2 text-sm leading-relaxed text-crust"><?= e($passo['texto']) ?></p>
+          <div>
+            <h3 class="text-xl"><?= e($passo['titulo']) ?></h3>
+            <p class="mt-1 leading-relaxed text-crust"><?= e($passo['texto']) ?></p>
+          </div>
         </li>
       <?php endforeach; ?>
     </ol>
 
-    <div class="mt-10 flex flex-col gap-5 rounded-bandeja bg-neutral p-7 text-neutral-content sm:flex-row sm:items-center sm:p-9">
-      <div class="flex-1">
-        <h3 class="text-2xl">Evento grande, escola ou empresa?</h3>
-        <p class="mt-2 max-w-xl leading-relaxed opacity-85">
-          Fazemos coffee break, formatura, feira e lanche escolar com bandeja montada.
-          Fale com a matriz e a gente monta o orçamento com você.
-        </p>
-      </div>
-      <?php // RF-19 — o atendimento a empresas tem página própria agora. ?>
-      <a href="/sobre#empresas" class="btn h-12 min-h-12 shrink-0 border-none bg-accent px-6 font-bold text-accent-content hover:bg-accent/85">
-        Ver atendimento a empresas
-      </a>
-    </div>
+    <?php // RF-19 — atendimento a empresas tem página própria; aqui só o convite. ?>
+    <p class="mt-10 border-t border-base-300 pt-6 text-crust">
+      Evento, escola ou empresa?
+      <a href="/sobre#empresas" class="font-semibold text-brand underline underline-offset-4">Veja o atendimento para grandes pedidos</a>
+    </p>
   </div>
 </section>
 

@@ -18,4 +18,18 @@ final class Promotion {
   if ((!empty($p['data_inicio']) && $date->format('Y-m-d')<$p['data_inicio']) || (!empty($p['data_fim']) && $date->format('Y-m-d')>$p['data_fim'])) return false;
   return $p['tipo_agenda']==='SEMANAL' || self::vigente($p,$date);
  }
+ /**
+  * O que o painel precisa para dizer se a promoção aparece no site hoje e, se não, por quê.
+  * Espera a linha de CatalogRepository::promotions(false), com 'pares' já calculados.
+  */
+ public static function checklist(array $p, \DateTimeInterface $date): array {
+  $agenda=self::visivel(['ativa'=>true]+$p,$date);
+  $items=[
+   'ativa'=>[(bool)$p['ativa'],'Promoção ativa','Ligue "Ativa" para publicar.'],
+   'pares'=>[!empty($p['pares']),'Produto disponível numa unidade marcada','Marque um produto ativo e uma unidade onde ele é vendido, com atendimento compatível.'],
+   'agenda'=>[$agenda,'Dentro da agenda','Hoje está fora do período escolhido.'],
+   'desconto'=>[(float)$p['valor_desconto']>0,'Desconto preenchido','Sem desconto, o card aparece sem valor.'],
+  ];
+  return ['items'=>$items,'no_site'=>$items['ativa'][0] && $items['pares'][0] && $agenda,'vigente'=>self::vigente($p,$date)];
+ }
 }

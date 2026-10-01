@@ -24,3 +24,5 @@ public/assets/
 
 # Configuracao local do assistente
 .claude/
+
+docker-compose.override.yml

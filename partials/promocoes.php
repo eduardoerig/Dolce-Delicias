@@ -54,7 +54,7 @@ $temVigente = (bool) array_filter($promocoes, static fn (array $p): bool => !emp
         $selo    = trim((string) ($promocao['selo'] ?? ''));
         $agenda  = trim((string) ($promocao['agenda'] ?? ''));
         ?>
-        <li class="revelar relative flex flex-col rounded-bandeja border bg-papel p-5 shadow-bandeja sm:p-6<?= $vigente ? ' border-brand border-t-4' : ' border-base-300' ?>">
+        <li class="relative flex flex-col rounded-bandeja border bg-papel p-5 shadow-bandeja sm:p-6<?= $vigente ? ' border-brand border-t-4' : ' border-base-300' ?>">
 
           <?php if ($vigente): ?>
             <span class="absolute -top-3 left-5 rounded-full bg-accent px-3 py-1 text-xs font-bold text-accent-content shadow-sm">

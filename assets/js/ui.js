@@ -162,6 +162,18 @@ if (grade) {
 
     const filtrando = termo !== '' || Boolean(document.querySelector('[data-filter-category]')?.value) || Boolean(document.querySelector('[data-filter-line]')?.value) || Boolean(document.querySelector('[data-filter-tag]:checked'));
 
+    // Chips de categoria refletem o valor do filtro (inclusive depois de "Mostrar tudo").
+    const categoria = document.querySelector('[data-filter-category]')?.value || '';
+    document.querySelectorAll('[data-chip-categoria]').forEach((chip) => {
+      chip.setAttribute('aria-pressed', String(chip.dataset.chipCategoria === categoria));
+    });
+    // Quantos filtros extras estão ligados, no botão "Filtros".
+    const extras = (document.querySelector('[data-filter-line]')?.value ? 1 : 0) + document.querySelectorAll('[data-filter-tag]:checked').length;
+    document.querySelectorAll('[data-filtros-contagem]').forEach((el) => {
+      el.textContent = extras ? String(extras) : '';
+      el.classList.toggle('oculto', extras === 0);
+    });
+
     if (semResultado) semResultado.classList.toggle('oculto', visiveis > 0);
     grade.classList.toggle('oculto', visiveis === 0);
 
@@ -186,6 +198,15 @@ if (grade) {
   document.addEventListener('click', (evento) => {
     const alvo = evento.target;
     if (!(alvo instanceof Element)) return;
+
+    const chip = alvo.closest('[data-chip-categoria]');
+    if (chip) {
+      const campo = document.querySelector('[data-filter-category]');
+      if (campo) {
+        campo.value = chip.dataset.chipCategoria;
+        filtrar();
+      }
+    }
 
     if (alvo.closest('[data-limpar-filtros]')) {
       termo = '';

@@ -23,7 +23,7 @@ $imagem      = dd_imagem($produto['imagem'] ?? null);
 $url         = '/produtos/' . rawurlencode((string) $produto['slug']);
 ?>
 <article
-  class="card revelar group border border-base-300 bg-papel shadow-bandeja transition-shadow duration-300 hover:shadow-bandeja-alta<?= $disponivel ? '' : ' opacity-60' ?>"
+  class="card group border border-base-300 bg-papel shadow-bandeja transition-shadow duration-300 hover:shadow-bandeja-alta<?= $disponivel ? '' : ' opacity-60' ?>"
   data-categoria="<?= e($produto['categoria']) ?>" data-linha="<?= e($produto['linha']) ?>" data-tags="<?= e(implode(',', $produto['tags'])) ?>" data-produto
   data-busca="<?= e(dd_indice_busca($produto)) ?>">
 
@@ -46,7 +46,6 @@ $url         = '/produtos/' . rawurlencode((string) $produto['slug']);
       <div class="massa flex h-full w-full flex-col items-center justify-center gap-2 text-crust/45" role="img"
            aria-label="Foto de <?= e($produto['nome']) ?> ainda não cadastrada">
         <?= dd_icone_categoria((string) ($produto['categoria'] ?? '')) ?>
-        <span class="text-[0.7rem] font-semibold tracking-wide text-crust">foto em breve</span>
       </div>
     <?php endif; ?>
     </a>
@@ -83,7 +82,7 @@ $url         = '/produtos/' . rawurlencode((string) $produto['slug']);
       <?php if ($faixa['temMinimo']): ?>
         <?php // O mínimo sai no celular: no card estreito ele empurrava o preço
            // para duas linhas. Continua na página do produto. ?>
-        <span class="hidden text-xs text-crust sm:inline">· mín. <?= e((string) $faixa['min']) ?> un</span>
+        <span class="hidden text-xs text-crust sm:inline">mín. <?= e((string) $faixa['min']) ?> un</span>
       <?php endif; ?>
     </p>
 
@@ -92,7 +91,7 @@ $url         = '/produtos/' . rawurlencode((string) $produto['slug']);
     <div class="card-actions mt-auto items-center gap-2 pt-2 sm:pt-3">
       <?php if ($disponivel): ?>
         <button type="button"
-                class="btn btn-primary h-11 min-h-11 w-full text-xs font-bold sm:h-12 sm:min-h-12 sm:w-auto sm:flex-1 sm:text-sm"
+                class="btn btn-primary h-11 min-h-11 w-full text-xs font-bold sm:h-12 sm:min-h-12 sm:text-sm"
                 data-add
                 data-id="<?= e($produto['slug']) ?>"
                 data-slug="<?= e($produto['slug']) ?>"
@@ -111,12 +110,6 @@ $url         = '/produtos/' . rawurlencode((string) $produto['slug']);
         <button type="button" class="btn btn-disabled h-11 min-h-11 w-full text-xs sm:h-12 sm:min-h-12 sm:w-auto sm:flex-1 sm:text-sm" disabled>Indisponível hoje</button>
       <?php endif; ?>
 
-      <?php // "Detalhes" só a partir de sm: no card de dois por linha não cabe
-         // ao lado do "Adicionar", e o título do card já leva ao produto. ?>
-      <a href="<?= e($url) ?>"
-         class="btn btn-ghost hidden px-3 font-semibold text-crust hover:bg-transparent hover:text-brand sm:inline-flex">
-        Detalhes<span class="sr-only"> de <?= e($produto['nome']) ?></span>
-      </a>
     </div>
   </div>
 </article>
