@@ -13,12 +13,6 @@ $ofertasProduto = $ofertas ?? dd_promocoes_produto($produto);
 if ($ofertasProduto === []) {
     return;
 }
-
-$atendimentoPromo = static fn (string $tipo): string => match ($tipo) {
-    'ENCOMENDA' => 'só na encomenda',
-    'BALCAO'    => 'só no balcão',
-    default     => 'na encomenda e no balcão',
-};
 ?>
 <section class="produto-bloco" aria-labelledby="promo-titulo">
   <h2 id="promo-titulo" class="produto-subtitulo"><?= count($ofertasProduto) > 1 ? 'Promoções' : 'Promoção' ?></h2>
@@ -35,13 +29,8 @@ $atendimentoPromo = static fn (string $tipo): string => match ($tipo) {
         <?php if (trim((string) ($oferta['texto'] ?? '')) !== ''): ?>
           <p class="mt-1 text-sm leading-relaxed text-crust"><?= e((string) $oferta['texto']) ?></p>
         <?php endif; ?>
-        <?php
-        // "Toda quarta-feira, só na encomenda." ou, sem agenda, "Vale só na encomenda."
-        $quando = trim((string) ($oferta['agenda'] ?? ''));
-        $regra  = ($quando !== '' ? $quando . ', ' : 'Vale ') . $atendimentoPromo((string) ($oferta['tipo_atendimento'] ?? 'AMBOS'));
-        ?>
         <p class="mt-2 text-xs leading-relaxed text-crust">
-          <?= e($regra) ?>. Vale em: <?= e((string) ($oferta['lojas'] ?? '')) ?>.
+          <?= e(dd_promocao_regra($oferta)) ?>. Vale em: <?= e((string) ($oferta['lojas'] ?? '')) ?>.
         </p>
       </li>
     <?php endforeach; ?>

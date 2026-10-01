@@ -13,9 +13,12 @@ declare(strict_types=1);
  * Nada cadastrado (ou tudo com 'ativo' => false) não desenha seção nenhuma: a
  * home não pode ter um buraco chamado "Promoções" com vazio dentro.
  *
- * A oferta que vale HOJE ganha selo e borda; as outras ficam em cartão neutro.
- * É a diferença entre "aproveite agora" e "programe-se" — e é ela que faz a
- * divulgação da quarta-feira funcionar na segunda.
+ * Mesmo cartão da página do produto (.promo-produto): selo, "Vale hoje" ou
+ * "Programe-se" e a regra numa frase. Aqui ele ainda lista os produtos da
+ * oferta, que é a pergunta seguinte de quem lê "15% OFF".
+ *
+ * ATENÇÃO: include divide o escopo com a página (a home usa $produtos, $selo…),
+ * então toda variável daqui leva o prefixo "promo".
  *
  * Espera:
  *   $promocoesEm  DateTimeInterface|null  opcional. A data que decide o que
@@ -31,68 +34,71 @@ if ($promocoes === []) {
     return;
 }
 
-$temVigente = (bool) array_filter($promocoes, static fn (array $p): bool => !empty($p['vigente']));
-?>
-<section id="promocoes" class="border-b border-base-300 bg-base-200">
-  <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+$promoTemVigente = (bool) array_filter($promocoes, static fn (array $p): bool => !empty($p['vigente']));
 
-    <div class="flex flex-wrap items-end justify-between gap-4">
-      <div class="max-w-2xl">
-        <h2 class="text-3xl sm:text-4xl">Promoções</h2>
-        <p class="mt-3 text-lg leading-relaxed text-crust">
-          <?= $temVigente
-              ? 'Tem oferta valendo hoje. As outras ficam aqui para você se programar.'
-              : 'As ofertas da semana e da temporada ficam aqui — dá para já ir programando a encomenda.' ?>
-        </p>
-      </div>
+// Produtos por cartão: passando disso, o resto vira "e mais N".
+$promoMaxProdutos = 4;
+?>
+<section id="promocoes" class="border-b border-linha bg-farinha" aria-labelledby="titulo-promocoes">
+  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+
+    <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+      <h2 id="titulo-promocoes" class="text-3xl sm:text-4xl">Promoções</h2>
+      <p class="text-crust">
+        <?= $promoTemVigente ? 'Tem oferta valendo hoje.' : 'As ofertas da semana, para você se programar.' ?>
+      </p>
     </div>
 
-    <ul class="mt-8 grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
+    <ul class="mt-5 grid gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
       <?php foreach ($promocoes as $promocao): ?>
         <?php
-        $vigente = !empty($promocao['vigente']);
-        $selo    = trim((string) ($promocao['selo'] ?? ''));
-        $agenda  = trim((string) ($promocao['agenda'] ?? ''));
+        $promoVigente  = !empty($promocao['vigente']);
+        $promoSelo     = trim((string) ($promocao['selo'] ?? ''));
+        $promoTexto    = trim((string) ($promocao['texto'] ?? ''));
+        $promoLojas    = implode(', ', array_unique(array_column((array) ($promocao['pares'] ?? []), 'nome')));
+        $promoProdutos = dd_promocao_produtos($promocao);
+        $promoSobram   = count($promoProdutos) - $promoMaxProdutos;
         ?>
-        <li class="relative flex flex-col rounded-bandeja border bg-papel p-5 shadow-bandeja sm:p-6<?= $vigente ? ' border-brand border-t-4' : ' border-base-300' ?>">
-
-          <?php if ($vigente): ?>
-            <span class="absolute -top-3 left-5 rounded-full bg-accent px-3 py-1 text-xs font-bold text-accent-content shadow-sm">
-              é hoje
+        <li class="promo-produto flex flex-col">
+          <p class="flex flex-wrap items-center gap-2">
+            <span class="selo selo-promo"><?= e($promoSelo !== '' ? $promoSelo : 'Promoção') ?></span>
+            <span class="text-xs font-bold <?= $promoVigente ? 'text-success' : 'text-crust' ?>">
+              <?= $promoVigente ? 'Vale hoje' : 'Programe-se' ?>
             </span>
-          <?php endif; ?>
-
-          <?php if ($agenda !== ''): ?>
-            <p class="text-xs font-bold uppercase tracking-[0.14em] text-crust<?= $vigente ? ' mt-2' : '' ?>">
-              <?= e($agenda) ?>
-            </p>
-          <?php endif; ?>
-
-          <h3 class="mt-2 text-2xl leading-tight"><?= e((string) ($promocao['titulo'] ?? '')) ?></h3>
-
-          <?php if ($selo !== ''): ?>
-            <p class="fonte-display mt-2 text-4xl leading-none text-brand"><?= e($selo) ?></p>
-          <?php endif; ?>
-
-          <p class="mt-3 flex-1 text-sm leading-relaxed text-crust">
-            <?= e((string) ($promocao['texto'] ?? '')) ?>
           </p>
 
-          <?php // Sem botão próprio: a promoção não é um produto no carrinho. O
-             // caminho é o mesmo de sempre — escolher no catálogo e fechar com
-             // a matriz, que é quem aplica o desconto na conversa. ?>
-          <?php // min-h-11: é a ação principal do cartão, então tem alvo de
-             // dedo inteiro, e não os 20px de uma linha de texto solta. ?>
-          <a href="#catalogo" class="mt-3 inline-flex min-h-11 w-fit items-center gap-1.5 rounded py-2 text-sm font-bold text-brand underline decoration-brand/40 underline-offset-4 hover:decoration-brand">
-            Ver o catálogo
-            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-          </a>
+          <h3 class="mt-2 font-sans text-lg font-bold"><?= e((string) ($promocao['titulo'] ?? '')) ?></h3>
+          <?php if ($promoTexto !== ''): ?>
+            <p class="mt-1 text-sm leading-relaxed text-crust"><?= e($promoTexto) ?></p>
+          <?php endif; ?>
+
+          <p class="mt-2 text-xs leading-relaxed text-crust">
+            <?= e(dd_promocao_regra($promocao)) ?>.<?php if ($promoLojas !== ''): ?> Vale em: <?= e($promoLojas) ?>.<?php endif; ?>
+          </p>
+
+          <?php // Sem botão de "adicionar": a promoção não é um item do carrinho. O
+             // caminho é abrir o produto e pedir normalmente; a matriz aplica o
+             // desconto na conversa. ?>
+          <?php if ($promoProdutos !== []): ?>
+            <ul class="mt-auto flex flex-wrap items-center gap-2 pt-3" aria-label="Produtos da promoção <?= e((string) ($promocao['titulo'] ?? '')) ?>">
+              <?php foreach (array_slice($promoProdutos, 0, $promoMaxProdutos) as $promoProduto): ?>
+                <li>
+                  <a href="/produtos/<?= e(rawurlencode((string) $promoProduto['slug'])) ?>" class="pilula pilula-link">
+                    <?= e((string) $promoProduto['nome']) ?>
+                  </a>
+                </li>
+              <?php endforeach; ?>
+              <?php if ($promoSobram > 0): ?>
+                <li class="text-sm font-semibold text-crust">e mais <?= e((string) $promoSobram) ?></li>
+              <?php endif; ?>
+            </ul>
+          <?php endif; ?>
         </li>
       <?php endforeach; ?>
     </ul>
 
-    <p class="mt-6 text-xs leading-relaxed text-crust">
-      O desconto é aplicado pela matriz no fechamento do pedido — o total que o site mostra é sempre o preço cheio.
+    <p class="mt-4 text-xs leading-relaxed text-crust">
+      O site mostra o preço cheio; o desconto é aplicado pela matriz no fechamento pelo WhatsApp.
     </p>
   </div>
 </section>

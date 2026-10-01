@@ -76,7 +76,7 @@ $precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
     <div class="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-8 sm:px-6 md:flex-row md:items-end md:justify-between lg:px-8 lg:py-10">
       <div>
         <h2 id="catalogo-titulo" class="text-4xl sm:text-5xl">Catálogo</h2>
-        <p class="mt-2 text-crust"><?= e((string) $totalProdutos) ?> itens feitos todo dia, por encomenda ou no balcão.</p>
+        <p class="mt-2 text-crust"><?= e($totalProdutos === 1 ? '1 item feito' : $totalProdutos . ' itens feitos') ?> todo dia, por encomenda ou no balcão.</p>
       </div>
 
       <form class="busca-pilula w-full md:max-w-md" role="search" data-busca-form>

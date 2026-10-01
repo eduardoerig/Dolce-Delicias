@@ -210,10 +210,12 @@ function dd_agenda_em_texto(array $agenda): string
 
     switch ((string) ($agenda['tipo'] ?? 'sempre')) {
         case 'semanal':
-            $nomes = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
+            // Cada dia com o próprio artigo: "todo sábado", "toda quarta-feira".
+            $nomes = ['todo domingo', 'toda segunda-feira', 'toda terça-feira', 'toda quarta-feira',
+                      'toda quinta-feira', 'toda sexta-feira', 'todo sábado'];
             $dias  = array_map(static fn ($d): string => $nomes[(int) $d] ?? '', (array) ($agenda['dias'] ?? []));
             $dias  = array_values(array_filter($dias));
-            return $dias === [] ? '' : 'Toda ' . $juntar($dias);
+            return $dias === [] ? '' : ucfirst($juntar($dias));
 
         case 'mensal':
             $nomes = [1 => 'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
@@ -554,6 +556,33 @@ function dd_logo(string $classes = 'h-11 w-auto'): string
   <text x="150" y="116" text-anchor="middle" fill="#FCE24C" font-family="var(--font-logo, 'Trebuchet MS'), sans-serif" font-size="38" font-weight="800">delícias</text>
 </svg>
 SVG;
+}
+
+/**
+ * A regra da promoção numa frase, sem ponto final: "Toda quarta-feira, só na
+ * encomenda". Sem agenda: "Vale na encomenda e no balcão".
+ */
+function dd_promocao_regra(array $promocao): string
+{
+    $onde = match ((string) ($promocao['tipo_atendimento'] ?? 'AMBOS')) {
+        'ENCOMENDA' => 'só na encomenda',
+        'BALCAO'    => 'só no balcão',
+        default     => 'na encomenda e no balcão',
+    };
+    $quando = trim((string) ($promocao['agenda'] ?? ''));
+
+    return ($quando !== '' ? $quando . ', ' : 'Vale ') . $onde;
+}
+
+/** Os produtos do catálogo que entram na promoção, na ordem do catálogo. */
+function dd_promocao_produtos(array $promocao): array
+{
+    $ids = array_map('intval', array_column((array) ($promocao['pares'] ?? []), 'id_produto'));
+
+    return array_values(array_filter(
+        dd_produtos(),
+        static fn (array $produto): bool => in_array((int) $produto['id'], $ids, true)
+    ));
 }
 
 function dd_promocoes_produto(array $produto): array {
