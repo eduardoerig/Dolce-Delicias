@@ -172,7 +172,7 @@ $precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
           </button>
           <label for="ordenar" class="sr-only">Ordenar por</label>
           <select id="ordenar" class="seletor-ordem" data-ordenar>
-            <option value="destaque">Ordenar: Destaques</option>
+            <option value="destaque">Ordenar: Recomendados</option>
             <option value="preco-asc">Menor preço por peça</option>
             <option value="preco-desc">Maior preço por peça</option>
             <option value="nome">Nome (A–Z)</option>

@@ -63,10 +63,9 @@ $comoCompra = match ($linhaCard) {
     <?php endif; ?>
   </a>
 
-  <?php if ($selo !== '' || !empty($produto['destaque'])): ?>
+  <?php if ($selo !== ''): ?>
     <p class="cartao-selos">
-      <?php if ($selo !== ''): ?><span class="selo selo-promo"><?= e($selo) ?></span><?php endif; ?>
-      <?php if (!empty($produto['destaque'])): ?><span class="selo selo-destaque">Destaque</span><?php endif; ?>
+      <span class="selo selo-promo"><?= e($selo) ?></span>
     </p>
   <?php endif; ?>
 

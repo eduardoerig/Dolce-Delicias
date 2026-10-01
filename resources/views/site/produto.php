@@ -127,7 +127,6 @@ include DD_BASE . '/partials/header.php';
          ------------------------------------------------------------------ -->
     <div class="min-w-0">
       <ul class="flex flex-wrap items-center gap-2" aria-label="Sobre este produto">
-        <?php if (!empty($produto['destaque'])): ?><li><span class="selo selo-destaque">Destaque</span></li><?php endif; ?>
         <?php if ($ofertas !== []): ?><li><span class="selo selo-promo"><?= e(trim((string) ($ofertas[0]['selo'] ?? '')) ?: 'Promoção') ?></span></li><?php endif; ?>
         <li class="pilula"><?= e((string) ($produto['categoria'] ?? '')) ?></li>
         <li class="pilula"><?= e($comoCompra) ?></li>
