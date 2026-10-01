@@ -682,6 +682,7 @@ details.dropdown:not([open]) > .dropdown-content {
   display: grid;
   place-items: center;
   background-color: var(--color-polvilho);
+  background-image: radial-gradient(circle at 50% 50%, rgb(255 255 255 / 0.75) 0 22%, transparent 60%);
   color: var(--color-farelo);
 }
 
@@ -1010,16 +1011,21 @@ details.dropdown:not([open]) > .dropdown-content {
   object-fit: cover;
 }
 
+/* Sem foto, o desenho do produto ganha um palco: os raios do logo bem
+   claros sobre a cor de massa, saindo de trás dele. */
 .produto-sem-foto {
   display: grid;
   place-items: center;
   background-color: var(--color-polvilho);
+  background-image:
+    radial-gradient(circle at 50% 52%, rgb(255 255 255 / 0.9) 0 18%, transparent 46%),
+    repeating-conic-gradient(from 0deg at 50% 52%, rgb(255 255 255 / 0.55) 0deg 8deg, transparent 8deg 20deg);
   color: var(--color-farelo);
 }
 
 .produto-sem-foto svg {
-  width: 11rem;
-  height: 11rem;
+  width: 14rem;
+  height: 14rem;
   filter: drop-shadow(0 12px 12px rgb(122 46 18 / 0.18));
 }
 
