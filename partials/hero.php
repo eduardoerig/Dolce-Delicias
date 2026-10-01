@@ -59,7 +59,7 @@ $heroAtalhos = $heroAtalhos ?? [];
       </div>
     </div>
 
-    <div class="heroi-arte mx-auto w-full max-w-[38rem] lg:-mr-4">
+    <div class="heroi-arte mx-auto w-full max-w-[19rem] sm:max-w-[30rem] lg:-mr-4 lg:max-w-[38rem]">
       <?php include __DIR__ . '/hero-bandeja.php'; ?>
     </div>
   </div>
