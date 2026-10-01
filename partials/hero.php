@@ -9,9 +9,9 @@ declare(strict_types=1);
  * trabalho, como cartaz de preço de feira. Sem split 50/50, sem par de
  * botões, sem pílula de selo.
  *
- * Nasceu na home e virou partial para unidades.php usar o mesmo desenho —
- * duas páginas com o mesmo herói significa um arquivo, não dois parecidos
- * que divergem na primeira mudança.
+ * Hoje só a home usa: as outras páginas abrem com a faixa clara de caminho e
+ * título. Continua partial para que uma segunda página de cartaz use este
+ * arquivo em vez de uma cópia que diverge na primeira mudança.
  *
  * Tipografia: nada de especial aqui. Alfa Slab One é a --font-display do
  * site, então o h1 já nasce com ela pela camada base.

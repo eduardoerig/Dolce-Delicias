@@ -17,9 +17,8 @@ require_once __DIR__ . '/bootstrap.php';
 /** @var array $unidade */
 $ehMatriz = !empty($unidade['matriz']);
 $foto     = dd_imagem($unidade['imagem'] ?? null);
-$whatsapp = preg_replace('/\D+/', '', (string) ($unidade['whatsapp'] ?? ''));
-// Número vazio ou de exemplo (ex.: 55000000000) não vira botão: seria um link para ninguém.
-$temZap   = preg_match('/^\d{10,15}$/D', $whatsapp) === 1 && preg_match('/^\d{0,3}0{8,}$/D', $whatsapp) !== 1;
+$whatsapp = dd_whatsapp($unidade); // '' quando vazio ou de exemplo: aí não vira botão
+$temZap   = $whatsapp !== '';
 $pdf      = (string) ($unidade['catalogoPdf'] ?? '');
 $temPdf   = dd_tem_pdf($pdf);
 $mapa     = trim((string) ($unidade['mapaUrl'] ?? ''));

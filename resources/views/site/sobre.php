@@ -17,6 +17,10 @@ declare(strict_types=1);
  * perguntas. Quatro páginas separadas dariam quatro páginas curtas e um menu
  * inchado — e no celular ninguém navega entre elas.
  *
+ * Mesmo desenho de catálogo, produto, carrinho e unidades: faixa com o caminho
+ * e o título, área clara com cards brancos. O bloco "Para empresas" é o único
+ * vermelho da página, porque é o pedido que ela existe para gerar.
+ *
  * Todo o texto vem de data/empresa.php. Aqui só existe estrutura: cada seção
  * some sozinha quando o dado dela está vazio.
  */
@@ -32,15 +36,28 @@ $historia      = (array) ($empresa['historia'] ?? []);
 $portfolio     = (array) ($empresa['portfolio'] ?? []);
 $paraEmpresas  = (array) ($empresa['empresas'] ?? []);
 
+$chamada          = rtrim(trim((string) ($institucional['chamada'] ?? '')), '.');
+$temInstitucional = !empty($institucional['texto']) || !empty($institucional['valores']);
+$temEmpresas      = !empty($paraEmpresas['itens']) || trim((string) ($paraEmpresas['texto'] ?? '')) !== '';
+
 // O total de lojas é contado, nunca cadastrado: assim não diverge de
 // data/units.php quando abrir a próxima.
 $totalUnidades = count(dd_unidades());
 
-// WhatsApp da matriz com a conversa de orçamento já começada (RF-19).
-$zapMatriz = preg_replace('/\D+/', '', (string) ($matriz['whatsapp'] ?? ''));
+// WhatsApp da matriz com a conversa de orçamento já começada (RF-19). Número
+// vazio ou de exemplo não vira botão — ver dd_whatsapp().
+$zapMatriz     = dd_whatsapp($matriz);
 $linkOrcamento = $zapMatriz !== ''
     ? 'https://wa.me/' . $zapMatriz . '?text=' . rawurlencode('Olá! Vim pelo site e quero um orçamento para a minha empresa.')
     : '';
+
+// Atalhos da faixa: um por seção que existe, na ordem da página.
+$atalhos = array_filter([
+    'institucional' => $temInstitucional ? 'Quem somos' : null,
+    'historia'      => $historia !== [] ? 'Nossa história' : null,
+    'portfolio'     => $portfolio !== [] ? 'O que fazemos' : null,
+    'empresas'      => $temEmpresas ? 'Para empresas' : null,
+]);
 
 $tituloPagina    = 'Sobre a Dolce Delícias — história, portfólio e atendimento a empresas';
 $descricaoPagina = 'Quem é a Dolce Delícias, como a padaria começou, o que ela faz e como atende escolas, faculdades, empresas e indústrias.';
@@ -48,225 +65,190 @@ $descricaoPagina = 'Quem é a Dolce Delícias, como a padaria começou, o que el
 include DD_BASE . '/partials/header.php';
 ?>
 
-<!-- ============================================================
-     HERÓI — mesmo desenho da home, via partials/hero.php
-     ============================================================ -->
-<?php
-$heroEtiqueta  = 'A empresa · ' . $totalUnidades . ' unidades';
-$heroLinhas    = [
-    ['texto' => 'Padaria'],
-    ['texto' => 'de bairro.'],
-    ['texto' => 'Cozinha',  'destaque' => true],
-    ['texto' => 'de gente.', 'destaque' => true],
-];
-$heroTexto     = trim((string) ($institucional['chamada'] ?? '')) !== ''
-    ? (string) $institucional['chamada']
-    : 'Quem somos, de onde viemos e o que fazemos todo dia';
-$heroTextoLink = ['href' => '#empresas', 'texto' => 'atendemos empresas'];
-$heroCta       = ['href' => '#portfolio', 'texto' => 'O que fazemos'];
-$heroTira      = [];
+<div class="bg-farinha">
 
-include DD_BASE . '/partials/hero.php';
-?>
+  <!-- Faixa: caminho, título, quem é e atalhos para cada parte da página -->
+  <div class="border-b border-linha bg-polvilho">
+    <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <nav aria-label="Você está aqui" class="flex items-center gap-2 text-sm font-semibold text-crust">
+        <a href="/" class="rounded hover:text-brand">Início</a>
+        <span aria-hidden="true">/</span>
+        <span class="text-base-content" aria-current="page">A empresa</span>
+      </nav>
+      <h1 class="mt-3 text-4xl sm:text-5xl">A Dolce Delícias</h1>
+      <p class="mt-2 max-w-2xl text-crust">
+        <?php if ($chamada !== ''): ?><?= e($chamada) ?>. <?php endif; ?>
+        Salgados, assados e doces para escolas, eventos e empresas, em <?= e((string) $totalUnidades) ?> unidades.
+      </p>
 
-<div class="faixa-raios" aria-hidden="true"></div>
+      <?php if (count($atalhos) > 1): ?>
+        <nav class="mt-5 flex flex-wrap gap-2" aria-label="Ir para uma parte da página">
+          <?php foreach ($atalhos as $idSecao => $rotulo): ?>
+            <a href="#<?= e($idSecao) ?>" class="pilula pilula-link"><?= e($rotulo) ?></a>
+          <?php endforeach; ?>
+        </nav>
+      <?php endif; ?>
+    </div>
+  </div>
 
-<!-- ============================================================
-     RF-31 — INSTITUCIONAL
-     ============================================================ -->
-<?php if (!empty($institucional['texto']) || !empty($institucional['valores'])): ?>
-  <section id="institucional" class="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-20"
-           aria-labelledby="titulo-institucional">
+  <?php // RF-31 — institucional ?>
+  <?php if ($temInstitucional): ?>
+    <section id="institucional" class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14"
+             aria-labelledby="titulo-institucional">
 
-    <div class="grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:gap-14">
-      <div>
-        <h2 id="titulo-institucional" class="text-3xl sm:text-4xl">Quem somos</h2>
-        <?php foreach ((array) ($institucional['texto'] ?? []) as $paragrafo): ?>
-          <p class="mt-4 max-w-prose text-lg leading-relaxed text-crust"><?= e((string) $paragrafo) ?></p>
-        <?php endforeach; ?>
-      </div>
+      <div class="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-12">
+        <div>
+          <h2 id="titulo-institucional" class="text-3xl sm:text-4xl">Quem somos</h2>
+          <?php foreach ((array) ($institucional['texto'] ?? []) as $paragrafo): ?>
+            <p class="mt-4 max-w-prose text-lg leading-relaxed text-crust"><?= e((string) $paragrafo) ?></p>
+          <?php endforeach; ?>
+        </div>
 
-      <?php // Os números ficam ao lado do texto, não numa faixa própria: são a
-         // prova do parágrafo, e longe dele viram enfeite. ?>
-      <?php if ($numeros !== []): ?>
-        <dl class="grid grid-cols-2 gap-px self-start overflow-hidden rounded-bandeja border border-base-300 bg-base-300">
-          <div class="bg-papel px-4 py-5 text-center sm:px-6 sm:py-7">
-            <dd class="fonte-display text-3xl text-brand sm:text-4xl"><?= e((string) $totalUnidades) ?></dd>
-            <dt class="mt-1 text-sm font-semibold text-crust">unidades</dt>
+        <?php // Os números ficam ao lado do texto, não numa faixa própria: são a
+           // prova do parágrafo, e longe dele viram enfeite. No HTML o rótulo
+           // (dt) vem antes do número (dd); o CSS põe o número em cima. ?>
+        <dl class="numeros">
+          <div>
+            <dt>unidades</dt>
+            <dd><?= e((string) $totalUnidades) ?></dd>
           </div>
           <?php foreach ($numeros as $numero): ?>
-            <div class="bg-papel px-4 py-5 text-center sm:px-6 sm:py-7">
-              <dd class="fonte-display text-3xl text-brand sm:text-4xl"><?= e((string) ($numero['valor'] ?? '')) ?></dd>
-              <dt class="mt-1 text-sm font-semibold text-crust"><?= e((string) ($numero['rotulo'] ?? '')) ?></dt>
+            <?php $valorNumero = (string) ($numero['valor'] ?? ''); ?>
+            <div>
+              <dt><?= e((string) ($numero['rotulo'] ?? '')) ?></dt>
+              <?php // Valor comprido (ex.: "mais de 30") desce um tamanho para não quebrar no meio. ?>
+              <dd<?= mb_strlen($valorNumero) > 6 ? ' class="numero-longo"' : '' ?>><?= e($valorNumero) ?></dd>
             </div>
           <?php endforeach; ?>
         </dl>
-      <?php endif; ?>
-    </div>
-
-    <?php // RNF-11 — os valores da marca. ?>
-    <?php if (!empty($institucional['valores'])): ?>
-      <ul class="mt-10 grid gap-5 md:grid-cols-3">
-        <?php foreach ($institucional['valores'] as $valor): ?>
-          <li class="revelar rounded-bandeja border border-base-300 bg-papel p-6 shadow-bandeja">
-            <h3 class="text-xl"><?= e((string) ($valor['titulo'] ?? '')) ?></h3>
-            <p class="mt-2 text-sm leading-relaxed text-crust"><?= e((string) ($valor['texto'] ?? '')) ?></p>
-          </li>
-        <?php endforeach; ?>
-      </ul>
-    <?php endif; ?>
-  </section>
-<?php endif; ?>
-
-<!-- ============================================================
-     RF-21 — HISTÓRIA
-     ============================================================ -->
-<?php if ($historia !== []): ?>
-  <section id="historia" class="border-y border-base-300 bg-base-200" aria-labelledby="titulo-historia">
-    <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
-
-      <div class="max-w-2xl">
-        <h2 id="titulo-historia" class="text-3xl sm:text-4xl">Nossa história</h2>
-        <p class="mt-3 text-lg leading-relaxed text-crust">
-          Do primeiro forno até as <?= e((string) $totalUnidades) ?> lojas de hoje.
-        </p>
       </div>
 
-      <?php
-      /**
-       * Linha do tempo em <ol>: é sequência de verdade, e a ordem importa para
-       * quem lê com leitor de tela também.
-       *
-       * A régua vertical é uma borda no <li>, não um elemento à parte — no
-       * celular ela fica à esquerda e no desktop continua igual, sem precisar de
-       * dois desenhos. O último item esconde a régua para a linha não sobrar
-       * pendurada embaixo do texto.
-       *
-       * ATENÇÃO: o último item fica com a borda TRANSPARENTE, não sem borda.
-       * Removê-la tira 2px da caixa e desalinha o ponto e o texto desse marco
-       * em relação aos outros — dá para ver a olho nu.
-       */
-      $ultimoMarco = count($historia) - 1;
-      ?>
-      <ol class="mt-10 max-w-3xl">
-        <?php foreach ($historia as $i => $marco): ?>
-          <li class="revelar relative flex gap-4 border-l-2 pb-8 pl-4 sm:gap-6<?= $i === $ultimoMarco ? ' border-transparent' : ' border-base-300' ?>">
-            <span class="absolute -left-[0.5625rem] top-1 h-4 w-4 rounded-full border-[3px] border-base-200 bg-primary" aria-hidden="true"></span>
-
-            <div class="-mt-1 pl-4">
-              <p class="fonte-display text-xl text-brand sm:text-2xl"><?= e((string) ($marco['ano'] ?? '')) ?></p>
-              <h3 class="mt-1 text-xl sm:text-2xl"><?= e((string) ($marco['titulo'] ?? '')) ?></h3>
-              <p class="mt-2 max-w-prose leading-relaxed text-crust"><?= e((string) ($marco['texto'] ?? '')) ?></p>
-            </div>
-          </li>
-        <?php endforeach; ?>
-      </ol>
-    </div>
-  </section>
-<?php endif; ?>
-
-<!-- ============================================================
-     RF-22 — PORTFÓLIO
-     ============================================================ -->
-<?php if ($portfolio !== []): ?>
-  <section id="portfolio" class="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-20"
-           aria-labelledby="titulo-portfolio">
-
-    <div class="max-w-2xl">
-      <h2 id="titulo-portfolio" class="text-3xl sm:text-4xl">O que fazemos</h2>
-      <p class="mt-3 text-lg leading-relaxed text-crust">
-        Quatro frentes, a mesma cozinha. O catálogo do site cobre as encomendas e o balcão;
-        o resto sai sob medida na conversa.
-      </p>
-    </div>
-
-    <ul class="mt-8 grid gap-5 sm:grid-cols-2">
-      <?php foreach ($portfolio as $servico): ?>
-        <li class="revelar flex flex-col rounded-bandeja border border-base-300 bg-papel p-6 shadow-bandeja">
-          <h3 class="text-2xl"><?= e((string) ($servico['titulo'] ?? '')) ?></h3>
-          <p class="mt-2 leading-relaxed text-crust"><?= e((string) ($servico['texto'] ?? '')) ?></p>
-
-          <?php if (!empty($servico['itens'])): ?>
-            <ul class="mt-4 flex flex-wrap gap-2">
-              <?php foreach ($servico['itens'] as $item): ?>
-                <li class="rounded-full border border-base-300 bg-base-200 px-3 py-1.5 text-sm font-semibold text-crust">
-                  <?= e((string) $item) ?>
-                </li>
-              <?php endforeach; ?>
-            </ul>
-          <?php endif; ?>
-        </li>
-      <?php endforeach; ?>
-    </ul>
-
-    <div class="mt-8 flex flex-wrap gap-3">
-      <a href="/#catalogo" class="btn btn-primary h-12 min-h-12 px-6 font-bold">Ver o catálogo</a>
-      <a href="/unidades" class="btn h-12 min-h-12 border border-base-300 bg-papel px-6 font-semibold text-crust hover:border-brand hover:text-brand">
-        Onde a gente está
-      </a>
-    </div>
-  </section>
-<?php endif; ?>
-
-<!-- ============================================================
-     RF-19 — PARA EMPRESAS E INDÚSTRIAS
-     ============================================================ -->
-<?php if (!empty($paraEmpresas['itens']) || trim((string) ($paraEmpresas['texto'] ?? '')) !== ''): ?>
-  <section id="empresas" class="border-t border-base-300 bg-neutral text-neutral-content"
-           aria-labelledby="titulo-empresas">
-    <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
-
-      <div class="max-w-2xl">
-        <p class="text-xs font-bold uppercase tracking-[0.22em] opacity-70">Para empresas e indústrias</p>
-        <h2 id="titulo-empresas" class="mt-4 text-3xl sm:text-4xl">
-          <?= e((string) ($paraEmpresas['chamada'] ?? 'Para a sua empresa')) ?>
-        </h2>
-        <?php if (trim((string) ($paraEmpresas['texto'] ?? '')) !== ''): ?>
-          <p class="mt-3 text-lg leading-relaxed opacity-85"><?= e((string) $paraEmpresas['texto']) ?></p>
-        <?php endif; ?>
-      </div>
-
-      <?php if (!empty($paraEmpresas['itens'])): ?>
-        <ul class="mt-10 grid gap-5 md:grid-cols-3">
-          <?php foreach ($paraEmpresas['itens'] as $item): ?>
-            <li class="revelar rounded-bandeja bg-white/10 p-6">
-              <h3 class="text-xl"><?= e((string) ($item['titulo'] ?? '')) ?></h3>
-              <p class="mt-2 text-sm leading-relaxed opacity-85"><?= e((string) ($item['texto'] ?? '')) ?></p>
+      <?php // RNF-11 — os valores da marca. ?>
+      <?php if (!empty($institucional['valores'])): ?>
+        <ul class="mt-8 grid gap-4 md:grid-cols-3 lg:mt-10">
+          <?php foreach ($institucional['valores'] as $valor): ?>
+            <li class="cartao-etapa">
+              <h3 class="font-sans text-lg font-bold"><?= e((string) ($valor['titulo'] ?? '')) ?></h3>
+              <p class="mt-2 text-[0.9375rem] leading-relaxed text-crust"><?= e((string) ($valor['texto'] ?? '')) ?></p>
             </li>
           <?php endforeach; ?>
         </ul>
       <?php endif; ?>
+    </section>
+  <?php endif; ?>
 
-      <?php // Os passos do orçamento, numerados: é sequência, igual ao "Como
-         // encomendar" da home. ?>
-      <?php if (!empty($paraEmpresas['comoFunciona'])): ?>
-        <div class="mt-10">
-          <h3 class="text-2xl">Como pedir um orçamento</h3>
-          <ol class="mt-5 grid gap-4 md:grid-cols-3">
-            <?php foreach ($paraEmpresas['comoFunciona'] as $i => $passo): ?>
-              <li class="flex gap-3">
-                <span class="fonte-display flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent text-accent-content">
-                  <?= e((string) ($i + 1)) ?>
-                </span>
-                <p class="text-sm leading-relaxed opacity-85"><?= e((string) $passo) ?></p>
-              </li>
-            <?php endforeach; ?>
-          </ol>
-        </div>
-      <?php endif; ?>
+  <?php // RF-21 — história. Linha do tempo em <ol>: é sequência de verdade, e a
+     // ordem importa para quem lê com leitor de tela também. ?>
+  <?php if ($historia !== []): ?>
+    <section id="historia" class="border-y border-linha bg-polvilho" aria-labelledby="titulo-historia">
+      <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+        <h2 id="titulo-historia" class="text-3xl sm:text-4xl">Nossa história</h2>
+        <p class="mt-2 max-w-2xl text-crust">
+          Do primeiro forno até as <?= e((string) $totalUnidades) ?> lojas de hoje.
+        </p>
 
-      <?php if ($linkOrcamento !== ''): ?>
-        <div class="mt-10 flex flex-wrap items-center gap-4">
-          <a href="<?= e($linkOrcamento) ?>" target="_blank" rel="noopener noreferrer"
-             class="btn h-13 min-h-13 gap-2 border-none bg-accent px-7 text-base font-bold text-accent-content hover:bg-accent/85">
-            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.5 8.5 0 1 1 21 11.5Z"/></svg>
-            Pedir orçamento no WhatsApp
-          </a>
-          <p class="text-sm opacity-75">Falamos com a matriz — ela responde por todas as unidades.</p>
+        <ol class="marcos mt-8 lg:mt-12">
+          <?php foreach ($historia as $marco): ?>
+            <li class="marco">
+              <p class="fonte-display text-2xl"><?= e((string) ($marco['ano'] ?? '')) ?></p>
+              <h3 class="mt-1 font-sans text-lg font-bold"><?= e((string) ($marco['titulo'] ?? '')) ?></h3>
+              <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-crust"><?= e((string) ($marco['texto'] ?? '')) ?></p>
+            </li>
+          <?php endforeach; ?>
+        </ol>
+      </div>
+    </section>
+  <?php endif; ?>
+
+  <?php // RF-22 — portfólio ?>
+  <?php if ($portfolio !== []): ?>
+    <section id="portfolio" class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14"
+             aria-labelledby="titulo-portfolio">
+      <h2 id="titulo-portfolio" class="text-3xl sm:text-4xl">O que fazemos</h2>
+      <p class="mt-2 max-w-2xl text-crust">
+        Tudo sai da mesma cozinha. O catálogo do site cobre as encomendas e o balcão;
+        o resto é combinado na conversa.
+      </p>
+
+      <ul class="mt-8 grid gap-4 sm:grid-cols-2">
+        <?php foreach ($portfolio as $servico): ?>
+          <li class="cartao-etapa flex flex-col">
+            <h3 class="font-sans text-xl font-bold"><?= e((string) ($servico['titulo'] ?? '')) ?></h3>
+            <p class="mt-2 leading-relaxed text-crust"><?= e((string) ($servico['texto'] ?? '')) ?></p>
+
+            <?php if (!empty($servico['itens'])): ?>
+              <ul class="mt-4 flex flex-wrap gap-2">
+                <?php foreach ($servico['itens'] as $item): ?>
+                  <li class="pilula"><?= e((string) $item) ?></li>
+                <?php endforeach; ?>
+              </ul>
+            <?php endif; ?>
+          </li>
+        <?php endforeach; ?>
+      </ul>
+
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="/#catalogo" class="botao-primario">Ver o catálogo</a>
+        <a href="/unidades" class="botao-secundario">Ver as unidades</a>
+      </div>
+    </section>
+  <?php endif; ?>
+
+  <?php // RF-19 — para empresas e indústrias: a placa vermelha da marca. ?>
+  <?php if ($temEmpresas): ?>
+    <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8 lg:pb-16<?= $portfolio === [] ? ' pt-10 lg:pt-14' : '' ?>">
+      <section id="empresas" class="placa-empresas" aria-labelledby="titulo-empresas">
+        <div class="raios pointer-events-none absolute inset-0 opacity-50" style="--raios-x:100%;--raios-y:0%" aria-hidden="true"></div>
+
+        <div class="relative">
+          <h2 id="titulo-empresas" class="max-w-2xl text-3xl sm:text-4xl">
+            <?= e((string) ($paraEmpresas['chamada'] ?? 'Para a sua empresa')) ?>
+          </h2>
+          <?php if (trim((string) ($paraEmpresas['texto'] ?? '')) !== ''): ?>
+            <p class="mt-3 max-w-2xl text-lg leading-relaxed"><?= e((string) $paraEmpresas['texto']) ?></p>
+          <?php endif; ?>
+
+          <?php if (!empty($paraEmpresas['itens'])): ?>
+            <ul class="mt-8 grid gap-4 md:grid-cols-3">
+              <?php foreach ($paraEmpresas['itens'] as $item): ?>
+                <li class="placa-empresas-item">
+                  <h3 class="font-sans text-lg font-bold"><?= e((string) ($item['titulo'] ?? '')) ?></h3>
+                  <p class="mt-2 text-[0.9375rem] leading-relaxed"><?= e((string) ($item['texto'] ?? '')) ?></p>
+                </li>
+              <?php endforeach; ?>
+            </ul>
+          <?php endif; ?>
+
+          <?php // Os passos do orçamento, numerados: é sequência, igual ao "Como
+             // encomendar" da home. ?>
+          <?php if (!empty($paraEmpresas['comoFunciona'])): ?>
+            <h3 class="mt-10 font-sans text-xl font-bold">Como pedir um orçamento</h3>
+            <ol class="mt-5 grid gap-5 md:grid-cols-3">
+              <?php foreach ($paraEmpresas['comoFunciona'] as $i => $passo): ?>
+                <li class="flex gap-3">
+                  <span class="placa-empresas-numero" aria-hidden="true"><?= e((string) ($i + 1)) ?></span>
+                  <p class="text-[0.9375rem] leading-relaxed"><?= e((string) $passo) ?></p>
+                </li>
+              <?php endforeach; ?>
+            </ol>
+          <?php endif; ?>
+
+          <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
+            <?php if ($linkOrcamento !== ''): ?>
+              <a href="<?= e($linkOrcamento) ?>" target="_blank" rel="noopener noreferrer" class="botao-amarelo">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.5 8.5 0 1 1 21 11.5Z"/></svg>
+                Pedir orçamento no WhatsApp
+              </a>
+            <?php else: ?>
+              <?php // INTEGRAÇÃO FUTURA: cadastre o WhatsApp da matriz no painel e o botão liga sozinho. ?>
+              <span class="botao-desligado">WhatsApp em breve</span>
+            <?php endif; ?>
+            <p class="text-sm">A matriz responde pelas <?= e((string) $totalUnidades) ?> unidades.</p>
+          </div>
         </div>
-      <?php endif; ?>
+      </section>
     </div>
-  </section>
-<?php endif; ?>
+  <?php endif; ?>
+</div>
 
 <?php include DD_BASE . '/partials/footer.php'; ?>

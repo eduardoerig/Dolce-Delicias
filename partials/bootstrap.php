@@ -79,6 +79,24 @@ function dd_matriz(): ?array
     return null;
 }
 
+/**
+ * WhatsApp da unidade só com dígitos, ou '' quando não dá para conversar com ele.
+ *
+ * Vazio, curto ou longo demais e número de exemplo (ex.: 55000000000) contam
+ * como "sem WhatsApp": um link para ninguém é pior que o botão desligado. É a
+ * mesma regra do checkout() em assets/js/cart.js — as duas mudam juntas.
+ */
+function dd_whatsapp(?array $unidade): string
+{
+    $numero = preg_replace('/\D+/', '', (string) ($unidade['whatsapp'] ?? ''));
+
+    if (preg_match('/^\d{10,15}$/D', $numero) !== 1 || preg_match('/^\d{0,3}0{8,}$/D', $numero) === 1) {
+        return '';
+    }
+
+    return $numero;
+}
+
 /* -----------------------------------------------------------------------------
  * CATÁLOGOS EM PDF
  * O arquivo pode não existir ainda (ver catalogos/README.md), então todo lugar

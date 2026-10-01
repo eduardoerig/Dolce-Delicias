@@ -324,7 +324,9 @@ export function checkout() {
   }
 
   const numero = String(unidade.whatsapp || '').replace(/\D+/g, '');
-  if (!/^\d{10,15}$/.test(numero) || numero === '55000000000') {
+  // Mesma regra de dd_whatsapp() em partials/bootstrap.php: número de exemplo
+  // (ex.: 55000000000) conta como não cadastrado.
+  if (!/^\d{10,15}$/.test(numero) || /^\d{0,3}0{8,}$/.test(numero)) {
     avisar('A matriz ainda não tem WhatsApp cadastrado.');
     return;
   }
