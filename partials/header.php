@@ -120,15 +120,16 @@ $urlDasFontes = 'https://fonts.googleapis.com/css2?family=' . implode('&family='
 
   <div class="drawer-content flex min-h-screen flex-col">
 
-    <header class="sticky top-0 z-50 border-b border-base-300/70 bg-base-100">
-      <div class="mx-auto flex h-[4.5rem] max-w-7xl items-center gap-2 px-3 sm:gap-3 sm:px-6 lg:px-8">
+    <header class="sticky top-0 z-50 border-b border-linha bg-base-100">
+      <?php // Grade de 3 colunas no computador: as laterais têm a mesma largura (1fr), então o menu fica no centro exato da página, e não no centro do espaço que sobra. ?>
+      <div class="mx-auto grid h-[4.5rem] max-w-7xl grid-cols-[auto_1fr] items-center gap-2 px-3 sm:gap-3 sm:px-6 lg:grid-cols-[1fr_auto_1fr] lg:px-8">
 
-        <a href="/" class="flex shrink-0 items-center rounded-xl" aria-label="Dolce Delícias, página inicial">
+        <a href="/" class="flex items-center justify-self-start rounded-xl" aria-label="Dolce Delícias, página inicial">
           <?= dd_logo('h-9 w-auto drop-shadow-sm sm:h-11') ?>
         </a>
 
         <!-- Navegação em telas grandes: links ao centro, como no cardápio de referência -->
-        <nav class="hidden flex-1 justify-center lg:flex" aria-label="Seções do site">
+        <nav class="hidden lg:flex" aria-label="Seções do site">
           <ul class="flex items-center gap-1">
             <?php foreach ($menu as $item): ?>
               <?php $atual = ($item['href'] ?? '') === $caminhoAtual; ?>
@@ -155,7 +156,7 @@ $urlDasFontes = 'https://fonts.googleapis.com/css2?family=' . implode('&family='
           </ul>
         </nav>
 
-        <div class="ml-auto flex items-center gap-1.5 sm:gap-2 lg:ml-0">
+        <div class="flex items-center justify-self-end gap-1.5 sm:gap-2">
           <!-- Busca: na home leva ao campo do catálogo; fora dela, abre a home já na busca -->
           <a href="/#busca" data-focar-busca class="icone-redondo" aria-label="Buscar no catálogo">
             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -177,7 +178,7 @@ $urlDasFontes = 'https://fonts.googleapis.com/css2?family=' . implode('&family='
             <span class="sr-only" data-cart-sr aria-live="polite">Carrinho vazio</span>
           </button>
 
-          <a href="/carrinho" class="botao-amarelo hidden sm:inline-flex">Fechar pedido</a>
+          <a href="/carrinho" class="botao-primario hidden sm:inline-flex">Fechar pedido</a>
 
           <!-- Menu no celular -->
           <details class="dropdown dropdown-end lg:hidden" data-menu-dropdown>

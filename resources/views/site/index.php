@@ -72,7 +72,7 @@ $precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
 <section id="catalogo" class="bg-farinha" aria-labelledby="catalogo-titulo">
 
   <!-- Faixa: título à esquerda, busca à direita -->
-  <div class="border-b border-base-300 bg-base-200">
+  <div class="border-b border-linha bg-polvilho">
     <div class="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-8 sm:px-6 md:flex-row md:items-end md:justify-between lg:px-8 lg:py-10">
       <div>
         <h2 id="catalogo-titulo" class="text-4xl sm:text-5xl">Catálogo</h2>
@@ -86,7 +86,7 @@ $precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
                placeholder="Buscar coxinha, cupcake, bebida…"
                autocomplete="off" enterkeyhint="search"
                aria-describedby="contagem-catalogo">
-        <button type="submit" class="botao-amarelo">Buscar</button>
+        <button type="submit" class="botao-primario">Buscar</button>
       </form>
     </div>
   </div>
@@ -155,7 +155,7 @@ $precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
 
       <?php // Só no celular: o painel cobre a grade, então precisa de uma saída que diga o resultado. ?>
       <div class="filtros-pe">
-        <button type="button" class="botao-amarelo w-full" data-fechar-filtros data-ver-itens>Ver <?= e((string) $totalProdutos) ?> itens</button>
+        <button type="button" class="botao-primario w-full" data-fechar-filtros data-ver-itens>Ver <?= e((string) $totalProdutos) ?> itens</button>
       </div>
     </aside>
     <div class="filtros-fundo" data-fechar-filtros hidden></div>
@@ -190,12 +190,12 @@ $precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
       </div>
 
       <!-- Busca sem resultado -->
-      <div data-sem-resultado class="oculto flex flex-col items-center gap-3 rounded-bandeja border border-base-300 bg-papel px-6 py-14 text-center">
+      <div data-sem-resultado class="oculto flex flex-col items-center gap-3 rounded-bandeja border border-linha bg-papel px-6 py-14 text-center">
         <p class="text-xl font-bold">Nenhum item com esses filtros</p>
         <p class="max-w-sm text-sm leading-relaxed text-crust">
           Tente outra palavra ou limpe os filtros. Se for algo especial, a matriz faz sob encomenda pelo WhatsApp.
         </p>
-        <button type="button" data-limpar-filtros class="botao-amarelo mt-1">Limpar filtros</button>
+        <button type="button" data-limpar-filtros class="botao-primario mt-1">Limpar filtros</button>
       </div>
 
       <nav class="paginacao" aria-label="Páginas do catálogo" data-paginacao hidden></nav>
@@ -210,7 +210,7 @@ $precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
    no <template> e ui.js copia os que a pessoa viu. Sem histórico, nada aparece.
    ============================================================ */
 ?>
-<section class="oculto border-t border-base-300 bg-base-200" aria-labelledby="vistos-titulo" data-vistos>
+<section class="oculto border-t border-linha bg-polvilho" aria-labelledby="vistos-titulo" data-vistos>
   <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-12">
     <h2 id="vistos-titulo" class="text-3xl sm:text-4xl">Vistos recentemente</h2>
     <div class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4" data-vistos-grade></div>
@@ -225,7 +225,7 @@ $precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
 <!-- ============================================================
      COMO ENCOMENDAR — sequência de verdade, por isso vai numerada
      ============================================================ -->
-<section id="encomendas" class="border-t border-base-300 bg-base-100">
+<section id="encomendas" class="border-t border-linha bg-base-100">
   <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
     <h2 class="text-3xl sm:text-4xl">Como encomendar</h2>
 
@@ -251,7 +251,7 @@ $precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
     </ol>
 
     <?php // RF-19 — atendimento a empresas tem página própria; aqui só o convite. ?>
-    <p class="mt-10 border-t border-base-300 pt-6 text-crust">
+    <p class="mt-10 border-t border-linha pt-6 text-crust">
       Evento, escola ou empresa?
       <a href="/sobre#empresas" class="font-semibold text-brand underline underline-offset-4">Veja o atendimento para grandes pedidos</a>
     </p>

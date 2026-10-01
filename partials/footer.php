@@ -38,7 +38,7 @@ $canaisRodape = array_values(array_filter(
 ?>
     </main>
 
-    <footer id="contato" class="border-t border-base-300 bg-papel">
+    <footer id="contato" class="border-t border-linha bg-papel">
       <div class="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:grid-cols-2 sm:px-6 lg:grid-cols-[1.4fr_1fr_1fr_1.3fr_1.3fr] lg:gap-8 lg:px-8 lg:py-14">
 
         <div>
@@ -82,7 +82,7 @@ $canaisRodape = array_values(array_filter(
             </address>
             <a href="https://wa.me/<?= e($matrizRodape['whatsapp']) ?>"
                target="_blank" rel="noopener noreferrer"
-               class="botao-amarelo mt-4">
+               class="botao-primario mt-4">
               Falar no WhatsApp
             </a>
           <?php endif; ?>
@@ -108,7 +108,7 @@ $canaisRodape = array_values(array_filter(
                 <li>
                   <a href="<?= e((string) ($canalRodape['url'] ?? '#')) ?>"
                      target="_blank" rel="noopener noreferrer"
-                     class="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-base-300 px-3.5 text-sm font-semibold hover:border-campo">
+                     class="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-linha px-3.5 text-sm font-semibold hover:border-campo">
                     <?= e((string) ($canalRodape['nome'] ?? 'Canal')) ?>
                   </a>
                 </li>
@@ -118,7 +118,7 @@ $canaisRodape = array_values(array_filter(
         </div>
       </div>
 
-      <div class="border-t border-base-300">
+      <div class="border-t border-linha">
         <div class="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <p class="text-xs text-crust">
             © <?= e((string) $anoAtual) ?> Dolce Delícias. Os pedidos são fechados pelo WhatsApp da matriz.

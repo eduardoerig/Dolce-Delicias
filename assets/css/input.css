@@ -77,7 +77,10 @@
   --color-papel: #ffffff; /* superficie elevada: cards, paineis, drawer */
   --color-campo: #9c8069; /* borda de input/textarea -- 3.4:1 sobre branco */
   --color-massa: #f3ddc4; /* fundo do placeholder de foto */
-  --color-farinha: #fcf7f0; /* fundo da area do catalogo, entre o creme e o branco */
+  --color-farinha: #fbfaf8; /* fundo da area do catalogo: quase branco, sem puxar para o amarelo */
+  --color-polvilho: #f4f1ed; /* faixas, fundo de foto e icones redondos: neutro quente bem claro */
+  --color-linha: #e7e1db; /* bordas neutras dos componentes do cardapio */
+  --color-brand-escuro: #b00418; /* vermelho da placa pressionado/hover */
 
   /* Tipo de madeira em TODO titulo do site: heroi, secoes, precos.
      ATENCAO: peso unico 400. Nao peca 700/800 em cima dele -- o navegador
@@ -456,11 +459,14 @@ details.dropdown:not([open]) > .dropdown-content {
 /* =============================================================
    CARDÁPIO — catálogo da home no desenho de cardápio online:
    faixa com busca em pílula, filtros na lateral, cards com botão "+".
-   Amarelo é a cor de AÇÃO (buscar, adicionar, página ativa), como o
-   botão do herói. Vermelho fica para a marca e para promoção.
+
+   Cor: VERMELHO é ação (buscar, adicionar, marcado, página atual), como
+   sempre foi o botão principal da Dolce. Os fundos são neutros quase
+   brancos (polvilho/farinha) para a página não puxar para o amarelo;
+   o amarelo da placa aparece só no selo "Destaque".
    ============================================================= */
 
-.botao-amarelo {
+.botao-primario {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -468,16 +474,16 @@ details.dropdown:not([open]) > .dropdown-content {
   min-height: 2.75rem;
   padding: 0.5rem 1.25rem;
   border-radius: 999px;
-  background-color: var(--color-accent);
-  color: var(--color-ink);
+  background-color: var(--color-brand);
+  color: #fff;
   font-size: 0.9375rem;
   font-weight: 700;
   white-space: nowrap;
   transition: background-color 0.15s var(--ease-massa);
 }
 
-.botao-amarelo:hover {
-  background-color: color-mix(in oklab, var(--color-accent) 86%, var(--color-ink));
+.botao-primario:hover {
+  background-color: var(--color-brand-escuro);
 }
 
 /* Busca em pílula: o contorno de foco é da pílula inteira, não do campo. */
@@ -486,10 +492,10 @@ details.dropdown:not([open]) > .dropdown-content {
   align-items: center;
   gap: 0.625rem;
   padding: 0.3125rem 0.3125rem 0.3125rem 1.125rem;
-  border: 1px solid var(--color-base-300);
+  border: 1px solid var(--color-linha);
   border-radius: 999px;
   background-color: var(--color-papel);
-  box-shadow: 0 1px 2px rgb(42 23 16 / 0.06);
+  box-shadow: 0 1px 2px rgb(42 23 16 / 0.05);
 }
 
 .busca-pilula:has(input:focus-visible) {
@@ -512,25 +518,24 @@ details.dropdown:not([open]) > .dropdown-content {
 }
 
 .busca-pilula input::placeholder {
-  color: color-mix(in oklab, var(--color-crust) 75%, white);
+  color: #7d6b60; /* 5:1 sobre branco */
 }
 
 /* ---------- Filtros ---------- */
 .filtros-painel {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--color-base-300);
+  border: 1px solid var(--color-linha);
   border-radius: 1rem;
   background-color: var(--color-papel);
 }
-
 
 .filtros-cabeca {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 1rem 1.25rem 0.75rem;
-  border-bottom: 1px solid var(--color-base-300);
+  border-bottom: 1px solid var(--color-linha);
 }
 
 .filtros-cabeca h3 {
@@ -563,7 +568,7 @@ details.dropdown:not([open]) > .dropdown-content {
   margin: 0;
   padding: 1rem 0;
   border: 0;
-  border-bottom: 1px solid var(--color-base-300);
+  border-bottom: 1px solid var(--color-linha);
 }
 
 .filtro-grupo:last-child {
@@ -597,8 +602,7 @@ details.dropdown:not([open]) > .dropdown-content {
   color: var(--color-crust);
 }
 
-/* Caixa de marcar: amarelo da marca com o visto em marrom (o visto carrega o
-   estado, não só a cor). */
+/* Caixa de marcar: vermelho da marca com visto branco. */
 .filtro-opcao input {
   display: grid;
   place-content: center;
@@ -614,9 +618,9 @@ details.dropdown:not([open]) > .dropdown-content {
 }
 
 .filtro-opcao input:checked {
-  border-color: var(--color-ink);
-  background-color: var(--color-accent);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232a1710' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12 5 5 9-10'/%3E%3C/svg%3E");
+  border-color: var(--color-brand);
+  background-color: var(--color-brand);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12 5 5 9-10'/%3E%3C/svg%3E");
   background-size: 0.8125rem;
   background-position: center;
   background-repeat: no-repeat;
@@ -666,17 +670,22 @@ details.dropdown:not([open]) > .dropdown-content {
   justify-content: center;
   min-height: 2.5rem;
   padding: 0 0.25rem;
-  border: 1px solid var(--color-base-300);
+  border: 1px solid var(--color-linha);
   border-radius: 0.625rem;
   background-color: var(--color-papel);
   font-size: 0.8125rem;
   font-weight: 600;
 }
 
-/* Marcado: amarelo + borda marrom. A borda garante a leitura sem depender da cor. */
+.segmentos label:hover span {
+  border-color: var(--color-campo);
+}
+
+/* Marcado: preenchido de vermelho (contraste de luminância, não só de cor). */
 .segmentos input:checked + span {
-  border-color: var(--color-ink);
-  background-color: var(--color-accent);
+  border-color: var(--color-brand);
+  background-color: var(--color-brand);
+  color: #fff;
   font-weight: 700;
 }
 
@@ -685,7 +694,7 @@ details.dropdown:not([open]) > .dropdown-content {
   outline-offset: 2px;
 }
 
-/* Preço por peça: trilho com borda (visível no branco), parte escolhida em amarelo. */
+/* Preço por peça: trilho com borda, parte escolhida em vermelho. */
 .faixa-preco {
   --pct: 100%;
   width: 100%;
@@ -696,24 +705,22 @@ details.dropdown:not([open]) > .dropdown-content {
 }
 
 .faixa-preco::-webkit-slider-runnable-track {
-  height: 0.5rem;
-  border: 1px solid var(--color-campo);
+  height: 0.375rem;
   border-radius: 999px;
-  background: linear-gradient(to right, var(--color-accent) 0 var(--pct), var(--color-papel) var(--pct));
+  background: linear-gradient(to right, var(--color-brand) 0 var(--pct), var(--color-linha) var(--pct));
 }
 
 .faixa-preco::-moz-range-track {
-  height: 0.5rem;
-  border: 1px solid var(--color-campo);
+  height: 0.375rem;
   border-radius: 999px;
-  background: linear-gradient(to right, var(--color-accent) 0 var(--pct), var(--color-papel) var(--pct));
+  background: linear-gradient(to right, var(--color-brand) 0 var(--pct), var(--color-linha) var(--pct));
 }
 
 .faixa-preco::-webkit-slider-thumb {
   width: 1.375rem;
   height: 1.375rem;
   margin-top: -0.5rem;
-  border: 2px solid var(--color-ink);
+  border: 2px solid var(--color-brand);
   border-radius: 50%;
   background-color: var(--color-papel);
   appearance: none;
@@ -722,7 +729,7 @@ details.dropdown:not([open]) > .dropdown-content {
 .faixa-preco::-moz-range-thumb {
   width: 1.125rem;
   height: 1.125rem;
-  border: 2px solid var(--color-ink);
+  border: 2px solid var(--color-brand);
   border-radius: 50%;
   background-color: var(--color-papel);
 }
@@ -772,13 +779,13 @@ details.dropdown:not([open]) > .dropdown-content {
   }
 
   .filtros-fechar:hover {
-    background-color: var(--color-base-200);
+    background-color: var(--color-polvilho);
   }
 
   .filtros-pe {
     display: block;
     padding: 1rem 1.25rem;
-    border-top: 1px solid var(--color-base-300);
+    border-top: 1px solid var(--color-linha);
   }
 
   .filtros-fundo:not([hidden]) {
@@ -806,7 +813,7 @@ details.dropdown:not([open]) > .dropdown-content {
   align-items: center;
   gap: 0.375rem;
   min-height: 2.75rem;
-  border: 1px solid var(--color-base-300);
+  border: 1px solid var(--color-linha);
   border-radius: 999px;
   background-color: var(--color-papel);
   font-size: 0.875rem;
@@ -821,8 +828,8 @@ details.dropdown:not([open]) > .dropdown-content {
   min-width: 1.25rem;
   padding: 0 0.375rem;
   border-radius: 999px;
-  background-color: var(--color-ink);
-  color: var(--color-papel);
+  background-color: var(--color-brand);
+  color: #fff;
   font-size: 0.75rem;
   line-height: 1.25rem;
   text-align: center;
@@ -844,7 +851,7 @@ details.dropdown:not([open]) > .dropdown-content {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid var(--color-base-300);
+  border: 1px solid var(--color-linha);
   border-radius: 1rem;
   background-color: var(--color-papel);
   transition: border-color 0.15s var(--ease-massa);
@@ -874,8 +881,8 @@ details.dropdown:not([open]) > .dropdown-content {
 .cartao-sem-foto {
   display: grid;
   place-items: center;
-  background-color: var(--color-base-200);
-  color: color-mix(in oklab, var(--color-crust) 55%, transparent);
+  background-color: var(--color-polvilho);
+  color: #b8aaa0;
 }
 
 .cartao-sem-foto svg {
@@ -902,6 +909,7 @@ details.dropdown:not([open]) > .dropdown-content {
   line-height: 1.45;
 }
 
+/* O amarelo da placa fica só aqui: um selo pequeno, não a página inteira. */
 .selo-destaque {
   background-color: var(--color-accent);
   color: var(--color-ink);
@@ -996,8 +1004,8 @@ details.dropdown:not([open]) > .dropdown-content {
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
-  background-color: var(--color-accent);
-  color: var(--color-ink);
+  background-color: var(--color-brand);
+  color: #fff;
   transition: background-color 0.15s var(--ease-massa), transform 0.15s var(--ease-massa);
 }
 
@@ -1008,7 +1016,7 @@ details.dropdown:not([open]) > .dropdown-content {
 }
 
 .botao-mais:hover {
-  background-color: color-mix(in oklab, var(--color-accent) 86%, var(--color-ink));
+  background-color: var(--color-brand-escuro);
 }
 
 .botao-mais:active {
@@ -1027,7 +1035,6 @@ details.dropdown:not([open]) > .dropdown-content {
 /* Resposta ao clique: o "+" vira visto por um instante. */
 .botao-mais.feito {
   background-color: var(--color-ink);
-  color: var(--color-accent);
 }
 
 .botao-mais.feito .icone-mais {
@@ -1041,7 +1048,7 @@ details.dropdown:not([open]) > .dropdown-content {
 .cartao-indisponivel {
   padding: 0.25rem 0.625rem;
   border-radius: 999px;
-  background-color: var(--color-base-200);
+  background-color: var(--color-polvilho);
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--color-crust);
@@ -1062,7 +1069,7 @@ details.dropdown:not([open]) > .dropdown-content {
   min-width: 2.75rem;
   height: 2.75rem;
   padding: 0 0.5rem;
-  border: 1px solid var(--color-base-300);
+  border: 1px solid var(--color-linha);
   border-radius: 0.625rem;
   background-color: var(--color-papel);
   font-weight: 600;
@@ -1073,8 +1080,9 @@ details.dropdown:not([open]) > .dropdown-content {
 }
 
 .paginacao button[aria-current="page"] {
-  border-color: var(--color-ink);
-  background-color: var(--color-accent);
+  border-color: var(--color-brand);
+  background-color: var(--color-brand);
+  color: #fff;
   font-weight: 700;
 }
 
@@ -1090,14 +1098,14 @@ details.dropdown:not([open]) > .dropdown-content {
   width: 2.75rem;
   height: 2.75rem;
   border-radius: 999px;
-  background-color: var(--color-base-200);
+  background-color: var(--color-polvilho);
   color: var(--color-ink);
   cursor: pointer;
   transition: background-color 0.15s var(--ease-massa);
 }
 
 .icone-redondo:hover {
-  background-color: color-mix(in oklab, var(--color-base-200) 82%, var(--color-crust));
+  background-color: var(--color-linha);
 }
 
 /* Títulos de coluna do rodapé: h2 nasce em Alfa Slab One; aqui é Figtree. */
