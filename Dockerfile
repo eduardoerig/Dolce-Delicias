@@ -14,5 +14,6 @@ WORKDIR /var/www/html
 COPY . .
 RUN composer install --no-interaction --prefer-dist && mkdir -p storage/uploads storage/logs && chown -R www-data:www-data storage
 COPY --from=assets /app/public/assets ./public/assets
+RUN a2enmod headers
 COPY config/apache.conf /etc/apache2/sites-available/000-default.conf
 COPY config/php.ini /usr/local/etc/php/conf.d/dolce.ini

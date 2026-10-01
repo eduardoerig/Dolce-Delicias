@@ -5,11 +5,15 @@ declare(strict_types=1);
 /**
  * partials/product-card.php — um card do catálogo.
  *
+ * Desenho de cardápio: foto em cima, selos no canto, nome, uma linha de
+ * descrição, como se compra e o mínimo, e embaixo o preço com o botão "+".
+ *
  * Espera:
- *   $produto  array  item vindo de data/products.php
+ *   $produto  array  item vindo de dd_produtos()
  *   $eager    bool   opcional. true carrega a imagem sem lazy (use nos primeiros cards).
  *
- * A busca do catálogo lê o data-busca deste elemento — não o remova.
+ * Os data-* do <article> alimentam busca, filtros e ordenação em assets/js/ui.js;
+ * os do botão "+" alimentam o carrinho em assets/js/cart.js. Não remova.
  */
 
 require_once __DIR__ . '/bootstrap.php';
@@ -17,99 +21,104 @@ require_once __DIR__ . '/bootstrap.php';
 /** @var array $produto */
 $eager ??= false;
 
-$faixa       = dd_faixa_principal($produto);
-$disponivel  = ($produto['disponivel'] ?? true) !== false;
-$imagem      = dd_imagem($produto['imagem'] ?? null);
-$url         = '/produtos/' . rawurlencode((string) $produto['slug']);
+$faixa      = dd_faixa_principal($produto);
+$disponivel = ($produto['disponivel'] ?? true) !== false;
+$imagem     = dd_imagem($produto['imagem'] ?? null);
+$url        = '/produtos/' . rawurlencode((string) $produto['slug']);
+$linhaCard  = (string) ($produto['linha'] ?? 'AMBOS');
+$ofertas    = dd_promocoes_produto($produto);
+$selo       = $ofertas !== [] ? (trim((string) ($ofertas[0]['selo'] ?? '')) ?: 'Promoção') : '';
+
+// Como se compra, em uma palavra: é o que a referência chamava de "porção".
+$comoCompra = match ($linhaCard) {
+    'ENCOMENDA' => 'Encomenda',
+    'BALCAO'    => 'Balcão',
+    default     => 'Encomenda e balcão',
+};
 ?>
 <article
-  class="card group border border-base-300 bg-papel shadow-bandeja transition-shadow duration-300 hover:shadow-bandeja-alta<?= $disponivel ? '' : ' opacity-60' ?>"
-  data-categoria="<?= e($produto['categoria']) ?>" data-linha="<?= e($produto['linha']) ?>" data-tags="<?= e(implode(',', $produto['tags'])) ?>" data-produto
-  data-busca="<?= e(dd_indice_busca($produto)) ?>">
+  class="cartao"
+  data-produto
+  data-slug="<?= e((string) $produto['slug']) ?>"
+  data-categoria="<?= e((string) $produto['categoria']) ?>"
+  data-linha="<?= e($linhaCard) ?>"
+  data-tags="<?= e(implode(',', $produto['tags'])) ?>"
+  data-busca="<?= e(dd_indice_busca($produto)) ?>"
+  data-nome="<?= e(dd_ascii((string) $produto['nome'])) ?>"
+  data-unitario="<?= e(number_format($faixa['unitario'], 4, '.', '')) ?>"
+  data-destaque="<?= !empty($produto['destaque']) ? '1' : '0' ?>">
 
-  <figure class="relative aspect-[4/3] overflow-hidden rounded-t-box">
-    <?php
-    // A foto leva ao produto. No celular o "Detalhes" some e o título tem só
-    // 20px de altura — alvo pequeno demais para dedo. A foto dá 166x125px.
-    // tabindex/aria-hidden porque é link repetido: quem usa teclado ou leitor
-    // de tela já chega lá pelo título. Mesmo padrão da miniatura do carrinho.
-    ?>
-    <a href="<?= e($url) ?>" class="block h-full w-full" tabindex="-1" aria-hidden="true">
+  <?php
+  // A foto também leva ao produto (alvo grande para o dedo). tabindex/aria-hidden
+  // porque é link repetido: teclado e leitor de tela chegam pelo nome.
+  ?>
+  <a href="<?= e($url) ?>" class="cartao-foto" tabindex="-1" aria-hidden="true">
     <?php if ($imagem): ?>
-      <img src="<?= e($imagem) ?>"
-           alt="<?= e($produto['nome']) ?>"
-           class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+      <img src="<?= e($imagem) ?>" alt=""
            <?= $eager ? '' : 'loading="lazy" decoding="async"' ?>
-           width="640" height="480">
+           width="480" height="360">
     <?php else: ?>
       <?php // INTEGRAÇÃO FUTURA: assim que o arquivo em 'imagem' existir, ele entra aqui sozinho. ?>
-      <div class="massa flex h-full w-full flex-col items-center justify-center gap-2 text-crust/45" role="img"
-           aria-label="Foto de <?= e($produto['nome']) ?> ainda não cadastrada">
-        <?= dd_icone_categoria((string) ($produto['categoria'] ?? '')) ?>
-      </div>
+      <span class="cartao-sem-foto"><?= dd_icone_categoria((string) ($produto['categoria'] ?? '')) ?></span>
     <?php endif; ?>
-    </a>
+  </a>
 
-    <?php // Sem selo na foto: todos os cards do catálogo saem iguais. A linha
-       // (encomenda x balcão) aparece no preço, como "/ cento" ou "/ un". ?>
-  </figure>
+  <?php if ($selo !== '' || !empty($produto['destaque'])): ?>
+    <p class="cartao-selos">
+      <?php if ($selo !== ''): ?><span class="selo selo-promo"><?= e($selo) ?></span><?php endif; ?>
+      <?php if (!empty($produto['destaque'])): ?><span class="selo selo-destaque">Destaque</span><?php endif; ?>
+    </p>
+  <?php endif; ?>
 
-  <div class="card-body gap-2 p-3 sm:gap-2.5 sm:p-5">
-    <h3 class="text-sm leading-tight sm:text-xl">
-      <a href="<?= e($url) ?>" class="rounded transition-colors hover:text-brand">
-        <?= e($produto['nome']) ?>
-      </a>
+  <div class="cartao-corpo">
+    <h3 class="cartao-nome">
+      <a href="<?= e($url) ?>"><?= e((string) $produto['nome']) ?></a>
     </h3>
 
-    <?php
-    // O clamp fica no <span>, não no <p>: como .card-body é flex, o Chrome
-    // "blockifica" display:-webkit-box no filho direto e o corte deixa de valer.
-    //
-    // Some no celular: com dois cards por linha sobram ~137px de texto útil, e
-    // duas linhas de descrição aí viram ruído em cima do que importa (preço).
-    // Quem quiser ler abre o produto — o título é link.
-    ?>
-    <p class="hidden min-h-[2.85rem] text-sm leading-relaxed text-crust sm:block">
-      <span class="duas-linhas"><?= e($produto['descricao'] ?? '') ?></span>
-    </p>
+    <?php if (trim((string) ($produto['descricao'] ?? '')) !== ''): ?>
+      <p class="cartao-descricao"><?= e((string) $produto['descricao']) ?></p>
+    <?php endif; ?>
 
-    <?php // Preço: número grande, base pequena — como quadro de preço de balcão.
-       // O mínimo entra na mesma linha em vez de virar um selo à parte. ?>
-    <p class="mt-1 flex flex-wrap items-baseline gap-x-1.5">
-      <span class="text-xs font-semibold text-crust sm:text-sm">R$</span>
-      <span class="fonte-display text-xl leading-none text-brand sm:text-3xl"><?= e(number_format($faixa['valor'], 2, ',', '.')) ?></span>
-      <span class="whitespace-nowrap text-xs font-semibold text-crust sm:text-sm">/ <?= e($faixa['porCurto']) ?></span>
-      <?php if ($faixa['temMinimo']): ?>
-        <?php // O mínimo sai no celular: no card estreito ele empurrava o preço
-           // para duas linhas. Continua na página do produto. ?>
-        <span class="hidden text-xs text-crust sm:inline">mín. <?= e((string) $faixa['min']) ?> un</span>
+    <p class="cartao-meta">
+      <span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9.5 12 4l9 5.5v9L12 23l-9-4.5z"/><path d="M3 9.5 12 15l9-5.5M12 15v8"/></svg>
+        <?= e($comoCompra) ?>
+      </span>
+      <?php if ($faixa['temMinimo'] && $faixa['min'] > 1): ?>
+        <span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h10M4 17h6"/></svg>
+          mín. <?= e((string) $faixa['min']) ?> un
+        </span>
       <?php endif; ?>
     </p>
 
-    <?php include __DIR__ . '/product-promotions.php'; ?>
-    <?php // mt-auto alinha os botões na base, mesmo com descrições de tamanhos diferentes. ?>
-    <div class="card-actions mt-auto items-center gap-2 pt-2 sm:pt-3">
+    <div class="cartao-rodape">
+      <p class="cartao-preco">
+        <strong><?= e(str_replace(' ', "\u{00A0}", dd_moeda($faixa['valor']))) ?></strong>
+        <span>/ <?= e($faixa['porCurto']) ?></span>
+      </p>
+
       <?php if ($disponivel): ?>
         <button type="button"
-                class="btn btn-primary h-11 min-h-11 w-full text-xs font-bold sm:h-12 sm:min-h-12 sm:text-sm"
+                class="botao-mais"
+                aria-label="Adicionar <?= e((string) $produto['nome']) ?> ao pedido"
                 data-add
-                data-id="<?= e($produto['slug']) ?>"
-                data-slug="<?= e($produto['slug']) ?>"
-                data-nome="<?= e($produto['nome']) ?>"
+                data-id="<?= e((string) $produto['slug']) ?>"
+                data-slug="<?= e((string) $produto['slug']) ?>"
+                data-nome="<?= e((string) $produto['nome']) ?>"
                 data-preco="<?= e(number_format($faixa['unitario'], 4, '.', '')) ?>"
                 data-por="<?= e($faixa['exibicao']) ?>"
                 data-min="<?= e((string) $faixa['min']) ?>"
                 data-passo="<?= e((string) $faixa['passo']) ?>"
                 data-base="<?= e((string) $faixa['base']) ?>"
-                <?php // Miniatura do carrinho: a foto quando existir, senão o ícone da categoria. ?>
                 data-imagem="<?= e((string) $imagem) ?>"
-                data-categoria="<?= e($produto['categoria'] ?? '') ?>">
-          Adicionar
+                data-categoria="<?= e((string) ($produto['categoria'] ?? '')) ?>">
+          <svg class="icone-mais" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          <svg class="icone-feito" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>
         </button>
       <?php else: ?>
-        <button type="button" class="btn btn-disabled h-11 min-h-11 w-full text-xs sm:h-12 sm:min-h-12 sm:w-auto sm:flex-1 sm:text-sm" disabled>Indisponível hoje</button>
+        <span class="cartao-indisponivel">Indisponível hoje</span>
       <?php endif; ?>
-
     </div>
   </div>
 </article>

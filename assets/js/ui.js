@@ -6,7 +6,7 @@
  *   1. nome da matriz nos rótulos do carrinho
  *   2. dropdowns <details> (fechar ao clicar fora / Esc)
  *   3. drawer do carrinho, com foco e teclado
- *   4. busca e filtros do catálogo
+ *   4. catálogo: busca, filtros, ordem, páginas e vistos recentemente
  *   5. revelação dos cards ao rolar (IntersectionObserver)
  *   6. avisos curtos (toasts)
  *   7. quantidade na página do produto
@@ -127,146 +127,343 @@ if (alavancaDrawer && painelCarrinho) {
 }
 
 /* ===========================================================================
- * 4. BUSCA E FILTROS DO CATÁLOGO
- * Filtragem no próprio DOM: o PHP já imprimiu todos os cards.
+ * 4. CATÁLOGO: BUSCA, FILTROS, ORDEM E PÁGINAS
+ * Tudo no próprio DOM: o PHP já imprimiu todos os cards, e os data-* de cada
+ * <article> (partials/product-card.php) dizem categoria, linha, etiquetas,
+ * preço por peça e destaque. Sem JavaScript, a grade inteira aparece.
  * ======================================================================== */
+
+const movimentoSuave = () =>
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
 
 const grade = document.querySelector('[data-grade-produtos]');
 
 if (grade) {
+  const POR_PAGINA = 12;
   const cards = Array.from(grade.querySelectorAll('[data-produto]'));
+  // A ordem do PHP vira o desempate de "Destaques" (o PHP já manda na ordem do cadastro).
+  cards.forEach((card, i) => { card.dataset.ordem = String(i); });
+
   const campoBusca = document.querySelector('[data-busca-input]');
   const semResultado = document.querySelector('[data-sem-resultado]');
-  // Plural: a contagem aparece na barra completa E na barra fina.
   const contagens = document.querySelectorAll('[data-contagem]');
-  const definirContagem = (texto) => contagens.forEach((el) => { el.textContent = texto; });
+  const paginacao = document.querySelector('[data-paginacao]');
+  const ordenar = document.querySelector('[data-ordenar]');
+  const todas = document.querySelector('[data-filter-category-todas]');
+  const categorias = Array.from(document.querySelectorAll('[data-filter-category]'));
+  const preco = document.querySelector('[data-filter-preco]');
+  const precoSaida = document.querySelector('[data-filter-preco-saida]');
+  const brl = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
 
   let termo = '';
+  let pagina = 1;
 
   /** minúsculas e sem acento, igual ao índice gerado pelo PHP */
   const marcasDeAcento = new RegExp('[\\u0300-\\u036f]', 'g');
   const normalizar = (texto) => texto.toLowerCase().normalize('NFD').replace(marcasDeAcento, '');
+  const plural = (n) => (n === 1 ? 'item' : 'itens');
 
-  function filtrar() {
-    let visiveis = 0;
-
-    cards.forEach((card) => {
-      const category = document.querySelector('[data-filter-category]')?.value || '';
-      const line = document.querySelector('[data-filter-line]')?.value || '';
-      const tags = [...document.querySelectorAll('[data-filter-tag]:checked')].map(el=>el.value);
-      const combina = (termo === '' || (card.dataset.busca || '').includes(termo)) && (!category || card.dataset.categoria===category) && (!line || card.dataset.linha==='AMBOS' || card.dataset.linha===line) && tags.every(tag=>(card.dataset.tags||'').split(',').includes(tag));
-
-      card.classList.toggle('oculto', !combina);
-      if (combina) visiveis += 1;
-    });
-
-    const filtrando = termo !== '' || Boolean(document.querySelector('[data-filter-category]')?.value) || Boolean(document.querySelector('[data-filter-line]')?.value) || Boolean(document.querySelector('[data-filter-tag]:checked'));
-
-    // Chips de categoria refletem o valor do filtro (inclusive depois de "Mostrar tudo").
-    const categoria = document.querySelector('[data-filter-category]')?.value || '';
-    document.querySelectorAll('[data-chip-categoria]').forEach((chip) => {
-      chip.setAttribute('aria-pressed', String(chip.dataset.chipCategoria === categoria));
-    });
-    // Quantos filtros extras estão ligados, no botão "Filtros".
-    const extras = (document.querySelector('[data-filter-line]')?.value ? 1 : 0) + document.querySelectorAll('[data-filter-tag]:checked').length;
-    document.querySelectorAll('[data-filtros-contagem]').forEach((el) => {
-      el.textContent = extras ? String(extras) : '';
-      el.classList.toggle('oculto', extras === 0);
-    });
-
-    if (semResultado) semResultado.classList.toggle('oculto', visiveis > 0);
-    grade.classList.toggle('oculto', visiveis === 0);
-
-    const plural = cards.length === 1 ? 'item' : 'itens';
-
-    if (visiveis === 0) {
-      definirContagem('Nenhum item encontrado');
-    } else if (filtrando) {
-      // A concordância segue o total, não o filtrado: "1 de 18 itens".
-      definirContagem(`${visiveis} de ${cards.length} ${plural}`);
-    } else {
-      definirContagem(`${cards.length} ${plural}`);
-    }
+  function lerFiltros() {
+    return {
+      categorias: categorias.filter((c) => c.checked).map((c) => c.value),
+      linha: document.querySelector('[data-filter-line]:checked')?.value || '',
+      tags: Array.from(document.querySelectorAll('[data-filter-tag]:checked')).map((el) => el.value),
+      // No teto, o filtro de preço está desligado.
+      precoMax: preco && Number(preco.value) < Number(preco.max) ? Number(preco.value) : null,
+    };
   }
 
-  document.querySelectorAll('[data-filter-category],[data-filter-line],[data-filter-tag]').forEach(el=>el.addEventListener('change',filtrar));
+  function combina(card, f) {
+    if (termo && !(card.dataset.busca || '').includes(termo)) return false;
+    // Várias categorias marcadas somam (Salgados OU Doces).
+    if (f.categorias.length && !f.categorias.includes(card.dataset.categoria)) return false;
+    if (f.linha && card.dataset.linha !== 'AMBOS' && card.dataset.linha !== f.linha) return false;
+    // Restrições se acumulam: vegano E sem lactose.
+    const etiquetas = (card.dataset.tags || '').split(',');
+    if (!f.tags.every((t) => etiquetas.includes(t))) return false;
+    if (f.precoMax !== null && Number(card.dataset.unitario) > f.precoMax) return false;
+    return true;
+  }
+
+  const criterios = {
+    destaque: (a, b) =>
+      Number(b.dataset.destaque) - Number(a.dataset.destaque) || Number(a.dataset.ordem) - Number(b.dataset.ordem),
+    'preco-asc': (a, b) => Number(a.dataset.unitario) - Number(b.dataset.unitario),
+    'preco-desc': (a, b) => Number(b.dataset.unitario) - Number(a.dataset.unitario),
+    nome: (a, b) => (a.dataset.nome || '').localeCompare(b.dataset.nome || '', 'pt-BR'),
+  };
+
+  function atualizarPreco() {
+    if (!preco) return;
+    const min = Number(preco.min);
+    const max = Number(preco.max);
+    const valor = Number(preco.value);
+    preco.style.setProperty('--pct', `${((valor - min) / (max - min || 1)) * 100}%`);
+    const texto = valor >= max ? 'Qualquer preço' : `Até ${brl.format(valor)}`;
+    if (precoSaida) precoSaida.textContent = texto;
+    preco.setAttribute('aria-valuetext', texto);
+  }
+
+  /** ‹ 1 … 4 5 6 … 10 › — primeira, última e vizinhas da atual. */
+  function desenharPaginas(total) {
+    if (!paginacao) return;
+    const paginas = Math.ceil(total / POR_PAGINA);
+    paginacao.replaceChildren();
+    paginacao.hidden = paginas <= 1;
+    if (paginas <= 1) return;
+
+    const botao = (rotulo, alvo, nome, { atual = false, desligado = false } = {}) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = rotulo;
+      b.dataset.irPara = String(alvo);
+      b.setAttribute('aria-label', nome);
+      if (atual) b.setAttribute('aria-current', 'page');
+      b.disabled = desligado;
+      return b;
+    };
+
+    paginacao.append(botao('‹', pagina - 1, 'Página anterior', { desligado: pagina === 1 }));
+    let ultimo = 0;
+    for (let n = 1; n <= paginas; n += 1) {
+      if (n !== 1 && n !== paginas && Math.abs(n - pagina) > 1) continue;
+      if (n - ultimo > 1) {
+        const reticencias = document.createElement('span');
+        reticencias.className = 'grid min-w-6 place-items-center text-crust';
+        reticencias.setAttribute('aria-hidden', 'true');
+        reticencias.textContent = '…';
+        paginacao.append(reticencias);
+      }
+      paginacao.append(botao(String(n), n, `Página ${n}`, { atual: n === pagina }));
+      ultimo = n;
+    }
+    paginacao.append(botao('›', pagina + 1, 'Próxima página', { desligado: pagina === paginas }));
+  }
+
+  function filtrar({ manterPagina = false } = {}) {
+    if (!manterPagina) pagina = 1;
+    const f = lerFiltros();
+    const ordem = criterios[ordenar?.value] || criterios.destaque;
+    const achados = cards.filter((card) => combina(card, f)).sort(ordem);
+    const paginas = Math.max(1, Math.ceil(achados.length / POR_PAGINA));
+    pagina = Math.min(Math.max(1, pagina), paginas);
+
+    const inicio = (pagina - 1) * POR_PAGINA;
+    const naPagina = new Set(achados.slice(inicio, inicio + POR_PAGINA));
+
+    // A grade segue a ordem escolhida; os que não combinam vão para o fim, escondidos.
+    const resto = cards.filter((card) => !achados.includes(card));
+    [...achados, ...resto].forEach((card) => grade.append(card));
+    cards.forEach((card) => card.classList.toggle('oculto', !naPagina.has(card)));
+
+    grade.classList.toggle('oculto', achados.length === 0);
+    semResultado?.classList.toggle('oculto', achados.length > 0);
+
+    const filtrando = termo !== '' || f.categorias.length > 0 || f.linha !== '' || f.tags.length > 0 || f.precoMax !== null;
+    let texto;
+    if (achados.length === 0) texto = 'Nenhum item encontrado';
+    // A concordância segue o total, não o filtrado: "1 de 18 itens".
+    else if (filtrando) texto = `${achados.length} de ${cards.length} ${plural(cards.length)}`;
+    else texto = `${cards.length} ${plural(cards.length)}`;
+    if (paginas > 1) texto += `, página ${pagina} de ${paginas}`;
+    contagens.forEach((el) => { el.textContent = texto; });
+
+    // "Todas" fica marcada exatamente quando nenhuma categoria específica está.
+    if (todas) todas.checked = f.categorias.length === 0;
+
+    const ligados = f.categorias.length + (f.linha ? 1 : 0) + f.tags.length + (f.precoMax !== null ? 1 : 0);
+    document.querySelectorAll('[data-filtros-contagem]').forEach((el) => {
+      el.textContent = String(ligados);
+      el.classList.toggle('oculto', ligados === 0);
+    });
+    document.querySelectorAll('[data-ver-itens]').forEach((b) => {
+      b.textContent = achados.length ? `Ver ${achados.length} ${plural(achados.length)}` : 'Nenhum item: ajuste os filtros';
+    });
+
+    desenharPaginas(achados.length);
+  }
+
+  categorias.forEach((c) => c.addEventListener('change', () => filtrar()));
+  todas?.addEventListener('change', () => {
+    if (todas.checked) categorias.forEach((c) => { c.checked = false; });
+    filtrar();
+  });
+  document.querySelectorAll('[data-filter-line], [data-filter-tag]').forEach((el) => el.addEventListener('change', () => filtrar()));
+  preco?.addEventListener('input', () => {
+    atualizarPreco();
+    filtrar();
+  });
+  ordenar?.addEventListener('change', () => filtrar());
+
   campoBusca?.addEventListener('input', () => {
     termo = normalizar(campoBusca.value.trim());
     filtrar();
   });
 
+  // "Buscar" filtra (já filtrou ao digitar), fecha o teclado e leva aos resultados.
+  document.querySelector('[data-busca-form]')?.addEventListener('submit', (evento) => {
+    evento.preventDefault();
+    termo = normalizar((campoBusca?.value || '').trim());
+    filtrar();
+    campoBusca?.blur();
+    document.getElementById('contagem-catalogo')?.scrollIntoView({ behavior: movimentoSuave(), block: 'start' });
+  });
+
+  // Trocar de página leva o foco para a grade nova (e o leitor de tela lê a contagem).
+  grade.tabIndex = -1;
+  paginacao?.addEventListener('click', (evento) => {
+    const alvo = evento.target instanceof Element ? evento.target.closest('[data-ir-para]') : null;
+    if (!alvo || alvo.disabled) return;
+    pagina = Number(alvo.dataset.irPara);
+    filtrar({ manterPagina: true });
+    document.getElementById('contagem-catalogo')?.scrollIntoView({ behavior: movimentoSuave(), block: 'start' });
+    grade.focus({ preventScroll: true });
+  });
+
   document.addEventListener('click', (evento) => {
     const alvo = evento.target;
-    if (!(alvo instanceof Element)) return;
-
-    const chip = alvo.closest('[data-chip-categoria]');
-    if (chip) {
-      const campo = document.querySelector('[data-filter-category]');
-      if (campo) {
-        campo.value = chip.dataset.chipCategoria;
-        filtrar();
-      }
-    }
-
-    if (alvo.closest('[data-limpar-filtros]')) {
-      termo = '';
-      document.querySelectorAll('[data-filter-category],[data-filter-line]').forEach(el=>el.value='');
-      document.querySelectorAll('[data-filter-tag]').forEach(el=>el.checked=false);
-      if (campoBusca) campoBusca.value = '';
-      filtrar();
-      campoBusca?.focus();
-    }
-
-    // Lupa da barra fina: leva de volta ao campo de busca de verdade.
-    if (alvo.closest('[data-focar-busca]') && campoBusca) {
-      campoBusca.focus();
-      campoBusca.scrollIntoView({ block: 'center' });
-    }
+    if (!(alvo instanceof Element) || !alvo.closest('[data-limpar-filtros]')) return;
+    termo = '';
+    if (campoBusca) campoBusca.value = '';
+    categorias.forEach((c) => { c.checked = false; });
+    document.querySelectorAll('[data-filter-tag]').forEach((el) => { el.checked = false; });
+    const tudo = document.querySelector('[data-filter-line][value=""]');
+    if (tudo) tudo.checked = true;
+    if (preco) preco.value = preco.max;
+    atualizarPreco();
+    filtrar();
   });
 
   /* -------------------------------------------------------------------------
-   * BARRA FINA
-   * Entra quando a barra completa passa do topo e sai quando o catálogo
-   * acaba, para não pairar sobre "Como encomendar".
-   *
-   * Um listener de scroll com requestAnimationFrame em vez de
-   * IntersectionObserver: são duas condições combinadas (passou da barra E o
-   * catálogo ainda está na tela), e ler dois rects por quadro é mais simples
-   * e mais exato do que sincronizar dois observadores.
+   * PAINEL DE FILTROS NO CELULAR
+   * Abaixo de 1024px o <aside> vira um painel por cima da grade. Enquanto
+   * aberto ele se comporta como diálogo: foco preso dentro, Esc fecha, e o
+   * foco volta para o botão "Filtros".
    * ---------------------------------------------------------------------- */
-  const barraFina = document.querySelector('[data-barra-fina]');
-  const barraCheia = document.querySelector('[data-barra-filtros]');
-  const secaoCatalogo = document.getElementById('catalogo');
+  const painel = document.querySelector('[data-filtros-painel]');
+  const abridor = document.querySelector('[data-abrir-filtros]');
+  const fundo = document.querySelector('.filtros-fundo');
 
-  if (barraFina && barraCheia && secaoCatalogo) {
-    const ALTURA_HEADER = 72; // h-[4.5rem] do header fixo
-    let agendado = false;
+  if (painel && abridor) {
+    const aberto = () => painel.classList.contains('aberto');
 
-    function avaliarBarraFina() {
-      agendado = false;
-      const passouDaBarra = barraCheia.getBoundingClientRect().bottom < ALTURA_HEADER;
-      // Uma folga para a barra sumir antes de encostar no fim da seção.
-      const catalogoNaTela = secaoCatalogo.getBoundingClientRect().bottom > ALTURA_HEADER + 96;
-      barraFina.classList.toggle('oculto', !(passouDaBarra && catalogoNaTela));
+    function abrirFiltros() {
+      painel.classList.add('aberto');
+      painel.setAttribute('role', 'dialog');
+      painel.setAttribute('aria-modal', 'true');
+      if (fundo) fundo.hidden = false;
+      abridor.setAttribute('aria-expanded', 'true');
+      document.documentElement.style.overflow = 'hidden';
+      setTimeout(() => painel.querySelector('.filtros-fechar')?.focus(), 60);
     }
 
-    function agendarAvaliacao() {
-      if (agendado) return;
-      agendado = true;
-      requestAnimationFrame(avaliarBarraFina);
+    function fecharFiltros({ devolverFoco = true } = {}) {
+      if (!aberto()) return;
+      painel.classList.remove('aberto');
+      painel.removeAttribute('role');
+      painel.removeAttribute('aria-modal');
+      if (fundo) fundo.hidden = true;
+      abridor.setAttribute('aria-expanded', 'false');
+      document.documentElement.style.overflow = '';
+      if (devolverFoco) abridor.focus();
     }
 
-    window.addEventListener('scroll', agendarAvaliacao, { passive: true });
-    window.addEventListener('resize', agendarAvaliacao, { passive: true });
+    abridor.addEventListener('click', abrirFiltros);
+    document.querySelectorAll('[data-fechar-filtros]').forEach((el) => el.addEventListener('click', () => fecharFiltros()));
 
-    // Aba em segundo plano não roda requestAnimationFrame, então a barra pode
-    // ficar com o estado velho enquanto ninguém olha. Ao voltar, reavalia na
-    // hora, sem esperar um scroll.
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') avaliarBarraFina();
+    document.addEventListener('keydown', (evento) => {
+      if (!aberto()) return;
+      if (evento.key === 'Escape') {
+        fecharFiltros();
+        return;
+      }
+      if (evento.key !== 'Tab') return;
+      const focaveis = Array.from(painel.querySelectorAll('button, input, select, a[href]'))
+        .filter((el) => !el.disabled && el.getClientRects().length > 0);
+      const primeiro = focaveis[0];
+      const ultimo = focaveis[focaveis.length - 1];
+      if (evento.shiftKey && document.activeElement === primeiro) {
+        evento.preventDefault();
+        ultimo.focus();
+      } else if (!evento.shiftKey && document.activeElement === ultimo) {
+        evento.preventDefault();
+        primeiro.focus();
+      }
     });
 
-    avaliarBarraFina();
+    // Girou o tablet ou abriu a janela: no computador o painel é coluna, não diálogo.
+    window.matchMedia('(min-width: 64rem)').addEventListener('change', (consulta) => {
+      if (consulta.matches) fecharFiltros({ devolverFoco: false });
+    });
+  }
+
+  atualizarPreco();
+  filtrar();
+}
+
+/* Lupa do cabeçalho: na home leva à busca do catálogo; nas outras páginas o
+   link vai para /#busca e a busca recebe o foco quando a home abre. */
+document.addEventListener('click', (evento) => {
+  const link = evento.target instanceof Element ? evento.target.closest('[data-focar-busca]') : null;
+  const campo = document.querySelector('[data-busca-input]');
+  if (!link || !campo) return;
+  evento.preventDefault();
+  campo.scrollIntoView({ behavior: movimentoSuave(), block: 'center' });
+  campo.focus({ preventScroll: true });
+});
+
+if (window.location.hash === '#busca') {
+  document.querySelector('[data-busca-input]')?.focus();
+}
+
+/* Botão "+": responde ao clique trocando o sinal por um visto por um instante.
+   Quem coloca no carrinho é cart.js; aqui é só o retorno visual. */
+const temporizadoresMais = new WeakMap();
+document.addEventListener('click', (evento) => {
+  const mais = evento.target instanceof Element ? evento.target.closest('.botao-mais') : null;
+  if (!mais) return;
+  mais.classList.add('feito');
+  clearTimeout(temporizadoresMais.get(mais));
+  temporizadoresMais.set(mais, setTimeout(() => mais.classList.remove('feito'), 1400));
+});
+
+/* ---------------------------------------------------------------------------
+ * VISTOS RECENTEMENTE
+ * A página do produto anota o slug no navegador; a home mostra os últimos
+ * quatro, copiando os cards prontos do <template>. Sem histórico (ou com o
+ * armazenamento bloqueado), a seção simplesmente não aparece.
+ * ------------------------------------------------------------------------ */
+const CHAVE_VISTOS = 'dolce:vistos';
+
+function lerVistos() {
+  try {
+    const lista = JSON.parse(localStorage.getItem(CHAVE_VISTOS) || '[]');
+    return Array.isArray(lista) ? lista.filter((s) => typeof s === 'string') : [];
+  } catch {
+    return [];
+  }
+}
+
+const produtoAberto = document.querySelector('[data-produto-visto]');
+if (produtoAberto) {
+  const slug = produtoAberto.dataset.produtoVisto;
+  try {
+    localStorage.setItem(CHAVE_VISTOS, JSON.stringify([slug, ...lerVistos().filter((s) => s !== slug)].slice(0, 8)));
+  } catch {
+    /* navegador sem armazenamento: só não haverá "vistos recentemente" */
+  }
+}
+
+const secaoVistos = document.querySelector('[data-vistos]');
+const modelosVistos = document.querySelector('[data-vistos-modelos]');
+if (secaoVistos && modelosVistos) {
+  const porSlug = new Map(
+    Array.from(modelosVistos.content.querySelectorAll('[data-produto]')).map((card) => [card.dataset.slug, card])
+  );
+  const escolhidos = lerVistos().map((slug) => porSlug.get(slug)).filter(Boolean).slice(0, 4);
+  if (escolhidos.length) {
+    secaoVistos.querySelector('[data-vistos-grade]')?.replaceChildren(...escolhidos.map((card) => document.importNode(card, true)));
+    secaoVistos.classList.remove('oculto');
   }
 }
 

@@ -8,10 +8,7 @@ declare(strict_types=1);
 
 require_once DD_BASE . '/partials/bootstrap.php';
 
-$produtos   = dd_produtos();
-$unidades   = dd_unidades(); // aqui só para contar: a lista vive em unidades.php
-
-$totalEncomenda = count(array_filter($produtos, static fn (array $p): bool => dd_linha($p) === 'atacado'));
+$produtos = dd_produtos();
 
 $tituloPagina    = 'Dolce Delícias — encomendas de salgados, assados e doces';
 $descricaoPagina = 'Padaria e panificadora que atende escolas, faculdades, eventos e encomendas. Monte seu pedido no site e feche no WhatsApp da matriz.';
@@ -49,145 +46,186 @@ include DD_BASE . '/partials/hero.php';
 include DD_BASE . '/partials/promocoes.php';
 ?>
 
-<!-- ============================================================
-     CATÁLOGO
-     ============================================================ -->
-<section id="catalogo" class="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+<?php
+/* ============================================================
+   CATÁLOGO — desenho de cardápio online: faixa com título e busca,
+   filtros na lateral, grade com paginação.
 
-  <div class="max-w-2xl">
-    <h2 class="text-3xl sm:text-4xl">Catálogo</h2>
-    <p class="mt-3 text-lg leading-relaxed text-crust">
-      Encomenda é por cento; balcão, por unidade.
-    </p>
-  </div>
+   Tudo que filtra, ordena e pagina mora em assets/js/ui.js (seção 4) e lê
+   os data-* abaixo. Sem JavaScript, a grade inteira aparece.
+   ============================================================ */
+$totalProdutos = count($produtos);
 
-  <?php // Busca + filtros. Já foi uma barra fixa com fundo creme, mas grudada
-     // embaixo do header ela virava uma faixa de 180px cobrindo a grade.
-     // Agora rola junto com a página, sem fundo e sem borda. ?>
-  <div data-barra-filtros class="mt-8 flex flex-col gap-4">
+$porCategoria = [];
+foreach ($produtos as $p) {
+    $porCategoria[$p['categoria']] = ($porCategoria[$p['categoria']] ?? 0) + 1;
+}
 
-    <div class="flex flex-wrap items-center gap-3">
-      <div class="relative w-full min-w-0 sm:w-auto sm:max-w-sm sm:flex-1">
-        <label for="busca" class="sr-only">Buscar no catálogo</label>
-        <?php // z-10 obrigatorio: o .input do daisyUI e position:relative e vem
-           // depois no DOM, entao sem z-index o fundo branco dele cobre a lupa. ?>
-        <svg class="pointer-events-none absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-crust" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="busca" type="search" data-busca-input
-               class="input h-11 w-full rounded-full border-campo bg-papel pl-11 pr-4 text-base"
-               placeholder="Buscar por coxinha, cupcake, bebida…"
-               autocomplete="off"
-               aria-describedby="contagem-catalogo">
+// Restrições que existem de fato no catálogo; filtro sem item seria beco sem saída.
+$restricoes = array_values(array_filter(['vegano', 'sem lactose', 'sem glúten', 'sem carne'],
+    static fn (string $tag): bool => (bool) array_filter($produtos, static fn (array $p): bool => in_array($tag, $p['tags'], true))));
+
+// Teto do filtro de preço: o maior preço por peça, arredondado para cima.
+$unitarios = array_map(static fn (array $p): float => dd_faixa_principal($p)['unitario'], $produtos);
+$precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
+?>
+<section id="catalogo" class="bg-farinha" aria-labelledby="catalogo-titulo">
+
+  <!-- Faixa: título à esquerda, busca à direita -->
+  <div class="border-b border-base-300 bg-base-200">
+    <div class="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-8 sm:px-6 md:flex-row md:items-end md:justify-between lg:px-8 lg:py-10">
+      <div>
+        <h2 id="catalogo-titulo" class="text-4xl sm:text-5xl">Catálogo</h2>
+        <p class="mt-2 text-crust"><?= e((string) $totalProdutos) ?> itens feitos todo dia, por encomenda ou no balcão.</p>
       </div>
 
-      <p id="contagem-catalogo" class="sr-only ml-auto shrink-0 text-sm text-crust sm:not-sr-only" data-contagem aria-live="polite">
-        <?= e((string) count($produtos)) ?> itens
-      </p>
-    </div>
-
-  </div>
-
-  <?php
-  /**
-   * BARRA FINA
-   * Entra grudada embaixo do header quando a barra completa passa do topo, e
-   * sai quando o catálogo acaba — assim não paira sobre as outras seções.
-   * Quem liga e desliga é assets/js/ui.js (seção 4), pela classe .oculto.
-   *
-   * Leva a lupa e a contagem. A busca é um botão que rola de volta e põe o
-   * foco no campo de verdade — um campo só, sem duas caixas para manter em
-   * sincronia.
-   */
-  ?>
-  <div data-barra-fina
-       class="oculto fixed inset-x-0 top-[4.5rem] z-40 border-b border-base-300 bg-base-100/90 backdrop-blur-md">
-    <div class="mx-auto flex max-w-7xl items-center gap-2 px-4 py-1.5 sm:px-6 lg:px-8">
-
-      <button type="button" data-focar-busca
-              class="btn btn-ghost h-10 min-h-10 w-10 shrink-0 rounded-full p-0 text-crust hover:text-brand"
-              aria-label="Ir para a busca do catálogo">
-        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      </button>
-
-      <?php // Cópia visual da contagem. O aria-live fica só no original, senão
-         // o leitor de tela anuncia a mesma mudança duas vezes. ?>
-      <p class="ml-auto hidden shrink-0 text-sm text-crust sm:block" data-contagem aria-hidden="true">
-        <?= e((string) count($produtos)) ?> itens
-      </p>
+      <form class="busca-pilula w-full md:max-w-md" role="search" data-busca-form>
+        <label for="busca" class="sr-only">Buscar no catálogo</label>
+        <svg class="h-5 w-5 shrink-0 text-crust" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="busca" type="search" data-busca-input
+               placeholder="Buscar coxinha, cupcake, bebida…"
+               autocomplete="off" enterkeyhint="search"
+               aria-describedby="contagem-catalogo">
+        <button type="submit" class="botao-amarelo">Buscar</button>
+      </form>
     </div>
   </div>
 
-  <?php
-  // Categoria é o filtro que todo mundo usa: fica à vista, em chips.
-  // Atendimento e restrições são casos de nicho: ficam dentro de "Filtros".
-  // O campo escondido guarda a categoria escolhida; ui.js lê dele.
-  $restricoes = array_values(array_filter(['vegano', 'sem lactose', 'sem glúten', 'sem carne'],
-      static fn (string $tag): bool => (bool) array_filter($produtos, static fn (array $p): bool => in_array($tag, $p['tags'], true))));
-  ?>
-  <input type="hidden" data-filter-category value="">
-  <div class="mt-5 flex items-center gap-2">
-    <div class="sem-barra -mx-4 flex flex-1 gap-2 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0" role="group" aria-label="Categorias">
-      <button type="button" class="chip" data-chip-categoria="" aria-pressed="true">Tudo</button>
-      <?php foreach (dd_categorias() as $categoria): ?>
-        <button type="button" class="chip" data-chip-categoria="<?= e($categoria) ?>" aria-pressed="false"><?= e($categoria) ?></button>
-      <?php endforeach; ?>
-    </div>
+  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:grid lg:grid-cols-[15.5rem_minmax(0,1fr)] lg:items-start lg:gap-8 lg:px-8 lg:py-10">
 
-    <details class="dropdown dropdown-end shrink-0">
-      <summary class="chip cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
-        Filtros
-        <span data-filtros-contagem class="oculto rounded-full bg-primary px-1.5 text-xs leading-5 text-primary-content"></span>
-      </summary>
-      <div class="dropdown-content z-30 mt-2 w-72 rounded-2xl border border-base-300 bg-papel p-4 shadow-bandeja-alta">
-        <label for="filtro-linha" class="text-sm font-semibold">Atendimento</label>
-        <select id="filtro-linha" data-filter-line class="select mt-1 w-full border-campo">
-          <option value="">Encomenda e balcão</option>
-          <option value="ENCOMENDA">Só encomenda (por cento)</option>
-          <option value="BALCAO">Só balcão (por unidade)</option>
-        </select>
+    <!-- Filtros: coluna fixa no computador, painel por cima no celular -->
+    <aside id="filtros" class="filtros-painel" aria-labelledby="filtros-titulo" data-filtros-painel>
+      <div class="filtros-cabeca">
+        <h3 id="filtros-titulo" class="font-sans text-lg font-bold">Filtros</h3>
+        <button type="button" class="filtros-limpar" data-limpar-filtros>Limpar</button>
+        <button type="button" class="filtros-fechar" data-fechar-filtros aria-label="Fechar filtros">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+
+      <div class="filtros-corpo">
+        <fieldset class="filtro-grupo">
+          <legend>Categoria</legend>
+          <label class="filtro-opcao">
+            <input type="checkbox" data-filter-category-todas checked>
+            <span>Todas</span>
+            <small><?= e((string) $totalProdutos) ?></small>
+          </label>
+          <?php foreach ($porCategoria as $categoria => $quantos): ?>
+            <label class="filtro-opcao">
+              <input type="checkbox" data-filter-category value="<?= e((string) $categoria) ?>">
+              <span><?= e((string) $categoria) ?></span>
+              <small><?= e((string) $quantos) ?></small>
+            </label>
+          <?php endforeach; ?>
+        </fieldset>
+
+        <?php if ($precoTeto > 1): ?>
+          <div class="filtro-grupo">
+            <label for="filtro-preco" class="filtro-titulo">Preço por peça</label>
+            <input id="filtro-preco" type="range" class="faixa-preco" data-filter-preco
+                   min="1" max="<?= e((string) $precoTeto) ?>" step="1" value="<?= e((string) $precoTeto) ?>"
+                   aria-valuetext="Qualquer preço">
+            <p class="filtro-dica"><span>R$ 1</span><output for="filtro-preco" data-filter-preco-saida>Qualquer preço</output></p>
+          </div>
+        <?php endif; ?>
+
+        <fieldset class="filtro-grupo">
+          <legend>Como comprar</legend>
+          <div class="segmentos">
+            <label><input type="radio" name="linha" value="" data-filter-line checked><span>Tudo</span></label>
+            <label><input type="radio" name="linha" value="ENCOMENDA" data-filter-line><span>Encomenda</span></label>
+            <label><input type="radio" name="linha" value="BALCAO" data-filter-line><span>Balcão</span></label>
+          </div>
+          <p class="filtro-dica">Encomenda é pedido antecipado; balcão, compra na loja.</p>
+        </fieldset>
+
         <?php if ($restricoes !== []): ?>
-          <fieldset class="mt-4">
-            <legend class="text-sm font-semibold">Restrições alimentares</legend>
+          <fieldset class="filtro-grupo">
+            <legend>Restrições alimentares</legend>
             <?php foreach ($restricoes as $tag): ?>
-              <label class="mt-2 flex min-h-9 cursor-pointer items-center gap-2.5">
-                <input type="checkbox" class="checkbox checkbox-sm checkbox-primary" data-filter-tag value="<?= e($tag) ?>">
+              <label class="filtro-opcao">
+                <input type="checkbox" data-filter-tag value="<?= e($tag) ?>">
                 <span class="first-letter:uppercase"><?= e($tag) ?></span>
               </label>
             <?php endforeach; ?>
           </fieldset>
         <?php endif; ?>
       </div>
-    </details>
-  </div>
-  <!-- Grade -->
-  <div data-grade-produtos class="mt-6 grid grid-cols-2 gap-3 sm:mt-8 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
-    <?php foreach ($produtos as $i => $produto): ?>
-      <?php
-        $eager = $i < 4; // os primeiros cards carregam sem lazy
-        include DD_BASE . '/partials/product-card.php';
-      ?>
-    <?php endforeach; ?>
-  </div>
 
-  <!-- Busca sem resultado -->
-  <div data-sem-resultado class="oculto flex flex-col items-center gap-3 py-16 text-center">
-    <div class="massa flex h-20 w-20 items-center justify-center rounded-full text-crust/40">
-      <svg class="h-9 w-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <?php // Só no celular: o painel cobre a grade, então precisa de uma saída que diga o resultado. ?>
+      <div class="filtros-pe">
+        <button type="button" class="botao-amarelo w-full" data-fechar-filtros data-ver-itens>Ver <?= e((string) $totalProdutos) ?> itens</button>
+      </div>
+    </aside>
+    <div class="filtros-fundo" data-fechar-filtros hidden></div>
+
+    <div class="min-w-0">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <p id="contagem-catalogo" class="font-semibold" data-contagem aria-live="polite"><?= e((string) $totalProdutos) ?> itens</p>
+
+        <div class="flex items-center gap-2">
+          <button type="button" class="botao-filtros lg:hidden" data-abrir-filtros aria-controls="filtros" aria-expanded="false">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+            Filtros
+            <span data-filtros-contagem class="oculto"></span>
+          </button>
+          <label for="ordenar" class="sr-only">Ordenar por</label>
+          <select id="ordenar" class="seletor-ordem" data-ordenar>
+            <option value="destaque">Ordenar: Destaques</option>
+            <option value="preco-asc">Menor preço por peça</option>
+            <option value="preco-desc">Maior preço por peça</option>
+            <option value="nome">Nome (A–Z)</option>
+          </select>
+        </div>
+      </div>
+
+      <div data-grade-produtos class="mt-4 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
+        <?php foreach ($produtos as $i => $produto): ?>
+          <?php
+            $eager = $i < 4; // os primeiros cards carregam sem lazy
+            include DD_BASE . '/partials/product-card.php';
+          ?>
+        <?php endforeach; ?>
+      </div>
+
+      <!-- Busca sem resultado -->
+      <div data-sem-resultado class="oculto flex flex-col items-center gap-3 rounded-bandeja border border-base-300 bg-papel px-6 py-14 text-center">
+        <p class="text-xl font-bold">Nenhum item com esses filtros</p>
+        <p class="max-w-sm text-sm leading-relaxed text-crust">
+          Tente outra palavra ou limpe os filtros. Se for algo especial, a matriz faz sob encomenda pelo WhatsApp.
+        </p>
+        <button type="button" data-limpar-filtros class="botao-amarelo mt-1">Limpar filtros</button>
+      </div>
+
+      <nav class="paginacao" aria-label="Páginas do catálogo" data-paginacao hidden></nav>
     </div>
-    <p class="text-xl font-bold">Nada com esse nome por aqui</p>
-    <p class="max-w-sm text-sm leading-relaxed text-crust">
-      Tente outra palavra ou volte para o catálogo inteiro. Se for algo especial, a gente faz sob encomenda — é só chamar no WhatsApp.
-    </p>
-    <button type="button" data-limpar-filtros class="btn btn-primary btn-sm mt-1 font-bold">
-      Mostrar tudo
-    </button>
   </div>
 </section>
+
+<?php
+/* ============================================================
+   VISTOS RECENTEMENTE — os produtos abertos neste aparelho.
+   A lista mora no navegador (localStorage); o PHP só deixa os cards prontos
+   no <template> e ui.js copia os que a pessoa viu. Sem histórico, nada aparece.
+   ============================================================ */
+?>
+<section class="oculto border-t border-base-300 bg-base-200" aria-labelledby="vistos-titulo" data-vistos>
+  <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-12">
+    <h2 id="vistos-titulo" class="text-3xl sm:text-4xl">Vistos recentemente</h2>
+    <div class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4" data-vistos-grade></div>
+  </div>
+</section>
+<template data-vistos-modelos>
+  <?php foreach ($produtos as $produto): ?>
+    <?php $eager = false; include DD_BASE . '/partials/product-card.php'; ?>
+  <?php endforeach; ?>
+</template>
 
 <!-- ============================================================
      COMO ENCOMENDAR — sequência de verdade, por isso vai numerada
      ============================================================ -->
-<section id="encomendas" class="border-t border-base-300 bg-base-200">
+<section id="encomendas" class="border-t border-base-300 bg-base-100">
   <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
     <h2 class="text-3xl sm:text-4xl">Como encomendar</h2>
 

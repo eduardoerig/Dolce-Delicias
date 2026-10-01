@@ -63,7 +63,8 @@ $descricaoPagina = dd_resumo((string) ($produto['descricao'] ?? ''), 155);
 include DD_BASE . '/partials/header.php';
 ?>
 
-<div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+<?php // data-produto-visto: ui.js anota este produto em "Vistos recentemente" da home. ?>
+<div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12" data-produto-visto="<?= e((string) $produto['slug']) ?>">
 
   <nav aria-label="Você está aqui" class="mb-6 flex flex-wrap items-center gap-2 text-sm font-semibold text-crust">
     <a href="/" class="rounded hover:text-brand">Início</a>
@@ -291,7 +292,7 @@ include DD_BASE . '/partials/header.php';
     <section class="mt-16 border-t border-base-300 pt-12">
       <h2 class="text-2xl sm:text-3xl">Vai bem junto</h2>
       <p class="mt-2 text-crust">Outros itens de <?= e($produto['categoria'] ?? '') ?>.</p>
-      <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3">
         <?php foreach ($relacionados as $produtoRelacionado): ?>
           <?php
             $produtoOriginal = $produto;

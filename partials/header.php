@@ -21,7 +21,8 @@ $tituloPagina    ??= 'Dolce Delícias — encomendas de salgados, assados e doce
 $descricaoPagina ??= 'Padaria e panificadora que atende escolas, faculdades, eventos e encomendas. Peça o cento pelo WhatsApp da matriz.';
 
 // Os atalhos-âncora vivem na home; nas outras páginas eles voltam para lá.
-$naHome = in_array(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH), ['/', '/produtos'], true);
+$caminhoAtual = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+$naHome = in_array($caminhoAtual, ['/', '/produtos'], true);
 $ancora  = $naHome ? '' : '/';
 
 /**
@@ -119,22 +120,23 @@ $urlDasFontes = 'https://fonts.googleapis.com/css2?family=' . implode('&family='
 
   <div class="drawer-content flex min-h-screen flex-col">
 
-    <header class="sticky top-0 z-50 border-b border-base-300/70 bg-base-100/85 backdrop-blur-md">
+    <header class="sticky top-0 z-50 border-b border-base-300/70 bg-base-100">
       <div class="mx-auto flex h-[4.5rem] max-w-7xl items-center gap-2 px-3 sm:gap-3 sm:px-6 lg:px-8">
 
-        <a href="/" class="flex shrink-0 items-center gap-2.5 rounded-xl" aria-label="Dolce Delícias, página inicial">
+        <a href="/" class="flex shrink-0 items-center rounded-xl" aria-label="Dolce Delícias, página inicial">
           <?= dd_logo('h-9 w-auto drop-shadow-sm sm:h-11') ?>
         </a>
 
-        <!-- Navegação em telas grandes -->
-        <nav class="ml-2 hidden lg:block" aria-label="Seções do site">
+        <!-- Navegação em telas grandes: links ao centro, como no cardápio de referência -->
+        <nav class="hidden flex-1 justify-center lg:flex" aria-label="Seções do site">
           <ul class="flex items-center gap-1">
             <?php foreach ($menu as $item): ?>
+              <?php $atual = ($item['href'] ?? '') === $caminhoAtual; ?>
               <li>
                 <?php if (!empty($item['catalogos'])): ?>
                   <?php // Catálogo é dropdown: cada unidade tem o PDF dela. ?>
                   <details class="dropdown" data-catalog-dropdown>
-                    <summary class="flex cursor-pointer list-none items-center gap-1 rounded-xl px-3 py-2 text-[0.95rem] font-semibold text-crust transition-colors hover:bg-base-300/60 hover:text-brand [&::-webkit-details-marker]:hidden">
+                    <summary class="flex cursor-pointer list-none items-center gap-1 rounded-xl px-3 py-2 text-[0.95rem] font-semibold text-crust transition-colors hover:text-brand [&::-webkit-details-marker]:hidden">
                       <?= e($item['texto']) ?>
                       <svg class="h-4 w-4 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
                     </summary>
@@ -143,8 +145,8 @@ $urlDasFontes = 'https://fonts.googleapis.com/css2?family=' . implode('&family='
                     </ul>
                   </details>
                 <?php else: ?>
-                  <a href="<?= e($item['href']) ?>"
-                     class="block rounded-xl px-3 py-2 text-[0.95rem] font-semibold text-crust transition-colors hover:bg-base-300/60 hover:text-brand">
+                  <a href="<?= e($item['href']) ?>"<?= $atual ? ' aria-current="page"' : '' ?>
+                     class="block rounded-xl px-3 py-2 text-[0.95rem] transition-colors hover:text-brand <?= $atual ? 'font-bold text-base-content' : 'font-semibold text-crust' ?>">
                     <?= e($item['texto']) ?>
                   </a>
                 <?php endif; ?>
@@ -153,35 +155,41 @@ $urlDasFontes = 'https://fonts.googleapis.com/css2?family=' . implode('&family='
           </ul>
         </nav>
 
-        <div class="ml-auto flex items-center gap-1.5 sm:gap-2">
-          <!-- Carrinho -->
+        <div class="ml-auto flex items-center gap-1.5 sm:gap-2 lg:ml-0">
+          <!-- Busca: na home leva ao campo do catálogo; fora dela, abre a home já na busca -->
+          <a href="/#busca" data-focar-busca class="icone-redondo" aria-label="Buscar no catálogo">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          </a>
+
+          <!-- Carrinho: o nome acessível vem do texto escondido, que diz quantos itens há -->
           <button type="button"
                   data-cart-open
                   aria-controls="painel-carrinho"
                   aria-expanded="false"
-                  class="btn btn-primary h-11 min-h-11 gap-2 rounded-2xl px-3 shadow-bandeja sm:px-3.5">
+                  class="icone-redondo">
             <span class="relative inline-flex" data-cart-icon>
               <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/><circle cx="10" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/>
               </svg>
-              <span data-cart-badge
-                    class="oculto absolute -right-2.5 -top-2 min-w-[1.35rem] rounded-full bg-accent px-1 text-center text-[0.7rem] font-bold leading-[1.35rem] text-accent-content">0</span>
+              <span data-cart-badge aria-hidden="true"
+                    class="oculto absolute -right-3 -top-2.5 min-w-[1.35rem] rounded-full border-2 border-base-100 bg-accent px-1 text-center text-[0.7rem] font-bold leading-[1.1rem] text-accent-content">0</span>
             </span>
-            <span class="hidden text-sm font-bold sm:inline">Pedido</span>
             <span class="sr-only" data-cart-sr aria-live="polite">Carrinho vazio</span>
           </button>
 
-          <!-- Menu no mobile -->
+          <a href="/carrinho" class="botao-amarelo hidden sm:inline-flex">Fechar pedido</a>
+
+          <!-- Menu no celular -->
           <details class="dropdown dropdown-end lg:hidden" data-menu-dropdown>
-            <summary class="btn btn-ghost h-11 min-h-11 w-11 rounded-2xl border border-base-300 bg-papel p-0"
+            <summary class="icone-redondo list-none [&::-webkit-details-marker]:hidden"
                      aria-label="Abrir menu de navegação">
               <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
             </summary>
             <ul class="menu dropdown-content z-[60] mt-2 max-h-[75vh] w-[19rem] flex-nowrap gap-1 overflow-y-auto rounded-2xl border border-base-300 bg-papel p-2 shadow-bandeja-alta">
               <?php foreach ($menu as $item): ?>
-                <li><a class="rounded-xl px-3 py-2.5 font-semibold" href="<?= e($item['href']) ?>"><?= e($item['texto']) ?></a></li>
+                <li><a class="rounded-xl px-3 py-2.5 font-semibold" href="<?= e($item['href']) ?>"<?= ($item['href'] ?? '') === $caminhoAtual ? ' aria-current="page"' : '' ?>><?= e($item['texto']) ?></a></li>
               <?php endforeach; ?>
-              <li><a class="rounded-xl px-3 py-2.5 font-semibold" href="/carrinho">Ver meu pedido</a></li>
+              <li><a class="rounded-xl px-3 py-2.5 font-semibold" href="/carrinho">Fechar pedido</a></li>
 
               <?php
                 // No celular não dá para aninhar <details>: a lista de PDFs entra
