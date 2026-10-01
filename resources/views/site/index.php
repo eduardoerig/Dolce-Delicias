@@ -210,7 +210,7 @@ $precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
    no <template> e ui.js copia os que a pessoa viu. Sem histórico, nada aparece.
    ============================================================ */
 ?>
-<section class="oculto border-t border-linha bg-polvilho" aria-labelledby="vistos-titulo" data-vistos>
+<section class="oculto border-t border-linha bg-farinha" aria-labelledby="vistos-titulo" data-vistos>
   <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-12">
     <h2 id="vistos-titulo" class="text-3xl sm:text-4xl">Vistos recentemente</h2>
     <div class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4" data-vistos-grade></div>
@@ -225,7 +225,7 @@ $precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
 <!-- ============================================================
      COMO ENCOMENDAR — sequência de verdade, por isso vai numerada
      ============================================================ -->
-<section id="encomendas" class="border-t border-linha bg-base-100">
+<section id="encomendas" class="border-t border-linha bg-polvilho">
   <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
     <h2 class="text-3xl sm:text-4xl">Como encomendar</h2>
 
@@ -253,7 +253,8 @@ $precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
     <?php // RF-19 — atendimento a empresas tem página própria; aqui só o convite. ?>
     <p class="mt-10 border-t border-linha pt-6 text-crust">
       Evento, escola ou empresa?
-      <a href="/sobre#empresas" class="font-semibold text-brand underline underline-offset-4">Veja o atendimento para grandes pedidos</a>
+      <?php // Sobre a faixa cor de massa o vermelho fica abaixo de 4.5:1: o texto é marrom e o sublinhado leva a cor. ?>
+      <a href="/sobre#empresas" class="font-semibold text-base-content underline decoration-brand decoration-2 underline-offset-4 hover:text-brand-escuro">Veja o atendimento para grandes pedidos</a>
     </p>
   </div>
 </section>

@@ -22,7 +22,7 @@ $anoAtual       = date('Y');
  * cadastrado, é ele; senão, cai no WhatsApp dela com a frase já escrita, que é
  * o canal que a padaria já lê todo dia.
  */
-$zapMatriz  = preg_replace('/\D+/', '', (string) ($matrizRodape['whatsapp'] ?? ''));
+$zapMatriz    = dd_whatsapp($matrizRodape); // '' quando vazio ou de exemplo
 $linkFeedback = trim((string) ($matrizRodape['avaliacao'] ?? ''));
 
 if ($linkFeedback === '' && $zapMatriz !== '') {
@@ -35,15 +35,21 @@ $canaisRodape = array_values(array_filter(
     (array) ($matrizRodape['canais'] ?? []),
     static fn ($canal): bool => is_array($canal) && trim((string) ($canal['url'] ?? '')) !== ''
 ));
+
+// Sem link de avaliação nem outro canal, "Sua opinião" não teria para onde
+// mandar ninguém: a coluna some e a grade fica com quatro.
+$temOpiniao = $linkFeedback !== '' || $canaisRodape !== [];
 ?>
     </main>
 
-    <footer id="contato" class="border-t border-linha bg-papel">
-      <div class="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:grid-cols-2 sm:px-6 lg:grid-cols-[1.4fr_1fr_1fr_1.3fr_1.3fr] lg:gap-8 lg:px-8 lg:py-14">
+    <?php // Marrom torrado, como no rodapé original: fecha a página com cor e
+       // deixa a placa vermelha do logo saltar. Estilos em .rodape (input.css). ?>
+    <footer id="contato" class="rodape">
+      <div class="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:grid-cols-2 sm:px-6 lg:gap-8 lg:px-8 lg:py-14 <?= $temOpiniao ? 'lg:grid-cols-[1.4fr_1fr_1fr_1.3fr_1.3fr]' : 'lg:grid-cols-[1.6fr_1fr_1fr_1.4fr]' ?>">
 
         <div>
           <?= dd_logo('h-12 w-auto') ?>
-          <p class="mt-4 max-w-xs text-sm leading-relaxed text-crust">
+          <p class="mt-4 max-w-xs text-sm leading-relaxed">
             Padaria e panificadora. Salgados, assados e doces para escolas, eventos e encomendas
             em <?= count($unidadesRodape) ?> unidades.
           </p>
@@ -51,28 +57,28 @@ $canaisRodape = array_values(array_filter(
 
         <nav aria-labelledby="rodape-cardapio">
           <h2 id="rodape-cardapio" class="rodape-titulo">Cardápio</h2>
-          <ul class="mt-4 space-y-2.5 text-sm text-crust">
-            <li><a class="rounded hover:text-brand" href="/#catalogo">Catálogo</a></li>
+          <ul class="mt-4 space-y-2.5 text-sm">
+            <li><a class="rodape-link" href="/#catalogo">Catálogo</a></li>
             <?php if (dd_promocoes_visiveis() !== []): ?>
-              <li><a class="rounded hover:text-brand" href="/#promocoes">Promoções</a></li>
+              <li><a class="rodape-link" href="/#promocoes">Promoções</a></li>
             <?php endif; ?>
-            <li><a class="rounded hover:text-brand" href="/carrinho">Meu pedido</a></li>
+            <li><a class="rodape-link" href="/carrinho">Meu pedido</a></li>
           </ul>
         </nav>
 
         <nav aria-labelledby="rodape-dolce">
           <h2 id="rodape-dolce" class="rodape-titulo">A Dolce</h2>
-          <ul class="mt-4 space-y-2.5 text-sm text-crust">
-            <li><a class="rounded hover:text-brand" href="/sobre">A empresa</a></li>
-            <li><a class="rounded hover:text-brand" href="/unidades">Nossas unidades</a></li>
-            <li><a class="rounded hover:text-brand" href="/sobre#empresas">Para empresas</a></li>
+          <ul class="mt-4 space-y-2.5 text-sm">
+            <li><a class="rodape-link" href="/sobre">A empresa</a></li>
+            <li><a class="rodape-link" href="/unidades">Nossas unidades</a></li>
+            <li><a class="rodape-link" href="/sobre#empresas">Para empresas</a></li>
           </ul>
         </nav>
 
         <div>
           <h2 class="rodape-titulo">Matriz</h2>
           <?php if ($matrizRodape): ?>
-            <address class="mt-4 space-y-2 text-sm not-italic text-crust">
+            <address class="mt-4 space-y-2 text-sm not-italic">
               <p><?= e($matrizRodape['endereco']) ?></p>
               <p><?= e($matrizRodape['horario']) ?></p>
               <?php // RF-30 — o prazo aparece junto do horário em todo o site. ?>
@@ -80,47 +86,54 @@ $canaisRodape = array_values(array_filter(
                 <p><?= e($matrizRodape['preparo']) ?></p>
               <?php endif; ?>
             </address>
-            <a href="https://wa.me/<?= e($matrizRodape['whatsapp']) ?>"
-               target="_blank" rel="noopener noreferrer"
-               class="botao-primario mt-4">
-              Falar no WhatsApp
-            </a>
+            <?php if ($zapMatriz !== ''): ?>
+              <a href="https://wa.me/<?= e($zapMatriz) ?>"
+                 target="_blank" rel="noopener noreferrer"
+                 class="botao-primario mt-4">
+                Falar no WhatsApp
+              </a>
+            <?php else: ?>
+              <?php // INTEGRAÇÃO FUTURA: cadastre o WhatsApp da matriz no painel e o botão liga sozinho. ?>
+              <span class="botao-desligado mt-4">WhatsApp em breve</span>
+            <?php endif; ?>
           <?php endif; ?>
         </div>
 
-        <div>
-          <?php // RF-27 — feedback de serviço. Ver o cálculo de $linkFeedback no topo. ?>
-          <h2 class="rodape-titulo">Sua opinião</h2>
-          <?php if ($linkFeedback !== ''): ?>
-            <p class="mt-4 text-sm leading-relaxed text-crust">
-              Conte o que achou do atendimento. Elogio e reclamação ajudam do mesmo jeito.
-            </p>
-            <a href="<?= e($linkFeedback) ?>" target="_blank" rel="noopener noreferrer"
-               class="mt-3 inline-flex min-h-11 items-center text-sm font-bold text-brand underline underline-offset-4">
-              Deixar meu comentário
-            </a>
-          <?php endif; ?>
+        <?php if ($temOpiniao): ?>
+          <div>
+            <?php // RF-27 — feedback de serviço. Ver o cálculo de $linkFeedback no topo. ?>
+            <h2 class="rodape-titulo">Sua opinião</h2>
+            <?php if ($linkFeedback !== ''): ?>
+              <p class="mt-4 text-sm leading-relaxed">
+                Conte o que achou do atendimento. Elogio e reclamação ajudam do mesmo jeito.
+              </p>
+              <a href="<?= e($linkFeedback) ?>" target="_blank" rel="noopener noreferrer"
+                 class="rodape-link mt-3 inline-flex min-h-11 items-center text-sm font-bold text-cream underline underline-offset-4">
+                Deixar meu comentário
+              </a>
+            <?php endif; ?>
 
-          <?php // RF-26 — outras plataformas onde a matriz vende. Lista vazia não desenha nada. ?>
-          <?php if ($canaisRodape !== []): ?>
-            <ul class="mt-3 flex flex-wrap gap-2">
-              <?php foreach ($canaisRodape as $canalRodape): ?>
-                <li>
-                  <a href="<?= e((string) ($canalRodape['url'] ?? '#')) ?>"
-                     target="_blank" rel="noopener noreferrer"
-                     class="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-linha px-3.5 text-sm font-semibold hover:border-campo">
-                    <?= e((string) ($canalRodape['nome'] ?? 'Canal')) ?>
-                  </a>
-                </li>
-              <?php endforeach; ?>
-            </ul>
-          <?php endif; ?>
-        </div>
+            <?php // RF-26 — outras plataformas onde a matriz vende. Lista vazia não desenha nada. ?>
+            <?php if ($canaisRodape !== []): ?>
+              <ul class="mt-3 flex flex-wrap gap-2">
+                <?php foreach ($canaisRodape as $canalRodape): ?>
+                  <li>
+                    <a href="<?= e((string) ($canalRodape['url'] ?? '#')) ?>"
+                       target="_blank" rel="noopener noreferrer"
+                       class="rodape-canal">
+                      <?= e((string) ($canalRodape['nome'] ?? 'Canal')) ?>
+                    </a>
+                  </li>
+                <?php endforeach; ?>
+              </ul>
+            <?php endif; ?>
+          </div>
+        <?php endif; ?>
       </div>
 
-      <div class="border-t border-linha">
+      <div class="rodape-base">
         <div class="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-          <p class="text-xs text-crust">
+          <p class="text-xs">
             © <?= e((string) $anoAtual) ?> Dolce Delícias. Os pedidos são fechados pelo WhatsApp da matriz.
           </p>
           <a href="https://instagram.com/dolcedeliciasoficial" target="_blank" rel="noopener noreferrer"

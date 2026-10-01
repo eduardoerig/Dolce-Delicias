@@ -53,7 +53,7 @@ $respiroDeBaixo = $heroTira === [] ? ' pb-10 lg:pb-14' : '';
   <div class="relative mx-auto max-w-7xl px-4 pt-10 sm:px-6 lg:px-8 lg:pt-14<?= $respiroDeBaixo ?>">
 
     <?php if ($heroEtiqueta !== ''): ?>
-      <p class="text-sm font-semibold text-white/80">
+      <p class="text-sm font-semibold text-white">
         <?= e($heroEtiqueta) ?>
       </p>
     <?php endif; ?>
@@ -66,7 +66,7 @@ $respiroDeBaixo = $heroTira === [] ? ' pb-10 lg:pb-14' : '';
     </h1>
 
     <div class="mt-6 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between lg:mt-8">
-      <p class="max-w-md text-base leading-relaxed text-white/90">
+      <p class="max-w-md text-base leading-relaxed text-white">
         <?= e($heroTexto) ?><?php if ($heroTextoLink !== null): ?> —
           <a href="<?= e($heroTextoLink['href']) ?>" class="font-semibold text-accent underline decoration-accent/50 underline-offset-4 hover:decoration-accent"><?= e($heroTextoLink['texto']) ?></a>.
         <?php endif; ?>

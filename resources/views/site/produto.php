@@ -26,7 +26,7 @@ if ($produto === null) {
     ?>
     <section class="bg-farinha">
       <div class="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center gap-4 px-4 py-20 text-center">
-        <span class="grid h-24 w-24 place-items-center rounded-full bg-polvilho text-[#b8aaa0]">
+        <span class="grid h-24 w-24 place-items-center rounded-full bg-polvilho text-farelo">
           <svg class="h-11 w-11" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M11 36c0-9 9-15 21-15s21 6 21 15-9 12-21 12-21-3-21-12Z"/><path d="M22 30l4 6M32 28l4 7M42 30l3 6"/>
           </svg>
@@ -96,9 +96,9 @@ include DD_BASE . '/partials/header.php';
   <!-- Faixa com o caminho até aqui; a categoria abre o catálogo já filtrado -->
   <div class="border-b border-linha bg-polvilho">
     <nav aria-label="Você está aqui" class="mx-auto flex max-w-7xl flex-wrap items-center gap-2 px-4 py-4 text-sm font-semibold text-crust sm:px-6 lg:px-8">
-      <a href="/" class="rounded hover:text-brand">Início</a>
+      <a href="/" class="rounded hover:text-brand-escuro">Início</a>
       <span aria-hidden="true">/</span>
-      <a href="/?categoria=<?= e(rawurlencode((string) ($produto['categoria'] ?? ''))) ?>#catalogo" class="rounded hover:text-brand"><?= e((string) ($produto['categoria'] ?? 'Catálogo')) ?></a>
+      <a href="/?categoria=<?= e(rawurlencode((string) ($produto['categoria'] ?? ''))) ?>#catalogo" class="rounded hover:text-brand-escuro"><?= e((string) ($produto['categoria'] ?? 'Catálogo')) ?></a>
       <span aria-hidden="true">/</span>
       <span class="text-base-content" aria-current="page"><?= e((string) $produto['nome']) ?></span>
     </nav>

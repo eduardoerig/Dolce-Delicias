@@ -30,8 +30,8 @@
        base-300 = bordas e divisores decorativos
        campo    = borda de campo de formulario (contraste AA 3:1) */
   --color-base-100: #ffffff; /* fundo padrao do site */
-  --color-base-200: #f9efe1; /* faixa creme suave */
-  --color-base-300: #e8d6bd; /* bordas e divisores */
+  --color-base-200: #f7e8db; /* = polvilho: faixa cor de massa */
+  --color-base-300: #eadacb; /* = linha: bordas e divisores */
   --color-base-content: #2a1710; /* marrom torrado -- texto */
 
   --color-primary: #e1051e; /* vermelho da placa */
@@ -77,11 +77,14 @@
   --color-papel: #ffffff; /* superficie elevada: cards, paineis, drawer */
   --color-campo: #9c8069; /* borda de input/textarea -- 3.4:1 sobre branco */
   --color-massa: #f3ddc4; /* fundo do placeholder de foto */
-  --color-farinha: #fbfaf8; /* fundo da area do catalogo: quase branco, sem puxar para o amarelo */
-  --color-polvilho: #f4f1ed; /* faixas, fundo de foto e icones redondos: neutro quente bem claro */
-  --color-linha: #e7e1db; /* bordas neutras dos componentes do cardapio */
+  /* Fundos quentes puxando para a massa assada (matiz ~60 no OKLCH), e nao
+     para o creme amarelo (~77) que a primeira versao usava. */
+  --color-farinha: #fbf4ee; /* chao das paginas; o vermelho ainda passa 4.5:1 sobre ele */
+  --color-polvilho: #f7e8db; /* faixas, pilulas, foto vazia e icones redondos. Texto vermelho
+                                pequeno NAO vai aqui (4.1:1): use crosta ou o vermelho escuro */
+  --color-linha: #eadacb; /* bordas dos cards e divisores */
   --color-brand-escuro: #b00418; /* vermelho da placa pressionado/hover */
-  --color-farelo: #b8aaa0; /* icone de foto vazia e regua da linha do tempo */
+  --color-farelo: #c5ac98; /* icone de foto vazia e regua da linha do tempo */
 
   /* Tipo de madeira em TODO titulo do site: heroi, secoes, precos.
      ATENCAO: peso unico 400. Nao peca 700/800 em cima dele -- o navegador
@@ -1091,11 +1094,71 @@ details.dropdown:not([open]) > .dropdown-content {
   background-color: var(--color-linha);
 }
 
-/* Títulos de coluna do rodapé: h2 nasce em Alfa Slab One; aqui é Figtree. */
+/* ---------- Rodapé ----------
+   Marrom torrado com texto creme, como no rodapé original. A placa vermelha
+   do logo salta sobre ele; o amarelo aparece só no hover e no foco.
+   Texto: creme misturado ao marrom, 9.4:1 sobre o fundo. */
+.rodape {
+  background-color: var(--color-ink);
+  color: color-mix(in oklab, var(--color-cream) 82%, var(--color-ink));
+}
+
+/* O contorno de foco vermelho some no marrom; o amarelo aparece. */
+.rodape :focus-visible {
+  outline-color: var(--color-accent);
+}
+
+/* Títulos de coluna: h2 nasce em Alfa Slab One; aqui é Figtree. */
 .rodape-titulo {
   font-family: var(--font-sans);
   font-size: 0.9375rem;
   font-weight: 700;
+  color: var(--color-cream);
+}
+
+.rodape-link {
+  border-radius: 0.25rem;
+  transition: color 0.15s var(--ease-massa);
+}
+
+.rodape-link:hover {
+  color: var(--color-accent);
+}
+
+/* Outros canais de venda da matriz (iFood e afins). */
+.rodape-canal {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 0.875rem;
+  border: 1px solid color-mix(in oklab, var(--color-cream) 30%, transparent);
+  border-radius: 999px;
+  color: var(--color-cream);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.rodape-canal:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.rodape-base {
+  border-top: 1px solid color-mix(in oklab, var(--color-cream) 16%, transparent);
+}
+
+.rodape .botao-desligado {
+  border-color: color-mix(in oklab, var(--color-cream) 55%, transparent);
+  color: var(--color-cream);
+}
+
+.rodape .icone-redondo {
+  background-color: color-mix(in oklab, var(--color-cream) 10%, transparent);
+  color: var(--color-cream);
+}
+
+.rodape .icone-redondo:hover {
+  background-color: color-mix(in oklab, var(--color-cream) 20%, transparent);
 }
 
 /* ---------- Página do produto ---------- */

@@ -71,7 +71,7 @@ include DD_BASE . '/partials/header.php';
   <div class="border-b border-linha bg-polvilho">
     <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <nav aria-label="Você está aqui" class="flex items-center gap-2 text-sm font-semibold text-crust">
-        <a href="/" class="rounded hover:text-brand">Início</a>
+        <a href="/" class="rounded hover:text-brand-escuro">Início</a>
         <span aria-hidden="true">/</span>
         <span class="text-base-content" aria-current="page">A empresa</span>
       </nav>
