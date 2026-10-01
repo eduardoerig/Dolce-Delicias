@@ -55,9 +55,9 @@ include DD_BASE . '/partials/header.php';
       <a href="/#catalogo" class="botao-primario mt-2">Ver o catálogo</a>
     </div>
 
-    <div data-cart-footer class="oculto grid gap-6 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-start lg:gap-8">
+    <div data-cart-footer class="oculto grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-start lg:gap-8">
 
-      <div class="grid gap-6">
+      <div class="grid min-w-0 grid-cols-1 gap-6">
         <!-- 1. Itens -->
         <section class="cartao-etapa" aria-labelledby="etapa-itens">
           <div class="flex items-center justify-between gap-3">
@@ -123,7 +123,7 @@ include DD_BASE . '/partials/header.php';
           <span class="text-2xl font-bold" data-cart-total>R$ 0,00</span>
         </div>
 
-        <button type="button" data-cart-checkout class="botao-primario mt-4 min-h-13 w-full text-base">
+        <button type="button" data-cart-checkout class="botao-primario mt-4 min-h-13 w-full whitespace-normal text-center text-base">
           <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.74.46 3.44 1.32 4.94L2 22l5.36-1.4a9.8 9.8 0 0 0 4.68 1.2c5.44 0 9.84-4.4 9.84-9.84S17.48 2 12.04 2Zm5.72 13.9c-.24.68-1.4 1.3-1.94 1.34-.5.06-1.12.08-1.8-.12-.42-.12-.96-.3-1.64-.6-2.9-1.26-4.78-4.18-4.92-4.38-.14-.2-1.18-1.56-1.18-2.98 0-1.42.74-2.12 1-2.4.26-.3.58-.36.78-.36h.56c.18 0 .42-.06.66.5.24.58.82 2 .9 2.14.06.14.1.3.02.48-.1.2-.14.32-.28.48-.14.18-.3.38-.42.5-.14.14-.28.3-.12.58.16.28.72 1.18 1.54 1.92 1.06.94 1.94 1.24 2.22 1.38.28.14.44.12.6-.08.16-.18.68-.8.86-1.08.18-.28.36-.22.6-.14.24.1 1.56.74 1.82.88.28.14.44.2.5.32.08.1.08.62-.16 1.3Z"/>
           </svg>

@@ -14,15 +14,19 @@ declare(strict_types=1);
  */
 ?>
 <div class="drawer-side z-[70]">
-  <label for="carrinho-toggle" class="drawer-overlay" aria-label="Fechar o pedido"></label>
+  <?php // A camada escura fecha no clique; para teclado e leitor de tela quem fecha é o botão X. ?>
+  <label for="carrinho-toggle" class="drawer-overlay" aria-hidden="true"></label>
 
-  <aside id="painel-carrinho"
+  <?php // <div> e não <aside>: aside não aceita role="dialog". Pelo mesmo motivo a
+     // cabeça e o fechamento são <div> — <header>/<footer> soltos num diálogo
+     // viram um segundo cabeçalho e um segundo rodapé da página. ?>
+  <div id="painel-carrinho"
          role="dialog"
          aria-modal="true"
          aria-labelledby="titulo-carrinho"
          class="gaveta-carrinho flex h-full w-[min(30rem,100vw)] flex-col bg-papel text-base-content shadow-bandeja-alta">
 
-    <header class="flex items-center gap-2.5 px-6 pb-3 pt-5">
+    <div class="flex items-center gap-2.5 px-6 pb-3 pt-5">
       <h2 id="titulo-carrinho" class="text-xl">Seu pedido</h2>
       <span class="text-sm font-semibold text-crust" data-cart-count>0 itens</span>
       <button type="button" data-cart-close
@@ -30,7 +34,7 @@ declare(strict_types=1);
               aria-label="Fechar o pedido">
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
       </button>
-    </header>
+    </div>
 
     <?php // Unidade em uma linha só: é para o WhatsApp dela que o pedido vai. ?>
     <p class="border-b border-linha px-6 pb-4 text-xs text-crust">
@@ -50,7 +54,7 @@ declare(strict_types=1);
     <ul data-cart-items class="oculto flex-1 divide-y divide-linha overflow-y-auto px-6"></ul>
 
     <!-- Fechamento -->
-    <footer data-cart-footer class="oculto border-t border-linha px-6 py-5">
+    <div data-cart-footer class="oculto border-t border-linha px-6 py-5">
       <?php // Observação fica recolhida: quase ninguém preenche, e aberta ela
          // dominava o rodapé. <details> abre e navega pelo teclado sem JS. ?>
       <details class="group">
@@ -91,6 +95,6 @@ declare(strict_types=1);
           Esvaziar
         </button>
       </div>
-    </footer>
-  </aside>
+    </div>
+  </div>
 </div>

@@ -94,7 +94,7 @@ $precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
   <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:grid lg:grid-cols-[15.5rem_minmax(0,1fr)] lg:items-start lg:gap-8 lg:px-8 lg:py-10">
 
     <!-- Filtros: coluna fixa no computador, painel por cima no celular -->
-    <aside id="filtros" class="filtros-painel" aria-labelledby="filtros-titulo" data-filtros-painel>
+    <section id="filtros" class="filtros-painel" aria-labelledby="filtros-titulo" data-filtros-painel>
       <div class="filtros-cabeca">
         <h3 id="filtros-titulo" class="font-sans text-lg font-bold">Filtros</h3>
         <button type="button" class="filtros-limpar" data-limpar-filtros>Limpar</button>
@@ -157,14 +157,14 @@ $precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
       <div class="filtros-pe">
         <button type="button" class="botao-primario w-full" data-fechar-filtros data-ver-itens>Ver <?= e((string) $totalProdutos) ?> itens</button>
       </div>
-    </aside>
+    </section>
     <div class="filtros-fundo" data-fechar-filtros hidden></div>
 
     <div class="min-w-0">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <p id="contagem-catalogo" class="font-semibold" data-contagem aria-live="polite"><?= e((string) $totalProdutos) ?> itens</p>
 
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2">
           <button type="button" class="botao-filtros lg:hidden" data-abrir-filtros aria-controls="filtros" aria-expanded="false">
             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
             Filtros

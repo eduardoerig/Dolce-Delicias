@@ -78,22 +78,23 @@ $formasDePagamento = [
   <?php if ($horario !== '' || $preparo !== ''): ?>
     <dl class="mt-4 grid gap-2 text-sm sm:grid-cols-2">
       <?php if ($horario !== ''): ?>
-        <div class="flex gap-2.5">
-          <svg class="mt-0.5 h-5 w-5 shrink-0 text-crust" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-          <div>
-            <dt class="font-semibold">Horário da matriz</dt>
-            <dd class="leading-relaxed text-crust"><?= e($horario) ?></dd>
-          </div>
+        <?php // Grupo da <dl> só com dt + dd: o ícone mora dentro do dt, na margem. ?>
+        <div class="relative pl-7.5">
+          <dt class="font-semibold">
+            <svg class="absolute left-0 top-0.5 h-5 w-5 text-crust" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            Horário da matriz
+          </dt>
+          <dd class="leading-relaxed text-crust"><?= e($horario) ?></dd>
         </div>
       <?php endif; ?>
 
       <?php if ($preparo !== ''): ?>
-        <div class="flex gap-2.5">
-          <svg class="mt-0.5 h-5 w-5 shrink-0 text-crust" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.2a2 2 0 0 0-.6-1.4L12 12l-4.4 4.4a2 2 0 0 0-.6 1.4V22"/><path d="M7 2v4.2a2 2 0 0 0 .6 1.4L12 12l4.4-4.4a2 2 0 0 0 .6-1.4V2"/></svg>
-          <div>
-            <dt class="font-semibold">Prazo de preparo</dt>
-            <dd class="leading-relaxed text-crust"><?= e($preparo) ?></dd>
-          </div>
+        <div class="relative pl-7.5">
+          <dt class="font-semibold">
+            <svg class="absolute left-0 top-0.5 h-5 w-5 text-crust" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.2a2 2 0 0 0-.6-1.4L12 12l-4.4 4.4a2 2 0 0 0-.6 1.4V22"/><path d="M7 2v4.2a2 2 0 0 0 .6 1.4L12 12l4.4-4.4a2 2 0 0 0 .6-1.4V2"/></svg>
+            Prazo de preparo
+          </dt>
+          <dd class="leading-relaxed text-crust"><?= e($preparo) ?></dd>
         </div>
       <?php endif; ?>
     </dl>

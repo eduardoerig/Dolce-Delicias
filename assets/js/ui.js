@@ -66,23 +66,43 @@ document.addEventListener('keydown', (evento) => {
 
 const alavancaDrawer = document.getElementById('carrinho-toggle');
 const painelCarrinho = document.getElementById('painel-carrinho');
+// Fora do painel: a página inteira e o "Pular para o conteúdo", que vem antes dela.
+const foraDoPainel = [document.querySelector('.drawer-content'), document.querySelector('a[href="#conteudo"]')].filter(Boolean);
 let quemAbriuODrawer = null;
+
+/**
+ * Foca o elemento assim que ele puder receber foco.
+ *
+ * Dois atrasos no caminho: tirar `inert` só libera o foco no próximo ciclo de
+ * tarefas, e o drawer do daisyUI só fica visível depois de um atraso de
+ * transição (~100ms) — antes disso focus() não pega. Então tenta de novo até
+ * pegar, por no máximo ~1s. setTimeout e não requestAnimationFrame: este
+ * também dispara com a aba em segundo plano.
+ */
+function focarQuandoPuder(elemento, tentativas = 60) {
+  if (!elemento) return;
+  elemento.focus();
+  if (document.activeElement !== elemento && tentativas > 0) {
+    setTimeout(() => focarQuandoPuder(elemento, tentativas - 1), 16);
+  }
+}
 
 function aplicarEstadoDrawer(aberto) {
   if (!painelCarrinho) return;
 
   painelCarrinho.inert = !aberto;
+  // Diálogo modal de verdade: com o painel aberto, a página por trás sai do
+  // foco e do leitor de tela, e o Tab não escapa para o catálogo.
+  foraDoPainel.forEach((elemento) => { elemento.inert = aberto; });
   document.querySelectorAll('[data-cart-open]').forEach((botao) => {
     botao.setAttribute('aria-expanded', String(aberto));
   });
 
   if (aberto) {
-    // Tirar `inert` só libera o foco no próximo ciclo de tarefas — nem forçar
-    // reflow adianta. setTimeout roda depois disso e, ao contrário de
-    // requestAnimationFrame, também dispara com a aba em segundo plano.
-    setTimeout(() => painelCarrinho.querySelector('[data-cart-close]')?.focus(), 0);
+    focarQuandoPuder(painelCarrinho.querySelector('[data-cart-close]'));
   } else if (quemAbriuODrawer) {
-    quemAbriuODrawer.focus();
+    // O botão que abriu estava dentro da página inerte até agora.
+    focarQuandoPuder(quemAbriuODrawer);
     quemAbriuODrawer = null;
   }
 }
@@ -336,7 +356,7 @@ if (grade) {
 
   /* -------------------------------------------------------------------------
    * PAINEL DE FILTROS NO CELULAR
-   * Abaixo de 1024px o <aside> vira um painel por cima da grade. Enquanto
+   * Abaixo de 1024px a <section> vira um painel por cima da grade. Enquanto
    * aberto ele se comporta como diálogo: foco preso dentro, Esc fecha, e o
    * foco volta para o botão "Filtros".
    * ---------------------------------------------------------------------- */
