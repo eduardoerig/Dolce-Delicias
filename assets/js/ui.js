@@ -397,6 +397,10 @@ if (grade) {
     });
   }
 
+  // Vindo do caminho da página do produto (/?categoria=Assados#catalogo): já abre filtrado.
+  const categoriaPedida = new URLSearchParams(window.location.search).get('categoria');
+  if (categoriaPedida) categorias.forEach((c) => { c.checked = c.value === categoriaPedida; });
+
   atualizarPreco();
   filtrar();
 }

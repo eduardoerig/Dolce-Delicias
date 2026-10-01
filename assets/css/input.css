@@ -396,7 +396,7 @@
   border-radius: 1rem;
   /* A borda ja nasce com 2px: marcar troca a cor, nunca a espessura,
      entao o cartao nao "pula" 1px quando e selecionado. */
-  border: 2px solid var(--color-base-300);
+  border: 2px solid var(--color-linha);
   background-color: var(--color-papel);
   padding: 0.875rem 1rem;
   transition: border-color 0.18s var(--ease-massa),
@@ -1113,5 +1113,180 @@ details.dropdown:not([open]) > .dropdown-content {
   font-family: var(--font-sans);
   font-size: 0.9375rem;
   font-weight: 700;
+}
+
+/* ---------- Página do produto ---------- */
+.botao-secundario {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--color-linha);
+  border-radius: 999px;
+  background-color: var(--color-papel);
+  color: var(--color-ink);
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.botao-secundario:hover {
+  border-color: var(--color-campo);
+}
+
+.produto-foto {
+  margin: 0;
+  padding: 0.75rem;
+  border: 1px solid var(--color-linha);
+  border-radius: 1.25rem;
+  background-color: var(--color-papel);
+}
+
+.produto-foto img,
+.produto-sem-foto {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 0.875rem;
+}
+
+.produto-foto img {
+  object-fit: cover;
+}
+
+.produto-sem-foto {
+  display: grid;
+  place-items: center;
+  background-color: var(--color-polvilho);
+  color: #b8aaa0;
+}
+
+.produto-sem-foto svg {
+  width: 6rem;
+  height: 6rem;
+}
+
+/* Pílula: atributo do produto (categoria, como compra, etiquetas, sabores). */
+.pilula {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 1.875rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background-color: var(--color-polvilho);
+  color: var(--color-crust);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.pilula-branca {
+  border: 1px solid var(--color-linha);
+  background-color: var(--color-papel);
+  color: var(--color-ink);
+}
+
+/* Unidade clicável: alvo de toque inteiro. */
+.pilula-link {
+  min-height: 2.75rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-linha);
+  background-color: var(--color-papel);
+  color: var(--color-ink);
+}
+
+.pilula-link:hover {
+  border-color: var(--color-brand);
+  color: var(--color-brand);
+}
+
+.produto-compra {
+  padding: 1.25rem;
+  border: 1px solid var(--color-linha);
+  border-radius: 1.25rem;
+  background-color: var(--color-papel);
+}
+
+@media (min-width: 40rem) {
+  .produto-compra {
+    padding: 1.5rem;
+  }
+}
+
+.produto-subtitulo {
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.produto-bloco {
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-linha);
+}
+
+/* Promoção: um leve tom do vermelho da marca marca que é oferta. */
+.promo-produto {
+  padding: 1rem 1.125rem;
+  border: 1px solid color-mix(in oklab, var(--color-brand) 22%, white);
+  border-radius: 0.875rem;
+  background-color: color-mix(in oklab, var(--color-brand) 4%, white);
+}
+
+/* Seletor de quantidade em pílula: − número + */
+.seletor-qtd {
+  display: inline-flex;
+  align-items: center;
+  height: 2.875rem;
+  border: 1px solid var(--color-campo);
+  border-radius: 999px;
+  background-color: var(--color-papel);
+}
+
+.seletor-qtd:has(input:focus-visible) {
+  outline: 3px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+.seletor-qtd button {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  color: var(--color-ink);
+}
+
+.seletor-qtd button:hover {
+  background-color: var(--color-polvilho);
+  color: var(--color-brand);
+}
+
+.seletor-qtd button svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.seletor-qtd input {
+  width: 4rem;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-align: center;
+  appearance: textfield;
+}
+
+.seletor-qtd input::-webkit-outer-spin-button,
+.seletor-qtd input::-webkit-inner-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+.seletor-qtd input:focus-visible {
+  outline: none;
 }
 }

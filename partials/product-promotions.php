@@ -1,1 +1,50 @@
-<?php declare(strict_types=1); foreach(dd_promocoes_produto($produto) as $offer): ?><aside class="rounded-xl bg-base-200 p-3 mt-3 text-xs"><strong class="text-brand"><?= e($offer['selo']?:$offer['titulo']) ?></strong><p><?= e($offer['titulo']) ?> · <?= $offer['vigente']?'Vigente hoje':'Programe-se' ?></p><p><?= e($offer['agenda']) ?> · <?= e($offer['tipo_atendimento']) ?></p><p><?= e($offer['texto']) ?></p><p>Unidades: <?= e($offer['lojas']) ?></p><p>Desconto confirmado pela matriz no WhatsApp.</p></aside><?php endforeach ?>
+<?php
+
+declare(strict_types=1);
+
+/**
+ * partials/product-promotions.php — as promoções que valem para este produto,
+ * na página do produto. O card do catálogo mostra só o selo; aqui vai a regra.
+ *
+ * Espera $produto; usa $ofertas se a página já tiver calculado.
+ */
+
+$ofertasProduto = $ofertas ?? dd_promocoes_produto($produto);
+if ($ofertasProduto === []) {
+    return;
+}
+
+$atendimentoPromo = static fn (string $tipo): string => match ($tipo) {
+    'ENCOMENDA' => 'só na encomenda',
+    'BALCAO'    => 'só no balcão',
+    default     => 'na encomenda e no balcão',
+};
+?>
+<section class="produto-bloco" aria-labelledby="promo-titulo">
+  <h2 id="promo-titulo" class="produto-subtitulo"><?= count($ofertasProduto) > 1 ? 'Promoções' : 'Promoção' ?></h2>
+  <ul class="mt-3 grid gap-3">
+    <?php foreach ($ofertasProduto as $oferta): ?>
+      <li class="promo-produto">
+        <p class="flex flex-wrap items-center gap-2">
+          <span class="selo selo-promo"><?= e(trim((string) ($oferta['selo'] ?? '')) ?: 'Promoção') ?></span>
+          <span class="text-xs font-bold <?= !empty($oferta['vigente']) ? 'text-success' : 'text-crust' ?>">
+            <?= !empty($oferta['vigente']) ? 'Vale hoje' : 'Programe-se' ?>
+          </span>
+        </p>
+        <h3 class="mt-2 font-sans text-base font-bold"><?= e((string) ($oferta['titulo'] ?? '')) ?></h3>
+        <?php if (trim((string) ($oferta['texto'] ?? '')) !== ''): ?>
+          <p class="mt-1 text-sm leading-relaxed text-crust"><?= e((string) $oferta['texto']) ?></p>
+        <?php endif; ?>
+        <?php
+        // "Toda quarta-feira, só na encomenda." ou, sem agenda, "Vale só na encomenda."
+        $quando = trim((string) ($oferta['agenda'] ?? ''));
+        $regra  = ($quando !== '' ? $quando . ', ' : 'Vale ') . $atendimentoPromo((string) ($oferta['tipo_atendimento'] ?? 'AMBOS'));
+        ?>
+        <p class="mt-2 text-xs leading-relaxed text-crust">
+          <?= e($regra) ?>. Vale em: <?= e((string) ($oferta['lojas'] ?? '')) ?>.
+        </p>
+      </li>
+    <?php endforeach; ?>
+  </ul>
+  <p class="mt-2 text-xs leading-relaxed text-crust">O site mostra o preço cheio; o desconto é aplicado pela matriz no fechamento pelo WhatsApp.</p>
+</section>
