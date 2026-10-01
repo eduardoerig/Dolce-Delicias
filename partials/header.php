@@ -70,7 +70,7 @@ $menu = [
 <link rel="icon" href="/assets/img/logo.svg" type="image/svg+xml">
 
 <?php // O site tem um tema só (claro). Isto apenas avisa que o JS está vivo:
-      // sem a classe .sem-js, o conteúdo com .revelar já nasce visível. ?>
+      // sem JS, a classe .sem-js fica e o painel de filtros do celular aparece aberto no lugar. ?>
 <script>document.documentElement.classList.remove('sem-js');</script>
 
 <?php

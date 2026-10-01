@@ -7,10 +7,9 @@
  *   2. dropdowns <details> (fechar ao clicar fora / Esc)
  *   3. drawer do carrinho, com foco e teclado
  *   4. catálogo: busca, filtros, ordem, páginas e vistos recentemente
- *   5. revelação dos cards ao rolar (IntersectionObserver)
- *   6. avisos curtos (toasts)
- *   7. quantidade na página do produto
- *   8. confirmação do pedido (carrinho.php)
+ *   5. avisos curtos (toasts)
+ *   6. quantidade na página do produto
+ *   7. confirmação do pedido (carrinho.php)
  *
  * O estado do carrinho em si mora em assets/js/cart.js.
  */
@@ -492,40 +491,7 @@ if (secaoVistos && modelosVistos) {
 }
 
 /* ===========================================================================
- * 5. REVELAÇÃO AO ROLAR
- * Uma passada só: o card aparece e o observador o solta.
- * ======================================================================== */
-
-const aRevelar = document.querySelectorAll('.revelar');
-
-if (aRevelar.length) {
-  const semMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const revelarTudo = () => aRevelar.forEach((el) => el.classList.add('visivel'));
-
-  // Aba em segundo plano não roda o observador (nem requestAnimationFrame).
-  // Aí não há animação: o conteúdo simplesmente já nasce visível. O modo de
-  // falha desta animação nunca pode ser "o catálogo some".
-  if (semMovimento || document.visibilityState === 'hidden' || !('IntersectionObserver' in window)) {
-    revelarTudo();
-  } else {
-    const observador = new IntersectionObserver(
-      (entradas) => {
-        entradas.forEach((entrada) => {
-          if (!entrada.isIntersecting) return;
-          entrada.target.classList.add('visivel');
-          observador.unobserve(entrada.target);
-        });
-      },
-      // Margem generosa embaixo: o card já entra revelado quando a pessoa rola
-      // rápido. A animação é um detalhe, não pode virar buraco branco na tela.
-      { rootMargin: '0px 0px 280px 0px', threshold: 0 }
-    );
-    aRevelar.forEach((el) => observador.observe(el));
-  }
-}
-
-/* ===========================================================================
- * 6. AVISOS CURTOS
+ * 5. AVISOS CURTOS
  * ======================================================================== */
 
 const areaAvisos = document.querySelector('[data-toast-area]');
@@ -575,7 +541,7 @@ document.addEventListener('dolce:removido', () => mostrarAviso('Pedido atualizad
 document.addEventListener('dolce:aviso', (evento) => mostrarAviso(evento.detail.mensagem));
 
 /* ===========================================================================
- * 7. QUANTIDADE NA PÁGINA DO PRODUTO
+ * 6. QUANTIDADE NA PÁGINA DO PRODUTO
  * ======================================================================== */
 
 const campoQtd = document.querySelector('[data-qty-input]');
@@ -640,7 +606,7 @@ if (campoQtd) {
 }
 
 /* ===========================================================================
- * 8. CONFIRMAÇÃO DO PEDIDO (carrinho.php)
+ * 7. CONFIRMAÇÃO DO PEDIDO (carrinho.php)
  *
  * Duas coisas, as duas sobre deixar a escolha visível:
  *   - o campo de endereço aparece quando a escolha é entrega;

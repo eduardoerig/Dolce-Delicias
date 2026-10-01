@@ -163,57 +163,6 @@
 }
 
 /* -------------------------------------------------------------
-   PLACEHOLDER DE IMAGEM (massa) -- textura enquanto nao ha foto real.
-   ------------------------------------------------------------- */
-.massa {
-  background-color: var(--color-massa);
-  background-image: radial-gradient(
-      circle at 22% 28%,
-      color-mix(in oklab, var(--color-crust) 16%, transparent) 0 2px,
-      transparent 3px
-    ),
-    radial-gradient(
-      circle at 68% 62%,
-      color-mix(in oklab, var(--color-crust) 14%, transparent) 0 3px,
-      transparent 4px
-    ),
-    radial-gradient(
-      circle at 44% 82%,
-      color-mix(in oklab, var(--color-crust) 12%, transparent) 0 2px,
-      transparent 3px
-    );
-  background-size: 56px 56px, 84px 84px, 68px 68px;
-}
-
-/* -------------------------------------------------------------
-   REVELACAO NO SCROLL (IntersectionObserver em assets/js/ui.js)
-   ------------------------------------------------------------- */
-.revelar {
-  opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 0.5s var(--ease-massa), transform 0.5s var(--ease-massa);
-}
-
-.revelar.visivel {
-  opacity: 1;
-  transform: none;
-}
-
-/* Sem JS ou com movimento reduzido, o conteudo ja nasce visivel. */
-.sem-js .revelar,
-.revelar.visivel {
-  opacity: 1;
-  transform: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .revelar {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-/* -------------------------------------------------------------
    DESFILE DA FAIXA DO HEROI -- os nomes do catalogo passando sozinhos.
 
    Sao dois blocos identicos lado a lado. A animacao anda -50% da
@@ -273,16 +222,6 @@
 }
 
 /* -------------------------------------------------------------
-   Corta a descricao em 2 linhas nos cards sem depender de plugin.
-   ------------------------------------------------------------- */
-.duas-linhas {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* -------------------------------------------------------------
    ESCONDER -- unica classe que o JS liga/desliga.
    Usa !important de proposito: assim nunca briga com o `flex`,
    `grid` ou `block` que o elemento ja carrega.
@@ -292,91 +231,11 @@
 }
 
 /* -------------------------------------------------------------
-   CHIP -- botao de filtro do catalogo e seletor de variacao.
-   Vira componente porque se repete uma duzia de vezes.
-   ------------------------------------------------------------- */
-.chip {
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  gap: 0.375rem;
-  /* 44px de altura: alvo de toque confortavel no celular (WCAG 2.5.5). */
-  min-height: 2.75rem;
-  border-radius: 999px;
-  border: 1px solid var(--color-base-300);
-  background-color: var(--color-base-200);
-  padding: 0.4375rem 1rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.25;
-  color: var(--color-crust);
-  transition: background-color 0.18s var(--ease-massa),
-    color 0.18s var(--ease-massa), border-color 0.18s var(--ease-massa);
-}
-
-.chip:hover {
-  border-color: var(--color-brand);
-  color: var(--color-brand);
-}
-
-.chip[aria-pressed="true"] {
-  border-color: var(--color-primary);
-  background-color: var(--color-primary);
-  color: var(--color-primary-content);
-}
-
-/* -------------------------------------------------------------
-   SEGMENTO -- encomendas x balcao. Sao tres opcoes de UMA escolha,
-   entao viram um controle unico em vez de tres chips soltos: assim
-   nao ficam dois botoes vermelhos acesos ao lado do filtro de
-   categoria, que confundia com estado quebrado.
-
-   O alvo de toque de 44px vale para o GRUPO (36px do botao + o
-   padding de 4px da trilha em volta).
-   ------------------------------------------------------------- */
-.segmento {
-  display: inline-flex;
-  flex: 1 1 auto;
-  align-items: center;
-  justify-content: center;
-  min-height: 2.25rem;
-  white-space: nowrap;
-  border-radius: 999px;
-  padding: 0.25rem 0.875rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.25;
-  color: var(--color-crust);
-  transition: background-color 0.18s var(--ease-massa),
-    color 0.18s var(--ease-massa), box-shadow 0.18s var(--ease-massa);
-}
-
-.segmento:hover {
-  color: var(--color-brand);
-}
-
-/* Ativo: pastilha branca sobre a trilha creme -- le como "aqui estou"
-   sem gritar como o vermelho cheio do chip. */
-.segmento[aria-pressed="true"] {
-  background-color: var(--color-papel);
-  color: var(--color-brand);
-  box-shadow: 0 1px 2px rgb(42 23 16 / 0.14);
-}
-
-/* -------------------------------------------------------------
    OPCAO -- escolha unica na confirmacao do pedido: retirada x
    entrega, e forma de pagamento.
 
-   NAO reaproveita o .chip de proposito, e essa e a parte
-   importante. O chip do catalogo e um FILTRO: aceso quer dizer
-   "estou vendo so isto". Aqui a pessoa esta DECLARANDO uma escolha
-   que vai junto no pedido. Com o mesmo desenho nos dois, o cartao
-   aceso lia como filtro ligado -- e, com o <input> em sr-only, nao
-   sobrava nenhuma marca dizendo o que estava selecionado: so a cor
-   de fundo, que e exatamente o sinal que o filtro ja usava.
-
-   Por isso o radio fica VISIVEL. A bolinha marcada e o unico
+   Aqui a pessoa esta DECLARANDO uma escolha que vai junto no
+   pedido, nao filtrando uma lista. Por isso o radio fica VISIVEL. A bolinha marcada e o unico
    elemento que diz "esta e a sua escolha" sem depender de cor --
    serve para daltonico, para tela no sol e para quem so bateu o
    olho. A cor da borda reforca, nao carrega sozinha.
@@ -410,20 +269,6 @@
 .opcao:has(:focus-visible) {
   outline: 3px solid var(--color-brand);
   outline-offset: 3px;
-}
-
-/* -------------------------------------------------------------
-   Carrossel de chips no celular: rola na horizontal sem mostrar
-   a barra de rolagem, para as categorias nao virarem seis linhas
-   de chips empilhados na tela pequena.
-   ------------------------------------------------------------- */
-.sem-barra {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.sem-barra::-webkit-scrollbar {
-  display: none;
 }
 
 /* -------------------------------------------------------------
