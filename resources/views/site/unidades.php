@@ -5,7 +5,8 @@ declare(strict_types=1);
 /**
  * unidades.php — onde estão as lojas.
  *
- * A pergunta de quem chega é "qual fica perto, está aberta, como falo com
+ * Mesmo desenho de A empresa (cantos retos, fotos até a borda da tela). A
+ * pergunta de quem chega é "qual fica perto, está aberta, como falo com
  * ela". Então a página responde nessa ordem:
  *
  *   1. a matriz em destaque — é ela que recebe o pedido feito pelo site;
@@ -28,43 +29,59 @@ $descricaoPagina = 'Endereço, horário e WhatsApp de cada loja da Dolce Delíci
 include DD_BASE . '/partials/header.php';
 ?>
 
-<div class="bg-farinha">
+<div class="pagina-institucional bg-farinha">
 
-  <!-- Faixa: caminho, título e a regra que importa -->
-  <div class="border-b border-linha bg-polvilho">
-    <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+  <?php
+  // Mesmo desenho de A empresa: abertura com foto até a borda da tela, a
+  // matriz no zigue-zague e as outras lojas numa lista reta.
+  $fotoAbertura = dd_imagem('/assets/img/empresa/vitrine.jpg');
+  ?>
+  <section class="sobre-abertura" aria-labelledby="titulo-unidades">
+    <div class="sobre-abertura-texto">
       <nav aria-label="Você está aqui" class="flex items-center gap-2 text-sm font-semibold text-crust">
         <a href="/" class="rounded hover:text-brand-escuro">Início</a>
         <span aria-hidden="true">/</span>
         <span class="text-base-content" aria-current="page">Unidades</span>
       </nav>
-      <h1 class="mt-3 text-4xl sm:text-5xl">Nossas unidades</h1>
-      <p class="mt-3 max-w-2xl text-lg leading-relaxed text-crust">
+      <h1 id="titulo-unidades" class="mt-4 text-4xl sm:text-5xl lg:text-6xl">Nossas unidades</h1>
+      <p class="mt-5 max-w-xl text-lg leading-relaxed text-crust lg:text-xl">
         <?= e((string) count($unidades)) ?> lojas. O pedido feito pelo site vai para a matriz;
         nas outras lojas você compra no balcão ou pelo WhatsApp de cada uma.
       </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <?php foreach ($matrizes as $matrizAtalho): ?>
+          <a href="#<?= e((string) $matrizAtalho['slug']) ?>" class="botao-primario">Ver a matriz</a>
+        <?php endforeach; ?>
+        <?php if ($lojas !== []): ?>
+          <a href="#outras-lojas" class="botao-secundario">Outras lojas</a>
+        <?php endif; ?>
+      </div>
     </div>
-  </div>
 
-  <div class="mx-auto grid max-w-7xl gap-12 px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+    <?php if ($fotoAbertura): ?>
+      <img src="<?= e($fotoAbertura) ?>" alt="Vitrine com bolos e doces" class="sobre-abertura-foto" width="1600" height="1000" decoding="async" fetchpriority="high">
+    <?php else: ?>
+      <?php $fachadaClasse = 'w-full max-w-md justify-self-center p-8'; include DD_BASE . '/partials/ilustra-fachada.php'; ?>
+    <?php endif; ?>
+  </section>
+
+  <div>
     <?php foreach ($matrizes as $unidade): ?>
       <?php include DD_BASE . '/partials/unit-section.php'; ?>
     <?php endforeach; ?>
-
-    <?php if ($lojas !== []): ?>
-      <section aria-labelledby="titulo-lojas">
-        <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-          <h2 id="titulo-lojas" class="text-2xl sm:text-3xl">Outras lojas</h2>
-          <p class="text-sm text-crust">Balcão e WhatsApp de cada loja. Cada uma tem o próprio catálogo.</p>
-        </div>
-        <ul class="lojas mt-5">
-          <?php foreach ($lojas as $unidade): ?>
-            <?php include DD_BASE . '/partials/unit-section.php'; ?>
-          <?php endforeach; ?>
-        </ul>
-      </section>
-    <?php endif; ?>
   </div>
+
+  <?php if ($lojas !== []): ?>
+    <section id="outras-lojas" class="secao-lojas mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="titulo-lojas">
+      <h2 id="titulo-lojas">Outras lojas</h2>
+      <p class="mt-3 max-w-2xl text-lg leading-relaxed text-crust">Balcão e WhatsApp de cada loja. Cada uma tem o próprio catálogo.</p>
+      <ul class="lojas mt-8">
+        <?php foreach ($lojas as $unidade): ?>
+          <?php include DD_BASE . '/partials/unit-section.php'; ?>
+        <?php endforeach; ?>
+      </ul>
+    </section>
+  <?php endif; ?>
 </div>
 
 <?php include DD_BASE . '/partials/footer.php'; ?>

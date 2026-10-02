@@ -6,8 +6,9 @@ declare(strict_types=1);
  * partials/unit-section.php — uma loja em unidades.php.
  *
  * Dois desenhos, pela pergunta que cada um responde:
- *   - a matriz vem em destaque (.loja-matriz): é ela que recebe o pedido do
- *     site, então mostra os dados com rótulo e a foto (ou a fachada desenhada);
+ *   - a matriz vem em destaque, no zigue-zague da página institucional
+ *     (.zigue): foto encostada na borda da tela de um lado, dados com rótulo
+ *     do outro. É ela que recebe o pedido do site;
  *   - as outras lojas são uma linha da lista (.loja): nome e bairro, endereço,
  *     horário e os três caminhos de contato. Quem procura "a mais perto de
  *     mim" lê a lista de cima para baixo sem abrir nada.
@@ -54,10 +55,17 @@ $icone = [
 ];
 ?>
 <?php if ($ehMatriz): ?>
-  <section id="<?= e($slug) ?>" class="loja-matriz" aria-labelledby="titulo-<?= e($slug) ?>">
-    <div class="loja-matriz-corpo">
+  <section id="<?= e($slug) ?>" class="zigue loja-matriz" aria-labelledby="titulo-<?= e($slug) ?>">
+    <?php if ($foto): ?>
+      <img src="<?= e($foto) ?>" alt="Foto da <?= e((string) $unidade['nome']) ?>" class="zigue-foto" width="1600" height="1000" decoding="async">
+    <?php else: ?>
+      <?php // INTEGRAÇÃO FUTURA: foto da fachada, cadastrada no painel em Unidades. ?>
+      <div class="zigue-foto loja-matriz-fachada"><?php $fachadaClasse = 'w-full max-w-sm'; include __DIR__ . '/ilustra-fachada.php'; ?></div>
+    <?php endif; ?>
+
+    <div class="zigue-texto">
       <p class="loja-selo">Recebe os pedidos do site</p>
-      <h2 id="titulo-<?= e($slug) ?>" class="mt-3 text-3xl sm:text-4xl"><?= e($nomeLoja) ?></h2>
+      <h2 id="titulo-<?= e($slug) ?>" class="mt-4"><?= e($nomeLoja) ?></h2>
       <?php if ($bairro !== ''): ?><p class="mt-1 font-semibold text-crust"><?= e($bairro) ?></p><?php endif; ?>
       <?php if ($sobre !== ''): ?><p class="mt-4 max-w-prose leading-relaxed text-crust"><?= e($sobre) ?></p><?php endif; ?>
 
@@ -87,14 +95,6 @@ $icone = [
       </div>
     </div>
 
-    <figure class="loja-matriz-foto">
-      <?php if ($foto): ?>
-        <img src="<?= e($foto) ?>" alt="Foto da <?= e((string) $unidade['nome']) ?>" loading="lazy" decoding="async" width="1600" height="1000">
-      <?php else: ?>
-        <?php // INTEGRAÇÃO FUTURA: foto da fachada, cadastrada no painel em Unidades. ?>
-        <?php $fachadaClasse = 'w-full max-w-sm'; include __DIR__ . '/ilustra-fachada.php'; ?>
-      <?php endif; ?>
-    </figure>
   </section>
 <?php else: ?>
   <li id="<?= e($slug) ?>" class="loja">

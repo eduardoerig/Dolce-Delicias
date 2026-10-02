@@ -94,7 +94,7 @@ $cartoesEmpresa = [
 ];
 ?>
 
-<div class="pagina-sobre bg-farinha">
+<div class="pagina-institucional bg-farinha">
 
   <!-- Abertura: o caminho, quem é a padaria numa frase e a foto da cozinha -->
   <section class="sobre-abertura" aria-labelledby="titulo-sobre">
