@@ -6,8 +6,10 @@ declare(strict_types=1);
  * produto.php?slug=<slug> — página de um produto.
  * Slug inexistente cai numa página 404 amigável (com status HTTP correto).
  *
- * Mesmo desenho do catálogo da home: faixa neutra no topo, cards brancos com
- * borda leve, vermelho só para a ação (adicionar) e para promoção.
+ * Cantos retos como o resto do site: a foto de ponta a ponta no celular (no
+ * computador, a coluna da esquerda), o nome, a promoção numa faixa vermelha,
+ * a caixa de compra com a ficha (como compra, mínimo, preço por peça), os
+ * sabores e as lojas, uma por linha.
  */
 
 require_once DD_BASE . '/partials/bootstrap.php';
@@ -67,10 +69,11 @@ $sabores      = $produto['sabores'] ?? [];
 $relacionados = dd_relacionados($produto, 4);
 $ofertas      = dd_promocoes_produto($produto);
 
-// "atacado"/"varejo" são calculadas a partir de "Como é vendido"; aqui só confundiriam.
+// "atacado"/"varejo" são calculadas a partir de "Como é vendido", e balcão/encomenda
+// já estão na ficha ("Como compra"): aqui só repetiriam.
 $etiquetas = array_values(array_filter(
     array_map('strval', $produto['tags'] ?? []),
-    static fn (string $t): bool => !in_array($t, ['atacado', 'varejo'], true)
+    static fn (string $t): bool => !in_array(mb_strtolower($t), ['atacado', 'varejo', 'balcao', 'balcão', 'encomenda'], true)
 ));
 
 // Unidades onde o produto está à venda, na ordem do cadastro (matriz primeiro).
@@ -90,11 +93,11 @@ $descricaoPagina = dd_resumo((string) ($produto['descricao'] ?? ''), 155);
 include DD_BASE . '/partials/header.php';
 ?>
 
-<div class="bg-farinha">
+<div class="pagina-produto bg-farinha">
 
   <!-- Faixa com o caminho até aqui; a categoria abre o catálogo já filtrado -->
   <div class="border-b border-linha bg-polvilho">
-    <nav aria-label="Você está aqui" class="mx-auto flex max-w-7xl flex-wrap items-center gap-2 px-4 py-4 text-sm font-semibold text-crust sm:px-6 lg:px-8">
+    <nav aria-label="Você está aqui" class="mx-auto flex max-w-7xl flex-wrap items-center gap-2 px-4 py-3 text-sm font-semibold text-crust sm:px-6 lg:px-8">
       <a href="/" class="rounded hover:text-brand-escuro">Início</a>
       <span aria-hidden="true">/</span>
       <a href="/?categoria=<?= e(rawurlencode((string) ($produto['categoria'] ?? ''))) ?>#catalogo" class="rounded hover:text-brand-escuro"><?= e((string) ($produto['categoria'] ?? 'Catálogo')) ?></a>
@@ -103,45 +106,50 @@ include DD_BASE . '/partials/header.php';
     </nav>
   </div>
 
-  <div class="mx-auto grid max-w-7xl gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:items-start lg:gap-12 lg:px-8 lg:py-12">
+  <div class="produto-grade mx-auto max-w-7xl lg:px-8">
 
     <!-- ------------------------------------------------------------------
-         FOTO
+         FOTO — de ponta a ponta no celular; no computador, a coluna da
+         esquerda, parada enquanto o texto rola.
          >>> INTEGRAÇÃO FUTURA <<<
          Hoje existe uma imagem só (o campo 'imagem'). Para virar galeria,
          troque por um array 'imagens' e desenhe as miniaturas embaixo.
          ------------------------------------------------------------------ -->
-    <figure class="produto-foto lg:sticky lg:top-24">
+    <figure class="produto-foto">
       <?php if ($imagem): ?>
-        <img src="<?= e($imagem) ?>" alt="<?= e((string) $produto['nome']) ?>" width="960" height="720">
+        <img src="<?= e($imagem) ?>" alt="<?= e((string) $produto['nome']) ?>" width="960" height="720" fetchpriority="high">
       <?php else: ?>
         <span class="produto-sem-foto" role="img" aria-label="Foto de <?= e((string) $produto['nome']) ?> ainda não cadastrada">
           <?= dd_icone_categoria((string) ($produto['categoria'] ?? ''), (string) ($produto['nome'] ?? '')) ?>
         </span>
+      <?php endif; ?>
+      <?php if ($ofertas !== []): ?>
+        <span class="produto-foto-selo"><?= e(trim((string) ($ofertas[0]['selo'] ?? '')) ?: 'Promoção') ?></span>
       <?php endif; ?>
     </figure>
 
     <!-- ------------------------------------------------------------------
          INFORMAÇÕES E PEDIDO
          ------------------------------------------------------------------ -->
-    <div class="min-w-0">
-      <ul class="flex flex-wrap items-center gap-2" aria-label="Sobre este produto">
-        <?php if ($ofertas !== []): ?><li><span class="selo selo-promo"><?= e(trim((string) ($ofertas[0]['selo'] ?? '')) ?: 'Promoção') ?></span></li><?php endif; ?>
-        <li class="pilula"><?= e((string) ($produto['categoria'] ?? '')) ?></li>
-        <li class="pilula"><?= e($comoCompra) ?></li>
-        <?php foreach ($etiquetas as $etiqueta): ?>
-          <li class="pilula"><?= e(mb_strtoupper(mb_substr($etiqueta, 0, 1)) . mb_substr($etiqueta, 1)) ?></li>
-        <?php endforeach; ?>
-      </ul>
-
-      <h1 class="mt-4 text-4xl leading-[1.08] sm:text-5xl"><?= e((string) $produto['nome']) ?></h1>
+    <div class="produto-info">
+      <h1 class="produto-titulo"><?= e((string) $produto['nome']) ?></h1>
 
       <?php if (trim((string) ($produto['descricao'] ?? '')) !== ''): ?>
-        <p class="mt-4 max-w-prose text-lg leading-relaxed text-crust"><?= e((string) $produto['descricao']) ?></p>
+        <p class="produto-descricao"><?= e((string) $produto['descricao']) ?></p>
       <?php endif; ?>
 
+      <?php if ($etiquetas !== []): ?>
+        <ul class="produto-etiquetas" aria-label="Etiquetas">
+          <?php foreach ($etiquetas as $etiqueta): ?>
+            <li><?= e(mb_strtoupper(mb_substr($etiqueta, 0, 1)) . mb_substr($etiqueta, 1)) ?></li>
+          <?php endforeach; ?>
+        </ul>
+      <?php endif; ?>
+
+      <?php include DD_BASE . '/partials/product-promotions.php'; ?>
+
       <!-- Compra -->
-      <div class="produto-compra mt-7">
+      <div class="produto-compra">
 
         <?php
         /**
@@ -196,16 +204,29 @@ include DD_BASE . '/partials/header.php';
           </fieldset>
         <?php endif; ?>
 
-        <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-          <p class="flex items-baseline gap-1.5">
-            <span class="text-lg font-bold">R$</span>
-            <span class="text-4xl font-bold leading-none" data-preco-cheio><?= e(number_format($faixa['valor'], 2, ',', '.')) ?></span>
-            <span class="text-base font-semibold text-crust" data-preco-por>/ <?= e($faixa['porCurto']) ?></span>
-          </p>
+        <p class="produto-preco">
+          <span class="text-lg font-bold">R$</span>
+          <span class="produto-preco-valor" data-preco-cheio><?= e(number_format($faixa['valor'], 2, ',', '.')) ?></span>
+          <span class="text-base font-semibold text-crust" data-preco-por>/ <?= e($faixa['porCurto']) ?></span>
+        </p>
+
+        <?php // A ficha: o que a pessoa precisa saber antes de escolher a quantidade. ?>
+        <dl class="produto-ficha">
+          <div>
+            <dt>Como compra</dt>
+            <dd><?= e($comoCompra) ?></dd>
+          </div>
+          <div>
+            <dt>Pedido mínimo</dt>
+            <dd data-ficha-minimo><?= e((string) $faixa['min']) ?> un</dd>
+          </div>
           <?php if ($faixa['base'] > 1): ?>
-            <p class="text-sm text-crust" data-preco-unitario><?= e(dd_moeda($faixa['unitario'])) ?> por peça</p>
+            <div>
+              <dt>Por peça</dt>
+              <dd data-preco-unitario><?= e(dd_moeda($faixa['unitario'])) ?></dd>
+            </div>
           <?php endif; ?>
-        </div>
+        </dl>
 
         <?php if ($disponivel): ?>
           <!-- Quantidade e subtotal na mesma linha (a ajuda vai embaixo para não alargar o seletor), botão por último -->
@@ -255,21 +276,38 @@ include DD_BASE . '/partials/header.php';
           </button>
           <p class="mt-3 text-center text-xs text-crust">Sem pagamento no site. O pedido é fechado pelo WhatsApp da matriz.</p>
         <?php else: ?>
-          <p class="mt-6 rounded-xl bg-polvilho p-4 text-sm font-semibold text-crust">
+          <p class="mt-6 bg-polvilho p-4 text-sm font-semibold text-crust">
             Este item está fora do cardápio hoje. Fale com a unidade para saber quando volta.
           </p>
         <?php endif; ?>
       </div>
 
+      <?php if ($sabores): ?>
+        <section class="produto-bloco" aria-labelledby="sabores-titulo">
+          <h2 id="sabores-titulo" class="produto-subtitulo">Sabores</h2>
+          <p class="mt-1 text-sm leading-relaxed text-crust">
+            Você escolhe a combinação na conversa com a unidade. Dá para misturar.
+          </p>
+          <ul class="produto-sabores">
+            <?php foreach ($sabores as $sabor): ?>
+              <li><?= e((string) $sabor) ?></li>
+            <?php endforeach; ?>
+          </ul>
+        </section>
+      <?php endif; ?>
+
       <section class="produto-bloco" aria-labelledby="onde-titulo">
         <h2 id="onde-titulo" class="produto-subtitulo">Onde encontrar</h2>
         <?php if ($ondeTem !== []): ?>
-          <ul class="mt-3 flex flex-wrap gap-2">
+          <ul class="produto-lojas">
             <?php foreach ($ondeTem as $unidadeProduto): ?>
               <li>
-                <a class="pilula pilula-link" href="/unidades#<?= e((string) $unidadeProduto['slug']) ?>">
-                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
-                  <?= e((string) $unidadeProduto['nome']) ?>
+                <a href="/unidades#<?= e((string) $unidadeProduto['slug']) ?>">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+                  <span>
+                    <?= e((string) $unidadeProduto['nome']) ?>
+                    <?php if (!empty($unidadeProduto['matriz'])): ?><small>recebe os pedidos do site</small><?php endif; ?>
+                  </span>
                 </a>
               </li>
             <?php endforeach; ?>
@@ -278,22 +316,6 @@ include DD_BASE . '/partials/header.php';
           <p class="mt-2 text-sm text-crust">Nenhuma unidade está vendendo este item agora.</p>
         <?php endif; ?>
       </section>
-
-      <?php include DD_BASE . '/partials/product-promotions.php'; ?>
-
-      <?php if ($sabores): ?>
-        <section class="produto-bloco" aria-labelledby="sabores-titulo">
-          <h2 id="sabores-titulo" class="produto-subtitulo">Sabores</h2>
-          <p class="mt-1 text-sm leading-relaxed text-crust">
-            Você escolhe a combinação na conversa com a unidade. Dá para misturar.
-          </p>
-          <ul class="mt-3 flex flex-wrap gap-2">
-            <?php foreach ($sabores as $sabor): ?>
-              <li class="pilula pilula-branca"><?= e((string) $sabor) ?></li>
-            <?php endforeach; ?>
-          </ul>
-        </section>
-      <?php endif; ?>
     </div>
   </div>
 

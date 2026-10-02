@@ -625,6 +625,12 @@ if (campoQtd) {
       if (cheio) cheio.textContent = Number(d.valor).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
       if (por) por.textContent = `/ ${String(d.por).split('/').pop().trim()}`;
 
+      // A ficha acompanha a embalagem escolhida.
+      const minimo = document.querySelector('[data-ficha-minimo]');
+      const unitario = document.querySelector('[data-preco-unitario]');
+      if (minimo) minimo.textContent = `${d.min} un`;
+      if (unitario) unitario.textContent = Number(d.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
       atualizarSubtotal();
     });
   });

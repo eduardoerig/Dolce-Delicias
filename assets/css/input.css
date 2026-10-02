@@ -3638,4 +3638,217 @@ a.loja-acao:hover {
     padding: 1.5rem 1.5rem 1.5rem 0;
   }
 }
+
+/* ---------- Página do produto: desenho reto ----------
+   Cantos retos, como o resto do site. No celular a foto vai de ponta a
+   ponta, sem moldura, e o texto vem embaixo; do computador em diante a foto
+   é a coluna da esquerda, parada enquanto o texto rola. O vermelho fica para
+   a ação (adicionar) e para a promoção. */
+.pagina-produto .produto-grade {
+  display: grid;
+}
+
+.pagina-produto .produto-foto {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+
+.pagina-produto .produto-foto img,
+.pagina-produto .produto-sem-foto {
+  border-radius: 0;
+}
+
+/* O selo da promoção, no canto da foto, como nos cards do catálogo. */
+.produto-foto-selo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0.375rem 0.75rem;
+  background-color: var(--color-brand);
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  text-transform: uppercase;
+  /* Branco: amarelo sobre o vermelho só passa em letra bem grande. */
+  color: #fff;
+}
+
+.produto-info {
+  min-width: 0;
+  padding: 1.5rem 1rem 2.5rem;
+}
+
+.produto-titulo {
+  font-size: clamp(2.25rem, 9vw, 3.75rem);
+  line-height: 1;
+}
+
+.produto-descricao {
+  max-width: 40rem;
+  margin-top: 0.875rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--color-crust);
+}
+
+.produto-etiquetas,
+.produto-sabores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.produto-etiquetas {
+  margin-top: 1rem;
+}
+
+.produto-etiquetas li,
+.produto-sabores li {
+  padding: 0.25rem 0.625rem;
+  border: 1px solid var(--color-linha);
+  background-color: var(--color-papel);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.produto-sabores {
+  margin-top: 0.75rem;
+}
+
+/* Promoção: a mesma faixa das ofertas da home, em tamanho de coluna. */
+.produto-ofertas {
+  margin-top: 1.25rem;
+}
+
+.produto-oferta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem 1rem;
+  background-color: var(--color-brand);
+  color: #fff;
+}
+
+.produto-oferta .oferta-desconto {
+  flex-shrink: 0;
+  max-width: 7rem;
+  font-size: 1.75rem;
+}
+
+/* A compra: preço, ficha, quantidade e botão, numa caixa reta. */
+.pagina-produto .produto-compra {
+  margin-top: 1.25rem;
+  padding: 1.25rem;
+  border: 1px solid var(--color-linha);
+  border-radius: 0;
+  background-color: var(--color-papel);
+  box-shadow: none;
+}
+
+.produto-preco {
+  display: flex;
+  align-items: baseline;
+  gap: 0.375rem;
+}
+
+.produto-preco-valor {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.produto-ficha {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+  margin-top: 1rem;
+  border-block: 1px solid var(--color-linha);
+}
+
+.produto-ficha > div {
+  padding: 0.625rem 0.75rem 0.625rem 0;
+}
+
+.produto-ficha > div + div {
+  padding-left: 0.75rem;
+  border-left: 1px solid var(--color-linha);
+}
+
+.produto-ficha dt {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-crust);
+}
+
+.produto-ficha dd {
+  margin-top: 0.125rem;
+  font-weight: 700;
+}
+
+/* Onde encontrar: uma loja por linha, a linha inteira é o link. */
+.produto-lojas {
+  display: grid;
+  margin-top: 0.75rem;
+  border-top: 1px solid var(--color-linha);
+}
+
+.produto-lojas a {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-height: 3rem;
+  padding: 0.5rem 0.25rem;
+  border-bottom: 1px solid var(--color-linha);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.produto-lojas a:hover {
+  background-color: var(--color-polvilho);
+}
+
+.produto-lojas svg {
+  flex-shrink: 0;
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--color-brand-escuro);
+}
+
+.produto-lojas small {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-brand-escuro);
+}
+
+@media (min-width: 40rem) {
+  .produto-info {
+    padding-inline: 1.5rem;
+  }
+
+  .produto-lojas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1.5rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .pagina-produto .produto-grade {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 3.5rem;
+    padding-block: 3rem 4rem;
+  }
+
+  .pagina-produto .produto-foto {
+    position: sticky;
+    top: 6rem;
+  }
+
+  .produto-info {
+    padding: 0;
+  }
+}
 }
