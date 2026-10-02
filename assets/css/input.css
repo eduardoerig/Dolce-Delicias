@@ -2018,7 +2018,7 @@ a.loja-acao:hover {
      para a direita. Onde há texto a camada passa de 75%: branco cheio fica
      acima de 4.5:1 sobre qualquer foto.
 
-   A home, A empresa e Unidades têm heróis próprios (.heroi-cento,
+   A home, A empresa e Unidades têm heróis próprios (.heroi-zap,
    .heroi-manifesto, .heroi-diretorio). */
 
 .heroi-foto {
@@ -2915,14 +2915,17 @@ a.loja-acao:hover {
   }
 }
 
-/* ---------- Home: herói "o cento chegando" ----------
-   Um prato com um cento de salgados rola da esquerda e para com metade à
-   mostra: no celular apoiado no pé do herói (a metade de cima aparece), do
-   tablet em diante cortado pela borda direita. O texto nunca fica sobre o
-   prato: ele reserva o espaço da metade visível. --prato é o diâmetro.
-   A posição aqui é a final; o GSAP só anima a chegada (heroi-cento.js). */
-.heroi-cento {
-  --prato: min(118vw, 34rem);
+/* ---------- Home: herói "o pedido fecha no WhatsApp" ----------
+   Um braço segurando o celular entra pela esquerda; na tela, a conversa do
+   pedido com a Dolce. --cel é a largura da foto do braço com o celular
+   (1094 × 1519). A tela da foto é transparente: a conversa (.zap-tela) fica
+   por baixo da imagem, nas medidas da tela dentro da foto, e o notch e os
+   cantos vêm da própria foto. A posição aqui é a final; o GSAP só anima a
+   chegada (heroi-zap.js).
+   Celular e tablet em pé: texto em cima, celular embaixo, cortado pelo pé.
+   Computador: celular à esquerda, cortado pela borda, texto à direita. */
+.heroi-zap {
+  --cel: min(118vw, 40rem);
   position: relative;
   isolation: isolate;
   display: flex;
@@ -2931,113 +2934,351 @@ a.loja-acao:hover {
   min-height: calc(100svh - 4.5rem - 1px);
   overflow: hidden;
   background:
-    radial-gradient(circle at 50% 100%, rgb(225 5 30 / 0.6) 0, rgb(225 5 30 / 0.22) 30%, rgb(225 5 30 / 0) 58%),
+    radial-gradient(circle at 50% 80%, rgb(225 5 30 / 0.5) 0, rgb(225 5 30 / 0.18) 30%, rgb(225 5 30 / 0) 58%),
     var(--color-ink);
   color: #fff;
 }
 
-.heroi-cento :focus-visible {
+.heroi-zap :focus-visible {
   outline-color: #fff;
 }
 
-/* Atrás do texto: na chegada, no computador, o prato passa por baixo dele.
-   A sombra fica no contêiner, que não gira; ela cai sempre para baixo. */
-.heroi-cento-prato {
-  position: absolute;
-  /* Offsets negativos, não translate: o GSAP assume o transform do prato. */
-  bottom: calc(var(--prato) / -2);
-  left: calc(50% - var(--prato) / 2);
-  z-index: -1;
-  width: var(--prato);
-  aspect-ratio: 1;
-  filter: drop-shadow(0 20px 34px rgb(0 0 0 / 0.55));
-}
-
-.heroi-cento-prato img {
-  display: block;
+.heroi-zap-conteudo {
   width: 100%;
-  height: auto;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding: 1.75rem 1rem 1.25rem;
 }
 
-.heroi-cento-conteudo {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: center;
-  padding-top: 1.75rem;
-  /* A metade visível do prato e o "Arraste para baixo" logo acima dela. */
-  padding-bottom: calc(var(--prato) / 2 + 4rem);
-}
-
-.heroi-cento-texto {
-  max-width: 44rem;
+.heroi-zap-texto {
+  max-width: 40rem;
 }
 
 /* leading abaixo de 1 é o que dá cara de cartaz: as linhas se tocam. */
-.heroi-cento-titulo {
+.heroi-zap-titulo {
   font-size: clamp(2.5rem, 12vw, 5.5rem);
   line-height: 0.92;
   text-transform: uppercase;
 }
 
-.heroi-cento-frase {
+.heroi-zap-frase {
   max-width: 32rem;
   margin-top: 0.75rem;
   font-size: 1.0625rem;
   line-height: 1.6;
 }
 
-.heroi-cento .heroi-rolar {
-  bottom: calc(var(--prato) / 2 + 0.5rem);
+/* O palco ocupa o resto da altura e corta o celular; o pé esmaece no marrom,
+   e o "Arraste para baixo" fica sobre esse esmaecido. */
+.heroi-zap-palco {
+  position: relative;
+  flex: 1;
+  min-height: 17rem;
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 8rem), transparent calc(100% - 1.5rem));
 }
 
-/* Antes do primeiro quadro do GSAP: nada à mostra (ver hero.php). */
-.cento-anima [data-cento-prato],
-.cento-anima [data-cento-revela] {
-  opacity: 0;
+.heroi-zap-celular {
+  position: absolute;
+  top: 0.5rem;
+  /* A tela fica no meio: o centro dela está a 68% da largura da foto. */
+  left: calc(50% - var(--cel) * 0.68);
+  width: var(--cel);
+  aspect-ratio: 1094 / 1519;
+  filter: drop-shadow(0 24px 36px rgb(0 0 0 / 0.5));
+}
+
+.heroi-zap-foto {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.heroi-zap .heroi-rolar {
+  z-index: 2;
 }
 
 @media (min-width: 40rem) {
-  .heroi-cento-frase {
+  .heroi-zap-conteudo {
+    padding-inline: 1.5rem;
+  }
+
+  .heroi-zap-frase {
     margin-top: 1rem;
     font-size: 1.25rem;
   }
 }
 
-@media (min-width: 48rem) {
-  /* Um semicírculo inteiro na altura do herói, sem passar de 62% da tela. */
-  .heroi-cento {
-    --prato: min(calc(100svh - 7.5rem), 62vw);
+@media (min-width: 64rem) {
+  .heroi-zap {
+    --cel: min(50vw, calc((100svh - 4.5rem) * 0.86), 44rem);
+    display: block;
     background:
-      radial-gradient(circle at 100% 50%, rgb(225 5 30 / 0.55) 0, rgb(225 5 30 / 0.2) 28%, rgb(225 5 30 / 0) 52%),
+      radial-gradient(circle at calc(var(--cel) * 0.68) 42%, rgb(225 5 30 / 0.5) 0, rgb(225 5 30 / 0.18) 22%, rgb(225 5 30 / 0) 44%),
       var(--color-ink);
   }
 
-  .heroi-cento-prato {
-    top: calc(50% - var(--prato) / 2);
-    right: calc(var(--prato) / -2);
-    bottom: auto;
-    left: auto;
+  /* O texto começa depois da ponta dos dedos, alinhado à esquerda, no meio
+     da altura (a altura da tela do celular). */
+  .heroi-zap-conteudo {
+    display: flex;
+    align-items: center;
+    max-width: none;
+    min-height: calc(100vh - 4.5rem - 1px);
+    min-height: calc(100svh - 4.5rem - 1px);
+    padding: 3rem 2rem 4.5rem calc(var(--cel) + 2.5rem);
   }
 
-  .heroi-cento-conteudo {
-    padding-block: 4rem 5rem;
+  .heroi-zap-titulo {
+    font-size: clamp(2.75rem, 4.8vw, 5.5rem);
   }
 
-  /* O texto para antes da metade visível do prato (5rem: margem lateral
-     do conteúdo e um respiro). */
-  .heroi-cento-texto {
-    max-width: min(44rem, calc(100vw - var(--prato) / 2 - 5rem));
+  .heroi-zap-palco {
+    position: absolute;
+    inset: 0;
+    mask-image: none;
   }
 
-  .heroi-cento-titulo {
-    font-size: clamp(2.75rem, 6.4vw, 6.25rem);
+  .heroi-zap-celular {
+    top: 5%;
+    left: 0;
   }
 
-  /* A seta fica no meio da área do texto, longe do prato. */
-  .heroi-cento .heroi-rolar {
+  .heroi-zap .heroi-rolar {
     bottom: 1.25rem;
-    left: calc((100% - var(--prato) / 2) / 2);
+    left: calc(var(--cel) + 2.5rem + (100% - var(--cel) - 4.5rem) / 2);
   }
+}
+
+/* ---------- A conversa dentro do celular ----------
+   Medidas em cqw (largura da tela): o desenho encolhe junto com a foto. Cores
+   do WhatsApp claro, que todo mundo reconhece. */
+.zap-tela {
+  position: absolute;
+  /* A tela na foto: 47.075% / 1.777% / 41.773% / 64.977%, com sobra para
+     baixo do aro (a foto cobre). */
+  top: 1.5%;
+  left: 46.8%;
+  width: 42.3%;
+  height: 65.5%;
+  container-type: inline-size;
+  overflow: hidden;
+  border-radius: 9% / 4.2%;
+  background-color: #efeae2;
+}
+
+/* O cqw vale para quem está dentro do contêiner, não para ele: por isso o
+   app é um bloco interno. */
+.zap-app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: #111b21;
+  font-size: 5cqw;
+  line-height: 1.35;
+  text-align: left;
+}
+
+.zap-topo {
+  flex: none;
+  background-color: #008069;
+  color: #fff;
+}
+
+/* A linha do notch: hora à esquerda, sinal e bateria à direita. */
+.zap-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 8.5cqw;
+  padding: 1.2cqw 7cqw 0 9cqw;
+  font-size: 3.4cqw;
+  font-weight: 700;
+}
+
+.zap-status svg {
+  width: 8.5cqw;
+}
+
+.zap-contato {
+  display: flex;
+  align-items: center;
+  gap: 2cqw;
+  padding: 1.5cqw 3cqw 2.5cqw 1.5cqw;
+}
+
+.zap-voltar {
+  width: 6cqw;
+}
+
+.zap-avatar {
+  display: grid;
+  place-items: center;
+  width: 10cqw;
+  height: 10cqw;
+  border-radius: 999px;
+  background-color: #fff;
+}
+
+.zap-avatar img {
+  width: 82%;
+  height: auto;
+}
+
+.zap-nome {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.zap-nome strong {
+  font-size: 4.4cqw;
+}
+
+.zap-nome small {
+  font-size: 3.2cqw;
+  opacity: 0.85;
+}
+
+.zap-conversa {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2cqw;
+  min-height: 0;
+  padding: 3cqw 3cqw 0;
+}
+
+.zap-dia {
+  align-self: center;
+  padding: 0.6cqw 2.4cqw;
+  border-radius: 1.6cqw;
+  background-color: #fff;
+  font-size: 3cqw;
+  color: #54656f;
+}
+
+.zap-msg {
+  position: relative;
+  max-width: 84%;
+  padding: 1.8cqw 2.6cqw 1.4cqw;
+  border-radius: 2.4cqw;
+  background-color: #fff;
+  box-shadow: 0 0.3cqw 0.3cqw rgb(11 20 26 / 0.12);
+}
+
+.zap-eu {
+  align-self: flex-end;
+  background-color: #d9fdd3;
+}
+
+.zap-itens {
+  display: block;
+  margin-top: 1.4cqw;
+  font-weight: 600;
+}
+
+.zap-hora {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.8cqw;
+  margin-top: 0.4cqw;
+  font-size: 2.8cqw;
+  color: #54656f;
+}
+
+.zap-vistos {
+  width: 4.2cqw;
+  color: #54656f;
+}
+
+/* Lido: o GSAP troca no fim; sem movimento, já nasce lido. */
+.zap-lido .zap-vistos {
+  color: #027eb5;
+}
+
+.zap-foto {
+  width: 62%;
+  padding: 1cqw 1cqw 1.4cqw;
+}
+
+.zap-foto img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: 1.2cqw;
+  border-radius: 1.6cqw;
+  background-color: #2a1710;
+}
+
+/* "digitando…": três pontos. Só aparece durante a animação (o GSAP mostra
+   e esconde); sem ela, a conversa já está completa. */
+.zap-digitando {
+  display: none;
+  gap: 1cqw;
+  padding: 2.6cqw 3.2cqw;
+}
+
+.zap-digitando i {
+  width: 1.8cqw;
+  height: 1.8cqw;
+  border-radius: 999px;
+  background-color: #8696a0;
+  animation: zap-ponto 1s ease-in-out infinite;
+}
+
+.zap-digitando i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.zap-digitando i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes zap-ponto {
+  0%, 60%, 100% { translate: 0 0; opacity: 0.5; }
+  30% { translate: 0 -0.8cqw; opacity: 1; }
+}
+
+.zap-barra {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 1.6cqw;
+  padding: 2cqw 2.4cqw 5cqw;
+}
+
+.zap-campo {
+  flex: 1;
+  padding: 2.2cqw 3.6cqw;
+  border-radius: 999px;
+  background-color: #fff;
+  font-size: 3.8cqw;
+  color: #54656f;
+}
+
+.zap-mic {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 9.5cqw;
+  height: 9.5cqw;
+  border-radius: 999px;
+  background-color: #00a884;
+  color: #fff;
+}
+
+.zap-mic svg {
+  width: 5cqw;
+}
+
+/* Antes do primeiro quadro do GSAP: nada à mostra (ver hero.php). */
+.zap-anima [data-zap-celular],
+.zap-anima [data-zap-revela],
+.zap-anima [data-zap-msg] {
+  opacity: 0;
 }
 }

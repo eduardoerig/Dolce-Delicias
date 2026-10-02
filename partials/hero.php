@@ -3,21 +3,25 @@
 declare(strict_types=1);
 
 /**
- * partials/hero.php — o herói da home: "o cento chegando".
+ * partials/hero.php — o herói da home: "o pedido fecha no WhatsApp".
  *
- * Um prato com um cento de salgados (coxinhas, bolinhas, risoles e quibes)
- * entra rolando da esquerda, girando como uma roda, e para no fim do herói
- * com só metade à mostra: no celular apoiado no pé do herói, do tablet em
- * diante cortado pela borda direita. O texto fica sempre fora do prato.
+ * Um braço entra pela esquerda segurando o celular; na tela, uma conversa de
+ * WhatsApp com a Dolce: o pedido que o site monta, a loja respondendo e a foto
+ * do cento. É o caminho do site contado numa imagem: escolhe aqui, fecha lá.
+ *
+ * A tela da foto foi furada (assets/img/recortes/celular-*.webp): a conversa é
+ * HTML por baixo da imagem, então o notch e os cantos vêm da própria foto e o
+ * texto fica nítido em qualquer tela. Ela é decorativa (aria-hidden): quem lê
+ * a página recebe o título e a frase, que dizem o mesmo.
+ *
+ * Do computador em diante (64rem) o celular fica à esquerda, cortado pela
+ * borda, e o texto à direita, alinhado à esquerda na altura da tela. No celular
+ * e no tablet em pé, o texto vem em cima e o celular embaixo, cortado pelo pé
+ * do herói.
  *
  * A posição final é CSS puro: sem JavaScript, ou para quem pediu menos
- * movimento, o prato já aparece parado no lugar. O movimento é do GSAP
- * (assets/js/heroi-cento.js): a entrada uma vez e, ao rolar a página, o
- * prato continua rodando para a direita.
- *
- * Embaixo do título: a frase, o botão vermelho e três garantias curtas. Logo
- * acima do prato, "Arraste para baixo" com uma seta: o herói ocupa a tela
- * inteira, e sem o aviso parece que a página acaba ali.
+ * movimento, a conversa já aparece inteira. O movimento é do GSAP
+ * (assets/js/heroi-zap.js): o braço entra, as mensagens chegam uma a uma.
  *
  * Espera:
  *   $heroLinhas      array        linhas do h1, cada uma ['texto' => string]
@@ -35,58 +39,46 @@ $heroCta       = $heroCta       ?? null;
 $heroLink      = $heroLink      ?? null;
 $heroGarantias = $heroGarantias ?? [];
 
-// O prato (assets/img/recortes/cento-<largura>.webp): o maior tem 985px.
-$pratoLarguras = [400 => 400, 640 => 640, 1000 => 985];
-$pratoSrc      = [];
-foreach ($pratoLarguras as $arquivo => $largura) {
-    $caminho = dd_imagem("/assets/img/recortes/cento-{$arquivo}.webp");
-    if ($caminho) $pratoSrc[$largura] = $caminho;
-}
-
+$celular       = dd_imagem('/assets/img/recortes/celular-1100.webp');
+$celularMini   = dd_imagem('/assets/img/recortes/celular-640.webp');
+$fotoCento     = dd_imagem('/assets/img/recortes/cento-400.webp');
+$logo          = dd_imagem('/assets/img/logo.svg');
 $gsap          = dd_imagem('/assets/js/vendor/gsap.min.js');
 $scrollTrigger = dd_imagem('/assets/js/vendor/ScrollTrigger.min.js');
 
 $iconeGarantia = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>';
+// Os dois vistos do WhatsApp (cinza: entregue; azul: lido).
+$vistos = '<svg class="zap-vistos" viewBox="0 0 18 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m1 6 3.2 3.2L11 2.4"/><path d="m7.2 9.2.2.2L14.4 2.4"/></svg>';
 ?>
-<?php if ($pratoSrc !== [] && $gsap && $scrollTrigger): ?>
+<?php if ($celular && $gsap && $scrollTrigger): ?>
   <?php
-  // Esconde o prato e o texto antes do primeiro quadro, para o GSAP começar
-  // do zero sem piscar. Se o script não rodar em 3s, tudo aparece no lugar.
+  // Esconde o celular, as mensagens e o texto antes do primeiro quadro, para o
+  // GSAP começar do zero sem piscar. Se o script não rodar em 3s, tudo aparece.
   ?>
   <script>
     if (matchMedia('(prefers-reduced-motion: no-preference)').matches) {
-      document.documentElement.classList.add('cento-anima');
-      setTimeout(function () { document.documentElement.classList.remove('cento-anima'); }, 3000);
+      document.documentElement.classList.add('zap-anima');
+      setTimeout(function () { document.documentElement.classList.remove('zap-anima'); }, 3000);
     }
   </script>
   <script src="<?= e($gsap) ?>" defer></script>
   <script src="<?= e($scrollTrigger) ?>" defer></script>
-  <script type="module" src="/assets/js/heroi-cento.js"></script>
+  <script type="module" src="/assets/js/heroi-zap.js"></script>
 <?php endif; ?>
 
-<section class="heroi-cento" aria-labelledby="heroi-titulo" data-heroi-cento>
-  <?php if ($pratoSrc !== []): ?>
-    <?php
-    $srcset = implode(', ', array_map(static fn ($l, $c) => "{$c} {$l}w", array_keys($pratoSrc), $pratoSrc));
-    $menor  = $pratoSrc[min(array_keys($pratoSrc))];
-    ?>
-    <div class="heroi-cento-prato" aria-hidden="true" data-cento-prato>
-      <img src="<?= e($menor) ?>" srcset="<?= e($srcset) ?>" sizes="(min-width: 48rem) min(100svh, 64vw), 118vw" alt="" width="985" height="985" fetchpriority="high" decoding="async">
-    </div>
-  <?php endif; ?>
-
-  <div class="heroi-cento-conteudo mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="heroi-cento-texto">
+<section class="heroi-zap" aria-labelledby="heroi-titulo" data-heroi-zap>
+  <div class="heroi-zap-conteudo">
+    <div class="heroi-zap-texto">
       <?php // leading abaixo de 1 é o que dá cara de cartaz: as linhas se tocam. ?>
-      <h1 id="heroi-titulo" class="heroi-cento-titulo">
+      <h1 id="heroi-titulo" class="heroi-zap-titulo">
         <?php foreach ($heroLinhas as $linha): ?>
-          <span class="block" data-cento-revela><?= e($linha['texto']) ?></span>
+          <span class="block" data-zap-revela><?= e($linha['texto']) ?></span>
         <?php endforeach; ?>
       </h1>
 
-      <p class="heroi-cento-frase" data-cento-revela><?= e($heroTexto) ?></p>
+      <p class="heroi-zap-frase" data-zap-revela><?= e($heroTexto) ?></p>
 
-      <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3" data-cento-revela>
+      <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3" data-zap-revela>
         <?php if ($heroCta !== null): ?>
           <a href="<?= e($heroCta['href']) ?>" class="botao-primario heroi-cta w-full sm:w-auto"><?= e($heroCta['texto']) ?></a>
         <?php endif; ?>
@@ -96,7 +88,7 @@ $iconeGarantia = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
       </div>
 
       <?php if ($heroGarantias !== []): ?>
-        <ul class="heroi-garantias" data-cento-revela>
+        <ul class="heroi-garantias" data-zap-revela>
           <?php foreach ($heroGarantias as $garantia): ?>
             <li><?= $iconeGarantia ?><?= e($garantia) ?></li>
           <?php endforeach; ?>
@@ -105,8 +97,57 @@ $iconeGarantia = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
     </div>
   </div>
 
+  <?php if ($celular): ?>
+    <div class="heroi-zap-palco" aria-hidden="true">
+      <div class="heroi-zap-celular" data-zap-celular>
+        <div class="zap-tela">
+          <div class="zap-app">
+          <div class="zap-topo">
+            <div class="zap-status">
+              <span>10:24</span>
+              <svg viewBox="0 0 34 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/><rect x="22" y="1.5" width="10" height="9" rx="2.5" fill="none" stroke="currentColor"/><rect x="23.5" y="3" width="7" height="6" rx="1.2"/></svg>
+            </div>
+            <div class="zap-contato">
+              <svg class="zap-voltar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg>
+              <span class="zap-avatar"><?php if ($logo): ?><img src="<?= e($logo) ?>" alt="" width="40" height="40"><?php endif; ?></span>
+              <span class="zap-nome"><strong>Dolce Delícias</strong><small>online</small></span>
+            </div>
+          </div>
+
+          <div class="zap-conversa">
+            <span class="zap-dia">Hoje</span>
+            <p class="zap-msg zap-eu zap-lido" data-zap-msg>
+              Olá! Quero fazer uma encomenda pelo site da Dolce Delícias.
+              <span class="zap-itens">• 1 cento de Coxinha<br>• 1 cento de Mini Esfirras</span>
+              <span class="zap-hora">10:24 <?= $vistos ?></span>
+            </p>
+            <p class="zap-msg zap-loja zap-digitando" data-zap-digitando><i></i><i></i><i></i></p>
+            <p class="zap-msg zap-loja" data-zap-msg>
+              Oi! Recebemos seu pedido e já separamos tudo para a sua festa.
+              <span class="zap-hora">10:25</span>
+            </p>
+            <?php if ($fotoCento): ?>
+              <p class="zap-msg zap-loja zap-foto" data-zap-msg>
+                <img src="<?= e($fotoCento) ?>" alt="" width="400" height="400" decoding="async">
+                Seu cento vai sair assim.
+                <span class="zap-hora">10:25</span>
+              </p>
+            <?php endif; ?>
+          </div>
+
+          <div class="zap-barra">
+            <span class="zap-campo">Mensagem</span>
+            <span class="zap-mic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3.5 3.5 0 0 0 3.5-3.5v-6a3.5 3.5 0 1 0-7 0v6A3.5 3.5 0 0 0 12 15Zm6-3.5a1 1 0 1 0-2 0 4 4 0 0 1-8 0 1 1 0 1 0-2 0 6 6 0 0 0 5 5.9V20H9a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-2v-2.6a6 6 0 0 0 5-5.9Z"/></svg></span>
+          </div>
+          </div>
+        </div>
+        <img class="heroi-zap-foto" src="<?= e($celular) ?>" srcset="<?= e((string) $celularMini) ?> 640w, <?= e($celular) ?> 1094w" sizes="(min-width: 64rem) min(50vw, 44rem), 118vw" alt="" width="1094" height="1519" fetchpriority="high" decoding="async">
+      </div>
+    </div>
+  <?php endif; ?>
+
   <?php // No celular a pessoa arrasta; no computador ela rola. O link leva ao catálogo. ?>
-  <a href="#catalogo" class="heroi-rolar" data-cento-revela>
+  <a href="#catalogo" class="heroi-rolar" data-zap-revela>
     <span class="sm:hidden">Arraste para baixo</span>
     <span class="hidden sm:inline">Role para baixo</span>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v15"/><path d="m6 13 6 6 6-6"/></svg>
