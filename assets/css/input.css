@@ -241,6 +241,51 @@
 }
 
 /* -------------------------------------------------------------
+   CARRINHO COMO JANELA NO MEIO DA TELA
+   O mecanismo é o drawer do daisyUI (checkbox, overlay, inert e foco em
+   ui.js), mas o painel não encosta mais na lateral: fica centralizado,
+   com altura do conteúdo até o limite da tela. Uma barra de rolagem só, a
+   da lista de itens; a camada do daisyUI não rola e a página atrás trava.
+   Fora do @layer porque as regras do drawer do daisyUI também estão.
+   ------------------------------------------------------------- */
+:root:has(#carrinho-toggle:checked) {
+  overflow: hidden;
+}
+
+/* O espaço da barra de rolagem fica reservado: travar a página não faz o
+   conteúdo pular para o lado quando a barra some. */
+:root {
+  scrollbar-gutter: stable;
+}
+
+.drawer.drawer-end > .drawer-toggle ~ .drawer-side:has(> .gaveta-carrinho) {
+  place-items: center;
+  justify-items: center;
+  overflow: hidden;
+}
+
+.drawer.drawer-end > .drawer-toggle ~ .drawer-side > .gaveta-carrinho {
+  width: min(30rem, calc(100vw - 2rem));
+  max-height: min(42rem, calc(100dvh - 2rem));
+  box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.5);
+  opacity: 0;
+  translate: 0 1rem;
+  transition: translate 0.25s var(--ease-massa), opacity 0.2s ease-out;
+}
+
+.drawer.drawer-end > .drawer-toggle:checked ~ .drawer-side > .gaveta-carrinho {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer.drawer-end > .drawer-toggle ~ .drawer-side > .gaveta-carrinho {
+    translate: 0 0;
+    transition: opacity 0.15s linear;
+  }
+}
+
+/* -------------------------------------------------------------
    DROPDOWN FECHADO -- o daisyUI deixa o conteudo em
    display:block/visibility:visible com opacity:0, entao o painel
    fechado continua ocupando layout e sendo lido pelo leitor de tela
@@ -2424,21 +2469,10 @@ a.loja-acao:hover {
   outline-color: #fff;
 }
 
-.gaveta-unidade {
-  padding: 0.625rem 1.25rem;
-  border-bottom: 1px solid var(--color-linha);
-  background-color: var(--color-polvilho);
-  font-size: 0.8125rem;
-  color: var(--color-crust);
-}
-
-.gaveta-unidade strong {
-  color: var(--color-ink);
-}
-
 .gaveta-vazio {
   display: flex;
   flex: 1;
+  min-height: 20rem;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -2470,8 +2504,13 @@ a.loja-acao:hover {
   box-shadow: 0 -12px 24px -18px rgb(42 23 16 / 0.35);
 }
 
-/* No painel a miniatura cresce um pouco e "Remover" vira só a lixeira (o
+/* Na janela, só o essencial de cada item: nome, quantidade e subtotal. O
+   preço por embalagem fica para /carrinho. "Remover" vira só a lixeira (o
    nome acessível continua "Remover … do pedido"). */
+.gaveta-carrinho .item-pedido-nome span {
+  display: none;
+}
+
 .gaveta-carrinho .item-pedido {
   grid-template-columns: 4.5rem minmax(0, 1fr);
 }

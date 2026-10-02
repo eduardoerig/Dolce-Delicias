@@ -9,10 +9,11 @@ declare(strict_types=1);
  * A lista de itens é desenhada por assets/js/cart.js a partir do
  * localStorage['dolce_cart'] — aqui só existe a casca e o estado vazio.
  *
- * Desenho reto, como A empresa e Unidades: cabeça marrom com o título e a
- * contagem, a linha da unidade que recebe o pedido, os itens e um rodapé fixo
- * com o total e o botão. A observação mora só em /carrinho, onde o pedido é
- * fechado; aqui ela ocupava o rodapé e não seguia para a outra página.
+ * Janela centralizada (o mecanismo continua o drawer do daisyUI; o CSS de
+ * .gaveta-carrinho a põe no meio da tela). Desenho reto, como A empresa e
+ * Unidades, e só o essencial: cabeça marrom com o título e a contagem, os
+ * itens (a única parte que rola) e o rodapé com o total e o botão. Unidade,
+ * pagamento e observação ficam em /carrinho, onde o pedido é fechado.
  *
  * Acessibilidade: o painel recebe `inert` enquanto está fechado (assets/js/ui.js),
  * o que tira tudo que está dentro dele do foco e do leitor de tela.
@@ -29,7 +30,7 @@ declare(strict_types=1);
          role="dialog"
          aria-modal="true"
          aria-labelledby="titulo-carrinho"
-         class="gaveta-carrinho flex h-full w-[min(28rem,100vw)] flex-col bg-papel text-base-content">
+         class="gaveta-carrinho flex flex-col bg-papel text-base-content">
 
     <div class="gaveta-cabeca">
       <h2 id="titulo-carrinho">Seu pedido</h2>
@@ -39,11 +40,6 @@ declare(strict_types=1);
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
       </button>
     </div>
-
-    <?php // Unidade em uma linha só: é para o WhatsApp dela que o pedido vai. ?>
-    <p class="gaveta-unidade">
-      Pedido pela <strong data-unit-label>Matriz</strong>, fechado pelo WhatsApp
-    </p>
 
     <!-- Estado vazio -->
     <div data-cart-empty class="gaveta-vazio">
@@ -56,7 +52,7 @@ declare(strict_types=1);
     </div>
 
     <!-- Itens (desenhados por assets/js/cart.js) -->
-    <ul data-cart-items class="oculto flex-1 divide-y divide-linha overflow-y-auto px-5"></ul>
+    <ul data-cart-items class="oculto min-h-0 flex-1 divide-y divide-linha overflow-y-auto overscroll-contain px-5"></ul>
 
     <!-- Fechamento -->
     <div data-cart-footer class="oculto gaveta-rodape">
@@ -64,7 +60,6 @@ declare(strict_types=1);
         <span class="text-sm font-semibold text-crust">Total estimado</span>
         <span class="text-2xl font-bold" data-cart-total>R$ 0,00</span>
       </div>
-      <p class="mt-1 text-xs text-crust">A matriz confirma preço e prazo na conversa.</p>
 
       <?php
       /**
@@ -79,9 +74,8 @@ declare(strict_types=1);
       ?>
       <a href="/carrinho" class="botao-primario mt-4 w-full">Revisar e fechar pedido</a>
 
-      <div class="mt-3 flex items-center justify-between text-sm font-semibold">
-        <button type="button" data-cart-close class="link-discreto">Continuar escolhendo</button>
-        <button type="button" data-cart-clear class="link-discreto">Esvaziar</button>
+      <div class="mt-2 text-center">
+        <button type="button" data-cart-clear class="link-discreto">Esvaziar o pedido</button>
       </div>
     </div>
   </div>
