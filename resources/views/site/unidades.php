@@ -33,41 +33,43 @@ include DD_BASE . '/partials/header.php';
 
   <?php
   /*
-   * Herói "diretório": o número de lojas em letra gigante, com a tigela de
-   * bolinhas apoiada em cima dele, como se o número fosse o balcão. Ao lado
-   * (embaixo, no celular), um atalho para cada loja: a pessoa acha a dela já
-   * na primeira tela. A matriz vem primeiro, marcada por receber os pedidos
-   * do site. Os links usam o slug, que é o id de cada loja mais abaixo.
+   * Herói "balcão": a foto de uma loja (a vendedora arrumando os pães) ocupa
+   * o herói inteiro; o texto e um atalho para cada loja ficam sobre o marrom
+   * que sobe do lado esquerdo (no celular, a foto vem em cima e o texto
+   * embaixo). A pessoa acha a loja dela já na primeira tela. A matriz vem
+   * primeiro, marcada por receber os pedidos do site. Os links usam o slug,
+   * que é o id de cada loja mais abaixo.
    */
-  $todasLojas  = array_merge($matrizes, $lojas);
-  $tigela      = dd_imagem('/assets/img/recortes/tigela-900.webp');
-  $tigelaMini  = dd_imagem('/assets/img/recortes/tigela-520.webp');
-  $nomeCurto   = static fn (array $u): string => trim(explode(' — ', (string) ($u['nome'] ?? ''), 2)[0]);
+  $todasLojas = array_merge($matrizes, $lojas);
+  $nomeCurto  = static fn (array $u): string => trim(explode(' — ', (string) ($u['nome'] ?? ''), 2)[0]);
+  $fotoLarga  = dd_imagem('/assets/img/heroi/loja-2400.jpg');
+  $fotoMedia  = dd_imagem('/assets/img/heroi/loja-1600.jpg');
+  $fotoCel    = dd_imagem('/assets/img/heroi/loja-celular-780.jpg');
+  $fotoCel3x  = dd_imagem('/assets/img/heroi/loja-celular-1170.jpg');
   ?>
-  <section class="heroi-diretorio" aria-labelledby="titulo-unidades">
-    <div class="heroi-diretorio-grade mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="heroi-diretorio-arte" aria-hidden="true">
-        <?php if ($tigela): ?>
-          <img src="<?= e($tigela) ?>" srcset="<?= e((string) $tigelaMini) ?> 520w, <?= e($tigela) ?> 900w" sizes="(min-width: 64rem) 26rem, 62vw" alt="" width="900" height="852" fetchpriority="high" decoding="async">
-        <?php endif; ?>
-        <span class="heroi-diretorio-numero"><?= e((string) count($unidades)) ?></span>
-        <span class="heroi-diretorio-rotulo">lojas</span>
-      </div>
+  <section class="heroi-balcao" aria-labelledby="titulo-unidades">
+    <?php if ($fotoCel && $fotoMedia): ?>
+      <picture class="heroi-balcao-foto">
+        <source media="(min-width: 48rem)" srcset="<?= e($fotoMedia) ?> 1600w<?= $fotoLarga ? ', ' . e($fotoLarga) . ' 2400w' : '' ?>" sizes="100vw" width="2400" height="1600">
+        <img src="<?= e($fotoCel) ?>" srcset="<?= e($fotoCel) ?> 780w<?= $fotoCel3x ? ', ' . e($fotoCel3x) . ' 1170w' : '' ?>" sizes="100vw" alt="" width="780" height="1100" fetchpriority="high" decoding="async">
+      </picture>
+    <?php endif; ?>
 
-      <div class="heroi-diretorio-texto">
+    <div class="heroi-balcao-conteudo mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="heroi-balcao-texto">
         <nav aria-label="Você está aqui" class="flex items-center gap-2 text-sm font-semibold">
           <a href="/" class="rounded underline-offset-4 hover:underline">Início</a>
           <span aria-hidden="true">/</span>
           <span aria-current="page">Unidades</span>
         </nav>
-        <h1 id="titulo-unidades" class="heroi-diretorio-titulo">Nossas unidades</h1>
-        <p class="heroi-diretorio-frase">
+        <h1 id="titulo-unidades" class="heroi-balcao-titulo">Nossas unidades</h1>
+        <p class="heroi-balcao-frase">
           <?= e((string) count($unidades)) ?> lojas. O pedido feito pelo site vai para a matriz;
           nas outras você compra no balcão ou pelo WhatsApp de cada uma.
         </p>
 
         <?php if ($todasLojas !== []): ?>
-          <ul class="heroi-diretorio-lojas" aria-label="Ir para uma loja">
+          <ul class="heroi-balcao-lojas" aria-label="Ir para uma loja">
             <?php foreach ($todasLojas as $lojaAtalho): ?>
               <li>
                 <a href="#<?= e((string) $lojaAtalho['slug']) ?>" class="<?= !empty($lojaAtalho['matriz']) ? 'loja-atalho loja-atalho-matriz' : 'loja-atalho' ?>">

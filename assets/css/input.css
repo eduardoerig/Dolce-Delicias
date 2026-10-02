@@ -2019,7 +2019,7 @@ a.loja-acao:hover {
      acima de 4.5:1 sobre qualquer foto.
 
    A home, A empresa e Unidades têm heróis próprios (.heroi-cento,
-   .heroi-manifesto, .heroi-diretorio). */
+   .heroi-manifesto, .heroi-balcao). */
 
 .heroi-foto {
   position: relative;
@@ -2720,94 +2720,84 @@ a.loja-acao:hover {
   }
 }
 
-/* ---------- Unidades: herói "diretório" ----------
-   O número de lojas em letra gigante, com a tigela de bolinhas apoiada em
-   cima dele; ao lado, um atalho para cada loja. Fundo marrom com um padrão de
-   pontos, como mapa, e o halo vermelho atrás da tigela. No celular: a arte
-   em cima, o texto e os atalhos embaixo; do computador em diante, a arte à
-   esquerda e o texto à direita (o espelho da home). */
-.heroi-diretorio {
+/* ---------- Unidades: herói "balcão" ----------
+   A foto de uma loja (a vendedora arrumando os pães) ocupa o herói; o texto
+   e os atalhos das lojas ficam sobre o marrom. No celular e no tablet em pé a
+   foto vem em cima, esmaecendo no marrom, e o texto embaixo; do computador
+   em diante a foto ocupa tudo e o marrom sobe do lado esquerdo, onde fica o
+   texto: a vendedora, à direita, nunca fica atrás dele. */
+.heroi-balcao {
   position: relative;
   isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 4.5rem - 1px);
+  min-height: calc(100svh - 4.5rem - 1px);
   overflow: hidden;
-  background:
-    radial-gradient(circle at 50% 26%, rgb(225 5 30 / 0.45) 0, rgb(225 5 30 / 0.15) 26%, rgb(225 5 30 / 0) 50%),
-    radial-gradient(rgb(255 255 255 / 0.07) 1px, transparent 1.6px) 0 0 / 22px 22px,
-    var(--color-ink);
+  background-color: var(--color-ink);
   color: #fff;
 }
 
-.heroi-diretorio-grade {
-  display: grid;
-  align-content: center;
-  gap: 1.25rem;
-  min-height: calc(100vh - 4.5rem - 1px);
-  min-height: calc(100svh - 4.5rem - 1px);
-  padding-top: 1.5rem;
-  padding-bottom: 2.5rem;
+.heroi-balcao :focus-visible {
+  outline-color: #fff;
 }
 
-.heroi-diretorio-arte {
+.heroi-balcao-foto {
   position: relative;
-  display: grid;
-  justify-items: center;
-  filter: drop-shadow(0 22px 26px rgb(0 0 0 / 0.45));
+  display: block;
+  flex: none;
+  height: max(15rem, 44svh);
 }
 
-/* A tigela fica na frente do número e afunda um pouco nele: o pé esmaece
-   (a foto original foi cortada reta ali). */
-.heroi-diretorio-arte img {
+.heroi-balcao-foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 22%;
+}
+
+/* O pé da foto esmaece no marrom do texto. */
+.heroi-balcao-foto::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--color-ink) 0, rgb(42 23 16 / 0.6) 22%, rgb(42 23 16 / 0) 48%);
+}
+
+.heroi-balcao-conteudo {
   position: relative;
-  z-index: 1;
-  width: min(12rem, 48vw);
-  height: auto;
-  /* Pé e laterais esmaecem: a tigela da foto original foi cortada reta
-     embaixo e nos dois lados. */
-  mask-image:
-    linear-gradient(to bottom, #000 76%, transparent 100%),
-    linear-gradient(to right, transparent 0, #000 9%, #000 91%, transparent 100%);
-  mask-composite: intersect;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: -2.5rem;
+  padding-bottom: 2.25rem;
 }
 
-.heroi-diretorio-numero {
-  /* A tigela afunda só no topo do número: o "6" continua inteiro de ler. */
-  margin-top: -0.2em;
-  font-family: var(--font-display);
-  font-size: clamp(7rem, 34vw, 21rem);
-  line-height: 0.8;
-  color: var(--color-brand);
-}
-
-.heroi-diretorio-rotulo {
-  margin-top: 0.25rem;
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  line-height: 1;
-}
-
-.heroi-diretorio-titulo {
+.heroi-balcao-titulo {
   margin-top: 0.75rem;
-  font-size: clamp(2.25rem, 9vw, 4.25rem);
-  line-height: 1;
+  font-size: clamp(2.5rem, 11vw, 6rem);
+  line-height: 0.92;
+  text-transform: uppercase;
 }
 
-.heroi-diretorio-frase {
+.heroi-balcao-frase {
   max-width: 34rem;
   margin-top: 0.875rem;
   font-size: 1.0625rem;
   line-height: 1.6;
-  color: rgb(255 255 255 / 0.85);
+  color: rgb(255 255 255 / 0.88);
 }
 
 /* Atalhos: um por loja. A matriz ocupa a linha toda e vem em amarelo. */
-.heroi-diretorio-lojas {
+.heroi-balcao-lojas {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.5rem;
   margin-top: 1.5rem;
 }
 
-.heroi-diretorio-lojas li:first-child {
+.heroi-balcao-lojas li:first-child {
   grid-column: 1 / -1;
 }
 
@@ -2818,6 +2808,7 @@ a.loja-acao:hover {
   min-height: 3rem;
   padding: 0.5rem 0.875rem;
   border: 1px solid rgb(255 255 255 / 0.35);
+  background-color: rgb(42 23 16 / 0.35);
   font-size: 0.9375rem;
   font-weight: 700;
   color: #fff;
@@ -2826,7 +2817,7 @@ a.loja-acao:hover {
 
 .loja-atalho:hover {
   border-color: #fff;
-  background-color: rgb(255 255 255 / 0.1);
+  background-color: rgb(255 255 255 / 0.12);
 }
 
 .loja-atalho small {
@@ -2845,73 +2836,53 @@ a.loja-acao:hover {
   background-color: color-mix(in oklab, var(--color-accent) 86%, white);
 }
 
-.heroi-diretorio :focus-visible {
-  outline-color: #fff;
-}
-
 @media (min-width: 48rem) {
-  .heroi-diretorio {
-    background:
-      radial-gradient(circle at 28% 50%, rgb(225 5 30 / 0.45) 0, rgb(225 5 30 / 0.15) 24%, rgb(225 5 30 / 0) 46%),
-      radial-gradient(rgb(255 255 255 / 0.07) 1px, transparent 1.6px) 0 0 / 22px 22px,
-      var(--color-ink);
-  }
-
-  .heroi-diretorio-grade {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    align-items: center;
-    gap: 3rem;
-  }
-
-  .heroi-diretorio-arte img {
-    width: min(28rem, 32vw);
-  }
-
-  .heroi-diretorio-numero {
-    font-size: clamp(10rem, 22vw, 22rem);
-  }
-
-  .heroi-diretorio-lojas {
+  .heroi-balcao-lojas {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .heroi-balcao-frase {
+    font-size: 1.1875rem;
   }
 }
 
 @media (min-width: 64rem) {
-  .heroi-diretorio-grade {
-    gap: 5rem;
+  .heroi-balcao-foto {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    height: auto;
   }
 
-  .heroi-diretorio-frase {
-    font-size: 1.25rem;
+  .heroi-balcao-foto img {
+    object-position: 64% 30%;
+  }
+
+  /* O marrom sobe da esquerda e some antes da vendedora. */
+  .heroi-balcao-foto::after {
+    background: linear-gradient(90deg, rgb(42 23 16 / 0.96) 0, rgb(42 23 16 / 0.9) 34%, rgb(42 23 16 / 0.45) 52%, rgb(42 23 16 / 0) 68%);
+  }
+
+  .heroi-balcao-conteudo {
+    margin-top: 0;
+    padding-block: 3rem;
+  }
+
+  .heroi-balcao-texto {
+    max-width: min(38rem, 46%);
   }
 }
 
+/* A foto se aproxima devagar uma vez, ao chegar. */
 @media (prefers-reduced-motion: no-preference) {
-  /* A tigela "pousa" no número uma vez, com um quique leve. */
-  .heroi-diretorio-arte img {
-    animation: tigela-pousa 0.9s var(--ease-massa) 0.15s both;
-  }
-
-  @supports (animation-timeline: view()) {
-    .heroi-diretorio-arte {
-      animation: recorte-profundidade linear both;
-      animation-timeline: view();
-      animation-range: exit 0% exit 100%;
-    }
+  .heroi-balcao-foto img {
+    animation: balcao-chega 1.6s var(--ease-massa) both;
   }
 }
 
-@keyframes tigela-pousa {
-  0% {
-    opacity: 0;
-    translate: 0 -2.5rem;
-  }
-  70% {
-    opacity: 1;
-    translate: 0 0.3rem;
-  }
-  100% {
-    translate: 0 0;
+@keyframes balcao-chega {
+  from {
+    scale: 1.08;
   }
 }
 
