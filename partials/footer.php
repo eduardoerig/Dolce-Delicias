@@ -172,7 +172,7 @@ $temOpiniao = $linkFeedback !== '' || $canaisRodape !== [];
 
 <!-- Avisos curtos (item adicionado, item removido). Preenchido por assets/js/ui.js.
      O leitor de tela ouve a frase pela região aria-live ao lado, não os botões. -->
-<div class="avisos" data-toast-area></div>
+<section class="avisos" data-toast-area aria-label="Avisos"></section>
 <p class="sr-only" data-aviso-leitor aria-live="polite" aria-atomic="true"></p>
 
 </body>
