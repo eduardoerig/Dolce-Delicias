@@ -6,7 +6,7 @@
  *   1. nome da matriz nos rótulos do carrinho
  *   2. dropdowns <details> (fechar ao clicar fora / Esc)
  *   3. drawer do carrinho, com foco e teclado
- *   4. catálogo: busca, filtros, ordem, páginas e vistos recentemente
+ *   4. catálogo: busca, filtros, ordem e páginas
  *   5. avisos curtos (toasts)
  *   6. quantidade na página do produto
  *   7. confirmação do pedido (carrinho.php)
@@ -449,46 +449,6 @@ document.addEventListener('click', (evento) => {
   clearTimeout(temporizadoresMais.get(mais));
   temporizadoresMais.set(mais, setTimeout(() => mais.classList.remove('feito'), 1400));
 });
-
-/* ---------------------------------------------------------------------------
- * VISTOS RECENTEMENTE
- * A página do produto anota o slug no navegador; a home mostra os últimos
- * quatro, copiando os cards prontos do <template>. Sem histórico (ou com o
- * armazenamento bloqueado), a seção simplesmente não aparece.
- * ------------------------------------------------------------------------ */
-const CHAVE_VISTOS = 'dolce:vistos';
-
-function lerVistos() {
-  try {
-    const lista = JSON.parse(localStorage.getItem(CHAVE_VISTOS) || '[]');
-    return Array.isArray(lista) ? lista.filter((s) => typeof s === 'string') : [];
-  } catch {
-    return [];
-  }
-}
-
-const produtoAberto = document.querySelector('[data-produto-visto]');
-if (produtoAberto) {
-  const slug = produtoAberto.dataset.produtoVisto;
-  try {
-    localStorage.setItem(CHAVE_VISTOS, JSON.stringify([slug, ...lerVistos().filter((s) => s !== slug)].slice(0, 8)));
-  } catch {
-    /* navegador sem armazenamento: só não haverá "vistos recentemente" */
-  }
-}
-
-const secaoVistos = document.querySelector('[data-vistos]');
-const modelosVistos = document.querySelector('[data-vistos-modelos]');
-if (secaoVistos && modelosVistos) {
-  const porSlug = new Map(
-    Array.from(modelosVistos.content.querySelectorAll('[data-produto]')).map((card) => [card.dataset.slug, card])
-  );
-  const escolhidos = lerVistos().map((slug) => porSlug.get(slug)).filter(Boolean).slice(0, 4);
-  if (escolhidos.length) {
-    secaoVistos.querySelector('[data-vistos-grade]')?.replaceChildren(...escolhidos.map((card) => document.importNode(card, true)));
-    secaoVistos.classList.remove('oculto');
-  }
-}
 
 /* ===========================================================================
  * 5. AVISOS CURTOS

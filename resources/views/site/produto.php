@@ -90,8 +90,7 @@ $descricaoPagina = dd_resumo((string) ($produto['descricao'] ?? ''), 155);
 include DD_BASE . '/partials/header.php';
 ?>
 
-<?php // data-produto-visto: ui.js anota este produto em "Vistos recentemente" da home. ?>
-<div class="bg-farinha" data-produto-visto="<?= e((string) $produto['slug']) ?>">
+<div class="bg-farinha">
 
   <!-- Faixa com o caminho até aqui; a categoria abre o catálogo já filtrado -->
   <div class="border-b border-linha bg-polvilho">

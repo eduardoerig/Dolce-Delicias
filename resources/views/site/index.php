@@ -202,25 +202,6 @@ $precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
   </div>
 </section>
 
-<?php
-/* ============================================================
-   VISTOS RECENTEMENTE — os produtos abertos neste aparelho.
-   A lista mora no navegador (localStorage); o PHP só deixa os cards prontos
-   no <template> e ui.js copia os que a pessoa viu. Sem histórico, nada aparece.
-   ============================================================ */
-?>
-<section class="oculto border-t border-linha bg-farinha" aria-labelledby="vistos-titulo" data-vistos>
-  <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-12">
-    <h2 id="vistos-titulo" class="text-3xl sm:text-4xl">Vistos recentemente</h2>
-    <div class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4" data-vistos-grade></div>
-  </div>
-</section>
-<template data-vistos-modelos>
-  <?php foreach ($produtos as $produto): ?>
-    <?php $eager = false; include DD_BASE . '/partials/product-card.php'; ?>
-  <?php endforeach; ?>
-</template>
-
 <!-- ============================================================
      COMO ENCOMENDAR — sequência de verdade, por isso vai numerada
      ============================================================ -->
