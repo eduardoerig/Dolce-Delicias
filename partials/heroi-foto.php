@@ -6,11 +6,13 @@ declare(strict_types=1);
  * partials/heroi-foto.php — o herói de cada página: foto de fundo, uma camada
  * escura por cima e o texto.
  *
+ * Ocupa a primeira tela inteira (abaixo do topo fixo): é a chegada na página.
+ *
  * Mobile-first: no celular a foto vem recortada em retrato
- * (assets/img/heroi/<nome>-celular.jpg, 828 × 900) e a camada escurece de
+ * (assets/img/heroi/<nome>-celular.jpg, 780 × 1400) e a camada escurece de
  * baixo para cima, porque o texto fica embaixo; do tablet em diante entra a
- * versão larga (<nome>.jpg, 1920 × 800) e a camada escurece da esquerda para a
- * direita, onde fica o texto. O navegador só baixa a versão do tamanho da tela.
+ * versão larga (<nome>.jpg, 1920 × 1080) e a camada escurece da esquerda para
+ * a direita, onde fica o texto. O navegador só baixa a versão do tamanho da tela.
  *
  * A foto é decorativa (alt vazio): quem lê a página recebe o título.
  *
@@ -20,7 +22,7 @@ declare(strict_types=1);
  *   $heroiTitulo    string  id do h1, para o aria-labelledby
  *   $heroiTom       string  'escuro' (padrão) ou 'marca' (camada vermelha, a home)
  *   $heroiCaminho   string  opcional: nome da página no "Início / ..." acima do texto
- *   $heroiBaixo     bool    opcional: herói mais baixo, para páginas de tarefa (Seu pedido)
+ *   $heroiBaixo     bool    opcional: herói baixo em vez de tela cheia, para páginas de tarefa (Seu pedido)
  */
 
 require_once __DIR__ . '/bootstrap.php';
@@ -33,9 +35,9 @@ $heroiCelular  = dd_imagem('/assets/img/heroi/' . ($heroiFoto ?? '') . '-celular
   <?php if ($heroiCelular): ?>
     <picture class="heroi-foto-fundo">
       <?php if ($heroiLarga && $heroiLarga !== $heroiCelular): ?>
-        <source media="(min-width: 48rem)" srcset="<?= e($heroiLarga) ?>" width="1920" height="800">
+        <source media="(min-width: 48rem)" srcset="<?= e($heroiLarga) ?>" width="1920" height="1080">
       <?php endif; ?>
-      <img src="<?= e($heroiCelular) ?>" alt="" width="828" height="900" fetchpriority="high" decoding="async">
+      <img src="<?= e($heroiCelular) ?>" alt="" width="780" height="1400" fetchpriority="high" decoding="async">
     </picture>
   <?php endif; ?>
 

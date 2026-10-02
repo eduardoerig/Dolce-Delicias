@@ -1908,7 +1908,11 @@ a.loja-acao:hover {
   isolation: isolate;
   display: flex;
   align-items: flex-end;
-  min-height: 26rem;
+  /* A primeira tela inteira, descontado o topo fixo (4.5rem + a borda).
+     svh: a altura com a barra do navegador do celular à mostra, para o texto
+     de baixo nunca ficar escondido atrás dela. */
+  min-height: calc(100vh - 4.5rem - 1px);
+  min-height: calc(100svh - 4.5rem - 1px);
   overflow: hidden;
   background-color: var(--color-ink);
   color: #fff;
@@ -1949,7 +1953,6 @@ a.loja-acao:hover {
 @media (min-width: 48rem) {
   .heroi-foto {
     align-items: center;
-    min-height: 30rem;
   }
 
   .heroi-foto::before {
@@ -1962,12 +1965,6 @@ a.loja-acao:hover {
 
   .heroi-foto-conteudo {
     padding-block: 4rem;
-  }
-}
-
-@media (min-width: 64rem) {
-  .heroi-foto {
-    min-height: 34rem;
   }
 }
 
