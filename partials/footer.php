@@ -170,8 +170,10 @@ $temOpiniao = $linkFeedback !== '' || $canaisRodape !== [];
   <?php endforeach; ?>
 </template>
 
-<!-- Avisos curtos (item adicionado, item removido). Preenchido por assets/js/ui.js. -->
-<div class="toast toast-end z-[80] p-4" data-toast-area aria-live="polite" aria-atomic="true"></div>
+<!-- Avisos curtos (item adicionado, item removido). Preenchido por assets/js/ui.js.
+     O leitor de tela ouve a frase pela região aria-live ao lado, não os botões. -->
+<div class="avisos" data-toast-area></div>
+<p class="sr-only" data-aviso-leitor aria-live="polite" aria-atomic="true"></p>
 
 </body>
 </html>

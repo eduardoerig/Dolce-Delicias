@@ -156,8 +156,8 @@ function esc(texto) {
 let iconesPorCategoria = null;
 let iconesPorProduto = null;
 
-/** O desenho do próprio produto; se não houver, o da categoria. */
-function iconeDoItem(item) {
+/** O desenho do próprio produto; se não houver, o da categoria. (ui.js usa no aviso.) */
+export function iconeDoItem(item) {
   if (iconesPorCategoria === null) {
     iconesPorCategoria = new Map();
     iconesPorProduto = new Map();
@@ -404,8 +404,10 @@ document.addEventListener('click', (evento) => {
     const atual = campo ? Number(campo.value) || 0 : 0;
 
     if (alvo.closest('[data-item-remove]')) {
+      const antes = lerCarrinho();
+      const nome = antes.find((i) => i.id === id)?.nome || 'Item';
       removeItem(id);
-      document.dispatchEvent(new CustomEvent('dolce:removido'));
+      removido(antes, `${nome} saiu do pedido.`);
       return;
     }
     if (alvo.closest('[data-item-mais]')) {
@@ -424,11 +426,23 @@ document.addEventListener('click', (evento) => {
     return;
   }
   if (alvo.closest('[data-cart-clear]')) {
-    // Esvaziar não tem volta: pergunta antes, dizendo o que acontece.
-    if (!window.confirm('Tirar todos os itens do pedido? Essa ação não pode ser desfeita.')) return;
+    // Esvazia na hora e oferece "Desfazer" no aviso, em vez de perguntar antes:
+    // o engano custa um toque para voltar, e o acerto não custa uma confirmação.
+    const antes = lerCarrinho();
     limparCarrinho();
-    document.dispatchEvent(new CustomEvent('dolce:removido'));
+    removido(antes, 'Pedido esvaziado.');
   }
+});
+
+/** Avisa a remoção levando o carrinho de antes, para o aviso poder desfazer. */
+function removido(antes, mensagem) {
+  document.dispatchEvent(new CustomEvent('dolce:removido', { detail: { antes, mensagem } }));
+}
+
+/* "Desfazer" no aviso: o carrinho volta a ser o que era antes da remoção. */
+document.addEventListener('dolce:restaurar', (evento) => {
+  const itens = evento.detail?.itens;
+  if (Array.isArray(itens)) salvarCarrinho(itens.filter(itemValido));
 });
 
 document.addEventListener('change', (evento) => {
