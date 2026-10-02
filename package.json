@@ -12,6 +12,7 @@
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.13",
     "daisyui": "^5.1.7",
+    "gsap": "^3.15.0",
     "tailwindcss": "^4.1.13"
   },
   "type": "module"

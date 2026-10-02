@@ -14,7 +14,7 @@ Desktop.ini
 # propósito — assim o site funciona ao subir num host PHP simples, sem
 # precisar rodar o build lá. Regere com `npm run build`.
 .env
-vendor/
+/vendor/
 storage/uploads/*
 storage/logs/*
 .phpunit.cache/

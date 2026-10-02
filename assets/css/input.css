@@ -241,25 +241,6 @@
 }
 
 /* -------------------------------------------------------------
-   HERÓI COM RECORTE: TEXTO SÓ NA METADE ESQUERDA
-   Do tablet em diante a arte ocupa a metade direita; o texto não pode
-   passar dela. Fica fora do @layer porque o HTML do texto leva classes
-   utilitárias do Tailwind (max-w-*, text-[clamp…]) que venceriam uma regra
-   de componente.
-   ------------------------------------------------------------- */
-@media (min-width: 48rem) {
-  .heroi-foto-recorte .heroi-foto-conteudo > * {
-    max-width: min(44rem, 46%);
-  }
-
-  /* "ENCOMENDE" é uma palavra só e não quebra: o tamanho acompanha a
-     largura da tela para caber na metade do texto. */
-  .heroi-recorte-coxinhas h1 {
-    font-size: clamp(2.5rem, 5.4vw, 5.5rem);
-  }
-}
-
-/* -------------------------------------------------------------
    CARRINHO NA LATERAL, UMA BARRA DE ROLAGEM SÓ
    O drawer do daisyUI (checkbox, overlay, inert e foco em ui.js), colado
    à direita na altura inteira da tela. Uma barra de rolagem só, a da lista
@@ -2030,18 +2011,15 @@ a.loja-acao:hover {
 }
 
 /* ---------- Herói de cada página ----------
-   partials/heroi-foto.php. Dois desenhos, os dois com texto branco:
-
-   - foto (Seu pedido): foto de fundo com uma camada escura por cima. No
+   partials/heroi-foto.php, com texto branco (Seu pedido): foto de fundo
+   com uma camada escura por cima. No
      celular o texto fica embaixo e a camada escurece de baixo para cima; do
      tablet em diante o texto fica à esquerda e a camada escurece da esquerda
      para a direita. Onde há texto a camada passa de 75%: branco cheio fica
      acima de 4.5:1 sobre qualquer foto.
 
-   - recorte (home, A empresa, Unidades): a comida recortada flutua sobre o
-     marrom com um halo vermelho da marca atrás. Nunca há texto sobre a
-     comida: no celular a arte fica em cima e o texto embaixo; do tablet em
-     diante a arte ocupa a metade direita e o texto, a esquerda. */
+   A home, A empresa e Unidades têm heróis próprios (.heroi-cento,
+   .heroi-manifesto, .heroi-diretorio). */
 
 .heroi-foto {
   position: relative;
@@ -2086,51 +2064,6 @@ a.loja-acao:hover {
   outline-color: #fff;
 }
 
-/* Recorte, celular: arte em cima com o halo, texto embaixo. */
-.heroi-foto-recorte {
-  flex-direction: column;
-  align-items: stretch;
-  background:
-    radial-gradient(circle at 50% 24%, rgb(225 5 30 / 0.55) 0, rgb(225 5 30 / 0.2) 28%, rgb(225 5 30 / 0) 55%),
-    var(--color-ink);
-}
-
-.heroi-recorte {
-  position: relative;
-  display: grid;
-  flex: none;
-  /* Uma linha com altura definida: sem isso a altura em % da imagem não
-     resolve e a arte sai do tamanho natural, por cima do texto. */
-  grid-template-rows: minmax(0, 1fr);
-  place-items: center;
-  height: max(13rem, 38svh);
-  padding: 1.25rem 1rem 0;
-  /* A sombra fica no contêiner, não na imagem: na imagem o esmaecido do pé
-     (mask) recortava a sombra no limite da foto e desenhava um retângulo. */
-  filter: drop-shadow(0 22px 28px rgb(0 0 0 / 0.45));
-}
-
-.heroi-recorte img {
-  width: auto;
-  max-width: 88%;
-  height: 100%;
-  min-height: 0;
-  object-fit: contain;
-}
-
-.heroi-foto-recorte .heroi-foto-conteudo {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-top: 0.75rem;
-}
-
-/* Na home o "Arraste para baixo" fica preso no pé: o texto deixa espaço. */
-.heroi-foto-recorte .heroi-foto-conteudo:has(.heroi-rolar) {
-  padding-bottom: 4.5rem;
-}
-
 @media (min-width: 48rem) {
   .heroi-foto {
     align-items: center;
@@ -2143,67 +2076,9 @@ a.loja-acao:hover {
   .heroi-foto-conteudo {
     padding-block: 4rem;
   }
-
-  /* Recorte, tablet em diante: arte na metade direita, texto à esquerda. */
-  .heroi-foto-recorte {
-    flex-direction: row;
-    background:
-      radial-gradient(circle at 74% 50%, rgb(225 5 30 / 0.5) 0, rgb(225 5 30 / 0.18) 26%, rgb(225 5 30 / 0) 50%),
-      var(--color-ink);
-  }
-
-  .heroi-recorte {
-    position: absolute;
-    inset: 0 0 0 auto;
-    width: 50%;
-    height: 100%;
-    padding: 2.5rem 4% 2.5rem 0;
-  }
-
-  .heroi-recorte img {
-    max-width: 100%;
-    height: auto;
-    max-height: 84%;
-  }
-
-  /* O texto não passa da metade esquerda: ver "HERÓI COM RECORTE", fora do
-     @layer, no começo do arquivo. */
-  .heroi-foto-recorte .heroi-foto-conteudo {
-    display: block;
-  }
-
-  /* A seta fica no meio da metade do texto, longe da arte. */
-  .heroi-foto-recorte .heroi-rolar {
-    left: 25%;
-  }
 }
 
-/* Movimento, só para quem não pediu menos: a arte entra uma vez e, ao
-   rolar, sobe devagar (profundidade). A rolagem é CSS puro
-   (animation-timeline), sem JavaScript; navegador sem suporte mostra a arte
-   parada. */
-@media (prefers-reduced-motion: no-preference) {
-  .heroi-recorte img {
-    animation: recorte-entra 0.8s var(--ease-massa) 0.1s both;
-  }
-
-  @supports (animation-timeline: view()) {
-    .heroi-recorte {
-      animation: recorte-profundidade linear both;
-      animation-timeline: view();
-      animation-range: exit 0% exit 100%;
-    }
-  }
-}
-
-@keyframes recorte-entra {
-  from {
-    opacity: 0;
-    translate: 0 2rem;
-    scale: 0.96;
-  }
-}
-
+/* A arte sobe devagar ao rolar (profundidade): A empresa e Unidades. */
 @keyframes recorte-profundidade {
   to {
     translate: 0 -3rem;
@@ -3037,6 +2912,132 @@ a.loja-acao:hover {
   }
   100% {
     translate: 0 0;
+  }
+}
+
+/* ---------- Home: herói "o cento chegando" ----------
+   Um prato com um cento de salgados rola da esquerda e para com metade à
+   mostra: no celular apoiado no pé do herói (a metade de cima aparece), do
+   tablet em diante cortado pela borda direita. O texto nunca fica sobre o
+   prato: ele reserva o espaço da metade visível. --prato é o diâmetro.
+   A posição aqui é a final; o GSAP só anima a chegada (heroi-cento.js). */
+.heroi-cento {
+  --prato: min(118vw, 34rem);
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 4.5rem - 1px);
+  min-height: calc(100svh - 4.5rem - 1px);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 100%, rgb(225 5 30 / 0.6) 0, rgb(225 5 30 / 0.22) 30%, rgb(225 5 30 / 0) 58%),
+    var(--color-ink);
+  color: #fff;
+}
+
+.heroi-cento :focus-visible {
+  outline-color: #fff;
+}
+
+/* Atrás do texto: na chegada, no computador, o prato passa por baixo dele.
+   A sombra fica no contêiner, que não gira; ela cai sempre para baixo. */
+.heroi-cento-prato {
+  position: absolute;
+  /* Offsets negativos, não translate: o GSAP assume o transform do prato. */
+  bottom: calc(var(--prato) / -2);
+  left: calc(50% - var(--prato) / 2);
+  z-index: -1;
+  width: var(--prato);
+  aspect-ratio: 1;
+  filter: drop-shadow(0 20px 34px rgb(0 0 0 / 0.55));
+}
+
+.heroi-cento-prato img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.heroi-cento-conteudo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 1.75rem;
+  /* A metade visível do prato e o "Arraste para baixo" logo acima dela. */
+  padding-bottom: calc(var(--prato) / 2 + 4rem);
+}
+
+.heroi-cento-texto {
+  max-width: 44rem;
+}
+
+/* leading abaixo de 1 é o que dá cara de cartaz: as linhas se tocam. */
+.heroi-cento-titulo {
+  font-size: clamp(2.5rem, 12vw, 5.5rem);
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.heroi-cento-frase {
+  max-width: 32rem;
+  margin-top: 0.75rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+.heroi-cento .heroi-rolar {
+  bottom: calc(var(--prato) / 2 + 0.5rem);
+}
+
+/* Antes do primeiro quadro do GSAP: nada à mostra (ver hero.php). */
+.cento-anima [data-cento-prato],
+.cento-anima [data-cento-revela] {
+  opacity: 0;
+}
+
+@media (min-width: 40rem) {
+  .heroi-cento-frase {
+    margin-top: 1rem;
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 48rem) {
+  /* Um semicírculo inteiro na altura do herói, sem passar de 62% da tela. */
+  .heroi-cento {
+    --prato: min(calc(100svh - 7.5rem), 62vw);
+    background:
+      radial-gradient(circle at 100% 50%, rgb(225 5 30 / 0.55) 0, rgb(225 5 30 / 0.2) 28%, rgb(225 5 30 / 0) 52%),
+      var(--color-ink);
+  }
+
+  .heroi-cento-prato {
+    top: calc(50% - var(--prato) / 2);
+    right: calc(var(--prato) / -2);
+    bottom: auto;
+    left: auto;
+  }
+
+  .heroi-cento-conteudo {
+    padding-block: 4rem 5rem;
+  }
+
+  /* O texto para antes da metade visível do prato (5rem: margem lateral
+     do conteúdo e um respiro). */
+  .heroi-cento-texto {
+    max-width: min(44rem, calc(100vw - var(--prato) / 2 - 5rem));
+  }
+
+  .heroi-cento-titulo {
+    font-size: clamp(2.75rem, 6.4vw, 6.25rem);
+  }
+
+  /* A seta fica no meio da área do texto, longe do prato. */
+  .heroi-cento .heroi-rolar {
+    bottom: 1.25rem;
+    left: calc((100% - var(--prato) / 2) / 2);
   }
 }
 }
