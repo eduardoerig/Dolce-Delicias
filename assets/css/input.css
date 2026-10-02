@@ -2018,7 +2018,7 @@ a.loja-acao:hover {
      para a direita. Onde há texto a camada passa de 75%: branco cheio fica
      acima de 4.5:1 sobre qualquer foto.
 
-   A home, A empresa e Unidades têm heróis próprios (.heroi-zap,
+   A home, A empresa e Unidades têm heróis próprios (.heroi-cento,
    .heroi-manifesto, .heroi-diretorio). */
 
 .heroi-foto {
@@ -2915,17 +2915,14 @@ a.loja-acao:hover {
   }
 }
 
-/* ---------- Home: herói "o pedido fecha no WhatsApp" ----------
-   Um braço segurando o celular entra pela esquerda; na tela, a conversa do
-   pedido com a Dolce. --cel é a largura da foto do braço com o celular
-   (1094 × 1519). A tela da foto é transparente: a conversa (.zap-tela) fica
-   por baixo da imagem, nas medidas da tela dentro da foto, e o notch e os
-   cantos vêm da própria foto. A posição aqui é a final; o GSAP só anima a
-   chegada (heroi-zap.js).
-   Celular e tablet em pé: texto em cima, celular embaixo, cortado pelo pé.
-   Computador: celular à esquerda, cortado pela borda, texto à direita. */
-.heroi-zap {
-  --cel: min(118vw, 40rem);
+/* ---------- Home: herói "o cento chegando" ----------
+   Um prato com um cento de salgados rola da esquerda e para com metade à
+   mostra: no celular apoiado no pé do herói (a metade de cima aparece), do
+   tablet em diante cortado pela borda direita. O texto nunca fica sobre o
+   prato: ele reserva o espaço da metade visível. --prato é o diâmetro.
+   A posição aqui é a final; o GSAP só anima a chegada (heroi-cento.js). */
+.heroi-cento {
+  --prato: min(118vw, 34rem);
   position: relative;
   isolation: isolate;
   display: flex;
@@ -2934,50 +2931,222 @@ a.loja-acao:hover {
   min-height: calc(100svh - 4.5rem - 1px);
   overflow: hidden;
   background:
-    radial-gradient(circle at 50% 80%, rgb(225 5 30 / 0.5) 0, rgb(225 5 30 / 0.18) 30%, rgb(225 5 30 / 0) 58%),
+    radial-gradient(circle at 50% 100%, rgb(225 5 30 / 0.6) 0, rgb(225 5 30 / 0.22) 30%, rgb(225 5 30 / 0) 58%),
     var(--color-ink);
   color: #fff;
 }
 
-.heroi-zap :focus-visible {
+.heroi-cento :focus-visible {
   outline-color: #fff;
 }
 
-.heroi-zap-conteudo {
-  width: 100%;
-  max-width: 80rem;
-  margin-inline: auto;
-  padding: 1.75rem 1rem 1.25rem;
+/* Atrás do texto: na chegada, no computador, o prato passa por baixo dele.
+   A sombra fica no contêiner, que não gira; ela cai sempre para baixo. */
+.heroi-cento-prato {
+  position: absolute;
+  /* Offsets negativos, não translate: o GSAP assume o transform do prato. */
+  bottom: calc(var(--prato) / -2);
+  left: calc(50% - var(--prato) / 2);
+  z-index: -1;
+  width: var(--prato);
+  aspect-ratio: 1;
+  filter: drop-shadow(0 20px 34px rgb(0 0 0 / 0.55));
 }
 
-.heroi-zap-texto {
-  max-width: 40rem;
+.heroi-cento-prato img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.heroi-cento-conteudo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 1.75rem;
+  /* A metade visível do prato e o "Arraste para baixo" logo acima dela. */
+  padding-bottom: calc(var(--prato) / 2 + 4rem);
+}
+
+.heroi-cento-texto {
+  max-width: 44rem;
 }
 
 /* leading abaixo de 1 é o que dá cara de cartaz: as linhas se tocam. */
-.heroi-zap-titulo {
+.heroi-cento-titulo {
   font-size: clamp(2.5rem, 12vw, 5.5rem);
   line-height: 0.92;
   text-transform: uppercase;
 }
 
-.heroi-zap-frase {
+.heroi-cento-frase {
   max-width: 32rem;
   margin-top: 0.75rem;
   font-size: 1.0625rem;
   line-height: 1.6;
 }
 
-/* O palco ocupa o resto da altura e corta o celular; o pé esmaece no marrom,
-   e o "Arraste para baixo" fica sobre esse esmaecido. */
-.heroi-zap-palco {
-  position: relative;
-  flex: 1;
-  min-height: 17rem;
-  mask-image: linear-gradient(to bottom, #000 calc(100% - 8rem), transparent calc(100% - 1.5rem));
+.heroi-cento .heroi-rolar {
+  bottom: calc(var(--prato) / 2 + 0.5rem);
 }
 
-.heroi-zap-celular {
+/* Antes do primeiro quadro do GSAP: nada à mostra (ver hero.php). */
+.cento-anima [data-cento-prato],
+.cento-anima [data-cento-revela] {
+  opacity: 0;
+}
+
+@media (min-width: 40rem) {
+  .heroi-cento-frase {
+    margin-top: 1rem;
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 48rem) {
+  /* Um semicírculo inteiro na altura do herói, sem passar de 62% da tela. */
+  .heroi-cento {
+    --prato: min(calc(100svh - 7.5rem), 62vw);
+    background:
+      radial-gradient(circle at 100% 50%, rgb(225 5 30 / 0.55) 0, rgb(225 5 30 / 0.2) 28%, rgb(225 5 30 / 0) 52%),
+      var(--color-ink);
+  }
+
+  .heroi-cento-prato {
+    top: calc(50% - var(--prato) / 2);
+    right: calc(var(--prato) / -2);
+    bottom: auto;
+    left: auto;
+  }
+
+  .heroi-cento-conteudo {
+    padding-block: 4rem 5rem;
+  }
+
+  /* O texto para antes da metade visível do prato (5rem: margem lateral
+     do conteúdo e um respiro). */
+  .heroi-cento-texto {
+    max-width: min(44rem, calc(100vw - var(--prato) / 2 - 5rem));
+  }
+
+  .heroi-cento-titulo {
+    font-size: clamp(2.75rem, 6.4vw, 6.25rem);
+  }
+
+  /* A seta fica no meio da área do texto, longe do prato. */
+  .heroi-cento .heroi-rolar {
+    bottom: 1.25rem;
+    left: calc((100% - var(--prato) / 2) / 2);
+  }
+}
+
+/* ---------- Home: "Como encomendar" com o celular ----------
+   Os três passos ao lado de um braço segurando o celular; na tela, o terceiro
+   passo acontecendo: a conversa do pedido com a Dolce no WhatsApp. --cel é a
+   largura da foto do braço com o celular (1094 × 1519). A tela da foto é
+   transparente: a conversa (.zap-tela) fica por baixo da imagem, nas medidas
+   da tela dentro da foto, e o notch e os cantos vêm da própria foto. A
+   posição aqui é a final; o GSAP anima a chegada quando a seção aparece
+   (encomendas-zap.js).
+   Celular e tablet em pé: passos em cima, celular embaixo, esmaecendo.
+   Computador: celular à esquerda, cortado pela borda e pelo pé da seção,
+   passos à direita. */
+.encomendas {
+  --cel: min(118vw, 36rem);
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 72%, rgb(225 5 30 / 0.45) 0, rgb(225 5 30 / 0.15) 24%, rgb(225 5 30 / 0) 45%),
+    var(--color-ink);
+  color: #fff;
+}
+
+.encomendas :focus-visible {
+  outline-color: #fff;
+}
+
+.encomendas-conteudo {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding: 3rem 1rem 1.5rem;
+}
+
+.encomendas-texto {
+  max-width: 36rem;
+}
+
+.encomendas-frase {
+  margin-top: 0.75rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.85);
+}
+
+/* Sequência de verdade, por isso numerada. */
+.encomendas-passos {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.encomendas-passos li {
+  display: flex;
+  gap: 1rem;
+}
+
+.encomendas-numero {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  background-color: var(--color-accent);
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  color: var(--color-ink);
+}
+
+.encomendas-passos h3 {
+  font-size: 1.25rem;
+}
+
+.encomendas-passos p {
+  margin-top: 0.25rem;
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.85);
+}
+
+.encomendas-empresas {
+  margin-top: 2.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgb(255 255 255 / 0.2);
+  color: rgb(255 255 255 / 0.85);
+}
+
+.encomendas-empresas a {
+  font-weight: 600;
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+/* O palco corta o celular e esmaece o pé no marrom. */
+.encomendas-palco {
+  position: relative;
+  /* O celular inteiro (0,96 × --cel) e um pouco do braço, que esmaece. */
+  height: calc(var(--cel) * 0.96 + 5rem);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 5rem), transparent);
+}
+
+.encomendas-celular {
   position: absolute;
   top: 0.5rem;
   /* A tela fica no meio: o centro dela está a 68% da largura da foto. */
@@ -2987,7 +3156,7 @@ a.loja-acao:hover {
   filter: drop-shadow(0 24px 36px rgb(0 0 0 / 0.5));
 }
 
-.heroi-zap-foto {
+.encomendas-foto {
   position: relative;
   z-index: 1;
   display: block;
@@ -2995,59 +3164,47 @@ a.loja-acao:hover {
   height: auto;
 }
 
-.heroi-zap .heroi-rolar {
-  z-index: 2;
-}
-
 @media (min-width: 40rem) {
-  .heroi-zap-conteudo {
+  .encomendas-conteudo {
     padding-inline: 1.5rem;
   }
 
-  .heroi-zap-frase {
-    margin-top: 1rem;
+  .encomendas-frase {
     font-size: 1.25rem;
   }
 }
 
 @media (min-width: 64rem) {
-  .heroi-zap {
-    --cel: min(50vw, calc((100svh - 4.5rem) * 0.86), 44rem);
+  .encomendas {
+    --cel: min(46vw, 40rem);
     display: block;
     background:
-      radial-gradient(circle at calc(var(--cel) * 0.68) 42%, rgb(225 5 30 / 0.5) 0, rgb(225 5 30 / 0.18) 22%, rgb(225 5 30 / 0) 44%),
+      radial-gradient(circle at calc(var(--cel) * 0.68) 45%, rgb(225 5 30 / 0.45) 0, rgb(225 5 30 / 0.15) 22%, rgb(225 5 30 / 0) 44%),
       var(--color-ink);
   }
 
-  /* O texto começa depois da ponta dos dedos, alinhado à esquerda, no meio
-     da altura (a altura da tela do celular). */
-  .heroi-zap-conteudo {
+  /* Os passos começam depois da ponta dos dedos; a seção tem a altura do
+     celular até um pouco abaixo da tela, e o braço sai pelo pé. */
+  .encomendas-conteudo {
     display: flex;
     align-items: center;
     max-width: none;
-    min-height: calc(100vh - 4.5rem - 1px);
-    min-height: calc(100svh - 4.5rem - 1px);
-    padding: 3rem 2rem 4.5rem calc(var(--cel) + 2.5rem);
+    min-height: calc(var(--cel) * 0.96 + 8.5rem);
+    padding: 4.5rem 2rem 4.5rem calc(var(--cel) + 3rem);
   }
 
-  .heroi-zap-titulo {
-    font-size: clamp(2.75rem, 4.8vw, 5.5rem);
-  }
-
-  .heroi-zap-palco {
+  /* O rodapé também é marrom: o braço esmaece em vez de terminar numa
+     linha reta. */
+  .encomendas-palco {
     position: absolute;
     inset: 0;
-    mask-image: none;
+    height: auto;
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 7rem), transparent);
   }
 
-  .heroi-zap-celular {
-    top: 5%;
+  .encomendas-celular {
+    top: 2.5rem;
     left: 0;
-  }
-
-  .heroi-zap .heroi-rolar {
-    bottom: 1.25rem;
-    left: calc(var(--cel) + 2.5rem + (100% - var(--cel) - 4.5rem) / 2);
   }
 }
 
@@ -3277,7 +3434,6 @@ a.loja-acao:hover {
 
 /* Antes do primeiro quadro do GSAP: nada à mostra (ver hero.php). */
 .zap-anima [data-zap-celular],
-.zap-anima [data-zap-revela],
 .zap-anima [data-zap-msg] {
   opacity: 0;
 }

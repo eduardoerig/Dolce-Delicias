@@ -645,3 +645,22 @@ function dd_promocoes_produto(array $produto): array {
  }
  return $result;
 }
+
+/**
+ * Imprime as tags do GSAP e do ScrollTrigger (assets/js/vendor) uma vez só
+ * por página: o herói e o "Como encomendar" da home usam os dois.
+ */
+function dd_scripts_gsap(): void
+{
+    static $impresso = false;
+    if ($impresso) {
+        return;
+    }
+    $impresso = true;
+    foreach (['gsap.min.js', 'ScrollTrigger.min.js'] as $arquivo) {
+        $caminho = dd_imagem('/assets/js/vendor/' . $arquivo);
+        if ($caminho) {
+            echo '<script src="' . e($caminho) . '" defer></script>' . "\n";
+        }
+    }
+}

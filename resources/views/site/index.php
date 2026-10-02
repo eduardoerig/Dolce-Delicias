@@ -210,40 +210,16 @@ $precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
 </section>
 
 <!-- ============================================================
-     COMO ENCOMENDAR — sequência de verdade, por isso vai numerada
+     COMO ENCOMENDAR — os passos e o celular com a conversa do pedido
      ============================================================ -->
-<section id="encomendas" class="border-t border-linha bg-polvilho">
-  <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
-    <h2 class="text-3xl sm:text-4xl">Como encomendar</h2>
-
-    <ol class="mt-8 grid gap-x-8 gap-y-6 md:grid-cols-3">
-      <?php
-      $passos = [
-          ['titulo' => 'Monte o pedido',        'texto' => 'Adicione os itens. O mínimo de cada produto já vem respeitado.'],
-          ['titulo' => 'Diga como quer receber', 'texto' => 'Retirada na matriz ou entrega, e a forma de pagamento. Nada é cobrado no site.'],
-          // RF-18 fora do escopo: o site não fala em frete.
-          ['titulo' => 'Feche no WhatsApp',     'texto' => 'A conversa abre com o pedido escrito. A data e o valor final são combinados ali.'],
-      ];
-      foreach ($passos as $i => $passo): ?>
-        <li class="flex gap-4">
-          <span class="fonte-display flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-lg text-primary-content">
-            <?= e((string) ($i + 1)) ?>
-          </span>
-          <div>
-            <h3 class="text-xl"><?= e($passo['titulo']) ?></h3>
-            <p class="mt-1 leading-relaxed text-crust"><?= e($passo['texto']) ?></p>
-          </div>
-        </li>
-      <?php endforeach; ?>
-    </ol>
-
-    <?php // RF-19 — atendimento a empresas tem página própria; aqui só o convite. ?>
-    <p class="mt-10 border-t border-linha pt-6 text-crust">
-      Evento, escola ou empresa?
-      <?php // Sobre a faixa cor de massa o vermelho fica abaixo de 4.5:1: o texto é marrom e o sublinhado leva a cor. ?>
-      <a href="/sobre#empresas" class="font-semibold text-base-content underline decoration-brand decoration-2 underline-offset-4 hover:text-brand-escuro">Veja o atendimento para grandes pedidos</a>
-    </p>
-  </div>
-</section>
+<?php
+$passos = [
+    ['titulo' => 'Monte o pedido',        'texto' => 'Adicione os itens. O mínimo de cada produto já vem respeitado.'],
+    ['titulo' => 'Diga como quer receber', 'texto' => 'Retirada na matriz ou entrega, e a forma de pagamento. Nada é cobrado no site.'],
+    // RF-18 fora do escopo: o site não fala em frete.
+    ['titulo' => 'Feche no WhatsApp',     'texto' => 'A conversa abre com o pedido escrito. A data e o valor final são combinados ali.'],
+];
+include DD_BASE . '/partials/como-encomendar.php';
+?>
 
 <?php include DD_BASE . '/partials/footer.php'; ?>
