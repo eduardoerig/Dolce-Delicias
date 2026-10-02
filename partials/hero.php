@@ -7,14 +7,12 @@ declare(strict_types=1);
  *
  * A comida aparece viva, sem filtro de cor: o escuro só existe onde há texto
  * (embaixo no celular, à esquerda do tablet em diante; partials/heroi-foto.php,
- * tom 'vitrine'). Por cima da foto, a única ousadia da página: um selo de
- * preço de padaria, amarelo, com o menor valor de um cento no catálogo. Ele
- * entra uma vez, carimbado; movimento reduzido mostra o selo parado.
+ * tom 'vitrine').
  *
  * Embaixo do título: a frase, o botão vermelho (a cor de ação do site) e três
- * garantias curtas. No celular a foto fica em cima, limpa, e o texto num
- * painel embaixo; o link "Como funciona" e os atalhos de categoria só
- * aparecem do tablet em diante (no celular o catálogo vem logo abaixo).
+ * garantias curtas. No pé, "Arraste para baixo" com uma seta: o herói ocupa a
+ * tela inteira, e sem o aviso parece que a página acaba ali. A seta quica
+ * devagar; movimento reduzido mostra a seta parada.
  *
  * Tipografia: Alfa Slab One é a --font-display do site, então o h1 já nasce
  * com ela pela camada base.
@@ -24,40 +22,21 @@ declare(strict_types=1);
  *   $heroTexto       string       frase abaixo do título
  *   $heroCta         array|null   ['href','texto'] botão principal
  *   $heroLink        array|null   ['href','texto'] link discreto ao lado do botão
- *   $heroAtalhos     string[]     categorias para os atalhos; vazio esconde a fila
- *   $heroPrecoCento  float|null   menor preço de um cento; null esconde o selo
  *   $heroGarantias   string[]     frases curtas sob o botão
  */
 
 require_once __DIR__ . '/bootstrap.php';
 
-$heroLinhas     = $heroLinhas     ?? [];
-$heroTexto      = $heroTexto      ?? '';
-$heroCta        = $heroCta        ?? null;
-$heroLink       = $heroLink       ?? null;
-$heroAtalhos    = $heroAtalhos    ?? [];
-$heroPrecoCento = $heroPrecoCento ?? null;
-$heroGarantias  = $heroGarantias  ?? [];
-
-// "R$ 85,00" vira "R$ 85"; centavos só aparecem quando existem.
-$heroPrecoTexto = $heroPrecoCento !== null
-    ? preg_replace('/,00$/', '', dd_moeda((float) $heroPrecoCento))
-    : '';
+$heroLinhas    = $heroLinhas    ?? [];
+$heroTexto     = $heroTexto     ?? '';
+$heroCta       = $heroCta       ?? null;
+$heroLink      = $heroLink      ?? null;
+$heroGarantias = $heroGarantias ?? [];
 
 $iconeGarantia = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>';
 
 ob_start();
 ?>
-  <?php if ($heroPrecoTexto !== ''): ?>
-    <p class="selo-cento">
-      <span class="selo-cento-miolo">
-        <span class="selo-cento-rotulo">a partir de</span>
-        <span class="selo-cento-valor"><?= e($heroPrecoTexto) ?></span>
-        <span class="selo-cento-rotulo">o cento</span>
-      </span>
-    </p>
-  <?php endif; ?>
-
   <div class="heroi-vitrine-texto">
     <?php // leading abaixo de 1 é o que dá cara de cartaz: as linhas se tocam. ?>
     <h1 id="heroi-titulo" class="text-[clamp(2.5rem,12vw,5.5rem)] uppercase leading-[0.92]">
@@ -73,7 +52,7 @@ ob_start();
         <a href="<?= e($heroCta['href']) ?>" class="botao-primario heroi-cta w-full sm:w-auto"><?= e($heroCta['texto']) ?></a>
       <?php endif; ?>
       <?php if ($heroLink !== null): ?>
-        <a href="<?= e($heroLink['href']) ?>" class="hidden min-h-11 sm:inline-flex items-center font-semibold underline decoration-white/60 decoration-2 underline-offset-4 hover:decoration-white"><?= e($heroLink['texto']) ?></a>
+        <a href="<?= e($heroLink['href']) ?>" class="hidden min-h-11 items-center font-semibold underline decoration-white/60 decoration-2 underline-offset-4 hover:decoration-white sm:inline-flex"><?= e($heroLink['texto']) ?></a>
       <?php endif; ?>
     </div>
 
@@ -86,14 +65,12 @@ ob_start();
     <?php endif; ?>
   </div>
 
-  <?php if ($heroAtalhos !== []): ?>
-    <nav class="heroi-categorias" aria-label="Categorias do catálogo">
-      <span class="shrink-0 text-sm font-semibold">Comece por</span>
-      <?php foreach ($heroAtalhos as $categoriaAtalho): ?>
-        <a href="/?categoria=<?= e(rawurlencode($categoriaAtalho)) ?>#catalogo" class="heroi-atalho"><?= e($categoriaAtalho) ?></a>
-      <?php endforeach; ?>
-    </nav>
-  <?php endif; ?>
+  <?php // No celular a pessoa arrasta; no computador ela rola. O link leva ao catálogo. ?>
+  <a href="#catalogo" class="heroi-rolar">
+    <span class="sm:hidden">Arraste para baixo</span>
+    <span class="hidden sm:inline">Role para baixo</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v15"/><path d="m6 13 6 6 6-6"/></svg>
+  </a>
 <?php
 $heroiConteudo = (string) ob_get_clean();
 $heroiFoto     = 'inicio';

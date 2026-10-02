@@ -1936,7 +1936,7 @@ a.loja-acao:hover {
   background: linear-gradient(to top, rgb(42 23 16 / 0.95) 0, rgb(42 23 16 / 0.82) 55%, rgb(42 23 16 / 0.5) 100%);
 }
 
-/* Vitrine no celular: a foto em cima, limpa, em metade da tela; o texto num
+/* Vitrine no celular: a foto em cima, limpa, no terço de cima da tela; o texto num
    painel marrom embaixo dela, ligado por um esmaecido curto. Nada de texto
    sobre a comida. */
 .heroi-foto-vitrine {
@@ -1953,7 +1953,7 @@ a.loja-acao:hover {
   z-index: 0;
   flex: none;
   display: block;
-  height: max(15rem, 46svh);
+  height: max(12rem, 36svh);
 }
 
 .heroi-foto-vitrine .heroi-foto-fundo::after {
@@ -1969,8 +1969,8 @@ a.loja-acao:hover {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-top: 0.5rem;
-  padding-bottom: 2rem;
+  padding-top: 0.25rem;
+  padding-bottom: 4.5rem; /* espaço do "Arraste para baixo", preso no pé */
 }
 
 .heroi-foto-conteudo {
@@ -2047,99 +2047,6 @@ a.loja-acao:hover {
   max-width: 44rem;
 }
 
-/* Selo de preço de padaria: a única ousadia da página. Amarelo da marca,
-   letra marrom (o vermelho sobre o amarelo não chega a 4.5:1), anel
-   tracejado de etiqueta e um leve giro, como colado à mão na vitrine.
-   No celular ele fica preso no canto de baixo da foto, antes do painel de
-   texto, então nunca cobre o texto. Do tablet em diante flutua sobre a foto. */
-.selo-cento {
-  position: absolute;
-  top: calc(max(15rem, 46svh) - 6.5rem);
-  right: 1rem;
-  z-index: 1;
-  display: grid;
-  place-items: center;
-  width: 6.75rem;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background-color: var(--color-accent);
-  color: var(--color-ink);
-  text-align: center;
-  rotate: -8deg;
-  box-shadow: 0 12px 28px -8px rgb(0 0 0 / 0.45);
-  animation: selo-carimba 0.5s var(--ease-massa) 0.35s both;
-}
-
-.selo-cento-miolo {
-  display: grid;
-  place-items: center;
-  align-content: center;
-  gap: 0.125rem;
-  width: calc(100% - 0.75rem);
-  height: calc(100% - 0.75rem);
-  border: 2px dashed rgb(42 23 16 / 0.5);
-  border-radius: 50%;
-}
-
-.selo-cento-rotulo {
-  white-space: nowrap;
-  font-size: 0.75rem;
-  font-weight: 800;
-  line-height: 1.15;
-}
-
-.selo-cento-valor {
-  font-family: var(--font-display);
-  font-size: 1.75rem;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-@keyframes selo-carimba {
-  from {
-    opacity: 0;
-    scale: 1.6;
-    rotate: -24deg;
-  }
-  to {
-    opacity: 1;
-    scale: 1;
-    rotate: -8deg;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .selo-cento {
-    animation: none;
-  }
-}
-
-@media (min-width: 48rem) {
-  .selo-cento {
-    top: 16%;
-    right: 9%;
-    width: 10rem;
-  }
-
-  .selo-cento-rotulo {
-    font-size: 0.875rem;
-  }
-
-  .selo-cento-valor {
-    font-size: 2.5rem;
-  }
-}
-
-@media (min-width: 80rem) {
-  .selo-cento {
-    width: 11.5rem;
-  }
-
-  .selo-cento-valor {
-    font-size: 2.875rem;
-  }
-}
-
 /* Garantias: três frases curtas com um visto amarelo. No celular, três
    colunas lado a lado com o visto em cima: uma fileira só, sem lista longa. */
 .heroi-garantias {
@@ -2181,56 +2088,46 @@ a.loja-acao:hover {
   color: var(--color-accent);
 }
 
-/* Atalhos de categoria: uma linha só. No celular ela rola de lado e encosta
-   nas bordas da tela, em vez de empilhar três linhas de pílulas. */
-.heroi-categorias {
-  display: none;
+/* "Arraste para baixo": o herói ocupa a tela inteira, e sem o aviso parece
+   que a página acaba ali. Fica preso no pé do herói, centralizado. A seta
+   quica devagar. */
+.heroi-rolar {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 50%;
+  translate: -50% 0;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  margin: 1.75rem -1rem 0;
-  padding: 1.25rem 1rem 0.25rem;
-  border-top: 1px solid rgb(255 255 255 / 0.25);
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
-  scrollbar-width: none;
+  gap: 0.125rem;
+  min-height: 2.75rem;
+  padding: 0.25rem 0.75rem;
+  white-space: nowrap;
+  font-size: 0.8125rem;
+  font-weight: 600;
 }
 
-.heroi-categorias::-webkit-scrollbar {
-  display: none;
+.heroi-rolar svg {
+  width: 1.375rem;
+  height: 1.375rem;
+  animation: seta-quica 1.8s ease-in-out infinite;
 }
 
-.heroi-categorias .heroi-atalho {
-  flex-shrink: 0;
-  scroll-snap-align: start;
+@keyframes seta-quica {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 0.375rem; }
 }
 
-@media (min-width: 48rem) {
-  .heroi-categorias {
-    display: flex;
-    flex-wrap: wrap;
-    margin-inline: 0;
-    padding-inline: 0;
-    overflow: visible;
+@media (prefers-reduced-motion: reduce) {
+  .heroi-rolar svg {
+    animation: none;
   }
 }
 
-/* Atalho de categoria no rodapé do herói. */
-.heroi-atalho {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  padding: 0 1rem;
-  border: 1px solid rgb(255 255 255 / 0.55);
-  border-radius: 999px;
-  color: #fff;
-  font-size: 0.9375rem;
-  font-weight: 700;
-  transition: background-color 0.15s var(--ease-massa), color 0.15s var(--ease-massa);
-}
-
-.heroi-atalho:hover {
-  background-color: #fff;
-  color: var(--color-brand);
+@media (min-width: 48rem) {
+  .heroi-rolar {
+    bottom: 1.25rem;
+  }
 }
 
 /* Desenho do valor da marca, em A empresa. */

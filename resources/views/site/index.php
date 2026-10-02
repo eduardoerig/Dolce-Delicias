@@ -20,8 +20,8 @@ include DD_BASE . '/partials/header.php';
      HERÓI
      ============================================================ -->
 <?php
-// Herói: a comida em primeiro plano, o cartaz diz a proposta, o selo diz
-// quanto custa, três garantias dizem como funciona e um botão leva ao catálogo.
+// Herói: a comida em primeiro plano, o cartaz diz a proposta, três garantias
+// dizem como funciona e um botão leva ao catálogo.
 $heroLinhas  = [
     ['texto' => 'Encomende'],
     ['texto' => 'o cento.'],
@@ -29,12 +29,6 @@ $heroLinhas  = [
 $heroTexto   = 'A gente cuida do resto: salgados, assados e doces feitos no dia da sua festa. Você só fecha pelo WhatsApp.';
 $heroCta     = ['href' => '#catalogo', 'texto' => 'Montar meu pedido'];
 $heroLink    = ['href' => '#encomendas', 'texto' => 'Como funciona'];
-$heroAtalhos = dd_categorias($produtos);
-
-// Selo de preço: o menor valor de um cento no catálogo, contado e nunca
-// escrito à mão, para não mentir quando o preço mudar no painel.
-$centos = array_filter(array_map('dd_faixa_principal', $produtos), static fn (array $f): bool => $f['base'] === 100 && $f['valor'] > 0);
-$heroPrecoCento = $centos !== [] ? min(array_column($centos, 'valor')) : null;
 
 // Garantias: retirada ou entrega, o prazo da matriz e o pagamento fora do site.
 $preparoMatriz = trim(explode(' · ', (string) (dd_matriz()['preparo'] ?? ''))[0]);
