@@ -96,24 +96,82 @@ $cartoesEmpresa = [
 
 <div class="pagina-institucional bg-farinha">
 
-  <?php // Herói: foto de fundo, camada escura e quem é a padaria numa frase. ?>
-  <?php ob_start(); ?>
-    <h1 id="titulo-sobre" class="text-4xl sm:text-5xl lg:text-6xl">A Dolce Delícias</h1>
-    <p class="mt-4 max-w-xl text-lg leading-relaxed lg:text-xl">
-      <?php if ($chamada !== ''): ?><?= e($chamada) ?>. <?php endif; ?>
-      Salgados, assados e doces para escolas, eventos e empresas, saindo da mesma cozinha para <?= e((string) $totalUnidades) ?> unidades.
-    </p>
-    <div class="mt-7 flex flex-wrap gap-3">
-      <a href="/#catalogo" class="botao-primario">Ver o catálogo</a>
-      <a href="/unidades" class="botao-secundario">Nossas unidades</a>
-    </div>
   <?php
-  $heroiConteudo = (string) ob_get_clean();
-  $heroiRecorte  = ['src' => 'garfo'];
-  $heroiTitulo   = 'titulo-sobre';
-  $heroiCaminho  = 'A empresa';
-  include DD_BASE . '/partials/heroi-foto.php';
+  /*
+   * Herói "manifesto": a frase da marca em letras de cartaz, com o garfo e o
+   * croquete espetados numa coluna à direita. A linha do meio leva uma faixa
+   * vermelha que atravessa a tela inteira e passa por trás do garfo. Fundo
+   * claro: é o único herói assim no site.
+   *
+   * A frase vem de data/empresa.php ('chamada'). "Comida de verdade, feita
+   * todo dia" vira três linhas: "Comida de" / "verdade," (na faixa) / "feita
+   * todo dia." — quebra na vírgula, e a palavra antes dela ganha a faixa.
+   */
+  $fraseManifesto = $chamada !== '' ? $chamada . '.' : 'A Dolce Delícias.';
+  $partesManifesto = array_map('trim', explode(',', $fraseManifesto, 2));
+  $linhasManifesto = [];
+  if (count($partesManifesto) === 2) {
+      $palavras = preg_split('/\s+/', $partesManifesto[0]);
+      $faixa    = array_pop($palavras) . ',';
+      if ($palavras !== []) $linhasManifesto[] = ['texto' => implode(' ', $palavras), 'faixa' => false];
+      $linhasManifesto[] = ['texto' => $faixa, 'faixa' => true];
+      $linhasManifesto[] = ['texto' => $partesManifesto[1], 'faixa' => false];
+  } else {
+      $linhasManifesto[] = ['texto' => $fraseManifesto, 'faixa' => true];
+  }
+  $garfo     = dd_imagem('/assets/img/recortes/garfo-600.webp');
+  $garfoMini = dd_imagem('/assets/img/recortes/garfo-360.webp');
   ?>
+  <section class="heroi-manifesto" aria-labelledby="titulo-sobre">
+    <div class="heroi-manifesto-grade mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="heroi-manifesto-texto">
+        <nav aria-label="Você está aqui" class="flex items-center gap-2 text-sm font-semibold text-crust">
+          <a href="/" class="rounded underline-offset-4 hover:underline">Início</a>
+          <span aria-hidden="true">/</span>
+          <span class="text-base-content" aria-current="page">A empresa</span>
+        </nav>
+
+        <h1 id="titulo-sobre" class="heroi-manifesto-titulo">
+          <span class="sr-only">A Dolce Delícias: </span>
+          <?php foreach ($linhasManifesto as $linha): ?>
+            <span class="<?= $linha['faixa'] ? 'linha linha-faixa' : 'linha' ?>"><?= e($linha['texto']) ?></span>
+          <?php endforeach; ?>
+        </h1>
+
+        <p class="heroi-manifesto-frase">
+          Salgados, assados e doces para escolas, eventos e empresas, saindo da mesma cozinha para <?= e((string) $totalUnidades) ?> unidades.
+        </p>
+
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="/#catalogo" class="botao-primario">Ver o catálogo</a>
+          <a href="/unidades" class="botao-secundario">Nossas unidades</a>
+        </div>
+      </div>
+
+      <?php if ($garfo): ?>
+        <div class="heroi-manifesto-arte" aria-hidden="true">
+          <img src="<?= e($garfo) ?>" srcset="<?= e((string) $garfoMini) ?> 360w, <?= e($garfo) ?> 600w" sizes="(min-width: 64rem) 20rem, 9rem" alt="" width="600" height="1159" fetchpriority="high" decoding="async">
+        </div>
+      <?php endif; ?>
+    </div>
+
+    <?php // Números da marca no pé do herói. No HTML o rótulo (dt) vem antes do número (dd); o CSS põe o número em cima. ?>
+    <div class="heroi-manifesto-numeros mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <dl class="numeros">
+        <div>
+          <dt>unidades</dt>
+          <dd><?= e((string) $totalUnidades) ?></dd>
+        </div>
+        <?php foreach ($numeros as $numero): ?>
+          <?php $valorNumero = (string) ($numero['valor'] ?? ''); ?>
+          <div>
+            <dt><?= e((string) ($numero['rotulo'] ?? '')) ?></dt>
+            <dd<?= mb_strlen($valorNumero) > 6 ? ' class="numero-longo"' : '' ?>><?= e($valorNumero) ?></dd>
+          </div>
+        <?php endforeach; ?>
+      </dl>
+    </div>
+  </section>
 
   <div>
 
@@ -129,20 +187,6 @@ $cartoesEmpresa = [
             <p><?= e((string) $paragrafo) ?></p>
           <?php endforeach; ?>
 
-          <?php // No HTML o rótulo (dt) vem antes do número (dd); o CSS põe o número em cima. ?>
-          <dl class="numeros">
-            <div>
-              <dt>unidades</dt>
-              <dd><?= e((string) $totalUnidades) ?></dd>
-            </div>
-            <?php foreach ($numeros as $numero): ?>
-              <?php $valorNumero = (string) ($numero['valor'] ?? ''); ?>
-              <div>
-                <dt><?= e((string) ($numero['rotulo'] ?? '')) ?></dt>
-                <dd<?= mb_strlen($valorNumero) > 6 ? ' class="numero-longo"' : '' ?>><?= e($valorNumero) ?></dd>
-              </div>
-            <?php endforeach; ?>
-          </dl>
         </div>
       </section>
     <?php endif; ?>

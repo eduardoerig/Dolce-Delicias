@@ -15,7 +15,8 @@ declare(strict_types=1);
  *     1920 × 1080) e a camada escurece da esquerda para a direita.
  *
  *   - recorte ($heroiRecorte): a comida recortada, sem fundo, flutuando sobre o
- *     marrom da marca com um halo vermelho atrás (home, A empresa, Unidades).
+ *     marrom da marca com um halo vermelho atrás (home). A empresa e Unidades
+ *     têm heróis próprios, desenhados na própria página.
  *     No celular a arte fica em cima e o texto embaixo; do tablet em diante a
  *     arte vai para a direita. Ela entra uma vez e, ao rolar, sobe devagar
  *     (profundidade); quem prefere menos movimento vê tudo parado. As bordas
@@ -25,7 +26,7 @@ declare(strict_types=1);
  *
  * Espera:
  *   $heroiFoto      string  nome da foto em assets/img/heroi/ (sem extensão)
- *   $heroiRecorte   array   opcional: ['src' => 'coxinhas'|'garfo'|'tigela'], o recorte
+ *   $heroiRecorte   array   opcional: ['src' => 'coxinhas'], o recorte
  *                           em assets/img/recortes/; quando vem, substitui a foto
  *   $heroiConteudo  string  HTML do texto (o título h1 vem dentro dele)
  *   $heroiTitulo    string  id do h1, para o aria-labelledby
@@ -38,8 +39,6 @@ require_once __DIR__ . '/bootstrap.php';
 // Larguras geradas de cada recorte (assets/img/recortes/<nome>-<largura>.webp).
 $recortesLarguras = [
     'coxinhas' => [600, 1000],
-    'garfo'    => [360, 600],
-    'tigela'   => [520, 900],
 ];
 
 $heroiRecorteNome = (string) ($heroiRecorte['src'] ?? '');

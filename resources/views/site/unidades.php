@@ -31,28 +31,56 @@ include DD_BASE . '/partials/header.php';
 
 <div class="pagina-institucional bg-farinha">
 
-  <?php // Herói: foto de fundo, camada escura e a regra que importa. ?>
-  <?php ob_start(); ?>
-    <h1 id="titulo-unidades" class="text-4xl sm:text-5xl lg:text-6xl">Nossas unidades</h1>
-    <p class="mt-4 max-w-xl text-lg leading-relaxed lg:text-xl">
-      <?= e((string) count($unidades)) ?> lojas. O pedido feito pelo site vai para a matriz;
-      nas outras lojas você compra no balcão ou pelo WhatsApp de cada uma.
-    </p>
-    <div class="mt-7 flex flex-wrap gap-3">
-      <?php foreach ($matrizes as $matrizAtalho): ?>
-        <a href="#<?= e((string) $matrizAtalho['slug']) ?>" class="botao-primario">Ver a matriz</a>
-      <?php endforeach; ?>
-      <?php if ($lojas !== []): ?>
-        <a href="#outras-lojas" class="botao-secundario">Outras lojas</a>
-      <?php endif; ?>
-    </div>
   <?php
-  $heroiConteudo = (string) ob_get_clean();
-  $heroiRecorte  = ['src' => 'tigela'];
-  $heroiTitulo   = 'titulo-unidades';
-  $heroiCaminho  = 'Unidades';
-  include DD_BASE . '/partials/heroi-foto.php';
+  /*
+   * Herói "diretório": o número de lojas em letra gigante, com a tigela de
+   * bolinhas apoiada em cima dele, como se o número fosse o balcão. Ao lado
+   * (embaixo, no celular), um atalho para cada loja: a pessoa acha a dela já
+   * na primeira tela. A matriz vem primeiro, marcada por receber os pedidos
+   * do site. Os links usam o slug, que é o id de cada loja mais abaixo.
+   */
+  $todasLojas  = array_merge($matrizes, $lojas);
+  $tigela      = dd_imagem('/assets/img/recortes/tigela-900.webp');
+  $tigelaMini  = dd_imagem('/assets/img/recortes/tigela-520.webp');
+  $nomeCurto   = static fn (array $u): string => trim(explode(' — ', (string) ($u['nome'] ?? ''), 2)[0]);
   ?>
+  <section class="heroi-diretorio" aria-labelledby="titulo-unidades">
+    <div class="heroi-diretorio-grade mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="heroi-diretorio-arte" aria-hidden="true">
+        <?php if ($tigela): ?>
+          <img src="<?= e($tigela) ?>" srcset="<?= e((string) $tigelaMini) ?> 520w, <?= e($tigela) ?> 900w" sizes="(min-width: 64rem) 26rem, 62vw" alt="" width="900" height="852" fetchpriority="high" decoding="async">
+        <?php endif; ?>
+        <span class="heroi-diretorio-numero"><?= e((string) count($unidades)) ?></span>
+        <span class="heroi-diretorio-rotulo">lojas</span>
+      </div>
+
+      <div class="heroi-diretorio-texto">
+        <nav aria-label="Você está aqui" class="flex items-center gap-2 text-sm font-semibold">
+          <a href="/" class="rounded underline-offset-4 hover:underline">Início</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">Unidades</span>
+        </nav>
+        <h1 id="titulo-unidades" class="heroi-diretorio-titulo">Nossas unidades</h1>
+        <p class="heroi-diretorio-frase">
+          <?= e((string) count($unidades)) ?> lojas. O pedido feito pelo site vai para a matriz;
+          nas outras você compra no balcão ou pelo WhatsApp de cada uma.
+        </p>
+
+        <?php if ($todasLojas !== []): ?>
+          <ul class="heroi-diretorio-lojas" aria-label="Ir para uma loja">
+            <?php foreach ($todasLojas as $lojaAtalho): ?>
+              <li>
+                <a href="#<?= e((string) $lojaAtalho['slug']) ?>" class="<?= !empty($lojaAtalho['matriz']) ? 'loja-atalho loja-atalho-matriz' : 'loja-atalho' ?>">
+                  <?= e($nomeCurto($lojaAtalho)) ?>
+                  <?php if (!empty($lojaAtalho['matriz'])): ?><small>recebe os pedidos do site</small><?php endif; ?>
+                </a>
+              </li>
+            <?php endforeach; ?>
+          </ul>
+        <?php endif; ?>
+      </div>
+    </div>
+  </section>
 
   <div>
     <?php foreach ($matrizes as $unidade): ?>
