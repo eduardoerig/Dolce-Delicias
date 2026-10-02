@@ -1582,41 +1582,175 @@ a.loja-acao:hover {
 }
 
 /* ---------- A empresa ----------
-   Seções em trilha: só o título à esquerda, conteúdo à direita. */
+   Abertura com foto grande, seções em zigue-zague (foto de um lado, texto do
+   outro, alternando) e cartões de foto para empresas. */
 
-.trilha {
+.sobre-abertura {
+  border-bottom: 1px solid var(--color-linha);
+  background-color: var(--color-polvilho);
+}
+
+.sobre-foto {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 1.5rem;
+  object-fit: cover;
+}
+
+.zigue {
   display: grid;
-  gap: 1.5rem;
-  padding-block: 2.5rem;
+  gap: 2rem;
+  align-items: center;
+  padding-block: 3rem;
   scroll-margin-top: 5rem;
 }
 
-.trilha + .trilha {
+.zigue + .zigue {
   border-top: 1px solid var(--color-linha);
 }
 
-.trilha-cabeca h2 {
-  font-size: 1.875rem;
-  line-height: 1.15;
+.zigue-texto h2,
+.sobre-empresas h2 {
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.zigue-texto > p {
+  margin-top: 1rem;
+  max-width: 36rem;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--color-crust);
 }
 
 @media (min-width: 64rem) {
-  .trilha {
-    grid-template-columns: 19rem minmax(0, 1fr);
-    gap: 4rem;
-    padding-block: 3.5rem;
+  .zigue {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5rem;
+    padding-block: 5rem;
   }
 
-  /* O título fica parado enquanto o conteúdo da seção rola. */
-  .trilha-cabeca {
-    position: sticky;
-    top: 6.5rem;
-    align-self: start;
+  /* Uma seção sim, outra não, a foto troca de lado. */
+  .zigue:nth-child(even) .zigue-foto {
+    order: 2;
   }
 
-  .trilha-cabeca h2 {
-    font-size: 2.25rem;
+  /* Sem foto, o texto ocupa a largura toda. */
+  .zigue-texto:only-child {
+    grid-column: 1 / -1;
   }
+
+  .zigue-texto h2,
+  .sobre-empresas h2 {
+    font-size: 2.75rem;
+  }
+}
+
+/* Lista simples separada por linhas: serviços e valores. */
+.lista-sobre {
+  margin-top: 1.5rem;
+}
+
+.lista-sobre > li {
+  padding-block: 1rem;
+  border-top: 1px solid var(--color-linha);
+}
+
+.lista-sobre h3 {
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  font-weight: 700;
+}
+
+.lista-sobre p {
+  margin-top: 0.25rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--color-crust);
+}
+
+.lista-sobre-icone {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+/* Na meia coluna do zigue-zague, quatro números lado a lado ficam apertados. */
+.zigue-texto .numeros {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.lista-sobre-icone .valor-icone {
+  flex-shrink: 0;
+}
+
+/* Para empresas: cartões altos de foto, título por cima da foto. */
+.sobre-empresas {
+  padding-block: 3rem 4rem;
+  border-top: 1px solid var(--color-linha);
+  scroll-margin-top: 5rem;
+}
+
+.cartoes-empresa {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+@media (min-width: 48rem) {
+  .cartoes-empresa {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+.cartao-empresa {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 22rem;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  background-color: var(--color-brand-escuro);
+  color: #fff;
+}
+
+@media (min-width: 64rem) {
+  .cartao-empresa {
+    min-height: 28rem;
+  }
+}
+
+.cartao-empresa img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* O texto fica sobre um degradê escuro: branco cheio passa de 4.5:1 ali. */
+.cartao-empresa-texto {
+  position: relative;
+  width: 100%;
+  padding: 5rem 1.5rem 1.5rem;
+  background: linear-gradient(to top, rgb(42 23 16 / 0.92) 55%, rgb(42 23 16 / 0));
+}
+
+.cartao-empresa-sem-foto .cartao-empresa-texto {
+  background: none;
+}
+
+.cartao-empresa h3 {
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.cartao-empresa p {
+  margin-top: 0.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
 }
 
 /* Números da marca: uma linha, número grande e rótulo embaixo. No HTML o dt
@@ -1662,35 +1796,6 @@ a.loja-acao:hover {
   line-height: 1.6;
 }
 
-/* Serviços: duas colunas, cada um aberto por um traço vermelho curto. */
-.servicos {
-  display: grid;
-  gap: 2rem;
-}
-
-@media (min-width: 40rem) {
-  .servicos {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2.25rem 2.5rem;
-  }
-}
-
-.servicos > li {
-  padding-top: 1rem;
-  border-top: 3px solid var(--color-brand);
-}
-
-.valores {
-  display: grid;
-  gap: 2rem;
-}
-
-@media (min-width: 48rem) {
-  .valores {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
 /* Linha do tempo em pé: a régua é a borda de cada marco e o ponto é o
    ::before, então os dois andam juntos. */
 .marcos {
@@ -1699,7 +1804,7 @@ a.loja-acao:hover {
 
 .marco {
   position: relative;
-  padding: 0 0 2rem 1.75rem;
+  padding: 0 0 1.5rem 1.75rem;
   border-left: 2px solid var(--color-farelo);
 }
 
@@ -1754,11 +1859,6 @@ a.loja-acao:hover {
 /* O contorno de foco padrão é vermelho e sumiria aqui. */
 .placa-empresas :focus-visible {
   outline-color: #fff;
-}
-
-.placa-empresas-item {
-  padding-top: 1rem;
-  border-top: 2px solid #fff;
 }
 
 /* Sobre o vermelho, o botão desligado troca o marrom pelo branco. */
@@ -1883,11 +1983,4 @@ a.loja-acao:hover {
   height: 2.25rem;
 }
 
-/* Foto ao lado do título em A empresa. */
-.faixa-foto {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  border-radius: 1.25rem;
-  object-fit: cover;
-}
 }
