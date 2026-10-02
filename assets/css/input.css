@@ -234,6 +234,12 @@
   outline-offset: 3px;
 }
 
+/* Na página /carrinho (desenho reto, .pagina-institucional) a opção também é
+   reta. Fica aqui, fora do @layer, porque .opcao também está fora. */
+.pagina-institucional .opcao {
+  border-radius: 0;
+}
+
 /* -------------------------------------------------------------
    DROPDOWN FECHADO -- o daisyUI deixa o conteudo em
    display:block/visibility:visible com opacity:0, entao o painel
@@ -2341,6 +2347,188 @@ a.loja-acao:hover {
 @media (prefers-reduced-motion: reduce) {
   .aviso {
     animation: none;
+  }
+}
+
+/* ---------- Carrinho: painel lateral e página, no desenho reto ----------
+   Mesma linguagem de A empresa e Unidades: sem cantos arredondados, botões
+   em caixa alta. Escopado em .gaveta-carrinho (o painel) e em
+   .pagina-institucional (a página /carrinho), para não mexer nos cards do
+   catálogo. */
+
+.gaveta-carrinho .botao-primario,
+.gaveta-carrinho .botao-secundario {
+  border-radius: 0;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.gaveta-carrinho .item-pedido-foto,
+.pagina-institucional .item-pedido-foto,
+.gaveta-carrinho .seletor-qtd,
+.pagina-institucional .seletor-qtd,
+.gaveta-carrinho .item-pedido-remover,
+.pagina-institucional .item-pedido-remover,
+.pagina-institucional .cartao-etapa,
+.pagina-institucional .opcao,
+.pagina-institucional .campo-texto {
+  border-radius: 0;
+}
+
+/* Cabeça marrom: título, contagem em selo amarelo e o X. */
+.gaveta-cabeca {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 0.75rem 1rem 1.25rem;
+  background-color: var(--color-ink);
+  color: #fff;
+}
+
+.gaveta-cabeca h2 {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.gaveta-contagem {
+  padding: 0.25rem 0.5rem;
+  background-color: var(--color-accent);
+  color: var(--color-ink);
+  font-size: 0.75rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.gaveta-fechar {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-left: auto;
+  color: #fff;
+  cursor: pointer;
+}
+
+.gaveta-fechar:hover {
+  background-color: rgb(255 255 255 / 0.12);
+}
+
+.gaveta-fechar svg {
+  width: 1.375rem;
+  height: 1.375rem;
+}
+
+/* Sobre o marrom, o contorno de foco vermelho sumiria. */
+.gaveta-cabeca :focus-visible {
+  outline-color: #fff;
+}
+
+.gaveta-unidade {
+  padding: 0.625rem 1.25rem;
+  border-bottom: 1px solid var(--color-linha);
+  background-color: var(--color-polvilho);
+  font-size: 0.8125rem;
+  color: var(--color-crust);
+}
+
+.gaveta-unidade strong {
+  color: var(--color-ink);
+}
+
+.gaveta-vazio {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.gaveta-vazio-icone {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  margin-bottom: 0.5rem;
+  background-color: var(--color-polvilho);
+  color: var(--color-crust);
+}
+
+.gaveta-vazio-icone svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+/* Rodapé fixo: total e o botão. A sombra para cima separa da lista que rola. */
+.gaveta-rodape {
+  padding: 1.25rem;
+  border-top: 1px solid var(--color-linha);
+  background-color: var(--color-papel);
+  box-shadow: 0 -12px 24px -18px rgb(42 23 16 / 0.35);
+}
+
+/* No painel a miniatura cresce um pouco e "Remover" vira só a lixeira (o
+   nome acessível continua "Remover … do pedido"). */
+.gaveta-carrinho .item-pedido {
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+}
+
+.gaveta-carrinho .item-pedido-foto {
+  width: 4.5rem;
+  height: 4.5rem;
+}
+
+.gaveta-carrinho .item-pedido-remover span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.gaveta-carrinho .item-pedido-remover {
+  width: 2.75rem;
+  justify-content: center;
+  padding: 0;
+}
+
+/* Página /carrinho: etapas numeradas em quadrado vermelho, opção marcada com
+   borda vermelha. */
+.pagina-institucional .etapa-numero {
+  border-radius: 0;
+  background-color: var(--color-brand);
+  color: #fff;
+}
+
+/* Barra fixa no celular: total e "Fechar no WhatsApp" sempre à mão enquanto a
+   pessoa preenche as etapas. Do computador em diante o resumo fica ao lado e
+   a barra some. */
+.barra-pedido {
+  position: sticky;
+  bottom: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--color-linha);
+  background-color: var(--color-papel);
+  box-shadow: 0 -12px 24px -18px rgb(42 23 16 / 0.35);
+}
+
+.barra-pedido .botao-primario {
+  flex: 1;
+  min-height: 3rem;
+  white-space: nowrap;
+}
+
+@media (min-width: 64rem) {
+  .barra-pedido {
+    display: none;
   }
 }
 }

@@ -22,7 +22,7 @@ $descricaoPagina = 'Revise os itens da sua encomenda e feche no WhatsApp da matr
 include DD_BASE . '/partials/header.php';
 ?>
 
-<div class="bg-farinha">
+<div class="pagina-institucional bg-farinha">
 
   <?php // Herói: foto de fundo, camada escura, título e o que fazer aqui. ?>
   <?php ob_start(); ?>
@@ -138,6 +138,18 @@ include DD_BASE . '/partials/header.php';
         </p>
       </aside>
     </div>
+  </div>
+
+  <?php // Celular: o total e o fechamento ficam presos no pé da tela enquanto a
+     // pessoa preenche as etapas (o resumo só aparece no fim da página). O
+     // botão usa o mesmo data-cart-checkout do resumo; cart.js escuta por
+     // delegação. Do computador em diante a barra some (CSS .barra-pedido). ?>
+  <div data-cart-footer class="oculto barra-pedido">
+    <div class="min-w-0">
+      <span class="block text-xs font-semibold text-crust">Total estimado</span>
+      <strong class="text-lg" data-cart-total>R$ 0,00</strong>
+    </div>
+    <button type="button" data-cart-checkout class="botao-primario">Fechar pedido</button>
   </div>
 </div>
 
