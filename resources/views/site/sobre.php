@@ -94,19 +94,18 @@ $cartoesEmpresa = [
 ];
 ?>
 
-<div class="bg-farinha">
+<div class="pagina-sobre bg-farinha">
 
   <!-- Abertura: o caminho, quem é a padaria numa frase e a foto da cozinha -->
   <section class="sobre-abertura" aria-labelledby="titulo-sobre">
-    <div class="mx-auto grid max-w-7xl items-center gap-8 px-4 py-10 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8 lg:py-16">
-      <div>
+      <div class="sobre-abertura-texto">
         <nav aria-label="Você está aqui" class="flex items-center gap-2 text-sm font-semibold text-crust">
           <a href="/" class="rounded hover:text-brand-escuro">Início</a>
           <span aria-hidden="true">/</span>
           <span class="text-base-content" aria-current="page">A empresa</span>
         </nav>
         <h1 id="titulo-sobre" class="mt-4 text-4xl sm:text-5xl lg:text-6xl">A Dolce Delícias</h1>
-        <p class="mt-5 max-w-xl text-lg leading-relaxed text-crust">
+        <p class="mt-5 max-w-xl text-lg leading-relaxed text-crust lg:text-xl">
           <?php if ($chamada !== ''): ?><?= e($chamada) ?>. <?php endif; ?>
           Salgados, assados e doces para escolas, eventos e empresas, saindo da mesma cozinha para <?= e((string) $totalUnidades) ?> unidades.
         </p>
@@ -117,20 +116,19 @@ $cartoesEmpresa = [
       </div>
 
       <?php if ($foto = $fotoSobre('/assets/img/empresa/maos-na-massa.jpg')): ?>
-        <img src="<?= e($foto) ?>" alt="Mãos sovando massa sobre a bancada enfarinhada" class="sobre-foto" width="1600" height="1000" decoding="async" fetchpriority="high">
+        <img src="<?= e($foto) ?>" alt="Mãos sovando massa sobre a bancada enfarinhada" class="sobre-abertura-foto" width="1600" height="1000" decoding="async" fetchpriority="high">
       <?php else: ?>
-        <?php $fachadaClasse = 'w-full max-w-md justify-self-center'; include DD_BASE . '/partials/ilustra-fachada.php'; ?>
+        <?php $fachadaClasse = 'w-full max-w-md justify-self-center p-8'; include DD_BASE . '/partials/ilustra-fachada.php'; ?>
       <?php endif; ?>
-    </div>
   </section>
 
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div>
 
     <?php // RF-31 — institucional ?>
     <?php if ($temInstitucional): ?>
       <section id="institucional" class="zigue" aria-labelledby="titulo-institucional">
         <?php if ($foto = $fotoSobre('/assets/img/empresa/atendente.jpg')): ?>
-          <img src="<?= e($foto) ?>" alt="Atendente servindo pães no balcão" class="sobre-foto zigue-foto" width="1600" height="1000" loading="lazy" decoding="async">
+          <img src="<?= e($foto) ?>" alt="Atendente servindo pães no balcão" class="zigue-foto" width="1600" height="1000" loading="lazy" decoding="async">
         <?php endif; ?>
         <div class="zigue-texto">
           <h2 id="titulo-institucional">Quem somos</h2>
@@ -160,7 +158,7 @@ $cartoesEmpresa = [
     <?php if ($portfolio !== []): ?>
       <section id="portfolio" class="zigue" aria-labelledby="titulo-portfolio">
         <?php if ($foto = $fotoSobre('/assets/img/produtos/combo-festa.jpg')): ?>
-          <img src="<?= e($foto) ?>" alt="Bandeja de salgados variados para festa" class="sobre-foto zigue-foto" width="1200" height="900" loading="lazy" decoding="async">
+          <img src="<?= e($foto) ?>" alt="Bandeja de salgados variados para festa" class="zigue-foto" width="1200" height="900" loading="lazy" decoding="async">
         <?php endif; ?>
         <div class="zigue-texto">
           <h2 id="titulo-portfolio">O que fazemos</h2>
@@ -172,7 +170,7 @@ $cartoesEmpresa = [
               </li>
             <?php endforeach; ?>
           </ul>
-          <a href="/#catalogo" class="link-acao mt-6">Ver o catálogo</a>
+          <a href="/#catalogo" class="botao-primario mt-8">Ver o catálogo</a>
         </div>
       </section>
     <?php endif; ?>
@@ -181,7 +179,7 @@ $cartoesEmpresa = [
     <?php if (!empty($institucional['valores'])): ?>
       <section id="valores" class="zigue" aria-labelledby="titulo-valores">
         <?php if ($foto = $fotoSobre('/assets/img/empresa/vitrine.jpg')): ?>
-          <img src="<?= e($foto) ?>" alt="Vitrine com bolos e doces" class="sobre-foto zigue-foto" width="1600" height="1000" loading="lazy" decoding="async">
+          <img src="<?= e($foto) ?>" alt="Vitrine com bolos e doces" class="zigue-foto" width="1600" height="1000" loading="lazy" decoding="async">
         <?php endif; ?>
         <div class="zigue-texto">
           <h2 id="titulo-valores">No que acreditamos</h2>
@@ -204,7 +202,7 @@ $cartoesEmpresa = [
     <?php if ($historia !== []): ?>
       <section id="historia" class="zigue" aria-labelledby="titulo-historia">
         <?php if ($foto = $fotoSobre('/assets/img/unidades/matriz.jpg')): ?>
-          <img src="<?= e($foto) ?>" alt="Balcão da matriz com pães e doces" class="sobre-foto zigue-foto" width="1600" height="1000" loading="lazy" decoding="async">
+          <img src="<?= e($foto) ?>" alt="Balcão da matriz com pães e doces" class="zigue-foto" width="1600" height="1000" loading="lazy" decoding="async">
         <?php endif; ?>
         <div class="zigue-texto">
           <h2 id="titulo-historia">Nossa história</h2>
@@ -223,7 +221,7 @@ $cartoesEmpresa = [
 
     <?php // RF-19 — para empresas e indústrias: cartões de foto e o pedido de orçamento. ?>
     <?php if ($temEmpresas): ?>
-      <section id="empresas" class="sobre-empresas" aria-labelledby="titulo-empresas">
+      <section id="empresas" class="sobre-empresas mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="titulo-empresas">
         <h2 id="titulo-empresas" class="max-w-2xl"><?= e((string) ($paraEmpresas['chamada'] ?? 'Para a sua empresa')) ?></h2>
         <?php if (trim((string) ($paraEmpresas['texto'] ?? '')) !== ''): ?>
           <p class="mt-4 max-w-2xl text-lg leading-relaxed text-crust"><?= e((string) $paraEmpresas['texto']) ?></p>

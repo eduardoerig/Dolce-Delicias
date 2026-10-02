@@ -1582,31 +1582,72 @@ a.loja-acao:hover {
 }
 
 /* ---------- A empresa ----------
-   Abertura com foto grande, seções em zigue-zague (foto de um lado, texto do
-   outro, alternando) e cartões de foto para empresas. */
+   Desenho de página institucional grande: cantos retos, fotos que encostam
+   na borda da tela, seções coladas em zigue-zague, títulos grandes e textos
+   curtos. A borda da coluna de texto acompanha o contêiner de 80rem do site. */
 
+.pagina-sobre {
+  --sobre-margem: max(1rem, calc((100vw - 80rem) / 2 + 2rem));
+}
+
+/* Nesta página os botões também são retos. */
+.pagina-sobre .botao-primario,
+.pagina-sobre .botao-secundario {
+  border-radius: 0;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Abertura: texto à esquerda, foto ocupando a metade direita até a borda. */
 .sobre-abertura {
-  border-bottom: 1px solid var(--color-linha);
+  display: grid;
   background-color: var(--color-polvilho);
 }
 
-.sobre-foto {
+.sobre-abertura-texto {
+  padding: 2.5rem var(--sobre-margem);
+}
+
+.sobre-abertura-foto {
   width: 100%;
-  aspect-ratio: 4 / 3;
-  border-radius: 1.5rem;
+  aspect-ratio: 3 / 2;
   object-fit: cover;
 }
 
+@media (min-width: 64rem) {
+  .sobre-abertura {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    min-height: 34rem;
+  }
+
+  .sobre-abertura-texto {
+    padding: 4rem 4rem 4rem var(--sobre-margem);
+  }
+
+  .sobre-abertura-foto {
+    height: 100%;
+    aspect-ratio: auto;
+  }
+}
+
+/* Zigue-zague: a foto encosta na borda da tela (45% da largura), o texto fica
+   ao lado, e as seções vêm coladas, separadas só pelo próprio espaço. */
 .zigue {
   display: grid;
-  gap: 2rem;
   align-items: center;
-  padding-block: 3rem;
   scroll-margin-top: 5rem;
 }
 
-.zigue + .zigue {
-  border-top: 1px solid var(--color-linha);
+.zigue-foto {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+.zigue-texto {
+  padding: 2rem var(--sobre-margem) 2.5rem;
 }
 
 .zigue-texto h2,
@@ -1625,14 +1666,25 @@ a.loja-acao:hover {
 
 @media (min-width: 64rem) {
   .zigue {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 5rem;
-    padding-block: 5rem;
+    grid-template-columns: 45% minmax(0, 1fr);
+    padding-block: 2rem;
   }
 
-  /* Uma seção sim, outra não, a foto troca de lado. */
+  .zigue-texto {
+    padding: 2rem var(--sobre-margem) 2rem 5rem;
+  }
+
+  /* Uma seção sim, outra não, a foto vai para a direita. */
+  .zigue:nth-child(even) {
+    grid-template-columns: minmax(0, 1fr) 45%;
+  }
+
   .zigue:nth-child(even) .zigue-foto {
     order: 2;
+  }
+
+  .zigue:nth-child(even) .zigue-texto {
+    padding: 2rem 5rem 2rem var(--sobre-margem);
   }
 
   /* Sem foto, o texto ocupa a largura toda. */
@@ -1642,17 +1694,22 @@ a.loja-acao:hover {
 
   .zigue-texto h2,
   .sobre-empresas h2 {
-    font-size: 2.75rem;
+    font-size: 3rem;
+  }
+
+  .zigue-texto > p {
+    font-size: 1.25rem;
   }
 }
 
 /* Lista simples separada por linhas: serviços e valores. */
 .lista-sobre {
   margin-top: 1.5rem;
+  max-width: 36rem;
 }
 
 .lista-sobre > li {
-  padding-block: 1rem;
+  padding-block: 0.875rem;
   border-top: 1px solid var(--color-linha);
 }
 
@@ -1675,19 +1732,21 @@ a.loja-acao:hover {
   align-items: flex-start;
 }
 
-/* Na meia coluna do zigue-zague, quatro números lado a lado ficam apertados. */
-.zigue-texto .numeros {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
 .lista-sobre-icone .valor-icone {
   flex-shrink: 0;
 }
 
-/* Para empresas: cartões altos de foto, título por cima da foto. */
+/* Na meia coluna do zigue-zague, quatro números lado a lado ficam apertados. */
+.zigue-texto .numeros {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 36rem;
+}
+
+/* Para empresas: cartões de foto em duas colunas desencontradas, título
+   branco no alto da foto, sem cantos. */
 .sobre-empresas {
-  padding-block: 3rem 4rem;
-  border-top: 1px solid var(--color-linha);
+  padding-top: 3rem;
+  padding-bottom: 4rem;
   scroll-margin-top: 5rem;
 }
 
@@ -1699,26 +1758,26 @@ a.loja-acao:hover {
 
 @media (min-width: 48rem) {
   .cartoes-empresa {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.25rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+  }
+
+  /* A coluna da direita desce um pouco: as duas colunas não se alinham. */
+  .cartao-empresa:nth-child(even) {
+    transform: translateY(5rem);
+  }
+
+  .cartoes-empresa:has(.cartao-empresa:nth-child(2)) {
+    padding-bottom: 5rem;
   }
 }
 
 .cartao-empresa {
   position: relative;
-  display: flex;
-  align-items: flex-end;
-  min-height: 22rem;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
-  border-radius: 1.5rem;
   background-color: var(--color-brand-escuro);
   color: #fff;
-}
-
-@media (min-width: 64rem) {
-  .cartao-empresa {
-    min-height: 28rem;
-  }
 }
 
 .cartao-empresa img {
@@ -1729,28 +1788,38 @@ a.loja-acao:hover {
   object-fit: cover;
 }
 
-/* O texto fica sobre um degradê escuro: branco cheio passa de 4.5:1 ali. */
+/* O texto fica sobre um degradê escuro vindo de cima: branco cheio passa de
+   4.5:1 ali. */
 .cartao-empresa-texto {
   position: relative;
-  width: 100%;
-  padding: 5rem 1.5rem 1.5rem;
-  background: linear-gradient(to top, rgb(42 23 16 / 0.92) 55%, rgb(42 23 16 / 0));
+  z-index: 2;
+  max-width: 30rem;
+  padding: 1.5rem 1.5rem 4rem;
 }
 
-.cartao-empresa-sem-foto .cartao-empresa-texto {
-  background: none;
+.cartao-empresa:not(.cartao-empresa-sem-foto)::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: linear-gradient(to bottom, rgb(42 23 16 / 0.9) 0, rgb(42 23 16 / 0.75) 40%, rgb(42 23 16 / 0) 75%);
 }
 
 .cartao-empresa h3 {
-  font-family: var(--font-sans);
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1.15;
 }
 
 .cartao-empresa p {
   margin-top: 0.5rem;
   font-size: 0.9375rem;
   line-height: 1.55;
+}
+
+/* Pedido de orçamento: a placa vermelha, reta como o resto da página. */
+.pagina-sobre .placa-empresas {
+  border-radius: 0;
 }
 
 /* Números da marca: uma linha, número grande e rótulo embaixo. No HTML o dt
