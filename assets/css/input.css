@@ -3185,9 +3185,11 @@ a.loja-acao:hover {
 
   /* Os passos começam depois da ponta dos dedos; a seção tem a altura do
      celular até um pouco abaixo da tela, e o braço sai pelo pé. */
+  /* O texto fica no meio do espaço à direita do celular, não colado nele. */
   .encomendas-conteudo {
     display: flex;
     align-items: center;
+    justify-content: center;
     max-width: none;
     min-height: calc(var(--cel) * 0.96 + 8.5rem);
     padding: 4.5rem 2rem 4.5rem calc(var(--cel) + 3rem);
