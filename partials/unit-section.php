@@ -44,9 +44,7 @@ $msgUnidade = rawurlencode('Olá! Vim pelo site da Dolce Delícias e quero falar
     <?php else: ?>
       <?php // INTEGRAÇÃO FUTURA: foto da fachada, cadastrada no painel em Unidades. ?>
       <span class="unidade-sem-foto" role="img" aria-label="Foto da fachada da <?= e((string) $unidade['nome']) ?> ainda não cadastrada">
-        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M10 26 32 10l22 16"/><path d="M14 26v26h36V26"/><path d="M25 52V38h14v14"/>
-        </svg>
+        <?php $fachadaClasse = 'fachada'; include __DIR__ . '/ilustra-fachada.php'; ?>
       </span>
     <?php endif; ?>
   </figure>

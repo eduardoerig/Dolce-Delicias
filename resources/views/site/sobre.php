@@ -59,6 +59,22 @@ $atalhos = array_filter([
     'empresas'      => $temEmpresas ? 'Para empresas' : null,
 ]);
 
+/**
+ * Desenho de cada valor da marca, pelo título (mesmo traço dos produtos):
+ * coração para o amor, rolo de massa para o feito à mão, folha para o saudável.
+ */
+function dd_icone_valor(string $titulo): string
+{
+    $t = dd_ascii($titulo);
+    $glifo = match (true) {
+        str_contains($t, 'amor') => '<path d="M32 52S10 39 10 24a11 11 0 0 1 22-3 11 11 0 0 1 22 3c0 15-22 28-22 28Z" fill="#e1051e" stroke="#9e0315" stroke-width="1.8" stroke-linejoin="round"/><path d="M19 22a6 6 0 0 1 6-5" fill="none" stroke="#ff8a96" stroke-width="3" stroke-linecap="round"/>',
+        str_contains($t, 'industrializ') => '<rect x="14" y="26" width="36" height="12" rx="6" fill="#e7a446" stroke="#a9561a" stroke-width="1.8"/><rect x="4" y="29" width="11" height="6" rx="3" fill="#7a2e12"/><rect x="49" y="29" width="11" height="6" rx="3" fill="#7a2e12"/><path d="M20 30h24" stroke="#f7c46a" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="32" cy="50" rx="20" ry="5" fill="#fbf4ee" stroke="#c5ac98" stroke-width="1.6"/>',
+        default => '<path d="M14 50C14 26 30 12 52 12c0 22-14 38-38 38Z" fill="#6aa84f" stroke="#3f7a32" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 50 40 24" stroke="#3f7a32" stroke-width="2" stroke-linecap="round"/><path d="M24 40l-1-8M31 33l-1-8M24 40l8 1M31 33l8 1" stroke="#3f7a32" stroke-width="1.6" stroke-linecap="round"/>',
+    };
+
+    return '<svg viewBox="0 0 64 64" focusable="false">' . $glifo . '</svg>';
+}
+
 $tituloPagina    = 'Sobre a Dolce Delícias — história, portfólio e atendimento a empresas';
 $descricaoPagina = 'Quem é a Dolce Delícias, como a padaria começou, o que ela faz e como atende escolas, faculdades, empresas e indústrias.';
 
@@ -68,8 +84,9 @@ include DD_BASE . '/partials/header.php';
 <div class="bg-farinha">
 
   <!-- Faixa: caminho, título, quem é e atalhos para cada parte da página -->
-  <div class="border-b border-linha bg-polvilho">
-    <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+  <div class="faixa-pagina border-b border-linha bg-polvilho">
+    <div class="mx-auto grid max-w-7xl items-center gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,1fr)_20rem] lg:px-8">
+      <div>
       <nav aria-label="Você está aqui" class="flex items-center gap-2 text-sm font-semibold text-crust">
         <a href="/" class="rounded hover:text-brand-escuro">Início</a>
         <span aria-hidden="true">/</span>
@@ -88,6 +105,10 @@ include DD_BASE . '/partials/header.php';
           <?php endforeach; ?>
         </nav>
       <?php endif; ?>
+      </div>
+
+      <?php // A frente de uma loja, desenhada: só no computador, onde sobra a lateral. ?>
+      <?php $fachadaClasse = 'hidden w-full lg:block'; include DD_BASE . '/partials/ilustra-fachada.php'; ?>
     </div>
   </div>
 
@@ -128,7 +149,8 @@ include DD_BASE . '/partials/header.php';
         <ul class="mt-8 grid gap-4 md:grid-cols-3 lg:mt-10">
           <?php foreach ($institucional['valores'] as $valor): ?>
             <li class="cartao-etapa">
-              <h3 class="font-sans text-lg font-bold"><?= e((string) ($valor['titulo'] ?? '')) ?></h3>
+              <span class="valor-icone" aria-hidden="true"><?= dd_icone_valor((string) ($valor['titulo'] ?? '')) ?></span>
+              <h3 class="mt-3 font-sans text-lg font-bold"><?= e((string) ($valor['titulo'] ?? '')) ?></h3>
               <p class="mt-2 text-[0.9375rem] leading-relaxed text-crust"><?= e((string) ($valor['texto'] ?? '')) ?></p>
             </li>
           <?php endforeach; ?>

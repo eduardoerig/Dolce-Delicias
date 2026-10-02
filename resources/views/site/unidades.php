@@ -29,8 +29,9 @@ include DD_BASE . '/partials/header.php';
 <div class="bg-farinha">
 
   <!-- Faixa: caminho, título, o que tem aqui e atalhos para cada loja -->
-  <div class="border-b border-linha bg-polvilho">
-    <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+  <div class="faixa-pagina border-b border-linha bg-polvilho">
+    <div class="mx-auto grid max-w-7xl items-center gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,1fr)_20rem] lg:px-8">
+      <div>
       <nav aria-label="Você está aqui" class="flex items-center gap-2 text-sm font-semibold text-crust">
         <a href="/" class="rounded hover:text-brand-escuro">Início</a>
         <span aria-hidden="true">/</span>
@@ -51,6 +52,10 @@ include DD_BASE . '/partials/header.php';
           <?php endforeach; ?>
         </nav>
       <?php endif; ?>
+      </div>
+
+      <?php // A frente de uma loja, desenhada: só no computador, onde sobra a lateral. ?>
+      <?php $fachadaClasse = 'hidden w-full lg:block'; include DD_BASE . '/partials/ilustra-fachada.php'; ?>
     </div>
   </div>
 

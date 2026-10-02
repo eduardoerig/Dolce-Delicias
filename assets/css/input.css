@@ -1402,9 +1402,15 @@ details.dropdown:not([open]) > .dropdown-content {
   color: var(--color-farelo);
 }
 
-.unidade-sem-foto svg {
-  width: 4rem;
-  height: 4rem;
+/* Sem foto, a fachada desenhada ocupa o quadro (partials/ilustra-fachada.php). */
+.unidade-sem-foto {
+  background-image: radial-gradient(circle at 50% 60%, rgb(255 255 255 / 0.8) 0 25%, transparent 70%);
+}
+
+.unidade-sem-foto .fachada {
+  width: 78%;
+  max-height: 88%;
+  margin-top: 6%;
 }
 
 .unidade-corpo {
@@ -1747,5 +1753,20 @@ details.dropdown:not([open]) > .dropdown-content {
 .heroi-atalho:hover {
   background-color: #fff;
   color: var(--color-brand);
+}
+
+/* Desenho do valor da marca, em A empresa. */
+.valor-icone {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 999px;
+  background-color: var(--color-polvilho);
+}
+
+.valor-icone svg {
+  width: 2.25rem;
+  height: 2.25rem;
 }
 }
