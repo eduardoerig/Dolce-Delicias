@@ -2023,8 +2023,21 @@ a.loja-acao:hover {
   content: "";
   position: absolute;
   inset: auto 0 0;
-  height: 35%;
-  background: linear-gradient(to bottom, rgb(42 23 16 / 0), var(--color-ink));
+  height: 60%;
+  /* Degradê com curva suave (vários pontos): o linear curto terminava de
+     repente e o olho via uma linha entre a foto e o painel. */
+  background: linear-gradient(
+    to bottom,
+    rgb(42 23 16 / 0) 0%,
+    rgb(42 23 16 / 0.03) 15%,
+    rgb(42 23 16 / 0.1) 30%,
+    rgb(42 23 16 / 0.24) 45%,
+    rgb(42 23 16 / 0.44) 60%,
+    rgb(42 23 16 / 0.66) 73%,
+    rgb(42 23 16 / 0.85) 85%,
+    rgb(42 23 16 / 0.96) 94%,
+    var(--color-ink) 100%
+  );
 }
 
 .heroi-foto-vitrine .heroi-foto-conteudo {
@@ -2209,15 +2222,17 @@ a.loja-acao:hover {
 }
 
 /* ---------- Avisos curtos ----------
-   Cartão reto, como as páginas institucionais, com uma faixa de cor à
-   esquerda: vermelha quando algo entrou no pedido, marrom nos demais. No
-   celular fica embaixo, na largura toda (onde o polegar alcança "Ver
-   pedido"); do tablet em diante, no canto de cima, logo abaixo do topo. */
+   Limpo: uma linha só, fundo marrom, cantos arredondados, sem faixas nem
+   barras. No celular fica embaixo, na largura toda (onde o polegar alcança a
+   ação); do tablet em diante, no canto de cima, logo abaixo do topo. */
 .avisos {
   position: fixed;
   inset: auto 0.75rem calc(0.75rem + env(safe-area-inset-bottom)) 0.75rem;
   z-index: 80;
   display: grid;
+  /* A coluna fica na largura da área: o texto quebra linha em vez de
+     esticar o aviso para fora da tela. */
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.5rem;
   pointer-events: none;
 }
@@ -2225,24 +2240,23 @@ a.loja-acao:hover {
 @media (min-width: 48rem) {
   .avisos {
     inset: calc(4.5rem + 1rem) 1.5rem auto auto;
-    width: 23rem;
+    width: 26rem;
   }
 }
 
 .aviso {
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--color-linha);
-  border-left: 4px solid var(--color-ink);
-  background-color: var(--color-papel);
-  color: var(--color-ink);
-  box-shadow: 0 16px 36px -14px rgb(42 23 16 / 0.45);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3.5rem;
+  padding: 0.5rem 0.25rem 0.5rem 0.75rem;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 0.875rem;
+  background-color: var(--color-ink);
+  color: #fff;
+  box-shadow: 0 18px 40px -16px rgb(42 23 16 / 0.6);
   pointer-events: auto;
-  animation: aviso-entra 0.32s var(--ease-massa) both;
-}
-
-.aviso-marca {
-  border-left-color: var(--color-brand);
+  animation: aviso-entra 0.28s var(--ease-massa) both;
 }
 
 .aviso.saindo {
@@ -2253,31 +2267,16 @@ a.loja-acao:hover {
 @keyframes aviso-entra {
   from {
     opacity: 0;
-    translate: 0 0.75rem;
+    translate: 0 0.5rem;
   }
-}
-
-@media (min-width: 48rem) {
-  @keyframes aviso-entra {
-    from {
-      opacity: 0;
-      translate: 0.75rem 0;
-    }
-  }
-}
-
-.aviso-corpo {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 0.5rem 0.75rem 0.875rem;
 }
 
 .aviso-foto {
   flex-shrink: 0;
-  width: 3.25rem;
-  height: 3.25rem;
+  width: 2.5rem;
+  height: 2.5rem;
   overflow: hidden;
+  border-radius: 0.5rem;
   background-color: var(--color-polvilho);
 }
 
@@ -2295,8 +2294,8 @@ a.loja-acao:hover {
 }
 
 .aviso-sem-foto svg {
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 1.75rem;
+  height: 1.75rem;
 }
 
 .aviso-texto {
@@ -2308,24 +2307,50 @@ a.loja-acao:hover {
   display: flex;
   align-items: center;
   gap: 0.375rem;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-weight: 700;
+  line-height: 1.3;
+}
+
+.aviso-titulo span {
+  min-width: 0;
 }
 
 .aviso-titulo svg {
   flex-shrink: 0;
-  width: 1.125rem;
-  height: 1.125rem;
-  color: var(--color-brand);
+  width: 1rem;
+  height: 1rem;
+  color: var(--color-accent);
 }
 
+/* Creme sobre o marrom: bem acima de 4.5:1. */
 .aviso-detalhe {
-  margin-top: 0.125rem;
-  overflow: hidden;
   font-size: 0.8125rem;
-  color: var(--color-crust);
-  text-overflow: ellipsis;
+  line-height: 1.3;
+  color: rgb(255 255 255 / 0.78);
+}
+
+/* A ação é texto amarelo, sem caixa: lê como link do próprio aviso. */
+.aviso-acao {
+  flex-shrink: 0;
+  min-height: 2.75rem;
+  padding: 0 0.75rem;
+  border-radius: 999px;
+  color: var(--color-accent);
+  font-size: 0.875rem;
+  font-weight: 700;
   white-space: nowrap;
+  cursor: pointer;
+}
+
+@media (max-width: 22.5rem) {
+  .aviso-acao {
+    padding: 0 0.5rem;
+  }
+}
+
+.aviso-acao:hover {
+  background-color: rgb(255 255 255 / 0.1);
 }
 
 .aviso-fechar {
@@ -2334,71 +2359,24 @@ a.loja-acao:hover {
   place-items: center;
   width: 2.75rem;
   height: 2.75rem;
-  color: var(--color-crust);
+  border-radius: 999px;
+  color: rgb(255 255 255 / 0.7);
   cursor: pointer;
 }
 
 .aviso-fechar:hover {
-  color: var(--color-ink);
-}
-
-.aviso-fechar svg {
-  width: 1.125rem;
-  height: 1.125rem;
-}
-
-/* A ação ocupa a largura do cartão: no celular é o alvo que o polegar acha. */
-.aviso-acao {
-  display: block;
-  width: 100%;
-  min-height: 2.75rem;
-  border-top: 1px solid var(--color-linha);
-  font-size: 0.8125rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--color-ink);
-  cursor: pointer;
-}
-
-.aviso-acao:hover {
-  background-color: var(--color-polvilho);
-}
-
-.aviso-marca .aviso-acao {
-  border-top-color: var(--color-brand);
-  background-color: var(--color-brand);
+  background-color: rgb(255 255 255 / 0.1);
   color: #fff;
 }
 
-.aviso-marca .aviso-acao:hover {
-  background-color: var(--color-brand-escuro);
+.aviso-fechar svg {
+  width: 1rem;
+  height: 1rem;
 }
 
-/* Tempo que falta: a barra encolhe em 4,5 s e, quando acaba, o aviso sai
-   (ui.js escuta o animationend). Mouse em cima ou foco num botão pausa. */
-.aviso-tempo {
-  position: absolute;
-  inset: auto 0 0;
-  height: 3px;
-  background-color: rgb(42 23 16 / 0.25);
-  transform-origin: left;
-  animation: aviso-tempo 4.5s linear forwards;
-}
-
-.aviso-marca .aviso-tempo {
-  background-color: rgb(255 255 255 / 0.55);
-}
-
-.aviso:hover .aviso-tempo,
-.aviso:focus-within .aviso-tempo {
-  animation-play-state: paused;
-}
-
-@keyframes aviso-tempo {
-  to {
-    transform: scaleX(0);
-  }
+/* Sobre o marrom, o contorno de foco vermelho sumiria. */
+.aviso :focus-visible {
+  outline-color: #fff;
 }
 
 @media (prefers-reduced-motion: reduce) {

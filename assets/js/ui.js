@@ -474,12 +474,10 @@ function tirarAviso(aviso) {
 }
 
 /**
- * Aviso curto, no estilo das páginas institucionais: cartão reto com uma
- * faixa de cor à esquerda (vermelha quando algo entrou no pedido, marrom nos
- * demais), um título, um detalhe opcional, a miniatura do item quando houver
- * e uma ação. A barra fina no pé mostra o tempo que falta; passar o mouse ou
- * focar um botão pausa a contagem (a barra é uma animação CSS, e o aviso sai
- * quando ela termina).
+ * Aviso curto, limpo: uma linha só, fundo marrom, cantos arredondados. A
+ * miniatura do item quando houver, o título, um detalhe opcional, a ação em
+ * texto amarelo e o X. Some sozinho em 4,5 s; passar o mouse ou focar um
+ * botão segura o aviso na tela até sair dele.
  *
  * O leitor de tela ouve só a frase, por uma região aria-live separada: assim
  * não lê "Ver pedido, Fechar aviso" a cada item.
@@ -495,16 +493,13 @@ function mostrarAviso({ titulo, detalhe = '', miniatura = '', tom = 'neutro', ac
   const aviso = document.createElement('div');
   aviso.className = `aviso aviso-${tom}`;
   aviso.innerHTML = `
-    <div class="aviso-corpo">
-      ${miniatura ? `<span class="aviso-foto">${miniatura}</span>` : ''}
-      <div class="aviso-texto">
-        <p class="aviso-titulo">${tom === 'marca' ? ICONE_VISTO : ''}${esc(titulo)}</p>
-        ${detalhe ? `<p class="aviso-detalhe">${esc(detalhe)}</p>` : ''}
-      </div>
-      <button type="button" class="aviso-fechar" aria-label="Fechar aviso">${ICONE_FECHAR}</button>
+    ${miniatura ? `<span class="aviso-foto">${miniatura}</span>` : ''}
+    <div class="aviso-texto">
+      <p class="aviso-titulo">${tom === 'marca' ? ICONE_VISTO : ''}<span>${esc(titulo)}</span></p>
+      ${detalhe ? `<p class="aviso-detalhe">${esc(detalhe)}</p>` : ''}
     </div>
     ${acao ? `<button type="button" class="aviso-acao">${esc(acao.texto)}</button>` : ''}
-    <span class="aviso-tempo" aria-hidden="true"></span>`;
+    <button type="button" class="aviso-fechar" aria-label="Fechar aviso">${ICONE_FECHAR}</button>`;
 
   aviso.querySelector('.aviso-fechar').addEventListener('click', () => tirarAviso(aviso));
   if (acao) {
@@ -513,9 +508,18 @@ function mostrarAviso({ titulo, detalhe = '', miniatura = '', tom = 'neutro', ac
       tirarAviso(aviso);
     });
   }
-  aviso.querySelector('.aviso-tempo').addEventListener('animationend', () => tirarAviso(aviso));
+
+  // Tempo na tela: para enquanto o mouse ou o foco estão no aviso.
+  let relogio = null;
+  const contar = () => { clearTimeout(relogio); relogio = setTimeout(() => tirarAviso(aviso), 4500); };
+  const segurar = () => clearTimeout(relogio);
+  aviso.addEventListener('pointerenter', segurar);
+  aviso.addEventListener('pointerleave', contar);
+  aviso.addEventListener('focusin', segurar);
+  aviso.addEventListener('focusout', (evento) => { if (!aviso.contains(evento.relatedTarget)) contar(); });
 
   areaAvisos.append(aviso);
+  contar();
 
   if (leitorAvisos) {
     leitorAvisos.textContent = '';
@@ -535,11 +539,9 @@ document.addEventListener('dolce:adicionado', (evento) => {
   const miniatura = item.imagem
     ? `<img src="${esc(item.imagem)}" alt="">`
     : `<span class="aviso-sem-foto">${iconeDoItem(item)}</span>`;
-  const quanto = item.qtd ? `${item.qtd} un` : '';
-
   mostrarAviso({
-    titulo: 'Adicionado ao pedido',
-    detalhe: [item.nome, quanto].filter(Boolean).join(', '),
+    titulo: item.nome || 'Item',
+    detalhe: item.qtd ? `${item.qtd} un no pedido` : 'Adicionado ao pedido',
     miniatura,
     tom: 'marca',
     acao: { texto: 'Ver pedido', aoClicar: () => abrirDrawer(null) },
