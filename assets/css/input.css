@@ -2553,9 +2553,11 @@ a.loja-acao:hover {
 
 /* ---------- A empresa: herói "manifesto" ----------
    Cartaz em fundo claro: a frase da marca em letras grandes e, numa coluna
-   própria à direita, o garfo com o croquete espetado. A linha do meio leva
-   uma faixa vermelha que atravessa a tela e passa por trás do garfo. O texto
-   nunca fica atrás da arte: cada um tem a sua coluna. */
+   própria à direita, a logo como um selo carimbado. A linha do meio leva uma
+   faixa vermelha que atravessa a tela e passa por trás do selo, que fica na
+   altura dela. O texto nunca fica atrás da arte: cada um tem a sua coluna.
+   --fonte é o tamanho do título e --coluna a largura da coluna do selo; com
+   eles o selo acha a altura da faixa. */
 .heroi-manifesto {
   position: relative;
   isolation: isolate;
@@ -2569,21 +2571,26 @@ a.loja-acao:hover {
 }
 
 .heroi-manifesto-grade {
+  /* No celular a fonte sai da largura que sobra ao lado do selo (tela −
+     margens − coluna): "COMIDA DE" mede 6,5 vezes a fonte e cabe numa linha
+     só em qualquer celular. */
+  --fonte: max(1.75rem, calc((100vw - 8.5rem) / 6.7));
+  --coluna: 6rem;
   display: grid;
   flex: 1;
-  grid-template-columns: minmax(0, 1fr) 6rem;
+  grid-template-columns: minmax(0, 1fr) var(--coluna);
   gap: 0 0.5rem;
-  align-items: center;
+  /* A linha da grade fica no meio da altura, mas texto e selo começam no
+     mesmo topo: é isso que deixa o selo na altura da faixa. */
+  align-content: center;
+  align-items: start;
   width: 100%;
   padding-top: 1.75rem;
 }
 
 .heroi-manifesto-titulo {
   margin-top: 1.25rem;
-  /* No celular a fonte sai da largura que sobra ao lado do garfo (tela −
-     margens − coluna da arte): "COMIDA DE" mede 6,5 vezes a fonte e cabe
-     numa linha só em qualquer celular. */
-  font-size: max(1.75rem, calc((100vw - 8.5rem) / 6.7));
+  font-size: var(--fonte);
   line-height: 0.95;
   text-transform: uppercase;
 }
@@ -2593,7 +2600,7 @@ a.loja-acao:hover {
 }
 
 /* A faixa: o fundo vermelho sai das bordas da tela (o herói corta o que
-   sobra) e fica atrás do texto e do garfo. Branco sobre o vermelho, em letra
+   sobra) e fica atrás do texto e do selo. Branco sobre o vermelho, em letra
    de cartaz, passa de 3:1. */
 .heroi-manifesto-titulo .linha-faixa {
   position: relative;
@@ -2622,24 +2629,37 @@ a.loja-acao:hover {
   color: var(--color-crust);
 }
 
-/* A arte fica acima da faixa. A sombra mora no contêiner e o esmaecido do
-   pé (onde a foto original foi cortada reta) na imagem: juntos na imagem, a
-   sombra seria recortada num retângulo. */
+/* O selo fica acima da faixa, centrado na altura dela: o caminho (1,25rem),
+   a margem do título (1,25rem) e uma linha e meia do título, menos meia
+   altura do selo (a logo é 300 × 160). Levemente torto, como carimbo. */
 .heroi-manifesto-arte {
   position: relative;
   z-index: 1;
-  display: grid;
-  /* No celular o croquete fica na altura do título e o cabo cruza a faixa. */
   align-self: start;
-  place-items: start center;
-  padding-top: 3.25rem;
-  filter: drop-shadow(0 18px 20px rgb(42 23 16 / 0.3));
+  padding-top: calc(2.5rem + var(--fonte) * 0.95 * 1.5 - var(--coluna) * 0.267);
+  filter: drop-shadow(0 12px 16px rgb(42 23 16 / 0.28));
+}
+
+/* Logo e um oval cor de farinha atrás dela, girando juntos: sem ele a logo
+   vermelha some na faixa vermelha. */
+.heroi-manifesto-selo {
+  position: relative;
+  rotate: -7deg;
+}
+
+.heroi-manifesto-selo::before {
+  content: "";
+  position: absolute;
+  inset: -5% -4%;
+  border-radius: 50%;
+  background-color: var(--color-farinha);
 }
 
 .heroi-manifesto-arte img {
+  position: relative;
+  display: block;
   width: 100%;
   height: auto;
-  mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
 }
 
 .heroi-manifesto-numeros {
@@ -2659,24 +2679,15 @@ a.loja-acao:hover {
 
 @media (min-width: 48rem) {
   .heroi-manifesto-grade {
-    grid-template-columns: minmax(0, 1fr) 13rem;
+    --fonte: clamp(2.75rem, 7.4vw, 6.75rem);
+    --coluna: 13rem;
     gap: 0 2rem;
-  }
-
-  .heroi-manifesto-arte {
-    align-self: stretch;
-    place-items: center;
-    padding-top: 0;
-  }
-
-  .heroi-manifesto-titulo {
-    font-size: clamp(2.75rem, 7.4vw, 6.75rem);
   }
 }
 
 @media (min-width: 64rem) {
   .heroi-manifesto-grade {
-    grid-template-columns: minmax(0, 1fr) 19rem;
+    --coluna: 19rem;
     gap: 0 4rem;
     padding-top: 2.5rem;
   }
@@ -2685,16 +2696,12 @@ a.loja-acao:hover {
     font-size: 1.25rem;
   }
 
-  .heroi-manifesto-arte img {
-    max-height: 72svh;
-    width: auto;
-  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* O garfo "espeta" uma vez: desce até o lugar e assenta. */
-  .heroi-manifesto-arte img {
-    animation: garfo-espeta 0.9s var(--ease-massa) 0.15s both;
+  /* O selo é carimbado uma vez: desce grande e torto e assenta. */
+  .heroi-manifesto-selo {
+    animation: selo-carimba 0.7s cubic-bezier(0.3, 1.4, 0.5, 1) 0.2s both;
   }
 
   @supports (animation-timeline: view()) {
@@ -2706,17 +2713,11 @@ a.loja-acao:hover {
   }
 }
 
-@keyframes garfo-espeta {
-  0% {
+@keyframes selo-carimba {
+  from {
     opacity: 0;
-    translate: 0 -2rem;
-  }
-  70% {
-    opacity: 1;
-    translate: 0 0.35rem;
-  }
-  100% {
-    translate: 0 0;
+    scale: 1.6;
+    rotate: -18deg;
   }
 }
 

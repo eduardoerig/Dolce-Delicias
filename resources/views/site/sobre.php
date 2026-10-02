@@ -98,10 +98,14 @@ $cartoesEmpresa = [
 
   <?php
   /*
-   * Herói "manifesto": a frase da marca em letras de cartaz, com o garfo e o
-   * croquete espetados numa coluna à direita. A linha do meio leva uma faixa
-   * vermelha que atravessa a tela inteira e passa por trás do garfo. Fundo
-   * claro: é o único herói assim no site.
+   * Herói "manifesto": a frase da marca em letras de cartaz e, numa coluna à
+   * direita, a logo como um selo carimbado sobre a faixa vermelha da linha do
+   * meio, que atravessa a tela inteira. Fundo claro: é o único herói assim no
+   * site.
+   *
+   * A logo é provisória: assets/img/marca/selo.(svg|png|webp). Quando a
+   * definitiva chegar, basta trocar o arquivo (de preferência horizontal,
+   * fundo transparente).
    *
    * A frase vem de data/empresa.php ('chamada'). "Comida de verdade, feita
    * todo dia" vira três linhas: "Comida de" / "verdade," (na faixa) / "feita
@@ -119,8 +123,11 @@ $cartoesEmpresa = [
   } else {
       $linhasManifesto[] = ['texto' => $fraseManifesto, 'faixa' => true];
   }
-  $garfo     = dd_imagem('/assets/img/recortes/garfo-600.webp');
-  $garfoMini = dd_imagem('/assets/img/recortes/garfo-360.webp');
+  $selo = null;
+  foreach (['svg', 'webp', 'png'] as $extensao) {
+      $selo ??= dd_imagem("/assets/img/marca/selo.{$extensao}");
+  }
+  $selo ??= dd_imagem('/assets/img/logo.svg');
   ?>
   <section class="heroi-manifesto" aria-labelledby="titulo-sobre">
     <div class="heroi-manifesto-grade mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -148,9 +155,11 @@ $cartoesEmpresa = [
         </div>
       </div>
 
-      <?php if ($garfo): ?>
+      <?php if ($selo): ?>
         <div class="heroi-manifesto-arte" aria-hidden="true">
-          <img src="<?= e($garfo) ?>" srcset="<?= e((string) $garfoMini) ?> 360w, <?= e($garfo) ?> 600w" sizes="(min-width: 64rem) 20rem, 9rem" alt="" width="600" height="1159" fetchpriority="high" decoding="async">
+          <div class="heroi-manifesto-selo">
+            <img src="<?= e($selo) ?>" alt="" width="300" height="160" decoding="async">
+          </div>
         </div>
       <?php endif; ?>
     </div>
