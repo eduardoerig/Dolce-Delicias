@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * partials/ilustra-fachada.php — a frente de uma loja da Dolce, desenhada.
  *
- * Mesmo traço da bandeja do herói: toldo listrado, placa oval vermelha da
+ * Mesmo traço dos desenhos de produto: toldo listrado, placa oval vermelha da
  * marca, vitrine com uma bandeja de salgados e a porta. Aparece no lugar da
  * foto da fachada enquanto ela não é cadastrada, e na faixa de unidades.php e
  * sobre.php.

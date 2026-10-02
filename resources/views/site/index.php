@@ -21,7 +21,7 @@ include DD_BASE . '/partials/header.php';
      ============================================================ -->
 <?php
 // Herói: o cartaz diz a proposta, a frase diz como funciona, um botão leva ao
-// catálogo; a bandeja mostra o que chega e os atalhos levam direto à categoria.
+// catálogo; a foto de fundo mostra o que chega e os atalhos levam direto à categoria.
 $heroLinhas  = [
     ['texto' => 'Encomende o cento.'],
     ['texto' => 'A gente cuida do resto.', 'destaque' => true],
@@ -182,7 +182,7 @@ $precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
       <div data-grade-produtos class="mt-4 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
         <?php foreach ($produtos as $i => $produto): ?>
           <?php
-            $eager = $i < 4; // os primeiros cards carregam sem lazy
+            $eager = false; // o herói ocupa a primeira tela: os cards ficam abaixo dela e carregam sob demanda
             include DD_BASE . '/partials/product-card.php';
           ?>
         <?php endforeach; ?>

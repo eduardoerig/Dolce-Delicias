@@ -24,20 +24,21 @@ include DD_BASE . '/partials/header.php';
 
 <div class="bg-farinha">
 
-  <!-- Faixa: caminho, título e o que fazer aqui -->
-  <div class="border-b border-linha bg-polvilho">
-    <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <nav aria-label="Você está aqui" class="flex items-center gap-2 text-sm font-semibold text-crust">
-        <a href="/" class="rounded hover:text-brand-escuro">Início</a>
-        <span aria-hidden="true">/</span>
-        <span class="text-base-content" aria-current="page">Seu pedido</span>
-      </nav>
-      <h1 class="mt-3 text-4xl sm:text-5xl">Seu pedido</h1>
-      <p class="mt-2 max-w-2xl text-crust">
-        Confira as quantidades, diga como quer receber e feche pelo WhatsApp da matriz. Nada é cobrado aqui.
-      </p>
-    </div>
-  </div>
+  <?php // Herói: foto de fundo, camada escura, título e o que fazer aqui. ?>
+  <?php ob_start(); ?>
+    <h1 id="titulo-pedido" class="text-4xl sm:text-5xl">Seu pedido</h1>
+    <p class="mt-3 max-w-xl text-lg leading-relaxed">
+      Confira as quantidades, diga como quer receber e feche pelo WhatsApp da matriz. Nada é cobrado aqui.
+    </p>
+  <?php
+  $heroiConteudo = (string) ob_get_clean();
+  $heroiFoto     = 'pedido';
+  $heroiTitulo   = 'titulo-pedido';
+  $heroiCaminho  = 'Seu pedido';
+  $heroiTom      = 'escuro';
+  $heroiBaixo    = true;
+  include DD_BASE . '/partials/heroi-foto.php';
+  ?>
 
   <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
 

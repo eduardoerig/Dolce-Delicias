@@ -31,39 +31,28 @@ include DD_BASE . '/partials/header.php';
 
 <div class="pagina-institucional bg-farinha">
 
-  <?php
-  // Mesmo desenho de A empresa: abertura com foto até a borda da tela, a
-  // matriz no zigue-zague e as outras lojas numa lista reta.
-  $fotoAbertura = dd_imagem('/assets/img/empresa/vitrine.jpg');
-  ?>
-  <section class="sobre-abertura" aria-labelledby="titulo-unidades">
-    <div class="sobre-abertura-texto">
-      <nav aria-label="Você está aqui" class="flex items-center gap-2 text-sm font-semibold text-crust">
-        <a href="/" class="rounded hover:text-brand-escuro">Início</a>
-        <span aria-hidden="true">/</span>
-        <span class="text-base-content" aria-current="page">Unidades</span>
-      </nav>
-      <h1 id="titulo-unidades" class="mt-4 text-4xl sm:text-5xl lg:text-6xl">Nossas unidades</h1>
-      <p class="mt-5 max-w-xl text-lg leading-relaxed text-crust lg:text-xl">
-        <?= e((string) count($unidades)) ?> lojas. O pedido feito pelo site vai para a matriz;
-        nas outras lojas você compra no balcão ou pelo WhatsApp de cada uma.
-      </p>
-      <div class="mt-8 flex flex-wrap gap-3">
-        <?php foreach ($matrizes as $matrizAtalho): ?>
-          <a href="#<?= e((string) $matrizAtalho['slug']) ?>" class="botao-primario">Ver a matriz</a>
-        <?php endforeach; ?>
-        <?php if ($lojas !== []): ?>
-          <a href="#outras-lojas" class="botao-secundario">Outras lojas</a>
-        <?php endif; ?>
-      </div>
+  <?php // Herói: foto de fundo, camada escura e a regra que importa. ?>
+  <?php ob_start(); ?>
+    <h1 id="titulo-unidades" class="text-4xl sm:text-5xl lg:text-6xl">Nossas unidades</h1>
+    <p class="mt-4 max-w-xl text-lg leading-relaxed lg:text-xl">
+      <?= e((string) count($unidades)) ?> lojas. O pedido feito pelo site vai para a matriz;
+      nas outras lojas você compra no balcão ou pelo WhatsApp de cada uma.
+    </p>
+    <div class="mt-7 flex flex-wrap gap-3">
+      <?php foreach ($matrizes as $matrizAtalho): ?>
+        <a href="#<?= e((string) $matrizAtalho['slug']) ?>" class="botao-primario">Ver a matriz</a>
+      <?php endforeach; ?>
+      <?php if ($lojas !== []): ?>
+        <a href="#outras-lojas" class="botao-secundario">Outras lojas</a>
+      <?php endif; ?>
     </div>
-
-    <?php if ($fotoAbertura): ?>
-      <img src="<?= e($fotoAbertura) ?>" alt="Vitrine com bolos e doces" class="sobre-abertura-foto" width="1600" height="1000" decoding="async" fetchpriority="high">
-    <?php else: ?>
-      <?php $fachadaClasse = 'w-full max-w-md justify-self-center p-8'; include DD_BASE . '/partials/ilustra-fachada.php'; ?>
-    <?php endif; ?>
-  </section>
+  <?php
+  $heroiConteudo = (string) ob_get_clean();
+  $heroiFoto     = 'unidades';
+  $heroiTitulo   = 'titulo-unidades';
+  $heroiCaminho  = 'Unidades';
+  include DD_BASE . '/partials/heroi-foto.php';
+  ?>
 
   <div>
     <?php foreach ($matrizes as $unidade): ?>

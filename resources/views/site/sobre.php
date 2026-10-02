@@ -96,31 +96,24 @@ $cartoesEmpresa = [
 
 <div class="pagina-institucional bg-farinha">
 
-  <!-- Abertura: o caminho, quem é a padaria numa frase e a foto da cozinha -->
-  <section class="sobre-abertura" aria-labelledby="titulo-sobre">
-      <div class="sobre-abertura-texto">
-        <nav aria-label="Você está aqui" class="flex items-center gap-2 text-sm font-semibold text-crust">
-          <a href="/" class="rounded hover:text-brand-escuro">Início</a>
-          <span aria-hidden="true">/</span>
-          <span class="text-base-content" aria-current="page">A empresa</span>
-        </nav>
-        <h1 id="titulo-sobre" class="mt-4 text-4xl sm:text-5xl lg:text-6xl">A Dolce Delícias</h1>
-        <p class="mt-5 max-w-xl text-lg leading-relaxed text-crust lg:text-xl">
-          <?php if ($chamada !== ''): ?><?= e($chamada) ?>. <?php endif; ?>
-          Salgados, assados e doces para escolas, eventos e empresas, saindo da mesma cozinha para <?= e((string) $totalUnidades) ?> unidades.
-        </p>
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a href="/#catalogo" class="botao-primario">Ver o catálogo</a>
-          <a href="/unidades" class="botao-secundario">Nossas unidades</a>
-        </div>
-      </div>
-
-      <?php if ($foto = $fotoSobre('/assets/img/empresa/maos-na-massa.jpg')): ?>
-        <img src="<?= e($foto) ?>" alt="Mãos sovando massa sobre a bancada enfarinhada" class="sobre-abertura-foto" width="1600" height="1000" decoding="async" fetchpriority="high">
-      <?php else: ?>
-        <?php $fachadaClasse = 'w-full max-w-md justify-self-center p-8'; include DD_BASE . '/partials/ilustra-fachada.php'; ?>
-      <?php endif; ?>
-  </section>
+  <?php // Herói: foto de fundo, camada escura e quem é a padaria numa frase. ?>
+  <?php ob_start(); ?>
+    <h1 id="titulo-sobre" class="text-4xl sm:text-5xl lg:text-6xl">A Dolce Delícias</h1>
+    <p class="mt-4 max-w-xl text-lg leading-relaxed lg:text-xl">
+      <?php if ($chamada !== ''): ?><?= e($chamada) ?>. <?php endif; ?>
+      Salgados, assados e doces para escolas, eventos e empresas, saindo da mesma cozinha para <?= e((string) $totalUnidades) ?> unidades.
+    </p>
+    <div class="mt-7 flex flex-wrap gap-3">
+      <a href="/#catalogo" class="botao-primario">Ver o catálogo</a>
+      <a href="/unidades" class="botao-secundario">Nossas unidades</a>
+    </div>
+  <?php
+  $heroiConteudo = (string) ob_get_clean();
+  $heroiFoto     = 'empresa';
+  $heroiTitulo   = 'titulo-sobre';
+  $heroiCaminho  = 'A empresa';
+  include DD_BASE . '/partials/heroi-foto.php';
+  ?>
 
   <div>
 

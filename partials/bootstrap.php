@@ -498,7 +498,7 @@ function dd_icone_categoria(string $categoria, string $nome = ''): string
     $c = dd_ascii($categoria);
     $n = dd_ascii($nome);
 
-    // Desenhos coloridos no mesmo traço da bandeja do herói (hero-bandeja.php):
+    // Desenhos coloridos no mesmo traço da fachada desenhada (ilustra-fachada.php):
     // dourado de fritura, contorno de crosta, vermelho e amarelo da marca.
     $crosta = 'stroke="#a9561a" stroke-width="1.8" stroke-linejoin="round"';
 

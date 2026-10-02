@@ -1569,39 +1569,6 @@ a.loja-acao:hover {
   text-transform: uppercase;
 }
 
-/* Abertura: texto à esquerda, foto ocupando a metade direita até a borda. */
-.sobre-abertura {
-  display: grid;
-  background-color: var(--color-polvilho);
-}
-
-.sobre-abertura-texto {
-  padding: 2.5rem var(--sobre-margem);
-}
-
-.sobre-abertura-foto {
-  width: 100%;
-  aspect-ratio: 3 / 2;
-  object-fit: cover;
-}
-
-@media (min-width: 64rem) {
-  .sobre-abertura {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: center;
-    min-height: 34rem;
-  }
-
-  .sobre-abertura-texto {
-    padding: 4rem 4rem 4rem var(--sobre-margem);
-  }
-
-  .sobre-abertura-foto {
-    height: 100%;
-    aspect-ratio: auto;
-  }
-}
-
 /* Zigue-zague: a foto encosta na borda da tela (45% da largura), o texto fica
    ao lado, e as seções vêm coladas, separadas só pelo próprio espaço. */
 .zigue {
@@ -1928,66 +1895,97 @@ a.loja-acao:hover {
   background-color: color-mix(in oklab, var(--color-accent) 86%, var(--color-ink));
 }
 
-/* ---------- Herói da home ---------- */
+/* ---------- Herói de cada página ----------
+   Foto de fundo, uma camada por cima e o texto em branco
+   (partials/heroi-foto.php). Mobile-first: no celular o texto fica embaixo e a
+   camada escurece de baixo para cima; do tablet em diante o texto fica à
+   esquerda e a camada escurece da esquerda para a direita. Onde há texto a
+   camada passa de 75% de opacidade: branco cheio fica acima de 4.5:1 sobre
+   qualquer foto. */
 
-/* Sobre o vermelho, o contorno de foco vermelho sumiria. */
-.heroi :focus-visible {
+.heroi-foto {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  min-height: 26rem;
+  overflow: hidden;
+  background-color: var(--color-ink);
+  color: #fff;
+}
+
+.heroi-foto-fundo,
+.heroi-foto-fundo img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.heroi-foto::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to top, rgb(42 23 16 / 0.95) 0, rgb(42 23 16 / 0.82) 55%, rgb(42 23 16 / 0.5) 100%);
+}
+
+.heroi-foto-marca::before {
+  background: linear-gradient(to top, rgb(122 2 16 / 0.96) 0, rgb(158 3 21 / 0.86) 55%, rgb(158 3 21 / 0.6) 100%);
+}
+
+.heroi-foto-conteudo {
+  padding-top: 6rem;
+  padding-bottom: 2.25rem;
+}
+
+/* Sobre a camada escura, o contorno de foco vermelho sumiria. */
+.heroi-foto :focus-visible {
   outline-color: #fff;
+}
+
+@media (min-width: 48rem) {
+  .heroi-foto {
+    align-items: center;
+    min-height: 30rem;
+  }
+
+  .heroi-foto::before {
+    background: linear-gradient(90deg, rgb(42 23 16 / 0.92) 0, rgb(42 23 16 / 0.8) 45%, rgb(42 23 16 / 0.3) 100%);
+  }
+
+  .heroi-foto-marca::before {
+    background: linear-gradient(90deg, rgb(122 2 16 / 0.95) 0, rgb(158 3 21 / 0.85) 45%, rgb(158 3 21 / 0.3) 100%);
+  }
+
+  .heroi-foto-conteudo {
+    padding-block: 4rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .heroi-foto {
+    min-height: 34rem;
+  }
+}
+
+/* Página de tarefa (Seu pedido): o herói só situa, o conteúdo sobe logo. */
+.heroi-foto-baixo {
+  min-height: 17rem;
+}
+
+@media (min-width: 48rem) {
+  .heroi-foto-baixo {
+    min-height: 19rem;
+  }
 }
 
 .heroi-cta {
   min-height: 3.5rem;
   padding-inline: 2rem;
   font-size: 1.0625rem;
-}
-
-.bandeja {
-  display: block;
-  width: 100%;
-  height: auto;
-  filter: drop-shadow(0 18px 24px rgb(90 2 14 / 0.25));
-}
-
-/* O cento chegando: cada peça cai no lugar, uma vez, em sequência. */
-@keyframes peca-chega {
-  from {
-    opacity: 0;
-    transform: translateY(-14px) scale(0.6);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-.bandeja .peca {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: peca-chega 0.42s var(--ease-massa) both;
-  animation-delay: calc(var(--i) * 11ms + 120ms);
-}
-
-@keyframes etiqueta-balanca {
-  0%, 100% { rotate: 0deg; }
-  40% { rotate: -5deg; }
-  70% { rotate: 2deg; }
-}
-
-.bandeja .etiqueta {
-  transform-box: fill-box;
-  transform-origin: 0% 50%;
-}
-
-.bandeja .etiqueta > * {
-  animation: etiqueta-balanca 1.2s var(--ease-massa) 1.6s 1 both;
-  transform-box: view-box;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .bandeja .peca,
-  .bandeja .etiqueta > * {
-    animation: none;
-  }
 }
 
 /* Atalho de categoria no rodapé do herói. */
