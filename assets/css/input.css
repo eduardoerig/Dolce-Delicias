@@ -3411,4 +3411,231 @@ a.loja-acao:hover {
 .zap-anima [data-zap-msg] {
   opacity: 0;
 }
+
+/* ---------- Home: Promoções ----------
+   Cada oferta é uma faixa larga, uma por linha, cantos retos: o desconto em
+   letra de cartaz sobre o vermelho, o texto no meio e as fotos dos primeiros
+   produtos. No celular as três partes empilham; do computador em diante
+   ficam lado a lado. */
+.ofertas {
+  border-bottom: 1px solid var(--color-linha);
+  background-color: var(--color-farinha);
+}
+
+.ofertas-lista {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.oferta {
+  display: grid;
+  border: 1px solid var(--color-linha);
+  background-color: var(--color-papel);
+}
+
+/* O selo: o desconto grande em amarelo sobre o vermelho, e quando vale. */
+.oferta-selo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding: 1rem 1.25rem;
+  background-color: var(--color-brand);
+  color: #fff;
+}
+
+.oferta-desconto {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 9vw, 2.75rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.oferta-quando {
+  padding: 0.25rem 0.625rem;
+  border: 1.5px solid rgb(255 255 255 / 0.7);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.oferta-quando-hoje {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-ink);
+}
+
+.oferta-corpo {
+  padding: 1.25rem 1.25rem 0;
+}
+
+.oferta-titulo {
+  font-size: 1.5rem;
+  line-height: 1.1;
+}
+
+.oferta-texto {
+  max-width: 38rem;
+  margin-top: 0.5rem;
+  line-height: 1.6;
+  color: var(--color-crust);
+}
+
+.oferta-regras {
+  display: grid;
+  gap: 0.375rem;
+  margin-top: 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.oferta-regras li {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.oferta-regras svg {
+  flex-shrink: 0;
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-top: 0.0625rem;
+  color: var(--color-brand-escuro);
+}
+
+/* As fotos dos produtos: duas por linha no celular, com o nome embaixo. */
+.oferta-produtos {
+  padding: 1.25rem;
+}
+
+.oferta-produtos ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.oferta-produto {
+  display: block;
+}
+
+.oferta-produto-foto {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background-color: var(--color-polvilho);
+  color: var(--color-crust);
+}
+
+.oferta-produto-foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: scale 0.3s var(--ease-massa);
+}
+
+.oferta-produto-foto svg {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.oferta-produto:hover img {
+  scale: 1.05;
+}
+
+.oferta-produto-nome {
+  display: block;
+  margin-top: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.oferta-produto:hover .oferta-produto-nome {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.oferta-todos {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 2.75rem;
+  margin-top: 0.75rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: var(--color-brand);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.oferta-todos svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--color-brand-escuro);
+}
+
+@media (min-width: 40rem) {
+  .oferta-produtos ul {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Tablet deitado: selo à esquerda, texto e fotos empilhados ao lado.
+   Computador largo: selo | texto | fotos, lado a lado. */
+@media (min-width: 64rem) {
+  .oferta {
+    grid-template-columns: 15rem minmax(0, 1fr);
+    grid-template-areas: "selo corpo" "selo produtos";
+  }
+
+  .oferta-selo {
+    grid-area: selo;
+  }
+
+  .oferta-corpo {
+    grid-area: corpo;
+  }
+
+  .oferta-produtos {
+    grid-area: produtos;
+  }
+
+  .oferta-selo {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 1.75rem 1.5rem;
+  }
+
+  .oferta-desconto {
+    font-size: 3.5rem;
+  }
+
+  .oferta-corpo {
+    align-self: center;
+    padding: 1.75rem 1.75rem 0;
+  }
+
+  .oferta-produtos {
+    padding: 1.25rem 1.75rem 1.75rem;
+  }
+}
+
+@media (min-width: 80rem) {
+  .oferta {
+    grid-template-columns: 15rem minmax(0, 1fr) minmax(0, 28rem);
+    grid-template-areas: "selo corpo produtos";
+  }
+
+  .oferta-corpo {
+    padding-bottom: 1.75rem;
+  }
+
+  .oferta-produtos {
+    align-self: center;
+    padding: 1.5rem 1.5rem 1.5rem 0;
+  }
+}
 }
