@@ -241,11 +241,10 @@
 }
 
 /* -------------------------------------------------------------
-   CARRINHO COMO JANELA NO MEIO DA TELA
-   O mecanismo é o drawer do daisyUI (checkbox, overlay, inert e foco em
-   ui.js), mas o painel não encosta mais na lateral: fica centralizado,
-   com altura do conteúdo até o limite da tela. Uma barra de rolagem só, a
-   da lista de itens; a camada do daisyUI não rola e a página atrás trava.
+   CARRINHO NA LATERAL, UMA BARRA DE ROLAGEM SÓ
+   O drawer do daisyUI (checkbox, overlay, inert e foco em ui.js), colado
+   à direita na altura inteira da tela. Uma barra de rolagem só, a da lista
+   de itens; a camada do daisyUI não rola e a página atrás trava.
    Fora do @layer porque as regras do drawer do daisyUI também estão.
    ------------------------------------------------------------- */
 :root:has(#carrinho-toggle:checked) {
@@ -258,30 +257,35 @@
   scrollbar-gutter: stable;
 }
 
+/* 100vw, e não 100%: cobre também o espaço reservado da barra de rolagem,
+   então o painel encosta na borda da tela. */
 .drawer.drawer-end > .drawer-toggle ~ .drawer-side:has(> .gaveta-carrinho) {
-  place-items: center;
-  justify-items: center;
+  width: 100vw;
   overflow: hidden;
 }
 
+/* Colado na lateral direita, na altura inteira da tela. */
 .drawer.drawer-end > .drawer-toggle ~ .drawer-side > .gaveta-carrinho {
-  width: min(30rem, calc(100vw - 2rem));
-  max-height: min(42rem, calc(100dvh - 2rem));
-  box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.5);
-  opacity: 0;
-  translate: 0 1rem;
-  transition: translate 0.25s var(--ease-massa), opacity 0.2s ease-out;
+  /* Acima da camada escura (que é sticky e, sem isso, passa por cima e
+     apaga o painel). */
+  position: relative;
+  z-index: 1;
+  width: min(30rem, 100vw);
+  height: 100dvh;
+  box-shadow: -24px 0 48px -24px rgb(0 0 0 / 0.5);
 }
 
+/* Aberto, o painel volta a ser texto comum: o daisyUI deixa will-change e
+   translate no painel, e o navegador passa a desenhá-lo como imagem, com as
+   letras borradas. */
 .drawer.drawer-end > .drawer-toggle:checked ~ .drawer-side > .gaveta-carrinho {
-  opacity: 1;
-  translate: 0 0;
+  will-change: auto;
+  translate: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .drawer.drawer-end > .drawer-toggle ~ .drawer-side > .gaveta-carrinho {
-    translate: 0 0;
-    transition: opacity 0.15s linear;
+    transition: none;
   }
 }
 

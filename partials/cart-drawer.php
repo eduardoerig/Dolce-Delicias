@@ -9,8 +9,7 @@ declare(strict_types=1);
  * A lista de itens é desenhada por assets/js/cart.js a partir do
  * localStorage['dolce_cart'] — aqui só existe a casca e o estado vazio.
  *
- * Janela centralizada (o mecanismo continua o drawer do daisyUI; o CSS de
- * .gaveta-carrinho a põe no meio da tela). Desenho reto, como A empresa e
+ * Painel colado à direita, na altura inteira da tela. Desenho reto, como A empresa e
  * Unidades, e só o essencial: cabeça marrom com o título e a contagem, os
  * itens (a única parte que rola) e o rodapé com o total e o botão. Unidade,
  * pagamento e observação ficam em /carrinho, onde o pedido é fechado.
