@@ -2041,12 +2041,18 @@ a.loja-acao:hover {
 }
 
 .heroi-foto-vitrine .heroi-foto-conteudo {
+  position: relative;
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-top: 0.25rem;
+  /* Sobe 2px sobre a foto, com fundo marrom: em tela de alta densidade a
+     última fileira da foto escapava por baixo do degradê e virava uma
+     linha clara entre a imagem e o painel. */
+  margin-top: -2px;
+  padding-top: calc(0.25rem + 2px);
   padding-bottom: 4.5rem; /* espaço do "Arraste para baixo", preso no pé */
+  background-color: var(--color-ink);
 }
 
 .heroi-foto-conteudo {
@@ -2087,7 +2093,9 @@ a.loja-acao:hover {
 
   .heroi-foto-vitrine .heroi-foto-conteudo {
     display: block;
+    margin-top: 0;
     padding-block: 4rem;
+    background-color: transparent;
   }
 
   .heroi-foto-vitrine::before {
