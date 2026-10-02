@@ -11,9 +11,10 @@ declare(strict_types=1);
  * preço de padaria, amarelo, com o menor valor de um cento no catálogo. Ele
  * entra uma vez, carimbado; movimento reduzido mostra o selo parado.
  *
- * Embaixo do título: a frase, o botão vermelho (a cor de ação do site), três
- * garantias curtas e os atalhos de categoria numa linha só, que no celular
- * rola de lado em vez de empilhar.
+ * Embaixo do título: a frase, o botão vermelho (a cor de ação do site) e três
+ * garantias curtas. No celular a foto fica em cima, limpa, e o texto num
+ * painel embaixo; o link "Como funciona" e os atalhos de categoria só
+ * aparecem do tablet em diante (no celular o catálogo vem logo abaixo).
  *
  * Tipografia: Alfa Slab One é a --font-display do site, então o h1 já nasce
  * com ela pela camada base.
@@ -59,20 +60,20 @@ ob_start();
 
   <div class="heroi-vitrine-texto">
     <?php // leading abaixo de 1 é o que dá cara de cartaz: as linhas se tocam. ?>
-    <h1 id="heroi-titulo" class="text-[clamp(2.25rem,5.4vw,4.25rem)] uppercase leading-[0.92]">
+    <h1 id="heroi-titulo" class="text-[clamp(2.5rem,12vw,5.5rem)] uppercase leading-[0.92]">
       <?php foreach ($heroLinhas as $linha): ?>
         <span class="block"><?= e($linha['texto']) ?></span>
       <?php endforeach; ?>
     </h1>
 
-    <p class="mt-4 max-w-lg text-lg leading-relaxed sm:text-xl"><?= e($heroTexto) ?></p>
+    <p class="mt-3 max-w-lg text-[1.0625rem] leading-relaxed sm:mt-4 sm:text-xl"><?= e($heroTexto) ?></p>
 
     <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
       <?php if ($heroCta !== null): ?>
-        <a href="<?= e($heroCta['href']) ?>" class="botao-primario heroi-cta"><?= e($heroCta['texto']) ?></a>
+        <a href="<?= e($heroCta['href']) ?>" class="botao-primario heroi-cta w-full sm:w-auto"><?= e($heroCta['texto']) ?></a>
       <?php endif; ?>
       <?php if ($heroLink !== null): ?>
-        <a href="<?= e($heroLink['href']) ?>" class="inline-flex min-h-11 items-center font-semibold underline decoration-white/60 decoration-2 underline-offset-4 hover:decoration-white"><?= e($heroLink['texto']) ?></a>
+        <a href="<?= e($heroLink['href']) ?>" class="hidden min-h-11 sm:inline-flex items-center font-semibold underline decoration-white/60 decoration-2 underline-offset-4 hover:decoration-white"><?= e($heroLink['texto']) ?></a>
       <?php endif; ?>
     </div>
 

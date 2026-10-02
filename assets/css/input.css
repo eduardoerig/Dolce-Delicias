@@ -1936,8 +1936,41 @@ a.loja-acao:hover {
   background: linear-gradient(to top, rgb(42 23 16 / 0.95) 0, rgb(42 23 16 / 0.82) 55%, rgb(42 23 16 / 0.5) 100%);
 }
 
+/* Vitrine no celular: a foto em cima, limpa, em metade da tela; o texto num
+   painel marrom embaixo dela, ligado por um esmaecido curto. Nada de texto
+   sobre a comida. */
+.heroi-foto-vitrine {
+  flex-direction: column;
+  align-items: stretch;
+}
+
 .heroi-foto-vitrine::before {
-  background: linear-gradient(to top, rgb(42 23 16 / 0.97) 0, rgb(42 23 16 / 0.92) 62%, rgb(42 23 16 / 0.5) 76%, rgb(42 23 16 / 0) 92%);
+  display: none;
+}
+
+.heroi-foto-vitrine .heroi-foto-fundo {
+  position: relative;
+  z-index: 0;
+  flex: none;
+  display: block;
+  height: max(15rem, 46svh);
+}
+
+.heroi-foto-vitrine .heroi-foto-fundo::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 35%;
+  background: linear-gradient(to bottom, rgb(42 23 16 / 0), var(--color-ink));
+}
+
+.heroi-foto-vitrine .heroi-foto-conteudo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 0.5rem;
+  padding-bottom: 2rem;
 }
 
 .heroi-foto-conteudo {
@@ -1959,7 +1992,30 @@ a.loja-acao:hover {
     background: linear-gradient(90deg, rgb(42 23 16 / 0.92) 0, rgb(42 23 16 / 0.8) 45%, rgb(42 23 16 / 0.3) 100%);
   }
 
+  /* Do tablet em diante a vitrine volta a ser foto de fundo com o texto à
+     esquerda, como os outros heróis. */
+  .heroi-foto-vitrine {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .heroi-foto-vitrine .heroi-foto-fundo {
+    position: absolute;
+    z-index: -2;
+    height: 100%;
+  }
+
+  .heroi-foto-vitrine .heroi-foto-fundo::after {
+    display: none;
+  }
+
+  .heroi-foto-vitrine .heroi-foto-conteudo {
+    display: block;
+    padding-block: 4rem;
+  }
+
   .heroi-foto-vitrine::before {
+    display: block;
     background: linear-gradient(90deg, rgb(42 23 16 / 0.95) 0, rgb(42 23 16 / 0.88) 40%, rgb(42 23 16 / 0.35) 60%, rgb(42 23 16 / 0) 78%);
   }
 
@@ -1994,12 +2050,13 @@ a.loja-acao:hover {
 /* Selo de preço de padaria: a única ousadia da página. Amarelo da marca,
    letra marrom (o vermelho sobre o amarelo não chega a 4.5:1), anel
    tracejado de etiqueta e um leve giro, como colado à mão na vitrine.
-   No celular ele entra no fluxo, à direita, acima do título: assim nunca
-   cobre o texto, mesmo em tela baixa. Do tablet em diante flutua sobre a foto. */
+   No celular ele fica preso no canto de baixo da foto, antes do painel de
+   texto, então nunca cobre o texto. Do tablet em diante flutua sobre a foto. */
 .selo-cento {
-  position: relative;
+  position: absolute;
+  top: calc(max(15rem, 46svh) - 6.5rem);
+  right: 1rem;
   z-index: 1;
-  margin: 0 0 1rem auto;
   display: grid;
   place-items: center;
   width: 6.75rem;
@@ -2059,10 +2116,8 @@ a.loja-acao:hover {
 
 @media (min-width: 48rem) {
   .selo-cento {
-    position: absolute;
     top: 16%;
     right: 9%;
-    margin: 0;
     width: 10rem;
   }
 
@@ -2085,13 +2140,22 @@ a.loja-acao:hover {
   }
 }
 
-/* Garantias: três frases curtas com um visto amarelo. */
+/* Garantias: três frases curtas com um visto amarelo. No celular, três
+   colunas lado a lado com o visto em cima: uma fileira só, sem lista longa. */
 .heroi-garantias {
   display: grid;
-  gap: 0.5rem;
-  margin-top: 1.5rem;
-  font-size: 0.9375rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  font-size: 0.8125rem;
   font-weight: 600;
+  line-height: 1.3;
+}
+
+.heroi-garantias li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
 }
 
 @media (min-width: 48rem) {
@@ -2099,13 +2163,15 @@ a.loja-acao:hover {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem 1.5rem;
+    margin-top: 1.5rem;
+    font-size: 0.9375rem;
   }
-}
 
-.heroi-garantias li {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  .heroi-garantias li {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
 }
 
 .heroi-garantias svg {
@@ -2118,7 +2184,7 @@ a.loja-acao:hover {
 /* Atalhos de categoria: uma linha só. No celular ela rola de lado e encosta
    nas bordas da tela, em vez de empilhar três linhas de pílulas. */
 .heroi-categorias {
-  display: flex;
+  display: none;
   align-items: center;
   gap: 0.5rem;
   margin: 1.75rem -1rem 0;
@@ -2138,8 +2204,9 @@ a.loja-acao:hover {
   scroll-snap-align: start;
 }
 
-@media (min-width: 40rem) {
+@media (min-width: 48rem) {
   .heroi-categorias {
+    display: flex;
     flex-wrap: wrap;
     margin-inline: 0;
     padding-inline: 0;
