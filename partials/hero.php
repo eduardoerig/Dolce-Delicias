@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 /**
- * partials/hero.php — o herói da home: "a vitrine".
+ * partials/hero.php — o herói da home.
  *
- * A comida aparece viva, sem filtro de cor: o escuro só existe onde há texto
- * (embaixo no celular, à esquerda do tablet em diante; partials/heroi-foto.php,
- * tom 'vitrine').
+ * Coxinhas recortadas, com farelo voando, sobre o marrom da marca com um halo
+ * vermelho atrás (partials/heroi-foto.php, $heroiRecorte): em cima no celular,
+ * à direita do tablet em diante.
  *
  * Embaixo do título: a frase, o botão vermelho (a cor de ação do site) e três
  * garantias curtas. No pé, "Arraste para baixo" com uma seta: o herói ocupa a
@@ -73,7 +73,6 @@ ob_start();
   </a>
 <?php
 $heroiConteudo = (string) ob_get_clean();
-$heroiFoto     = 'inicio';
+$heroiRecorte  = ['src' => 'coxinhas'];
 $heroiTitulo   = 'heroi-titulo';
-$heroiTom      = 'vitrine';
 include __DIR__ . '/heroi-foto.php';

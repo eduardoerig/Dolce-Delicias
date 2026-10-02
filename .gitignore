@@ -29,3 +29,6 @@ docker-compose.override.yml
 
 # Originais das fotos de exemplo (pesados, ~180 MB)
 imagens-exemplo/originais/
+
+# Referências do usuário (PNG grandes): os WebP otimizados estão em assets/img/recortes/
+imgReferencias-public/*.png

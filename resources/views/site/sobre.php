@@ -109,7 +109,7 @@ $cartoesEmpresa = [
     </div>
   <?php
   $heroiConteudo = (string) ob_get_clean();
-  $heroiFoto     = 'empresa';
+  $heroiRecorte  = ['src' => 'garfo'];
   $heroiTitulo   = 'titulo-sobre';
   $heroiCaminho  = 'A empresa';
   include DD_BASE . '/partials/heroi-foto.php';
@@ -237,15 +237,19 @@ $cartoesEmpresa = [
           </ul>
         <?php endif; ?>
 
-        <div class="placa-empresas mt-8">
-          <div class="raios pointer-events-none absolute inset-0 opacity-50" style="--raios-x:100%;--raios-y:0%" aria-hidden="true"></div>
-          <div class="relative flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-            <div>
-              <p class="fonte-display text-2xl sm:text-3xl">Peça um orçamento</p>
-              <p class="mt-1">A matriz responde pelas <?= e((string) $totalUnidades) ?> unidades.</p>
-            </div>
+        <?php // Pedido de orçamento: marrom com halo vermelho e a torre de nuggets
+           // recortada saindo pelo topo, à direita. O texto fica à esquerda. ?>
+        <div class="placa-empresas placa-empresas-recorte mt-16">
+          <?php $nuggets = dd_imagem('/assets/img/recortes/nuggets-700.webp'); ?>
+          <?php if ($nuggets): ?>
+            <img class="placa-recorte" src="<?= e($nuggets) ?>" srcset="<?= e((string) dd_imagem('/assets/img/recortes/nuggets-420.webp')) ?> 420w, <?= e($nuggets) ?> 700w" sizes="(min-width: 48rem) 22rem, 9rem" alt="" width="700" height="797" loading="lazy" decoding="async">
+          <?php endif; ?>
+          <div class="placa-recorte-texto">
+            <p class="fonte-display text-2xl sm:text-3xl">Peça um orçamento</p>
+            <p class="mt-1">A matriz responde pelas <?= e((string) $totalUnidades) ?> unidades.</p>
+            <div class="mt-5">
             <?php if ($linkOrcamento !== ''): ?>
-              <a href="<?= e($linkOrcamento) ?>" target="_blank" rel="noopener noreferrer" class="botao-amarelo">
+              <a href="<?= e($linkOrcamento) ?>" target="_blank" rel="noopener noreferrer" class="botao-primario">
                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.5 8.5 0 1 1 21 11.5Z"/></svg>
                 Pedir orçamento no WhatsApp
               </a>
@@ -253,6 +257,7 @@ $cartoesEmpresa = [
               <?php // INTEGRAÇÃO FUTURA: cadastre o WhatsApp da matriz no painel e o botão liga sozinho. ?>
               <span class="botao-desligado">WhatsApp em breve</span>
             <?php endif; ?>
+            </div>
           </div>
         </div>
       </section>

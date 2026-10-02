@@ -48,7 +48,7 @@ include DD_BASE . '/partials/header.php';
     </div>
   <?php
   $heroiConteudo = (string) ob_get_clean();
-  $heroiFoto     = 'unidades';
+  $heroiRecorte  = ['src' => 'tigela'];
   $heroiTitulo   = 'titulo-unidades';
   $heroiCaminho  = 'Unidades';
   include DD_BASE . '/partials/heroi-foto.php';

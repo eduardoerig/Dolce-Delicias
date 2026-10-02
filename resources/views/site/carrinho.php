@@ -35,7 +35,6 @@ include DD_BASE . '/partials/header.php';
   $heroiFoto     = 'pedido';
   $heroiTitulo   = 'titulo-pedido';
   $heroiCaminho  = 'Seu pedido';
-  $heroiTom      = 'escuro';
   $heroiBaixo    = true;
   include DD_BASE . '/partials/heroi-foto.php';
   ?>
