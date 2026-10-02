@@ -89,7 +89,7 @@ $icone = [
 
     <figure class="loja-matriz-foto">
       <?php if ($foto): ?>
-        <img src="<?= e($foto) ?>" alt="Fachada da <?= e((string) $unidade['nome']) ?>" loading="lazy" decoding="async" width="800" height="600">
+        <img src="<?= e($foto) ?>" alt="Foto da <?= e((string) $unidade['nome']) ?>" loading="lazy" decoding="async" width="1600" height="1000">
       <?php else: ?>
         <?php // INTEGRAÇÃO FUTURA: foto da fachada, cadastrada no painel em Unidades. ?>
         <?php $fachadaClasse = 'w-full max-w-sm'; include __DIR__ . '/ilustra-fachada.php'; ?>

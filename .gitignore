@@ -26,3 +26,6 @@ public/assets/
 .claude/
 
 docker-compose.override.yml
+
+# Originais das fotos de exemplo (pesados, ~180 MB)
+imagens-exemplo/originais/

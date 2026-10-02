@@ -1403,10 +1403,16 @@ details.dropdown:not([open]) > .dropdown-content {
   }
 }
 
+/* Com foto de verdade, ela ocupa a coluna inteira, sem moldura; o cartão
+   (overflow: hidden) arredonda os cantos. */
+.loja-matriz-foto:has(img) {
+  padding: 0;
+  background: none;
+}
+
 .loja-matriz-foto img {
   width: 100%;
   height: 100%;
-  border-radius: 1rem;
   object-fit: cover;
 }
 
@@ -1875,5 +1881,13 @@ a.loja-acao:hover {
 .valor-icone svg {
   width: 2.25rem;
   height: 2.25rem;
+}
+
+/* Foto ao lado do título em A empresa. */
+.faixa-foto {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 1.25rem;
+  object-fit: cover;
 }
 }

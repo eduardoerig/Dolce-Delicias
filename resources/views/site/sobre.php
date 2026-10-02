@@ -92,8 +92,16 @@ include DD_BASE . '/partials/header.php';
 
       </div>
 
-      <?php // A frente de uma loja, desenhada: só no computador, onde sobra a lateral. ?>
-      <?php $fachadaClasse = 'hidden w-full lg:block'; include DD_BASE . '/partials/ilustra-fachada.php'; ?>
+      <?php
+      // A foto da cozinha (assets/img/empresa/); sem ela, a fachada desenhada.
+      // Só no computador, onde sobra a lateral.
+      $fotoEmpresa = dd_imagem('/assets/img/empresa/maos-na-massa.jpg');
+      ?>
+      <?php if ($fotoEmpresa): ?>
+        <img src="<?= e($fotoEmpresa) ?>" alt="Mãos sovando massa sobre a bancada enfarinhada" class="faixa-foto hidden lg:block" width="1600" height="1000" decoding="async">
+      <?php else: ?>
+        <?php $fachadaClasse = 'hidden w-full lg:block'; include DD_BASE . '/partials/ilustra-fachada.php'; ?>
+      <?php endif; ?>
     </div>
   </div>
 
