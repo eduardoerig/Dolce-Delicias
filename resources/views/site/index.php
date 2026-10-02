@@ -20,16 +20,29 @@ include DD_BASE . '/partials/header.php';
      HERÓI
      ============================================================ -->
 <?php
-// Herói: o cartaz diz a proposta, a frase diz como funciona, um botão leva ao
-// catálogo; a foto de fundo mostra o que chega e os atalhos levam direto à categoria.
+// Herói: a comida em primeiro plano, o cartaz diz a proposta, o selo diz
+// quanto custa, três garantias dizem como funciona e um botão leva ao catálogo.
 $heroLinhas  = [
     ['texto' => 'Encomende o cento.'],
-    ['texto' => 'A gente cuida do resto.', 'destaque' => true],
+    ['texto' => 'A gente cuida do resto.'],
 ];
-$heroTexto   = 'Monte o pedido aqui, escolha retirar ou receber e feche pelo WhatsApp da matriz. Sem cadastro e sem pagamento pelo site.';
-$heroCta     = ['href' => '#catalogo', 'texto' => 'Ver catálogo'];
-$heroLink    = ['href' => '#encomendas', 'texto' => 'Como encomendar'];
+$heroTexto   = 'Salgados, assados e doces feitos no dia da sua festa. Monte o pedido aqui e feche pelo WhatsApp da matriz.';
+$heroCta     = ['href' => '#catalogo', 'texto' => 'Montar meu pedido'];
+$heroLink    = ['href' => '#encomendas', 'texto' => 'Como funciona'];
 $heroAtalhos = dd_categorias($produtos);
+
+// Selo de preço: o menor valor de um cento no catálogo, contado e nunca
+// escrito à mão, para não mentir quando o preço mudar no painel.
+$centos = array_filter(array_map('dd_faixa_principal', $produtos), static fn (array $f): bool => $f['base'] === 100 && $f['valor'] > 0);
+$heroPrecoCento = $centos !== [] ? min(array_column($centos, 'valor')) : null;
+
+// Garantias: retirada ou entrega, o prazo da matriz e o pagamento fora do site.
+$preparoMatriz = trim(explode(' · ', (string) (dd_matriz()['preparo'] ?? ''))[0]);
+$heroGarantias = array_values(array_filter([
+    'Retire na matriz ou receba em casa',
+    $preparoMatriz !== '' ? mb_strtoupper(mb_substr($preparoMatriz, 0, 1)) . mb_substr($preparoMatriz, 1) : null,
+    'Sem cadastro e sem pagar pelo site',
+]));
 
 include DD_BASE . '/partials/hero.php';
 ?>
