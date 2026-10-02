@@ -219,7 +219,7 @@ function linhaItem(item) {
 
         <div class="item-pedido-acoes">
           <div class="seletor-qtd seletor-qtd-sm">
-            <button type="button" data-item-menos aria-label="Diminuir a quantidade de ${nome}">${ICONE_MENOS}</button>
+            <button type="button" data-item-menos aria-label="Diminuir a quantidade de ${nome}"${Number(item.qtd) <= (Number(item.min) || 1) ? ' disabled' : ''}>${ICONE_MENOS}</button>
             <input type="number" data-item-qtd inputmode="numeric"
                    value="${Number(item.qtd)}" min="${Number(item.min) || 1}" step="${Number(item.passo) || 1}"
                    aria-label="Quantidade de ${nome}, em unidades">

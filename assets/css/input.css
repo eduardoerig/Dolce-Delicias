@@ -1176,9 +1176,15 @@ details.dropdown:not([open]) > .dropdown-content {
   color: var(--color-ink);
 }
 
-.seletor-qtd button:hover {
+.seletor-qtd button:hover:not(:disabled) {
   background-color: var(--color-polvilho);
   color: var(--color-brand);
+}
+
+/* "−" no mínimo: não dá para pedir menos, então o botão apaga e não responde. */
+.seletor-qtd button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
 .seletor-qtd button svg {
@@ -1372,8 +1378,10 @@ details.dropdown:not([open]) > .dropdown-content {
   gap: 0.5rem;
 }
 
+/* Mesma altura do seletor grande: 44px de botão + 1px de borda em cima e
+   embaixo. Com 2.75rem a borda cortava os botões. */
 .seletor-qtd-sm {
-  height: 2.75rem;
+  height: 2.875rem;
 }
 
 .seletor-qtd-sm input {
@@ -2415,10 +2423,6 @@ a.loja-acao:hover {
 
 .gaveta-carrinho .item-pedido-foto,
 .pagina-institucional .item-pedido-foto,
-.gaveta-carrinho .seletor-qtd,
-.pagina-institucional .seletor-qtd,
-.gaveta-carrinho .item-pedido-remover,
-.pagina-institucional .item-pedido-remover,
 .pagina-institucional .cartao-etapa,
 .pagina-institucional .opcao,
 .pagina-institucional .campo-texto {
@@ -2537,6 +2541,15 @@ a.loja-acao:hover {
   width: 2.75rem;
   justify-content: center;
   padding: 0;
+}
+
+/* Lixeira redonda, com borda: lê como botão, igual ao seletor ao lado. */
+.item-pedido-remover {
+  border: 1px solid var(--color-linha);
+}
+
+.item-pedido-remover:hover {
+  border-color: var(--color-brand);
 }
 
 /* Página /carrinho: etapas numeradas em quadrado vermelho, opção marcada com

@@ -580,10 +580,14 @@ if (campoQtd) {
     return ajustado;
   }
 
+  const botaoMenos = document.querySelector('[data-qty-menos]');
+
   function atualizarSubtotal() {
     const qtd = normalizarQtd();
     const preco = Number(botaoAdd?.dataset.preco) || 0;
     if (saidaSubtotal) saidaSubtotal.textContent = brl.format(preco * qtd);
+    // No mínimo, "−" apaga: não dá para pedir menos que isso.
+    if (botaoMenos) botaoMenos.disabled = qtd <= (Number(campoQtd.min) || 1);
   }
 
   document.querySelector('[data-qty-mais]')?.addEventListener('click', () => {
@@ -591,7 +595,7 @@ if (campoQtd) {
     atualizarSubtotal();
   });
 
-  document.querySelector('[data-qty-menos]')?.addEventListener('click', () => {
+  botaoMenos?.addEventListener('click', () => {
     campoQtd.value = String(Number(campoQtd.value) - (Number(campoQtd.step) || 1));
     atualizarSubtotal();
   });
