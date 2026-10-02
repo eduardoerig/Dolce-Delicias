@@ -34,8 +34,8 @@ declare(strict_types=1);
  *   'institucional'  array   RF-31: 'chamada', 'texto' (parágrafos), 'valores'
  *   'numeros'        array   os números da marca: 'valor' + 'rotulo'
  *   'historia'       array   RF-21: marcos, cada um 'ano', 'titulo', 'texto'
- *   'portfolio'      array   RF-22: serviços, cada um 'titulo', 'texto', 'itens'
- *   'empresas'       array   RF-19: 'chamada', 'texto', 'itens', 'comoFunciona'
+ *   'portfolio'      array   RF-22: serviços, cada um 'titulo' e 'texto'
+ *   'empresas'       array   RF-19: 'chamada', 'texto', 'itens'
  *
  * Lista vazia esconde a seção correspondente em sobre.php — nenhuma seção fica
  * com título e nada embaixo.
@@ -113,28 +113,23 @@ return [
 
     /* ---------------------------------------------------------------------
      * RF-22 — PORTFÓLIO
-     * 'itens' é opcional: entra como lista de marcadores dentro do cartão.
      * ------------------------------------------------------------------ */
     'portfolio' => [
         [
             'titulo' => 'Encomendas por cento',
             'texto'  => 'PREENCHER: o carro-chefe — salgados assados e fritos, doces e mini lanches, para festa, escola e evento.',
-            'itens'  => ['Salgados fritos', 'Assados', 'Mini lanches', 'Doces de festa'], // PREENCHER
         ],
         [
             'titulo' => 'Coffee break e eventos',
             'texto'  => 'PREENCHER: o serviço para empresa e faculdade — bandeja montada, quantas pessoas atende, se inclui bebida.',
-            'itens'  => ['Bandeja montada', 'Café e sucos', 'Montagem no local'], // PREENCHER
         ],
         [
             'titulo' => 'Padaria e balcão',
             'texto'  => 'PREENCHER: o que se acha na loja todo dia — pães, bolos, lanches, almoço executivo.',
-            'itens'  => ['Pães e bolos', 'Lanches', 'Almoço executivo', 'Cafeteria'], // PREENCHER
         ],
         [
             'titulo' => 'Lanche escolar',
             'texto'  => 'PREENCHER: o atendimento a escolas — entrega recorrente, cardápio combinado, porção individual.',
-            'itens'  => ['Entrega recorrente', 'Porção individual'], // PREENCHER
         ],
     ],
 
@@ -159,14 +154,6 @@ return [
                 'titulo' => 'Confraternização',
                 'texto'  => 'PREENCHER: festa de fim de ano e comemoração de equipe, do orçamento à montagem.',
             ],
-        ],
-
-        // Os passos do atendimento B2B. Ficam aqui porque são texto de negócio,
-        // não estrutura de página.
-        'comoFunciona' => [
-            'PREENCHER: como pedir um orçamento (o que a empresa precisa informar).',
-            'PREENCHER: em quanto tempo a matriz responde com a proposta.',
-            'PREENCHER: como fica o combinado de entrega e pagamento.',
         ],
     ],
 ];

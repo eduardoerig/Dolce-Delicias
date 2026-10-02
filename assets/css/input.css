@@ -1576,7 +1576,7 @@ a.loja-acao:hover {
 }
 
 /* ---------- A empresa ----------
-   Seções em trilha: título e frase de apoio à esquerda, conteúdo à direita. */
+   Seções em trilha: só o título à esquerda, conteúdo à direita. */
 
 .trilha {
   display: grid;
@@ -1592,13 +1592,6 @@ a.loja-acao:hover {
 .trilha-cabeca h2 {
   font-size: 1.875rem;
   line-height: 1.15;
-}
-
-.trilha-cabeca p {
-  margin-top: 0.5rem;
-  max-width: 22rem;
-  line-height: 1.55;
-  color: var(--color-crust);
 }
 
 @media (min-width: 64rem) {
@@ -1711,6 +1704,12 @@ a.loja-acao:hover {
   border-left-color: transparent;
 }
 
+.marco-ano {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-brand);
+}
+
 .marco::before {
   content: "";
   position: absolute;
@@ -1752,22 +1751,8 @@ a.loja-acao:hover {
 }
 
 .placa-empresas-item {
-  padding: 1.25rem;
-  border-radius: 1.25rem;
-  background-color: var(--color-brand-escuro);
-}
-
-.placa-empresas-numero {
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 999px;
-  background-color: #fff;
-  color: var(--color-brand);
-  font-family: var(--font-display);
-  font-size: 1.125rem;
+  padding-top: 1rem;
+  border-top: 2px solid #fff;
 }
 
 /* Sobre o vermelho, o botão desligado troca o marrom pelo branco. */

@@ -51,15 +51,6 @@ $linkOrcamento = $zapMatriz !== ''
     ? 'https://wa.me/' . $zapMatriz . '?text=' . rawurlencode('Olá! Vim pelo site e quero um orçamento para a minha empresa.')
     : '';
 
-// Atalhos da faixa: um por seção que existe, na ordem da página.
-$atalhos = array_filter([
-    'institucional' => $temInstitucional ? 'Quem somos' : null,
-    'portfolio'     => $portfolio !== [] ? 'O que fazemos' : null,
-    'valores'       => !empty($institucional['valores']) ? 'No que acreditamos' : null,
-    'historia'      => $historia !== [] ? 'Nossa história' : null,
-    'empresas'      => $temEmpresas ? 'Para empresas' : null,
-]);
-
 /**
  * Desenho de cada valor da marca, pelo título (mesmo traço dos produtos):
  * coração para o amor, rolo de massa para o feito à mão, folha para o saudável.
@@ -84,7 +75,7 @@ include DD_BASE . '/partials/header.php';
 
 <div class="bg-farinha">
 
-  <!-- Faixa: caminho, título, quem é e atalhos para cada parte da página -->
+  <!-- Faixa: caminho, título e quem é, numa frase -->
   <div class="faixa-pagina border-b border-linha bg-polvilho">
     <div class="mx-auto grid max-w-7xl items-center gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,1fr)_20rem] lg:px-8">
       <div>
@@ -99,13 +90,6 @@ include DD_BASE . '/partials/header.php';
         Salgados, assados e doces para escolas, eventos e empresas, em <?= e((string) $totalUnidades) ?> unidades.
       </p>
 
-      <?php if (count($atalhos) > 1): ?>
-        <nav class="mt-5 flex flex-wrap gap-2" aria-label="Ir para uma parte da página">
-          <?php foreach ($atalhos as $idSecao => $rotulo): ?>
-            <a href="#<?= e($idSecao) ?>" class="pilula pilula-link"><?= e($rotulo) ?></a>
-          <?php endforeach; ?>
-        </nav>
-      <?php endif; ?>
       </div>
 
       <?php // A frente de uma loja, desenhada: só no computador, onde sobra a lateral. ?>
@@ -129,7 +113,6 @@ include DD_BASE . '/partials/header.php';
       <section id="institucional" class="trilha" aria-labelledby="titulo-institucional">
         <header class="trilha-cabeca">
           <h2 id="titulo-institucional">Quem somos</h2>
-          <p>A padaria, quem ela atende e aonde quer chegar.</p>
         </header>
         <div>
           <?php foreach ((array) ($institucional['texto'] ?? []) as $paragrafo): ?>
@@ -160,7 +143,6 @@ include DD_BASE . '/partials/header.php';
       <section id="portfolio" class="trilha" aria-labelledby="titulo-portfolio">
         <header class="trilha-cabeca">
           <h2 id="titulo-portfolio">O que fazemos</h2>
-          <p>Tudo sai da mesma cozinha. O site cobre as encomendas e o balcão; o resto é combinado na conversa.</p>
         </header>
         <div>
           <ul class="servicos">
@@ -168,20 +150,9 @@ include DD_BASE . '/partials/header.php';
               <li>
                 <h3 class="font-sans text-lg font-bold"><?= e((string) ($servico['titulo'] ?? '')) ?></h3>
                 <p class="mt-2 text-[0.9375rem] leading-relaxed text-crust"><?= e((string) ($servico['texto'] ?? '')) ?></p>
-                <?php if (!empty($servico['itens'])): ?>
-                  <ul class="mt-3 flex flex-wrap gap-2">
-                    <?php foreach ($servico['itens'] as $item): ?>
-                      <li class="pilula"><?= e((string) $item) ?></li>
-                    <?php endforeach; ?>
-                  </ul>
-                <?php endif; ?>
               </li>
             <?php endforeach; ?>
           </ul>
-          <div class="mt-8 flex flex-wrap gap-3">
-            <a href="/#catalogo" class="botao-primario">Ver o catálogo</a>
-            <a href="/unidades" class="botao-secundario">Ver as unidades</a>
-          </div>
         </div>
       </section>
     <?php endif; ?>
@@ -191,7 +162,6 @@ include DD_BASE . '/partials/header.php';
       <section id="valores" class="trilha" aria-labelledby="titulo-valores">
         <header class="trilha-cabeca">
           <h2 id="titulo-valores">No que acreditamos</h2>
-          <p>O jeito de fazer que vale em todas as lojas.</p>
         </header>
         <ul class="valores">
           <?php foreach ($institucional['valores'] as $valor): ?>
@@ -210,13 +180,12 @@ include DD_BASE . '/partials/header.php';
       <section id="historia" class="trilha" aria-labelledby="titulo-historia">
         <header class="trilha-cabeca">
           <h2 id="titulo-historia">Nossa história</h2>
-          <p>Do primeiro forno até as <?= e((string) $totalUnidades) ?> lojas de hoje.</p>
         </header>
         <ol class="marcos">
           <?php foreach ($historia as $marco): ?>
             <li class="marco">
-              <p class="fonte-display text-xl"><?= e((string) ($marco['ano'] ?? '')) ?></p>
-              <h3 class="mt-1 font-sans text-lg font-bold"><?= e((string) ($marco['titulo'] ?? '')) ?></h3>
+              <p class="marco-ano"><?= e((string) ($marco['ano'] ?? '')) ?></p>
+              <h3 class="font-sans text-lg font-bold"><?= e((string) ($marco['titulo'] ?? '')) ?></h3>
               <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-crust"><?= e((string) ($marco['texto'] ?? '')) ?></p>
             </li>
           <?php endforeach; ?>
@@ -240,7 +209,7 @@ include DD_BASE . '/partials/header.php';
           <?php endif; ?>
 
           <?php if (!empty($paraEmpresas['itens'])): ?>
-            <ul class="mt-8 grid gap-4 md:grid-cols-3">
+            <ul class="mt-8 grid gap-6 md:grid-cols-3">
               <?php foreach ($paraEmpresas['itens'] as $item): ?>
                 <li class="placa-empresas-item">
                   <h3 class="font-sans text-lg font-bold"><?= e((string) ($item['titulo'] ?? '')) ?></h3>
@@ -248,20 +217,6 @@ include DD_BASE . '/partials/header.php';
                 </li>
               <?php endforeach; ?>
             </ul>
-          <?php endif; ?>
-
-          <?php // Os passos do orçamento, numerados: é sequência, igual ao "Como
-             // encomendar" da home. ?>
-          <?php if (!empty($paraEmpresas['comoFunciona'])): ?>
-            <h3 class="mt-10 font-sans text-xl font-bold">Como pedir um orçamento</h3>
-            <ol class="mt-5 grid gap-5 md:grid-cols-3">
-              <?php foreach ($paraEmpresas['comoFunciona'] as $i => $passo): ?>
-                <li class="flex gap-3">
-                  <span class="placa-empresas-numero" aria-hidden="true"><?= e((string) ($i + 1)) ?></span>
-                  <p class="text-[0.9375rem] leading-relaxed"><?= e((string) $passo) ?></p>
-                </li>
-              <?php endforeach; ?>
-            </ol>
           <?php endif; ?>
 
           <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
