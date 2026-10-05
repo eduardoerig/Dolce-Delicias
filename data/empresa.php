@@ -7,20 +7,25 @@ declare(strict_types=1);
  * A EMPRESA — conteúdo institucional da Dolce Delícias
  * =============================================================================
  *
- * Alimenta sobre.php inteira. Três requisitos moram aqui:
+ * Alimenta sobre.php inteira. Dois requisitos moram aqui:
  *
- *   RF-21  história da empresa — origem, trajetória e evolução
  *   RF-22  portfólio — serviços, produtos e locais de atuação
  *   RF-31  institucional — quem somos, atuação e objetivos
+ *
+ * RF-21 (história) também, quando houver datas reais: a chave 'historia' está
+ * vazia de propósito, e a seção some do site enquanto estiver assim.
  *
  * Está em data/ e não escrito dentro do template pelo mesmo motivo do catálogo:
  * quem vai reescrever esses textos é o cliente, não quem mexe em PHP. Acrescentar
  * um marco na linha do tempo ou um serviço no portfólio é copiar um bloco.
  *
- * >>> OS TEXTOS ABAIXO SÃO FICTÍCIOS <<<
- * Foram escritos para o site não ficar com buracos enquanto o cliente não
- * manda os dados reais. Datas, números, nomes e trajetória NÃO são da
- * Dolce Delícias: troque tudo pelo texto do cliente antes de publicar.
+ * >>> DE ONDE VEM CADA TEXTO <<<
+ * Real, do perfil oficial @dolcedeliciasoficial no Instagram (out/2026): a
+ * legenda de "Quem somos" e a assinatura (post de nov/2025), Toledo e Biopark,
+ * os seguidores, as frentes do portfólio (festas, cantinas e Lancheira Feliz,
+ * lanches lúdicos para crianças, café) e o @ do perfil.
+ * De exemplo, ainda para confirmar com o cliente: os textos dos valores e o
+ * detalhe de cada frente do portfólio.
  *
  * >>> FORA DE ESCOPO <<<
  * RF-32 (divulgação de novos locais e expansão) e RF-33 (fábrica de congelados)
@@ -30,10 +35,12 @@ declare(strict_types=1);
  * -----------------------------------------------------------------------------
  * ESQUEMA
  * -----------------------------------------------------------------------------
- *   'institucional'  array   RF-31: 'chamada', 'texto' (parágrafos), 'valores'
- *   'numeros'        array   os números da marca: 'valor' + 'rotulo'
+ *   'institucional'  array   RF-31: 'chamada', 'texto' (parágrafos),
+ *                            'assinatura', 'valores'
+ *   'numeros'        array   fatos curtos do herói: 'valor' + 'rotulo'
  *   'historia'       array   RF-21: marcos, cada um 'ano', 'titulo', 'texto'
- *   'portfolio'      array   RF-22: serviços, cada um 'titulo' e 'texto'
+ *   'portfolio'      array   RF-22: frentes, cada uma 'titulo' e 'texto'
+ *   'contato'        array   'instagram' (só o @, sem a arroba) e 'lugares'
  *
  * Lista vazia esconde a seção correspondente em sobre.php — nenhuma seção fica
  * com título e nada embaixo.
@@ -48,11 +55,15 @@ return [
         'chamada' => 'Comida de verdade, feita todo dia',
 
         // Texto oficial: legenda do post da marca no Instagram
-        // (instagram.com/p/DQu_5Q7DAPS, nov/2025).
+        // (instagram.com/p/DQu_5Q7DAPS, nov/2025). A frase final do post
+        // virou a 'assinatura', logo abaixo.
         'texto' => [
             'A Dolce Delícias é uma empresa que nasceu do zero, construída com dedicação, amor pela cozinha e muita vontade de fazer acontecer. O que começou como pequenas receitas feitas em casa virou uma marca reconhecida pelos seus pães, mini pizzas e salgados artesanais.',
-            'Cada produto carrega o sabor do esforço, da paixão e do sonho que se tornou realidade. Dolce Delícias: feita do zero, feita com coração.',
+            'Cada produto carrega o sabor do esforço, da paixão e do sonho que se tornou realidade.',
         ],
+
+        // A assinatura da marca, do mesmo post.
+        'assinatura' => 'Feita do zero, feita com coração',
 
         // RNF-11: os valores da marca — comida feita com amor, pouco
         // industrializada, buscando ser saudável. Estes três vieram do
@@ -74,62 +85,51 @@ return [
     ],
 
     /* ---------------------------------------------------------------------
-     * OS NÚMEROS DA MARCA
-     * O número de unidades NÃO entra aqui: ele é contado de data/units.php em
-     * sobre.php, senão os dois divergem no dia em que abrir a próxima loja.
+     * FATOS DO HERÓI
+     * Só o que dá para conferir no perfil oficial. Atualize os seguidores de
+     * vez em quando.
      * ------------------------------------------------------------------ */
     'numeros' => [
-        ['valor' => '18', 'rotulo' => 'anos de história'],
-        ['valor' => '12 mil', 'rotulo' => 'salgados por dia'],
-        ['valor' => '140', 'rotulo' => 'escolas e empresas atendidas'],
+        ['valor' => 'Toledo', 'rotulo' => 'e Biopark'],
+        ['valor' => '+4 mil', 'rotulo' => 'seguidores no Instagram'],
+        ['valor' => 'Do zero', 'rotulo' => 'receita e massa feitas na casa'],
     ],
 
     /* ---------------------------------------------------------------------
      * RF-21 — HISTÓRIA
-     * Ordem cronológica: o primeiro item é o começo de tudo.
+     * Ordem cronológica: o primeiro item é o começo de tudo. Vazia até o
+     * cliente mandar as datas reais (a seção não aparece no site).
+     * Exemplo de marco:
+     *   ['ano' => '2019', 'titulo' => 'O começo', 'texto' => '...'],
      * ------------------------------------------------------------------ */
-    'historia' => [
+    'historia' => [],
+
+    /* ---------------------------------------------------------------------
+     * RF-22 — PORTFÓLIO
+     * As três frentes que aparecem no perfil oficial. Os detalhes de cada
+     * texto ainda são de exemplo.
+     * ------------------------------------------------------------------ */
+    'portfolio' => [
         [
-            'ano'    => '2008',
-            'titulo' => 'O começo',
-            'texto'  => 'A família começa a fazer coxinha e empada na cozinha de casa, por encomenda, para festas de vizinhos e amigos.',
+            'titulo' => 'Salgados para festas',
+            'texto'  => 'Salgados fritos e assados, mini pizzas e pães por cento, para aniversário, confraternização e evento. Peça pelo cardápio de festas.',
         ],
         [
-            'ano'    => '2012',
-            'titulo' => 'A primeira loja',
-            'texto'  => 'As encomendas não cabem mais na cozinha de casa. Abre a loja do Centro, que hoje é a matriz, com balcão e café.',
+            'titulo' => 'Lanche escolar',
+            'texto'  => 'Cantinas e refeitórios de escola e a Lancheira Feliz, com lanches lúdicos pensados para as crianças.',
         ],
         [
-            'ano'    => '2016',
-            'titulo' => 'As encomendas',
-            'texto'  => 'Escolas e empresas começam a pedir salgado por cento toda semana. A matriz ganha uma cozinha só para as encomendas.',
-        ],
-        [
-            'ano'    => '2026',
-            'titulo' => 'Hoje',
-            'texto'  => 'São seis lojas e cerca de 60 pessoas na equipe. A coxinha continua sendo o salgado mais pedido.',
+            'titulo' => 'Balcão e café',
+            'texto'  => 'Salgado saindo na hora, pães e, agora, café para acompanhar.',
         ],
     ],
 
     /* ---------------------------------------------------------------------
-     * RF-22 — PORTFÓLIO
+     * CONTATO
+     * O WhatsApp não fica aqui: é o da matriz, cadastrado no painel.
      * ------------------------------------------------------------------ */
-    'portfolio' => [
-        [
-            'titulo' => 'Encomendas por cento',
-            'texto'  => 'O carro-chefe: salgados fritos e assados, docinhos e mini lanches, montados em bandeja para festa, escola e evento.',
-        ],
-        [
-            'titulo' => 'Coffee break e eventos',
-            'texto'  => 'Bandejas de salgado, doce e pão de queijo para reunião, palestra e formatura, de 10 a 300 pessoas. Café e suco sob encomenda.',
-        ],
-        [
-            'titulo' => 'Padaria e balcão',
-            'texto'  => 'Nas seis lojas: salgado saindo quente, pão de queijo, bolo, lanche e café, todo dia.',
-        ],
-        [
-            'titulo' => 'Lanche escolar',
-            'texto'  => 'Lanche do recreio com cardápio combinado com a escola, porção individual e entrega nos dias marcados.',
-        ],
+    'contato' => [
+        'instagram' => 'dolcedeliciasoficial',
+        'lugares'   => 'Toledo e Biopark',
     ],
 ];

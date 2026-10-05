@@ -63,7 +63,7 @@ return [
         'slug'        => 'matriz',
         'nome'        => 'Matriz — Centro',
         'endereco'    => 'Rua das Palmeiras, 410 — Centro',
-        'whatsapp'    => '55000000000', // A FAZER: número real (o de exemplo não vira botão)
+        'whatsapp'    => '5543999259373', // WhatsApp oficial (perfil @dolcedeliciasoficial): recebe os pedidos do site
         'horario'     => 'Seg a sex, 6h às 20h · Sáb e dom, 6h às 14h', // FICTÍCIO
         'preparo'     => '48 horas para encomendas · balcão na hora', // FICTÍCIO
         'sobre'       => 'A primeira loja e a cozinha central da Dolce. É daqui que saem as encomendas do site. Tem balcão com café, mesas e estacionamento na rua de trás.', // FICTÍCIO

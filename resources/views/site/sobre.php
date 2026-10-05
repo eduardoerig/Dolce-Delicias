@@ -32,14 +32,22 @@ $numeros       = (array) ($empresa['numeros'] ?? []);
 $historia      = (array) ($empresa['historia'] ?? []);
 $portfolio     = (array) ($empresa['portfolio'] ?? []);
 
-$chamada          = rtrim(trim((string) ($institucional['chamada'] ?? '')), '.');
+$contato       = (array) ($empresa['contato'] ?? []);
 
-// O total de lojas é contado, nunca cadastrado: assim não diverge de
-// data/units.php quando abrir a próxima.
-$totalUnidades = count(dd_unidades());
+$chamada    = rtrim(trim((string) ($institucional['chamada'] ?? '')), '.');
+$assinatura = rtrim(trim((string) ($institucional['assinatura'] ?? '')), '.');
+$instagram  = ltrim(trim((string) ($contato['instagram'] ?? '')), '@');
+$lugares    = trim((string) ($contato['lugares'] ?? ''));
 
-$tituloPagina    = 'Sobre a Dolce Delícias — quem somos, o que fazemos e nossa história';
-$descricaoPagina = 'Quem é a Dolce Delícias, como a padaria começou, o que ela faz e como atende escolas, faculdades, empresas e indústrias.';
+// WhatsApp da matriz com a conversa já começada. Número vazio ou de exemplo
+// não vira botão — ver dd_whatsapp().
+$zapMatriz = dd_whatsapp(dd_matriz());
+$linkZap   = $zapMatriz !== ''
+    ? 'https://wa.me/' . $zapMatriz . '?text=' . rawurlencode('Olá! Vim pelo site da Dolce Delícias e quero fazer um pedido.')
+    : '';
+
+$tituloPagina    = 'Sobre a Dolce Delícias — salgados artesanais feitos do zero em Toledo';
+$descricaoPagina = 'A Dolce Delícias nasceu do zero, com receitas feitas em casa. Salgados artesanais, pães e mini pizzas para festas, lanche escolar e o café do dia a dia, em Toledo.';
 
 include DD_BASE . '/partials/header.php';
 ?>
@@ -51,12 +59,14 @@ include DD_BASE . '/partials/header.php';
  * A ordem segue a conversa de quem chega:
  *
  *   1. herói marrom: a frase da marca à esquerda e a foto da coxinha sendo
- *      modelada à direita (no celular, a foto em cima). Os números no pé;
- *   2. "Quem somos": texto e a foto da equipe, com um bloco vermelho atrás;
- *   3. "O que fazemos": um cartão com foto por serviço;
+ *      modelada à direita (no celular, a foto em cima). Fatos curtos no pé;
+ *   2. "Feita do zero": a história contada pela própria marca, a foto
+ *      oficial com um bloco vermelho atrás e a assinatura em destaque;
+ *   3. "O que fazemos": um cartão com foto para cada frente;
  *   4. "No que acreditamos": a faixa vermelha, um valor por linha;
- *   5. "Nossa história": a linha do tempo;
- *   6. o vídeo da marca no Instagram, no player oficial do Instagram.
+ *   5. "Nossa história": a linha do tempo — só aparece com datas reais;
+ *   6. o vídeo da marca no Instagram, no player oficial do Instagram;
+ *   7. o convite final: catálogo, WhatsApp e Instagram.
  *
  * Texto nunca fica sobre comida: a foto tem coluna própria em todo tamanho.
  * Se um arquivo de foto não existir, a seção fica só com o texto. Todo o
@@ -67,10 +77,12 @@ $fotoSobre = static fn (string $caminho): ?string => dd_imagem($caminho);
 // Uma foto por serviço do portfólio, na ordem de data/empresa.php.
 $fotosPortfolio = [
     ['/assets/img/sobre/encomendas-800.webp', 'Coxinhas, uma aberta mostrando o recheio de frango'],
-    ['/assets/img/sobre/coffee-break-800.webp', 'Mesa de coffee break com doces'],
-    ['/assets/img/sobre/balcao-800.webp', 'Vitrine do balcão com folhados'],
     ['/assets/img/sobre/escolar-800.webp', 'Crianças lanchando no pátio da escola'],
+    ['/assets/img/sobre/balcao-800.webp', 'Vitrine do balcão com folhados'],
 ];
+
+$iconeZap = '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.5 8.5 0 1 1 21 11.5Z"/></svg>';
+$iconeInstagram = '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>';
 
 $fotoTopo     = dd_imagem('/assets/img/sobre/topo-1400.webp');
 // Foto oficial da marca (post do Instagram da Dolce, nov/2025).
@@ -99,39 +111,44 @@ $fotoEquipe   = dd_imagem('/assets/img/sobre/oficial-960.webp');
         </h1>
 
         <p class="sobre-topo-frase">
-          Salgados, assados e doces para escolas, eventos e empresas, saindo da mesma cozinha para <?= e((string) $totalUnidades) ?> unidades.
+          Salgados artesanais, pães e mini pizzas feitos do zero em Toledo, para festas, escolas e o café do dia a dia.
         </p>
 
         <div class="sobre-topo-botoes">
           <a href="/#catalogo" class="botao-amarelo">Ver o catálogo</a>
-          <a href="/unidades" class="botao-vazado">Nossas unidades</a>
+          <?php if ($linkZap !== ''): ?>
+            <a href="<?= e($linkZap) ?>" target="_blank" rel="noopener noreferrer" class="botao-vazado"><?= $iconeZap ?>Pedir no WhatsApp</a>
+          <?php else: ?>
+            <a href="/unidades" class="botao-vazado">Nossas unidades</a>
+          <?php endif; ?>
         </div>
 
-        <?php // Números da marca. No HTML o rótulo (dt) vem antes do número (dd); o CSS põe o número em cima. ?>
-        <dl class="sobre-topo-numeros">
-          <div>
-            <dt>unidades</dt>
-            <dd><?= e((string) $totalUnidades) ?></dd>
-          </div>
-          <?php foreach ($numeros as $numero): ?>
-            <div>
-              <dt><?= e((string) ($numero['rotulo'] ?? '')) ?></dt>
-              <dd><?= e((string) ($numero['valor'] ?? '')) ?></dd>
-            </div>
-          <?php endforeach; ?>
-        </dl>
+        <?php // Fatos curtos. No HTML o rótulo (dt) vem antes do valor (dd); o CSS põe o valor em cima. ?>
+        <?php if ($numeros !== []): ?>
+          <dl class="sobre-topo-numeros">
+            <?php foreach ($numeros as $numero): ?>
+              <div>
+                <dt><?= e((string) ($numero['rotulo'] ?? '')) ?></dt>
+                <dd><?= e((string) ($numero['valor'] ?? '')) ?></dd>
+              </div>
+            <?php endforeach; ?>
+          </dl>
+        <?php endif; ?>
       </div>
     </div>
   </section>
 
-  <?php // RF-31 — institucional ?>
+  <?php // RF-31 — institucional: a história contada pela própria marca e a assinatura. ?>
   <?php if (!empty($institucional['texto'])): ?>
     <section id="institucional" class="sobre-quem mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="titulo-institucional">
       <div class="sobre-quem-texto">
-        <h2 id="titulo-institucional">Quem somos</h2>
+        <h2 id="titulo-institucional">Feita do zero</h2>
         <?php foreach ((array) $institucional['texto'] as $paragrafo): ?>
           <p><?= e((string) $paragrafo) ?></p>
         <?php endforeach; ?>
+        <?php if ($assinatura !== ''): ?>
+          <p class="sobre-assinatura"><?= e($assinatura) ?>.</p>
+        <?php endif; ?>
       </div>
       <?php if ($fotoEquipe): ?>
         <div class="sobre-quem-foto">
@@ -212,12 +229,33 @@ $fotoEquipe   = dd_imagem('/assets/img/sobre/oficial-960.webp');
       <h2 id="titulo-video">A Dolce de perto</h2>
       <p>Nossa empresa é especializada em lanches escolares. Dá o play e conheça um pouco do nosso dia a dia.</p>
       <a href="https://www.instagram.com/p/<?= e($videoInstagram) ?>/" target="_blank" rel="noopener noreferrer" class="sobre-video-link">
-        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+        <?= $iconeInstagram ?>
         Ver no Instagram
       </a>
     </div>
     <div class="sobre-video-player">
       <iframe src="https://www.instagram.com/p/<?= e($videoInstagram) ?>/embed/" title="Vídeo da Dolce Delícias no Instagram" loading="lazy" allowfullscreen></iframe>
+    </div>
+  </section>
+
+  <?php // O convite final: o que fazer depois de conhecer a Dolce. ?>
+  <section class="sobre-cta mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="titulo-cta">
+    <div class="sobre-cta-caixa">
+      <div class="sobre-cta-texto">
+        <h2 id="titulo-cta">Vamos fazer o seu pedido?</h2>
+        <p>
+          <?php if ($lugares !== ''): ?><?= e($lugares) ?>. <?php endif; ?>Escolha no catálogo e feche pelo WhatsApp.
+        </p>
+      </div>
+      <div class="sobre-cta-acoes">
+        <a href="/#catalogo" class="botao-amarelo">Ver o catálogo</a>
+        <?php if ($linkZap !== ''): ?>
+          <a href="<?= e($linkZap) ?>" target="_blank" rel="noopener noreferrer" class="botao-vazado"><?= $iconeZap ?>Pedir no WhatsApp</a>
+        <?php endif; ?>
+        <?php if ($instagram !== ''): ?>
+          <a href="https://www.instagram.com/<?= e($instagram) ?>/" target="_blank" rel="noopener noreferrer" class="sobre-cta-link"><?= $iconeInstagram ?>@<?= e($instagram) ?></a>
+        <?php endif; ?>
+      </div>
     </div>
   </section>
 </div>

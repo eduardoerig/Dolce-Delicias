@@ -3187,8 +3187,9 @@ a.loja-acao:hover {
   margin-top: 2rem;
 }
 
-/* No celular a foto fica ao lado do texto, para a lista não ficar comprida;
-   do tablet em diante, em cima. */
+/* No celular e no tablet em pé a foto fica ao lado do texto, para a lista
+   não ficar comprida; do tablet deitado em diante, três colunas com a foto
+   em cima. */
 .sobre-servico:has(img) {
   display: grid;
   grid-template-columns: 7.5rem minmax(0, 1fr);
@@ -3212,7 +3213,7 @@ a.loja-acao:hover {
   hyphens: auto;
 }
 
-@media (min-width: 40rem) {
+@media (min-width: 48rem) {
   .sobre-servico:has(img) {
     display: block;
   }
@@ -3345,9 +3346,9 @@ a.loja-acao:hover {
   color: var(--color-crust);
 }
 
-@media (min-width: 40rem) {
+@media (min-width: 48rem) {
   .sobre-servicos-lista {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     column-gap: 1.5rem;
   }
 }
@@ -3362,10 +3363,6 @@ a.loja-acao:hover {
   .sobre-valores {
     padding-top: 4.5rem;
     padding-bottom: 4.5rem;
-  }
-
-  .sobre-servicos-lista {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .sobre-historia {
@@ -3993,6 +3990,91 @@ a.loja-acao:hover {
 
   .sobre-video-player {
     justify-self: end;
+  }
+}
+
+/* A empresa: a assinatura da marca, no fim da história. Letra de título em
+   vermelho escuro sobre o claro (passa 4,5:1), com um fio vermelho em cima. */
+.sobre-assinatura {
+  max-width: 30rem;
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 3px solid var(--color-brand);
+}
+
+.sobre-quem-texto .sobre-assinatura {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  line-height: 1.15;
+  color: var(--color-brand-escuro);
+}
+
+/* A empresa: o convite final. Caixa marrom (como a matriz em Unidades),
+   texto à esquerda e as ações à direita; no celular, empilhados. */
+.sobre-cta {
+  padding-bottom: 4.5rem;
+}
+
+.sobre-cta-caixa {
+  display: grid;
+  gap: 1.5rem;
+  padding: 2rem 1.5rem 2.25rem;
+  background:
+    radial-gradient(circle at 90% 50%, rgb(225 5 30 / 0.45) 0, rgb(225 5 30 / 0) 55%),
+    var(--color-ink);
+  color: #fff;
+}
+
+.sobre-cta-texto p {
+  max-width: 30rem;
+  margin-top: 0.5rem;
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.88);
+}
+
+.sobre-cta h2 {
+  font-size: clamp(1.75rem, 6vw, 2.5rem);
+  line-height: 1.05;
+}
+
+.sobre-cta-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+}
+
+.sobre-cta :focus-visible {
+  outline-color: #fff;
+}
+
+.sobre-cta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+@media (min-width: 64rem) {
+  .sobre-cta {
+    padding-bottom: 6rem;
+  }
+
+  .sobre-cta-caixa {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 3rem;
+    padding: 3rem;
+  }
+
+  .sobre-cta-acoes {
+    justify-content: flex-end;
   }
 }
 }
