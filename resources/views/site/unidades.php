@@ -105,8 +105,8 @@ include DD_BASE . '/partials/header.php';
         <p>Monte o pedido no site e feche pelo WhatsApp da matriz, que prepara a encomenda.</p>
         <a href="/#catalogo" class="botao-amarelo">Ver o catálogo</a>
       </div>
-      <?php if ($tigela = dd_imagem('/assets/img/recortes/tigela-640.webp')): ?>
-        <img class="unidades-fecho-tigela" src="<?= e($tigela) ?>" srcset="<?= e((string) dd_imagem('/assets/img/recortes/tigela-360.webp')) ?> 360w, <?= e($tigela) ?> 640w" sizes="(min-width: 48rem) 20rem, 10rem" alt="" width="640" height="606" loading="lazy" decoding="async">
+      <?php if ($coxinhas = dd_imagem('/assets/img/recortes/coxinhas-prato-640.webp')): ?>
+        <img class="unidades-fecho-recorte" src="<?= e($coxinhas) ?>" srcset="<?= e((string) dd_imagem('/assets/img/recortes/coxinhas-prato-360.webp')) ?> 360w, <?= e($coxinhas) ?> 640w" sizes="(min-width: 48rem) 20rem, 10rem" alt="" width="640" height="534" loading="lazy" decoding="async">
       <?php endif; ?>
     </div>
   </section>

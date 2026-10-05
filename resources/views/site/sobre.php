@@ -17,9 +17,10 @@ declare(strict_types=1);
  * perguntas. Quatro páginas separadas dariam quatro páginas curtas e um menu
  * inchado — e no celular ninguém navega entre elas.
  *
- * O desenho (detalhes abaixo, no HTML): herói claro com a foto da cozinha,
- * cartões com foto para os serviços, a faixa vermelha dos valores, a linha
- * do tempo e o pedido de orçamento, que é o que a página existe para gerar.
+ * O desenho (detalhes abaixo, no HTML): herói marrom com a coxinha sendo
+ * modelada, cartões com foto para os serviços, a faixa vermelha dos valores,
+ * a linha do tempo e a caixa de empresas com o pedido de orçamento, que é o
+ * que a página existe para gerar.
  *
  * Todo o texto vem de data/empresa.php. Aqui só existe estrutura: cada seção
  * some sozinha quando o dado dela está vazio.
@@ -74,114 +75,98 @@ include DD_BASE . '/partials/header.php';
 
 <?php
 /*
- * Desenho: cantos retos e fotos grandes, como o resto do site. A ordem segue a
- * conversa de quem chega — quem são, o que fazem, no que acreditam, de onde
- * vieram e o que oferecem a empresas.
+ * Desenho: fotografia de salgado de verdade e faixas que se alternam —
+ * marrom, claro, vermelho —, cantos retos e botões amarelos, como Unidades.
+ * A ordem segue a conversa de quem chega:
  *
- *   1. herói claro: a frase da marca à esquerda; à direita a foto das mãos na
- *      massa, com as coxinhas saltando do canto e a logo carimbada em cima.
- *      Embaixo, os números numa faixa marrom;
- *   2. "Quem somos": retrato da atendente e o texto ao lado;
- *   3. "O que fazemos": um cartão com foto para cada serviço;
- *   4. "No que acreditamos": a faixa vermelha, três colunas;
- *   5. "Nossa história": linha do tempo (deitada no computador);
- *   6. empresas: cartões com foto e o pedido de orçamento.
+ *   1. herói marrom: a frase da marca à esquerda e a foto da coxinha sendo
+ *      modelada à direita (no celular, a foto em cima). Os números no pé;
+ *   2. "Quem somos": texto e a foto da equipe, com um bloco vermelho atrás;
+ *   3. "O que fazemos": um cartão com foto por serviço;
+ *   4. "No que acreditamos": a faixa vermelha;
+ *   5. "Nossa história": a linha do tempo;
+ *   6. empresas: a caixa marrom com foto, a lista e o pedido de orçamento.
  *
- * Cada foto vem de assets/img/; se o arquivo não existir, o cartão fica só
- * com o texto. Todo o texto vem de data/empresa.php.
+ * Texto nunca fica sobre comida: a foto tem coluna própria em todo tamanho.
+ * Se um arquivo de foto não existir, a seção fica só com o texto. Todo o
+ * texto vem de data/empresa.php.
  */
 $fotoSobre = static fn (string $caminho): ?string => dd_imagem($caminho);
 
-// Uma foto por serviço do portfólio e por atendimento a empresas, na ordem de data/empresa.php.
+// Uma foto por serviço do portfólio, na ordem de data/empresa.php.
 $fotosPortfolio = [
-    ['/assets/img/produtos/combo-festa.jpg', 'Bandeja de salgados variados'],
-    ['/assets/img/sobre/coffee-break-800.webp', 'Mesa de coffee break com bolinhos'],
-    ['/assets/img/sobre/vitrine-800.webp', 'Vitrine de bolos e doces da loja'],
-    ['/assets/img/produtos/mini-sanduiche.jpg', 'Mini sanduíches'],
-];
-$fotosEmpresa = [
-    '/assets/img/produtos/mini-esfirras.jpg',
-    '/assets/img/produtos/mini-hamburguer.jpg',
-    '/assets/img/produtos/salgados-fritos.jpg',
+    ['/assets/img/sobre/encomendas-800.webp', 'Coxinhas, uma aberta mostrando o recheio de frango'],
+    ['/assets/img/sobre/coffee-break-800.webp', 'Mesa de coffee break com doces'],
+    ['/assets/img/sobre/balcao-800.webp', 'Vitrine do balcão com folhados'],
+    ['/assets/img/sobre/escolar-800.webp', 'Crianças lanchando no pátio da escola'],
 ];
 
-$selo = null;
-foreach (['svg', 'webp', 'png'] as $extensao) {
-    $selo ??= dd_imagem("/assets/img/marca/selo.{$extensao}");
-}
-$selo ??= dd_imagem('/assets/img/logo.svg');
-$fotoMassa    = dd_imagem('/assets/img/sobre/massa-1000.webp');
-$coxinhas     = dd_imagem('/assets/img/recortes/coxinhas-760.webp');
-$fotoQuemSomos = dd_imagem('/assets/img/sobre/atendente-960.webp');
+$fotoTopo     = dd_imagem('/assets/img/sobre/topo-1400.webp');
+$fotoEquipe   = dd_imagem('/assets/img/sobre/equipe-960.webp');
+$fotoEmpresas = dd_imagem('/assets/img/sobre/empresas-1000.webp');
 ?>
 
 <div class="pagina-institucional pagina-sobre bg-farinha">
 
-  <section class="sobre-heroi" aria-labelledby="titulo-sobre">
-    <div class="sobre-heroi-grade mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="sobre-heroi-texto">
-        <nav aria-label="Você está aqui" class="flex items-center gap-2 text-sm font-semibold text-crust">
+  <section class="sobre-topo" aria-labelledby="titulo-sobre">
+    <div class="sobre-topo-grade">
+      <?php if ($fotoTopo): ?>
+        <div class="sobre-topo-foto">
+          <img src="<?= e($fotoTopo) ?>" srcset="<?= e((string) dd_imagem('/assets/img/sobre/topo-800.webp')) ?> 800w, <?= e($fotoTopo) ?> 1400w" sizes="(min-width: 64rem) 52vw, 100vw" alt="Mãos modelando coxinha, com a massa e as coxinhas prontas na tábua" width="1400" height="1400" fetchpriority="high" decoding="async">
+        </div>
+      <?php endif; ?>
+
+      <div class="sobre-topo-texto">
+        <nav aria-label="Você está aqui" class="flex items-center gap-2 text-sm font-semibold">
           <a href="/" class="rounded underline-offset-4 hover:underline">Início</a>
           <span aria-hidden="true">/</span>
-          <span class="text-base-content" aria-current="page">A empresa</span>
+          <span aria-current="page">A empresa</span>
         </nav>
 
-        <h1 id="titulo-sobre" class="sobre-heroi-titulo">
+        <h1 id="titulo-sobre" class="sobre-topo-titulo">
           <span class="sr-only">A Dolce Delícias: </span><?= e($chamada !== '' ? $chamada . '.' : 'A Dolce Delícias.') ?>
         </h1>
 
-        <p class="sobre-heroi-frase">
+        <p class="sobre-topo-frase">
           Salgados, assados e doces para escolas, eventos e empresas, saindo da mesma cozinha para <?= e((string) $totalUnidades) ?> unidades.
         </p>
 
-        <div class="mt-7 flex flex-wrap gap-3">
-          <a href="/#catalogo" class="botao-primario">Ver o catálogo</a>
-          <a href="/unidades" class="botao-secundario">Nossas unidades</a>
+        <div class="sobre-topo-botoes">
+          <a href="/#catalogo" class="botao-amarelo">Ver o catálogo</a>
+          <a href="/unidades" class="botao-vazado">Nossas unidades</a>
         </div>
-      </div>
 
-      <?php if ($fotoMassa): ?>
-        <div class="sobre-heroi-arte" aria-hidden="true">
-          <img class="sobre-heroi-foto" src="<?= e($fotoMassa) ?>" srcset="<?= e((string) dd_imagem('/assets/img/sobre/massa-640.webp')) ?> 640w, <?= e($fotoMassa) ?> 1000w" sizes="(min-width: 64rem) 30rem, 82vw" alt="" width="1000" height="1250" fetchpriority="high" decoding="async">
-          <?php if ($coxinhas): ?>
-            <img class="sobre-heroi-coxinhas" src="<?= e($coxinhas) ?>" srcset="<?= e((string) dd_imagem('/assets/img/recortes/coxinhas-420.webp')) ?> 420w, <?= e($coxinhas) ?> 760w" sizes="(min-width: 64rem) 19rem, 46vw" alt="" width="760" height="725" decoding="async">
-          <?php endif; ?>
-          <?php if ($selo): ?>
-            <div class="sobre-heroi-selo"><img src="<?= e($selo) ?>" alt="" width="300" height="160" decoding="async"></div>
-          <?php endif; ?>
-        </div>
-      <?php endif; ?>
-    </div>
-
-    <?php // Números da marca. No HTML o rótulo (dt) vem antes do número (dd); o CSS põe o número em cima. ?>
-    <div class="sobre-numeros">
-      <dl class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div>
-          <dt>unidades</dt>
-          <dd><?= e((string) $totalUnidades) ?></dd>
-        </div>
-        <?php foreach ($numeros as $numero): ?>
+        <?php // Números da marca. No HTML o rótulo (dt) vem antes do número (dd); o CSS põe o número em cima. ?>
+        <dl class="sobre-topo-numeros">
           <div>
-            <dt><?= e((string) ($numero['rotulo'] ?? '')) ?></dt>
-            <dd><?= e((string) ($numero['valor'] ?? '')) ?></dd>
+            <dt>unidades</dt>
+            <dd><?= e((string) $totalUnidades) ?></dd>
           </div>
-        <?php endforeach; ?>
-      </dl>
+          <?php foreach ($numeros as $numero): ?>
+            <div>
+              <dt><?= e((string) ($numero['rotulo'] ?? '')) ?></dt>
+              <dd><?= e((string) ($numero['valor'] ?? '')) ?></dd>
+            </div>
+          <?php endforeach; ?>
+        </dl>
+      </div>
     </div>
   </section>
 
   <?php // RF-31 — institucional ?>
   <?php if (!empty($institucional['texto'])): ?>
     <section id="institucional" class="sobre-quem mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="titulo-institucional">
-      <?php if ($fotoQuemSomos): ?>
-        <img class="sobre-quem-foto" src="<?= e($fotoQuemSomos) ?>" srcset="<?= e((string) dd_imagem('/assets/img/sobre/atendente-640.webp')) ?> 640w, <?= e($fotoQuemSomos) ?> 960w" sizes="(min-width: 64rem) 32rem, 100vw" alt="Atendente servindo pães no balcão" width="960" height="1200" loading="lazy" decoding="async">
-      <?php endif; ?>
       <div class="sobre-quem-texto">
         <h2 id="titulo-institucional">Quem somos</h2>
         <?php foreach ((array) $institucional['texto'] as $paragrafo): ?>
           <p><?= e((string) $paragrafo) ?></p>
         <?php endforeach; ?>
       </div>
+      <?php if ($fotoEquipe): ?>
+        <div class="sobre-quem-foto">
+          <img src="<?= e($fotoEquipe) ?>" srcset="<?= e((string) dd_imagem('/assets/img/sobre/equipe-640.webp')) ?> 640w, <?= e($fotoEquipe) ?> 960w" sizes="(min-width: 64rem) 30rem, 90vw" alt="Duas padeiras sorrindo enquanto preparam a massa na cozinha" width="960" height="1200" loading="lazy" decoding="async">
+        </div>
+      <?php endif; ?>
     </section>
   <?php endif; ?>
 
@@ -243,48 +228,44 @@ $fotoQuemSomos = dd_imagem('/assets/img/sobre/atendente-960.webp');
     </section>
   <?php endif; ?>
 
-  <?php // RF-19 — para empresas e indústrias: cartões com foto e o pedido de orçamento. ?>
+  <?php // RF-19 — para empresas e indústrias: a caixa marrom, como a matriz em Unidades. ?>
   <?php if ($temEmpresas): ?>
-    <section id="empresas" class="sobre-empresas mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="titulo-empresas">
-      <h2 id="titulo-empresas" class="max-w-2xl"><?= e((string) ($paraEmpresas['chamada'] ?? 'Para a sua empresa')) ?></h2>
-      <?php if (trim((string) ($paraEmpresas['texto'] ?? '')) !== ''): ?>
-        <p class="mt-4 max-w-2xl text-lg leading-relaxed text-crust"><?= e((string) $paraEmpresas['texto']) ?></p>
-      <?php endif; ?>
-
-      <?php if (!empty($paraEmpresas['itens'])): ?>
-        <ul class="sobre-empresas-lista">
-          <?php foreach (array_values($paraEmpresas['itens']) as $i => $item): ?>
-            <li class="sobre-servico">
-              <?php if ($foto = $fotoSobre($fotosEmpresa[$i] ?? '')): ?>
-                <img src="<?= e($foto) ?>" alt="" width="1200" height="900" loading="lazy" decoding="async">
-              <?php endif; ?>
-              <h3><?= e((string) ($item['titulo'] ?? '')) ?></h3>
-              <p><?= e((string) ($item['texto'] ?? '')) ?></p>
-            </li>
-          <?php endforeach; ?>
-        </ul>
-      <?php endif; ?>
-
-      <?php // Pedido de orçamento: marrom com halo vermelho e a torre de nuggets
-         // recortada saindo pelo topo, à direita. O texto fica à esquerda. ?>
-      <div class="placa-empresas placa-empresas-recorte mt-16">
-        <?php $nuggets = dd_imagem('/assets/img/recortes/nuggets-700.webp'); ?>
-        <?php if ($nuggets): ?>
-          <img class="placa-recorte" src="<?= e($nuggets) ?>" srcset="<?= e((string) dd_imagem('/assets/img/recortes/nuggets-420.webp')) ?> 420w, <?= e($nuggets) ?> 700w" sizes="(min-width: 48rem) 22rem, 9rem" alt="" width="700" height="797" loading="lazy" decoding="async">
+    <section id="empresas" class="sobre-b2b" aria-labelledby="titulo-empresas">
+      <div class="sobre-b2b-grade">
+        <?php if ($fotoEmpresas): ?>
+          <div class="sobre-b2b-foto">
+            <img src="<?= e($fotoEmpresas) ?>" srcset="<?= e((string) dd_imagem('/assets/img/sobre/empresas-640.webp')) ?> 640w, <?= e($fotoEmpresas) ?> 1000w" sizes="(min-width: 64rem) 40rem, 100vw" alt="Colegas de trabalho conversando e lanchando no refeitório" width="1000" height="800" loading="lazy" decoding="async">
+          </div>
         <?php endif; ?>
-        <div class="placa-recorte-texto">
-          <p class="fonte-display text-2xl sm:text-3xl">Peça um orçamento</p>
-          <p class="mt-1">A matriz responde pelas <?= e((string) $totalUnidades) ?> unidades.</p>
-          <div class="mt-5">
-          <?php if ($linkOrcamento !== ''): ?>
-            <a href="<?= e($linkOrcamento) ?>" target="_blank" rel="noopener noreferrer" class="botao-primario">
-              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.5 8.5 0 1 1 21 11.5Z"/></svg>
-              Pedir orçamento no WhatsApp
-            </a>
-          <?php else: ?>
-            <?php // INTEGRAÇÃO FUTURA: cadastre o WhatsApp da matriz no painel e o botão liga sozinho. ?>
-            <span class="botao-desligado">WhatsApp em breve</span>
+
+        <div class="sobre-b2b-texto">
+          <h2 id="titulo-empresas"><?= e((string) ($paraEmpresas['chamada'] ?? 'Para a sua empresa')) ?></h2>
+          <?php if (trim((string) ($paraEmpresas['texto'] ?? '')) !== ''): ?>
+            <p class="sobre-b2b-frase"><?= e((string) $paraEmpresas['texto']) ?></p>
           <?php endif; ?>
+
+          <?php if (!empty($paraEmpresas['itens'])): ?>
+            <ul class="sobre-b2b-lista">
+              <?php foreach ($paraEmpresas['itens'] as $item): ?>
+                <li>
+                  <h3><?= e((string) ($item['titulo'] ?? '')) ?></h3>
+                  <p><?= e((string) ($item['texto'] ?? '')) ?></p>
+                </li>
+              <?php endforeach; ?>
+            </ul>
+          <?php endif; ?>
+
+          <div class="mt-8">
+            <?php if ($linkOrcamento !== ''): ?>
+              <a href="<?= e($linkOrcamento) ?>" target="_blank" rel="noopener noreferrer" class="botao-amarelo">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.5 8.5 0 1 1 21 11.5Z"/></svg>
+                Pedir orçamento no WhatsApp
+              </a>
+            <?php else: ?>
+              <?php // INTEGRAÇÃO FUTURA: cadastre o WhatsApp da matriz no painel e o botão liga sozinho. ?>
+              <span class="botao-desligado">WhatsApp em breve</span>
+            <?php endif; ?>
+            <p class="sobre-b2b-nota">A matriz responde pelas <?= e((string) $totalUnidades) ?> unidades.</p>
           </div>
         </div>
       </div>

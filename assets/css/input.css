@@ -1514,7 +1514,7 @@ a.loja-acao:hover {
 
 /* ---------- A empresa e Unidades ----------
    Cantos retos, como o resto do site. O desenho de cada página está em
-   "A empresa: herói da cozinha" e "Unidades: matriz em faixa". */
+   "A empresa: fotografia" e "Unidades: matriz em faixa". */
 
 /* Nesta página os botões também são retos. */
 .pagina-institucional .botao-primario,
@@ -1523,104 +1523,6 @@ a.loja-acao:hover {
   font-size: 0.875rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-}
-
-/* Para empresas: cartões com foto e o pedido de orçamento. */
-.sobre-empresas {
-  padding-top: 3rem;
-  padding-bottom: 4rem;
-  scroll-margin-top: 5rem;
-}
-
-/* Pedido de orçamento: a placa vermelha, reta como o resto da página. */
-.pagina-institucional .placa-empresas {
-  border-radius: 0;
-}
-
-/* Pedido de orçamento em A empresa: marrom com halo vermelho e a torre de
-   nuggets recortada saindo pelo topo, à direita (overflow visível). O texto
-   fica à esquerda, longe da arte. */
-.placa-empresas.placa-empresas-recorte {
-  overflow: visible;
-  padding-right: 9.25rem;
-  background:
-    radial-gradient(circle at 88% 60%, rgb(225 5 30 / 0.5) 0, rgb(225 5 30 / 0.16) 30%, rgb(225 5 30 / 0) 60%),
-    var(--color-ink);
-}
-
-.placa-recorte {
-  position: absolute;
-  right: 0.5rem;
-  bottom: 0;
-  width: 8.5rem;
-  height: auto;
-  filter: drop-shadow(0 8px 12px rgb(0 0 0 / 0.45));
-  pointer-events: none;
-}
-
-.placa-recorte-texto {
-  position: relative;
-}
-
-@media (min-width: 48rem) {
-  .placa-empresas.placa-empresas-recorte {
-    padding-right: 24rem;
-  }
-
-  .placa-recorte {
-    right: 3rem;
-    width: 19rem;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    .placa-recorte {
-      animation: placa-recorte-sobe linear both;
-      animation-timeline: view();
-      animation-range: entry 0% cover 50%;
-    }
-  }
-}
-
-@keyframes placa-recorte-sobe {
-  from {
-    translate: 0 2.5rem;
-  }
-}
-
-/* "Para empresas": a placa vermelha da marca, com os raios do logo. Texto
-   sempre branco cheio: branco translúcido sobre o vermelho cai abaixo de 4.5:1. */
-.placa-empresas {
-  position: relative;
-  overflow: hidden;
-  padding: 2rem 1.25rem;
-  border-radius: 1.75rem;
-  background-color: var(--color-brand);
-  color: #fff;
-}
-
-@media (min-width: 40rem) {
-  .placa-empresas {
-    padding: 2.5rem;
-  }
-}
-
-@media (min-width: 64rem) {
-  .placa-empresas {
-    padding: 3.5rem;
-  }
-}
-
-/* O contorno de foco padrão é vermelho e sumiria aqui. */
-.placa-empresas :focus-visible {
-  outline-color: #fff;
-}
-
-/* Sobre o vermelho, o botão desligado troca o marrom pelo branco. */
-.placa-empresas .botao-desligado {
-  border-color: rgb(255 255 255 / 0.75);
-  color: #fff;
 }
 
 /* Ação sobre fundo vermelho: o amarelo carimbo, como o botão do herói. */
@@ -1652,7 +1554,7 @@ a.loja-acao:hover {
      acima de 4.5:1 sobre qualquer foto.
 
    A home, A empresa e Unidades têm heróis próprios (.heroi-cento,
-   .sobre-heroi, .heroi-balcao). */
+   .sobre-topo, .heroi-balcao). */
 
 .heroi-foto {
   position: relative;
@@ -2181,14 +2083,6 @@ a.loja-acao:hover {
 @media (min-width: 64rem) {
   .barra-pedido {
     display: none;
-  }
-}
-
-@keyframes selo-carimba {
-  from {
-    opacity: 0;
-    scale: 1.6;
-    rotate: -18deg;
   }
 }
 
@@ -3272,165 +3166,17 @@ a.loja-acao:hover {
   }
 }
 
-/* ---------- A empresa: herói da cozinha e seções com foto ----------
-   Herói claro: a frase da marca à esquerda e, à direita, a foto das mãos na
-   massa com as coxinhas saltando do canto de baixo e a logo carimbada no
-   canto de cima. A arte tem coluna própria: texto nunca passa sobre comida.
-   Embaixo, os números numa faixa marrom. */
-.sobre-heroi {
-  overflow-x: clip;
-}
 
-.sobre-heroi-grade {
-  display: grid;
-  gap: 2.5rem;
-  padding-top: 1.5rem;
-  padding-bottom: 3.5rem;
-}
-
-.sobre-heroi-titulo {
-  max-width: 12ch;
-  margin-top: 1.25rem;
-  font-size: clamp(2.75rem, 12vw, 5.25rem);
-  line-height: 0.98;
-  text-transform: uppercase;
-  text-wrap: balance;
-}
-
-.sobre-heroi-frase {
-  max-width: 32rem;
-  margin-top: 1.25rem;
-  font-size: 1.125rem;
-  line-height: 1.6;
-  color: var(--color-crust);
-}
-
-/* A arte: a foto deixa espaço à esquerda e embaixo para as coxinhas e em cima
-   para a logo. */
-.sobre-heroi-arte {
-  position: relative;
-  width: min(100%, 30rem);
-  margin-inline: auto;
-  padding: 2.25rem 0 2.5rem 14%;
-}
-
-.sobre-heroi-foto {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-}
-
-.sobre-heroi-coxinhas {
-  position: absolute;
-  bottom: 0;
-  left: -4%;
-  width: 52%;
-  height: auto;
-  filter: drop-shadow(0 14px 16px rgb(42 23 16 / 0.35));
-}
-
-/* A logo num oval de farinha, para o vermelho dela não sumir sobre a foto. */
-.sobre-heroi-selo {
-  position: absolute;
-  top: 0;
-  right: -2%;
-  width: 40%;
-  padding: 0.75rem 0.875rem;
-  border-radius: 50%;
-  background-color: var(--color-farinha);
-  box-shadow: 0 10px 24px rgb(42 23 16 / 0.22);
-  rotate: 8deg;
-}
-
-.sobre-heroi-selo img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-/* Números: marrom, número em amarelo de cartaz e rótulo embaixo. */
-.sobre-numeros {
-  background-color: var(--color-ink);
-  color: var(--color-cream);
-}
-
-.sobre-numeros dl {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.5rem 1rem;
-  padding-top: 1.75rem;
-  padding-bottom: 1.75rem;
-}
-
-.sobre-numeros dl > div {
-  display: flex;
-  flex-direction: column-reverse;
-  justify-content: flex-end;
-  gap: 0.25rem;
-  min-width: 0;
-}
-
-.sobre-numeros dd {
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 6vw, 2.5rem);
-  line-height: 1;
-  color: var(--color-accent);
-  overflow-wrap: anywhere;
-}
-
-.sobre-numeros dt {
-  font-size: 0.875rem;
-  font-weight: 600;
-}
+/* ---------- A empresa: fotografia ----------
+   Salgado de verdade em foto grande e faixas que se alternam: marrom no
+   herói e na caixa de empresas, claro em "Quem somos" e na história,
+   polvilho nos serviços, vermelho nos valores. A foto tem coluna própria em
+   todo tamanho: texto nunca passa sobre comida. */
 
 /* Títulos das seções. */
 .pagina-sobre h2 {
   font-size: clamp(2rem, 7vw, 3rem);
   line-height: 1.05;
-}
-
-/* Quem somos: retrato e texto lado a lado. */
-.sobre-quem {
-  display: grid;
-  gap: 2rem;
-  padding-top: 4rem;
-  padding-bottom: 4rem;
-  scroll-margin-top: 5rem;
-}
-
-.sobre-quem-foto {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  object-position: 50% 25%;
-}
-
-@media (min-width: 64rem) {
-  .sobre-quem-foto {
-    aspect-ratio: 4 / 5;
-  }
-}
-
-.sobre-quem-texto {
-  align-self: center;
-}
-
-.sobre-quem-texto p {
-  max-width: 36rem;
-  margin-top: 1rem;
-  font-size: 1.0625rem;
-  line-height: 1.7;
-  color: var(--color-crust);
-}
-
-.sobre-quem-texto h2 + p {
-  margin-top: 1.5rem;
-  font-size: 1.25rem;
-  line-height: 1.55;
-  color: var(--color-ink);
 }
 
 /* O que fazemos: título com o botão ao lado e um cartão com foto por serviço. */
@@ -3450,8 +3196,7 @@ a.loja-acao:hover {
   gap: 1rem 2rem;
 }
 
-.sobre-servicos-lista,
-.sobre-empresas-lista {
+.sobre-servicos-lista {
   display: grid;
   gap: 1.5rem 1rem;
   margin-top: 2rem;
@@ -3621,40 +3366,12 @@ a.loja-acao:hover {
     column-gap: 1.5rem;
   }
 
-  .sobre-numeros dl {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .sobre-empresas-lista {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    column-gap: 1.5rem;
-  }
-
   .sobre-valores-lista {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @media (min-width: 64rem) {
-  .sobre-heroi-grade {
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-    align-items: center;
-    gap: 4rem;
-    min-height: calc(100svh - 12rem);
-    padding-top: 2.5rem;
-    padding-bottom: 4rem;
-  }
-
-  .sobre-heroi-arte {
-    margin-right: 0;
-  }
-
-  .sobre-quem {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-    gap: 5rem;
-    padding-top: 6rem;
-    padding-bottom: 6rem;
-  }
 
   .sobre-servicos,
   .sobre-valores {
@@ -3690,45 +3407,12 @@ a.loja-acao:hover {
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .sobre-heroi-coxinhas {
-    animation: coxinhas-saltam 0.9s var(--ease-massa) 0.15s both;
-  }
-
-  .sobre-heroi-selo {
-    animation: selo-carimba 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.3) 0.6s both;
-  }
-
-  @supports (animation-timeline: view()) {
-    .sobre-heroi-coxinhas {
-      animation:
-        coxinhas-saltam 0.9s var(--ease-massa) 0.15s both,
-        coxinhas-sobem linear both;
-      animation-timeline: auto, scroll();
-      animation-range: normal, 0 70vh;
-    }
-  }
-}
-
-@keyframes coxinhas-saltam {
-  from {
-    opacity: 0;
-    transform: translate(-1.5rem, 2.5rem) rotate(-12deg) scale(0.85);
-  }
-}
-
-@keyframes coxinhas-sobem {
-  to {
-    translate: 0 -3rem;
-  }
-}
-
 /* ---------- Unidades: matriz em faixa, lojas em cartões ----------
-   A matriz é a única loja que recebe pedidos do site, então ganha a faixa
-   caixa marrom, separada do herói: foto à esquerda, dados em branco à
-   direita, ações em amarelo. As outras lojas vêm em cartões retos ao lado do
-   título (que fica parado no computador). No fim, o convite para encomendar
-   com a tigela de bolinhas. */
+   A matriz é a única loja que recebe pedidos do site, então ganha a caixa
+   marrom, separada do herói: foto à esquerda, dados em branco à direita,
+   ações em amarelo. As outras lojas vêm em cartões retos ao lado do título
+   (que fica parado no computador). No fim, o convite para encomendar com a
+   pilha de coxinhas. */
 
 /* Botão de contorno claro, para fundo escuro. */
 .botao-vazado {
@@ -3950,7 +3634,7 @@ a.loja-acao:hover {
   border-radius: 0;
 }
 
-/* Fecho: convite para encomendar, com a tigela de bolinhas à direita. */
+/* Fecho: convite para encomendar, com a pilha de coxinhas à direita. */
 .unidades-fecho {
   padding-bottom: 4.5rem;
 }
@@ -3959,8 +3643,14 @@ a.loja-acao:hover {
   position: relative;
 }
 
+/* No celular as coxinhas ficam no alto da caixa, à direita, passando da
+   borda de cima; o texto começa abaixo delas e usa a largura toda. */
+.unidades-fecho {
+  padding-top: 2rem;
+}
+
 .unidades-fecho-texto {
-  padding: 2rem 9.5rem 2rem 1.5rem;
+  padding: 5.5rem 1.5rem 2.25rem;
   background:
     radial-gradient(circle at 92% 70%, rgb(225 5 30 / 0.5) 0, rgb(225 5 30 / 0) 55%),
     var(--color-ink);
@@ -3991,11 +3681,13 @@ a.loja-acao:hover {
   text-transform: uppercase;
 }
 
-.unidades-fecho-tigela {
+/* Do tablet em diante, a pilha de coxinhas passa um pouco da borda de baixo
+   da caixa, como se estivesse apoiada na frente dela. */
+.unidades-fecho-recorte {
   position: absolute;
-  right: 1.25rem;
-  bottom: 0;
-  width: 9rem;
+  top: -2.25rem;
+  right: 2rem;
+  width: 8.5rem;
   height: auto;
   filter: drop-shadow(0 10px 14px rgb(0 0 0 / 0.45));
   pointer-events: none;
@@ -4020,9 +3712,15 @@ a.loja-acao:hover {
     padding: 3rem 24rem 3rem 3rem;
   }
 
-  .unidades-fecho-tigela {
-    right: 4rem;
-    width: 18rem;
+  .unidades-fecho {
+    padding-top: 0;
+  }
+
+  .unidades-fecho-recorte {
+    top: auto;
+    right: 3.5rem;
+    bottom: -1.5rem;
+    width: 20rem;
   }
 }
 
@@ -4074,13 +3772,322 @@ a.loja-acao:hover {
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
+@media (min-width: 48rem) and (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
-    .unidades-fecho-tigela {
-      animation: placa-recorte-sobe linear both;
+    .unidades-fecho-recorte {
+      animation: recorte-sobe linear both;
       animation-timeline: view();
       animation-range: entry 0% cover 50%;
     }
+  }
+}
+
+@keyframes recorte-sobe {
+  from {
+    translate: 0 2.5rem;
+  }
+}
+
+/* A empresa: herói marrom. No celular a foto vem em cima (4:3) e o texto
+   embaixo; do computador em diante, texto à esquerda e a foto ocupando a
+   metade direita até a borda da tela. */
+.sobre-topo {
+  background-color: var(--color-ink);
+  color: #fff;
+}
+
+.sobre-topo :focus-visible {
+  outline-color: #fff;
+}
+
+.sobre-topo-grade {
+  display: grid;
+}
+
+.sobre-topo-foto img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: 50% 45%;
+}
+
+.sobre-topo-texto {
+  padding: 2rem 1rem 2.5rem;
+}
+
+.sobre-topo-titulo {
+  max-width: 13ch;
+  margin-top: 1rem;
+  font-size: clamp(2.5rem, 11vw, 4.75rem);
+  line-height: 0.98;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.sobre-topo-frase {
+  max-width: 32rem;
+  margin-top: 1.125rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.88);
+}
+
+.sobre-topo-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.pagina-sobre .botao-amarelo,
+.pagina-sobre .botao-vazado {
+  border-radius: 0;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Números: em amarelo de cartaz, dois por linha, separados do texto por um
+   fio claro. */
+.sobre-topo-numeros {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem 1rem;
+  max-width: 32rem;
+  margin-top: 2.25rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgb(255 255 255 / 0.2);
+}
+
+.sobre-topo-numeros > div {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.sobre-topo-numeros dd {
+  font-family: var(--font-display);
+  font-size: clamp(1.375rem, 5vw, 2rem);
+  line-height: 1;
+  color: var(--color-accent);
+  overflow-wrap: anywhere;
+}
+
+.sobre-topo-numeros dt {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-cream);
+}
+
+/* Quem somos: texto e a foto da equipe, com um bloco vermelho deslocado atrás. */
+.sobre-quem {
+  display: grid;
+  gap: 2.5rem;
+  padding-top: 4rem;
+  padding-bottom: 4.5rem;
+  scroll-margin-top: 5rem;
+}
+
+.sobre-quem-texto {
+  align-self: center;
+}
+
+.sobre-quem-texto p {
+  max-width: 36rem;
+  margin-top: 1rem;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--color-crust);
+}
+
+.sobre-quem-texto h2 + p {
+  margin-top: 1.5rem;
+  font-size: 1.25rem;
+  line-height: 1.55;
+  color: var(--color-ink);
+}
+
+.sobre-quem-foto {
+  position: relative;
+  width: min(100% - 1.25rem, 30rem);
+}
+
+.sobre-quem-foto::before {
+  content: "";
+  position: absolute;
+  inset: 1.25rem -1.25rem -1.25rem 1.25rem;
+  background-color: var(--color-brand);
+}
+
+.sobre-quem-foto img {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+/* Para empresas: a caixa marrom, no desenho da matriz em Unidades. */
+.sobre-b2b {
+  padding-top: 2.5rem;
+  padding-bottom: 4rem;
+  scroll-margin-top: 2rem;
+}
+
+.sobre-b2b-grade {
+  display: grid;
+  background-color: var(--color-ink);
+  color: #fff;
+}
+
+.sobre-b2b :focus-visible {
+  outline-color: #fff;
+}
+
+.sobre-b2b-foto img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 5 / 4;
+  object-fit: cover;
+}
+
+.sobre-b2b-texto {
+  padding: 2.5rem 1rem 3rem;
+}
+
+.sobre-b2b-frase {
+  max-width: 36rem;
+  margin-top: 1rem;
+  line-height: 1.65;
+  color: rgb(255 255 255 / 0.85);
+}
+
+.sobre-b2b-lista {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.75rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid rgb(255 255 255 / 0.2);
+}
+
+.sobre-b2b-lista li {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+/* Marcador: um quadrado amarelo na altura do título. */
+.sobre-b2b-lista li::before {
+  content: "";
+  position: absolute;
+  top: 0.45rem;
+  left: 0;
+  width: 0.625rem;
+  height: 0.625rem;
+  background-color: var(--color-accent);
+}
+
+.sobre-b2b-lista h3 {
+  font-size: 1.25rem;
+  line-height: 1.15;
+}
+
+.sobre-b2b-lista p {
+  max-width: 34rem;
+  margin-top: 0.375rem;
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.85);
+}
+
+.sobre-b2b .botao-desligado {
+  border-color: rgb(255 255 255 / 0.6);
+  border-radius: 0;
+  color: #fff;
+}
+
+.sobre-b2b-nota {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--color-cream);
+}
+
+@media (min-width: 40rem) {
+  .sobre-topo-texto {
+    padding-inline: 1.5rem;
+  }
+
+  .sobre-quem-foto {
+    justify-self: center;
+  }
+}
+
+@media (min-width: 64rem) {
+  .sobre-topo-grade {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    min-height: min(46rem, calc(100svh - 4.5rem - 1px));
+  }
+
+  .sobre-topo-foto {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .sobre-topo-foto img {
+    aspect-ratio: auto;
+    object-position: 50% 60%;
+  }
+
+  /* O título e os números medem a metade da tela, não a tela toda. */
+  .sobre-topo-titulo {
+    font-size: clamp(3rem, 5vw, 4.75rem);
+  }
+
+  .sobre-topo-numeros dd {
+    font-size: clamp(1.25rem, 2vw, 2rem);
+  }
+
+  /* A borda esquerda do texto acompanha o contêiner de 80rem do site. */
+  .sobre-topo-texto {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+    padding: 3.5rem 3.5rem 3.5rem max(2rem, calc((100vw - 80rem) / 2 + 2rem));
+  }
+
+  .sobre-quem {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: 5rem;
+    padding-top: 6rem;
+    padding-bottom: 6.5rem;
+  }
+
+  .sobre-quem-foto {
+    justify-self: end;
+  }
+
+  .sobre-b2b {
+    padding: 5rem 2rem 6rem;
+  }
+
+  .sobre-b2b-grade {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    max-width: 76rem;
+    margin-inline: auto;
+  }
+
+  .sobre-b2b-foto img {
+    aspect-ratio: auto;
+    min-height: 34rem;
+  }
+
+  .sobre-b2b-texto {
+    align-self: center;
+    padding: 3.5rem;
   }
 }
 }
