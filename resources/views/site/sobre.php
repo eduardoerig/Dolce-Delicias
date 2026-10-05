@@ -61,8 +61,9 @@ include DD_BASE . '/partials/header.php';
  * divisórias curvas entre as faixas e botões em pílula, com as cores e a
  * letra da Dolce.
  *
- *   1. abertura vermelha: a assinatura da marca, a frase e os botões; a foto
- *      oficial ao lado (no celular, embaixo). Termina numa curva;
+ *   1. abertura dividida: metade vermelha com a assinatura da marca, a frase
+ *      e os botões; a outra metade é a foto oficial, até a borda (no
+ *      celular, embaixo do texto). Termina numa curva;
  *   2. fatos: três itens grandes, centralizados;
  *   3. "Nossa história": a foto da coxinha sendo modelada e o texto da marca;
  *   4. "O que fazemos": um cartão com foto para cada frente;
@@ -94,7 +95,7 @@ $iconeInstagram = '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="
 
 <div class="pagina-sobre bg-farinha">
 
-  <section class="abertura" aria-labelledby="titulo-sobre">
+  <section class="abertura abertura-metade" aria-labelledby="titulo-sobre">
     <div class="abertura-grade mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="abertura-texto">
         <nav aria-label="Você está aqui" class="flex items-center gap-2 text-sm font-semibold">
@@ -119,12 +120,14 @@ $iconeInstagram = '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="
         </div>
       </div>
 
-      <?php if ($fotoOficial): ?>
-        <div class="abertura-foto">
-          <img src="<?= e($fotoOficial) ?>" srcset="<?= e((string) dd_imagem('/assets/img/sobre/oficial-640.webp')) ?> 640w, <?= e($fotoOficial) ?> 960w" sizes="(min-width: 64rem) 28rem, 86vw" alt="Mulher de avental da Dolce Delícias na cozinha, de braços cruzados e sorrindo, com bolo, pão e salgados na bancada à frente" width="960" height="1200" fetchpriority="high" decoding="async">
-        </div>
-      <?php endif; ?>
     </div>
+
+    <?php // A foto oficial (vertical) ocupa a metade direita, até a borda da tela; no celular vem embaixo do texto, de ponta a ponta. ?>
+    <?php if ($fotoOficial): ?>
+      <div class="abertura-lado">
+        <img src="<?= e($fotoOficial) ?>" srcset="<?= e((string) dd_imagem('/assets/img/sobre/oficial-640.webp')) ?> 640w, <?= e($fotoOficial) ?> 960w" sizes="(min-width: 64rem) 50vw, 100vw" alt="Mulher de avental da Dolce Delícias na cozinha, de braços cruzados e sorrindo, com bolo, pão e salgados na bancada à frente" width="960" height="1200" fetchpriority="high" decoding="async">
+      </div>
+    <?php endif; ?>
   </section>
 
   <?php // Fatos curtos. No HTML o rótulo (dt) vem antes do valor (dd); o CSS põe o valor em cima. ?>
