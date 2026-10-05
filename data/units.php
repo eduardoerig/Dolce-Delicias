@@ -134,7 +134,7 @@ return [
         'whatsapp'    => '55000000000', // A FAZER: número real (o de exemplo não vira botão)
         'horario'     => 'Seg a sáb, 6h às 20h', // FICTÍCIO
         'preparo'     => 'Encomendas com 48 horas de antecedência', // FICTÍCIO
-        'sobre'       => 'A maior depois da matriz: vitrine de doces e retirada de encomendas com hora marcada.', // FICTÍCIO
+        'sobre'       => 'A maior depois da matriz, com vitrine de doces.', // FICTÍCIO
         'mapaUrl'     => '', // FICTÍCIO: sem endereço real, sem link de mapa
         'imagem'      => '/assets/img/unidades/unidade-4.jpg', // FICTÍCIO
         'catalogoPdf' => '/catalogos/unidade-4.pdf',

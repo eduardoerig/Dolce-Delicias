@@ -288,32 +288,25 @@ function sincronizar() {
  * ------------------------------------------------------------------------ */
 
 /**
- * Lê a confirmação do pedido — retirada/entrega, endereço e pagamento.
+ * Lê a confirmação do pedido — endereço da entrega e pagamento. Não há
+ * retirada: todo pedido é entregue.
  *
  * Os campos vivem só em carrinho.php (partials/pedido-validacao.php). Quando o
  * checkout é chamado de outra página, eles não existem e valem os padrões: a
  * opção mais conservadora de cada pergunta, nunca uma promessa que a padaria
  * não fez.
  *
- * @returns {{entrega: string, endereco: string, pagamento: string}}
+ * @returns {{endereco: string, pagamento: string, temCampoEndereco: boolean}}
  */
 function lerConfirmacao() {
   const marcado = (seletor, padrao) =>
     document.querySelector(`${seletor}:checked`)?.value?.trim() || padrao;
-
-  const entrega = marcado('[data-pedido-entrega]', 'Retirar na matriz');
-
-  // O endereço só acompanha quando a escolha é entrega — se a pessoa digitou e
-  // depois voltou para "retirar", o texto órfão não entra na comanda.
-  const ehEntrega = entrega.toLowerCase().startsWith('entrega');
-  const endereco = ehEntrega
-    ? document.querySelector('[data-pedido-endereco]')?.value.trim() || ''
-    : '';
+  const campoEndereco = document.querySelector('[data-pedido-endereco]');
 
   return {
-    entrega,
-    endereco,
+    endereco: campoEndereco?.value.trim() || '',
     pagamento: marcado('[data-pedido-pagamento]', 'A combinar no WhatsApp'),
+    temCampoEndereco: Boolean(campoEndereco),
   };
 }
 
@@ -347,7 +340,13 @@ export function checkout() {
 
   const confirmacao = lerConfirmacao();
 
-  if (confirmacao.entrega.toLowerCase().startsWith('entrega') && !confirmacao.endereco) { avisar('Informe o endereço para entrega.'); return; }
+  // Na página do pedido o endereço é obrigatório; fechando pela gaveta, ele é
+  // combinado na conversa.
+  if (confirmacao.temCampoEndereco && !confirmacao.endereco) {
+    avisar('Informe o endereço da entrega.');
+    document.querySelector('[data-pedido-endereco]')?.focus();
+    return;
+  }
   const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagemPedido(itens, unidade, confirmacao, observacao))}`;
   window.open(url, '_blank', 'noopener');
 }

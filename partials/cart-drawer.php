@@ -63,7 +63,7 @@ declare(strict_types=1);
       <?php
       /**
        * O drawer NÃO fecha o pedido: ele leva para carrinho.php, onde ficam as
-       * perguntas da confirmação (retirada/entrega e pagamento — ver
+       * perguntas da confirmação (endereço da entrega e pagamento — ver
        * partials/pedido-validacao.php) e a observação. Duplicar os campos aqui
        * seria manter duas cópias em sincronia para sempre.
        *

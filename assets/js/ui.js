@@ -639,9 +639,8 @@ if (campoQtd) {
 /* ===========================================================================
  * 7. CONFIRMAÇÃO DO PEDIDO (carrinho.php)
  *
- * Duas coisas, as duas sobre deixar a escolha visível:
- *   - o campo de endereço aparece quando a escolha é entrega;
- *   - o resumo (Recebimento e Pagamento) repete, por extenso, o que está marcado.
+ * O resumo (Pagamento) repete, por extenso, o que está marcado. O endereço da
+ * entrega fica sempre à mostra: não há retirada.
  *
  * O resumo existe porque os rádios ficam nas etapas e o botão do WhatsApp na
  * outra coluna — no celular, duas telas depois. Ele fica logo acima do botão,
@@ -650,11 +649,9 @@ if (campoQtd) {
  * Quem lê os valores no fechamento é checkout(), em cart.js. Aqui é só interface.
  * ======================================================================== */
 
-const escolhasDoPedido = document.querySelectorAll('[data-pedido-entrega], [data-pedido-pagamento]');
+const escolhasDoPedido = document.querySelectorAll('[data-pedido-pagamento]');
 
 if (escolhasDoPedido.length) {
-  const campoEndereco = document.querySelector('[data-pedido-endereco-campo]');
-  const saidaEntrega = document.querySelector('[data-pedido-resumo-entrega]');
   const saidaPagamento = document.querySelector('[data-pedido-resumo-pagamento]');
 
   /** O texto do cartão marcado — o rótulo que a pessoa leu, não o value. */
@@ -664,13 +661,7 @@ if (escolhasDoPedido.length) {
   };
 
   function aplicarEscolhasDoPedido() {
-    const entrega = document.querySelector('[data-pedido-entrega]:checked');
-    const ehEntrega = (entrega?.value || '').toLowerCase().startsWith('entrega');
-
-    campoEndereco?.classList.toggle('oculto', !ehEntrega);
-
-    // O resumo ao lado repete o que está marcado, cada coisa na sua linha.
-    if (saidaEntrega) saidaEntrega.textContent = rotuloMarcado('[data-pedido-entrega]');
+    // O resumo ao lado repete o que está marcado.
     if (saidaPagamento) saidaPagamento.textContent = rotuloMarcado('[data-pedido-pagamento]');
   }
 
@@ -678,7 +669,7 @@ if (escolhasDoPedido.length) {
     radio.addEventListener('change', aplicarEscolhasDoPedido);
   });
 
-  // O HTML nasce com "retirar" e "Pix" marcados, mas o navegador restaura a
+  // O HTML nasce com "Pix" marcado, mas o navegador restaura a
   // escolha anterior num F5 — então o estado inicial é lido, não presumido.
   aplicarEscolhasDoPedido();
 }

@@ -1,7 +1,7 @@
 <?php declare(strict_types=1); use App\Core\Csrf; use App\Models\AdminUi;
 $pageTitle=$id?($record['nome']??AdminUi::plural($entity)):AdminUi::newLabel($entity); require __DIR__.'/header.php';
 $fields=$config['fields'];
-$defaults=['linha'=>'AMBOS','tipo_unidade'=>'FILIAL','tipo_desconto'=>'PERCENTUAL','tipo_atendimento'=>'AMBOS','tipo_agenda'=>'SEMPRE','perfil'=>'GESTOR','rotulo_preco'=>'1 unidade','pedido_minimo'=>'1','passo_quantidade'=>'1'];
+$defaults=['tipo_unidade'=>'FILIAL','tipo_desconto'=>'PERCENTUAL','tipo_agenda'=>'SEMPRE','perfil'=>'GESTOR','rotulo_preco'=>'1 unidade','pedido_minimo'=>'1','passo_quantidade'=>'1'];
 $value=function(string $key) use($record,$fields,$id,$defaults) {
  $type=$fields[$key][1]??'text';
  if($type==='password') return '';

@@ -10,7 +10,7 @@ declare(strict_types=1);
  *
  *   RF-29  horário de funcionamento da matriz
  *   RF-30  tempo mínimo de preparo
- *   RF-17  retirar na matriz ou receber em casa
+ *   RF-17  entrega (não há retirada: todo pedido é entregue)
  *   —      forma de pagamento (só declarada; NADA é pago pelo site)
  *
  * RF-18 está CORTADO do escopo: não há valor, faixa nem condição de frete em
@@ -21,7 +21,7 @@ declare(strict_types=1);
  *
  * assets/js/cart.js lê estes campos pelos data-pedido-* no checkout(). Se a
  * pessoa fechar o pedido de outra página, os campos não existem e o checkout()
- * cai nos padrões — retirada na matriz e pagamento a combinar.
+ * cai nos padrões — endereço combinado na conversa e pagamento a combinar.
  * assets/js/ui.js copia a escolha para o resumo (data-pedido-resumo-*).
  */
 
@@ -30,26 +30,6 @@ require_once __DIR__ . '/bootstrap.php';
 $matriz   = dd_matriz();
 $horario  = trim((string) ($matriz['horario'] ?? ''));
 $preparo  = trim((string) ($matriz['preparo'] ?? ''));
-$endereco = trim((string) ($matriz['endereco'] ?? ''));
-
-/**
- * Como receber (RF-17). A primeira nasce marcada.
- *
- * 'valor' é o que vai escrito na mensagem do WhatsApp; 'ajuda' é a linha de
- * baixo do cartão, que responde "o que acontece se eu escolher isto?".
- */
-$formasDeReceber = [
-    [
-        'valor'  => 'Retirar na matriz',
-        'rotulo' => 'Retirar na matriz',
-        'ajuda'  => $endereco !== '' ? $endereco : 'Endereço da matriz ainda não cadastrado.',
-    ],
-    [
-        'valor'  => 'Entrega',
-        'rotulo' => 'Entrega',
-        'ajuda'  => 'Você informa o endereço e a entrega é combinada na conversa.',
-    ],
-];
 
 /** Formas de pagamento oferecidas. A primeira nasce marcada. */
 $formasDePagamento = [
@@ -61,7 +41,7 @@ $formasDePagamento = [
     [
         'valor'  => 'Cartão débito/crédito',
         'rotulo' => 'Cartão',
-        'ajuda'  => 'Débito ou crédito, na retirada ou na entrega.',
+        'ajuda'  => 'Débito ou crédito, na entrega.',
     ],
     [
         'valor'  => 'A combinar no WhatsApp',
@@ -70,9 +50,9 @@ $formasDePagamento = [
     ],
 ];
 ?>
-<!-- 2. Como receber -->
+<!-- 2. Onde entregar -->
 <section class="cartao-etapa" aria-labelledby="etapa-receber">
-  <h2 id="etapa-receber" class="etapa-titulo"><span class="etapa-numero" aria-hidden="true">2</span>Como você quer receber</h2>
+  <h2 id="etapa-receber" class="etapa-titulo"><span class="etapa-numero" aria-hidden="true">2</span>Onde entregar</h2>
 
   <?php // RF-29 e RF-30 juntos: são as duas respostas para "quando eu recebo?". ?>
   <?php if ($horario !== '' || $preparo !== ''): ?>
@@ -100,32 +80,15 @@ $formasDePagamento = [
     </dl>
   <?php endif; ?>
 
-  <fieldset class="mt-5">
-    <legend class="sr-only">Como você quer receber</legend>
-
-    <div class="grid gap-2.5 sm:grid-cols-2">
-      <?php foreach ($formasDeReceber as $i => $forma): ?>
-        <label class="opcao">
-          <input type="radio" name="entrega" class="radio radio-primary mt-0.5 shrink-0" data-pedido-entrega
-                 value="<?= e($forma['valor']) ?>" <?= $i === 0 ? 'checked' : '' ?>>
-          <span class="min-w-0">
-            <span class="block font-bold leading-tight"><?= e($forma['rotulo']) ?></span>
-            <span class="mt-1 block text-xs leading-relaxed text-crust"><?= e($forma['ajuda']) ?></span>
-          </span>
-        </label>
-      <?php endforeach; ?>
-    </div>
-
-    <?php // Aparece só quando a escolha é Entrega — quem liga/desliga é ui.js. ?>
-    <label class="oculto mt-4 block" data-pedido-endereco-campo>
-      <span class="text-sm font-semibold">Endereço da entrega</span>
-      <textarea data-pedido-endereco rows="2" class="campo-texto mt-1.5"
-                placeholder="Rua, número, bairro e um ponto de referência"></textarea>
-      <span class="mt-1.5 block text-xs leading-relaxed text-crust">
-        O site não calcula nem cobra a entrega; ela é combinada na conversa.
-      </span>
-    </label>
-  </fieldset>
+  <?php // Todo pedido é entregue: o endereço é obrigatório para fechar (checkout() em cart.js). ?>
+  <label class="mt-5 block">
+    <span class="text-sm font-semibold">Endereço da entrega</span>
+    <textarea data-pedido-endereco rows="2" class="campo-texto mt-1.5" required
+              placeholder="Rua, número, bairro e um ponto de referência"></textarea>
+    <span class="mt-1.5 block text-xs leading-relaxed text-crust">
+      O site não calcula nem cobra a entrega; ela é combinada na conversa.
+    </span>
+  </label>
 </section>
 
 <!-- 3. Forma de pagamento: declaração, não cobrança -->

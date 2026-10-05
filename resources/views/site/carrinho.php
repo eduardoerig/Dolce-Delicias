@@ -28,7 +28,7 @@ include DD_BASE . '/partials/header.php';
   <?php ob_start(); ?>
     <h1 id="titulo-pedido" class="text-4xl sm:text-5xl">Seu pedido</h1>
     <p class="mt-3 max-w-xl text-lg leading-relaxed">
-      Confira as quantidades, diga como quer receber e feche pelo WhatsApp da matriz. Nada é cobrado aqui.
+      Confira as quantidades, diga onde entregar e feche pelo WhatsApp da matriz. Nada é cobrado aqui.
     </p>
   <?php
   $heroiConteudo = (string) ob_get_clean();
@@ -98,7 +98,7 @@ include DD_BASE . '/partials/header.php';
           </div>
           <div class="flex justify-between gap-4">
             <dt class="text-crust">Recebimento</dt>
-            <dd class="text-right font-semibold" data-pedido-resumo-entrega>Retirar na matriz</dd>
+            <dd class="text-right font-semibold">Entrega</dd>
           </div>
           <div class="flex justify-between gap-4">
             <dt class="text-crust">Pagamento</dt>

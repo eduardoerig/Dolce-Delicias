@@ -30,10 +30,10 @@ $heroTexto   = 'A gente cuida do resto: salgados, assados e doces feitos no dia 
 $heroCta     = ['href' => '#catalogo', 'texto' => 'Montar meu pedido'];
 $heroLink    = ['href' => '#encomendas', 'texto' => 'Como funciona'];
 
-// Garantias: retirada ou entrega, o prazo da matriz e o pagamento fora do site.
+// Garantias: a entrega, o prazo da matriz e o pagamento fora do site.
 $preparoMatriz = trim(explode(' · ', (string) (dd_matriz()['preparo'] ?? ''))[0]);
 $heroGarantias = array_values(array_filter([
-    'Retire ou receba em casa',
+    'Entrega no seu endereço',
     $preparoMatriz !== '' ? mb_strtoupper(mb_substr($preparoMatriz, 0, 1)) . mb_substr($preparoMatriz, 1) : null,
     'Sem cadastro, sem pagar no site',
 ]));
@@ -219,7 +219,7 @@ $precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
 <?php
 $passos = [
     ['titulo' => 'Monte o pedido',        'texto' => 'Adicione os itens. O mínimo de cada produto já vem respeitado.'],
-    ['titulo' => 'Diga como quer receber', 'texto' => 'Retirada na matriz ou entrega, e a forma de pagamento. Nada é cobrado no site.'],
+    ['titulo' => 'Diga onde entregar', 'texto' => 'O endereço da entrega e a forma de pagamento. Nada é cobrado no site.'],
     // RF-18 fora do escopo: o site não fala em frete.
     ['titulo' => 'Feche no WhatsApp',     'texto' => 'A conversa abre com o pedido escrito. A data e o valor final são combinados ali.'],
 ];

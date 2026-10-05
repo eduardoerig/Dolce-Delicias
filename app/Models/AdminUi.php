@@ -16,8 +16,6 @@ final class AdminUi {
  ];
  /** Valores gravados no banco => texto que a pessoa lê. */
  public const OPTIONS=[
-  'linha'=>['AMBOS'=>'Os dois','ENCOMENDA'=>'Encomenda','BALCAO'=>'Balcão'],
-  'tipo_atendimento'=>['AMBOS'=>'Os dois','ENCOMENDA'=>'Encomenda','BALCAO'=>'Balcão'],
   'tipo_unidade'=>['MATRIZ'=>'Matriz','FILIAL'=>'Filial'],
   'tipo_desconto'=>['PERCENTUAL'=>'Porcentagem','VALOR_FIXO'=>'Reais'],
   'tipo_agenda'=>['SEMPRE'=>'Sempre','SEMANAL'=>'Dias da semana','MENSAL'=>'Meses do ano','PERIODO'=>'Entre datas'],
@@ -40,7 +38,6 @@ final class AdminUi {
    'rotulo_preco'=>['Esse preço vale para','Ex.: 100 unidades, 1 unidade, 45 peças.'],
    'pedido_minimo'=>['Pedido mínimo','Menor quantidade de peças que o cliente pode pedir.'],
    'passo_quantidade'=>['Vende de quanto em quanto','Ex.: 25 permite pedir 50, 75, 100…'],
-   'linha'=>['Como é vendido','Encomenda: pedido antecipado pelo site. Balcão: venda na loja.'],
    'destaque'=>['Destaque','Aparece primeiro no catálogo.'],
    'ativo'=>['Ativo','Desligado, o produto some do site.'],
    'slug'=>['Endereço da página','Gerado pelo nome. Só mude se souber o que está fazendo.'],
@@ -70,7 +67,6 @@ final class AdminUi {
    'descricao'=>['Regras','Explique a condição para o cliente.'],
    'tipo_desconto'=>['Tipo de desconto',''],
    'valor_desconto'=>['Desconto',''],
-   'tipo_atendimento'=>['Vale para',''],
    'tipo_agenda'=>['Quando vale',''],
    'dias_semana'=>['Dias da semana',''],
    'meses'=>['Meses',''],
@@ -98,7 +94,7 @@ final class AdminUi {
    ['Sobre o produto','',['nome','id_categoria','descricao']],
    ['Preço e quantidade','',['preco','rotulo_preco','pedido_minimo','passo_quantidade']],
    ['Foto','',['imagem']],
-   ['Onde vende','Marque as unidades que têm este produto.',['linha','unidades']],
+   ['Onde vende','Marque as unidades que têm este produto.',['unidades']],
    ['Sabores e etiquetas','Opcional.',['sabores','tags']],
   ],
   'categorias'=>[['Categoria','',['nome']]],
@@ -111,7 +107,7 @@ final class AdminUi {
   ],
   'promocoes'=>[
    ['A promoção','',['nome','selo','descricao']],
-   ['Desconto','',['tipo_desconto','valor_desconto','tipo_atendimento']],
+   ['Desconto','',['tipo_desconto','valor_desconto']],
    ['Quando vale','',['agenda']],
    ['Produtos','Quais produtos entram na promoção.',['produtos']],
    ['Unidades','Onde a promoção vale.',['unidades']],
