@@ -169,6 +169,23 @@ $temOpiniao = $linkFeedback !== '' || $canaisRodape !== [];
   <?php endforeach; ?>
 </template>
 
+<?php
+/*
+ * Botão flutuante do WhatsApp, em todas as páginas: fala direto com a matriz.
+ * Só aparece com número real (dd_whatsapp() devolve '' para vazio ou de
+ * exemplo). No celular é um círculo; do tablet em diante mostra o texto. No
+ * carrinho, no celular, some para não cobrir a barra "Fechar pedido".
+ */
+?>
+<?php if ($zapMatriz !== ''): ?>
+  <aside aria-label="Atendimento pelo WhatsApp">
+  <a class="zap-flutuante" href="https://wa.me/<?= e($zapMatriz) ?>?text=<?= rawurlencode('Olá! Vim pelo site da Dolce Delícias.') ?>" target="_blank" rel="noopener noreferrer" aria-label="Falar com a Dolce no WhatsApp">
+    <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16.04 3C8.86 3 3.02 8.82 3.02 15.98c0 2.29.6 4.53 1.75 6.5L3 29l6.7-1.75a13.02 13.02 0 0 0 6.33 1.62h.01c7.18 0 13.02-5.82 13.02-12.98C29.06 8.82 23.22 3 16.04 3Zm0 23.68h-.01c-1.94 0-3.85-.52-5.51-1.51l-.4-.23-3.98 1.04 1.06-3.87-.26-.4a10.7 10.7 0 0 1-1.65-5.73c0-5.95 4.85-10.79 10.81-10.79 5.96 0 10.8 4.84 10.8 10.79 0 5.96-4.85 10.7-10.86 10.7Zm5.93-8.06c-.32-.16-1.92-.95-2.22-1.06-.3-.11-.51-.16-.73.16-.21.32-.84 1.06-1.03 1.27-.19.21-.38.24-.7.08-.32-.16-1.37-.5-2.6-1.6-.96-.86-1.61-1.91-1.8-2.23-.19-.32-.02-.49.14-.65.15-.14.32-.37.48-.56.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.73-1.75-1-2.4-.26-.63-.53-.54-.73-.55h-.62c-.21 0-.56.08-.86.4-.3.32-1.13 1.1-1.13 2.69s1.16 3.12 1.32 3.33c.16.21 2.28 3.47 5.52 4.87.77.33 1.37.53 1.84.68.77.24 1.48.21 2.03.13.62-.09 1.92-.78 2.19-1.54.27-.75.27-1.4.19-1.54-.08-.13-.29-.21-.62-.37Z"/></svg>
+    <span class="zap-flutuante-texto">Fale com a gente</span>
+  </a>
+  </aside>
+<?php endif; ?>
+
 <!-- Avisos curtos (item adicionado, item removido). Preenchido por assets/js/ui.js.
      O leitor de tela ouve a frase pela região aria-live ao lado, não os botões. -->
 <section class="avisos" data-toast-area aria-label="Avisos"></section>

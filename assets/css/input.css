@@ -4066,4 +4066,83 @@ a.loja-acao:hover {
     padding: 4rem 3rem;
   }
 }
+
+/* ---------- Botão flutuante do WhatsApp ----------
+   Canto de baixo, à direita, em todas as páginas. Verde escuro do WhatsApp:
+   o branco passa 5:1 e o círculo se destaca do fundo claro (3:1). Fica abaixo
+   da gaveta do carrinho (z-index 70) e dos avisos (80). No celular é um
+   círculo de 3.5rem; do tablet em diante, pílula com o texto. */
+.zap-flutuante {
+  position: fixed;
+  right: 1rem;
+  bottom: calc(1rem + env(safe-area-inset-bottom));
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 999px;
+  background-color: #15803d;
+  color: #fff;
+  box-shadow: 0 10px 24px rgb(21 128 61 / 0.35), 0 2px 6px rgb(42 23 16 / 0.2);
+  transition: background-color 0.15s var(--ease-massa), translate 0.15s var(--ease-massa);
+}
+
+.zap-flutuante:hover {
+  background-color: #166534;
+  translate: 0 -2px;
+}
+
+.zap-flutuante:focus-visible {
+  outline: 3px solid var(--color-ink);
+  outline-offset: 3px;
+}
+
+.zap-flutuante svg {
+  flex-shrink: 0;
+  width: 1.875rem;
+  height: 1.875rem;
+}
+
+.zap-flutuante-texto {
+  display: none;
+}
+
+/* No carrinho, no celular, a barra "Fechar pedido" já ocupa o pé da tela. */
+@media (max-width: 63.999rem) {
+  body:has(.barra-pedido:not(.oculto)) .zap-flutuante {
+    display: none;
+  }
+}
+
+@media (min-width: 48rem) {
+  .zap-flutuante {
+    right: 1.5rem;
+    bottom: 1.5rem;
+    width: auto;
+    padding: 0 1.25rem 0 1rem;
+    font-weight: 700;
+  }
+
+  .zap-flutuante svg {
+    width: 1.625rem;
+    height: 1.625rem;
+  }
+
+  .zap-flutuante-texto {
+    display: inline;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zap-flutuante {
+    transition: none;
+  }
+
+  .zap-flutuante:hover {
+    translate: none;
+  }
+}
 }
