@@ -184,3 +184,25 @@ Inclui o código completo, o painel, a integração de promoções, as migraçõ
 `localhost` significa o computador onde você está abrindo o navegador. O link local de Richard não abre a aplicação no computador do colega; o colega precisa iniciar sua própria cópia conforme este guia.
 
 Repositório do grupo: https://github.com/rocharichard061/dolce-delicias. Para acessar pelo GitHub, um repositório privado precisa permitir o acesso do colega; o ZIP pode ser usado sem Git.
+
+## 11. Publicar na Vercel
+
+O site roda na Vercel como uma função PHP (`api/index.php`, runtime `vercel-php`) e usa um Postgres hospedado. As fotos e os PDFs enviados pelo painel ficam no banco (tabela `arquivos`), e a sessão do login também (tabela `sessoes`), porque o disco da Vercel é temporário. Por isso o limite de upload é de 4 MB.
+
+1. Na Vercel, abra o projeto e vá em **Storage → Create Database → Neon (Postgres)**. Escolha a região São Paulo (`sa-east-1`) e ligue o banco ao projeto. A Vercel cria a variável `DATABASE_URL` sozinha.
+2. Em **Settings → Environment Variables**, confira se `DATABASE_URL` existe em Production e Preview.
+3. Copie o banco local para o novo (ele precisa estar vazio). Pegue a URL em **Storage → o banco → .env.local** e rode, com o Docker ligado:
+
+   ```bash
+   DATABASE_URL='cole-a-url-aqui' sh bin/copiar-banco-para-vercel.sh
+   ```
+
+   Para começar com o banco vazio em vez de copiar, rode as migrations e o seed apontando para ele:
+
+   ```bash
+   docker compose run --rm -e DATABASE_URL='cole-a-url-aqui' app sh -c "php bin/console.php migrate && php bin/console.php seed"
+   ```
+
+4. Envie a branch para o GitHub. A Vercel gera o deploy sozinha.
+
+Se você já tinha fotos enviadas pelo painel na versão em disco, rode `php bin/console.php importar-uploads` uma vez antes de copiar o banco.

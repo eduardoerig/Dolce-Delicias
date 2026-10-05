@@ -1,0 +1,9 @@
+# Só o que o deploy precisa. O código vem do git; isto vale para `vercel deploy` local.
+node_modules
+vendor
+imagens-exemplo
+imgReferencias-public
+storage/uploads/*
+storage/logs/*
+docker-compose.override.yml
+.env

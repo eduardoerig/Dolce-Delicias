@@ -1,0 +1,17 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build && rm -rf dist && mkdir -p dist && cp -r public/assets dist/assets",
+  "outputDirectory": "dist",
+  "regions": ["gru1"],
+  "functions": {
+    "api/index.php": {
+      "runtime": "vercel-php@0.7.3",
+      "excludeFiles": "{node_modules/**,public/assets/**,dist/**,tests/**,docs/**,imgReferencias-public/**,imagens-exemplo/**,storage/**}"
+    }
+  },
+  "routes": [
+    { "src": "/assets/(.*)", "headers": { "Cache-Control": "public, max-age=3600" }, "continue": true },
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/api/index.php" }
+  ]
+}

@@ -483,9 +483,11 @@ function dd_imagem(?string $caminho): ?string
     if (!$caminho) {
         return null;
     }
-    if (preg_match('~^/media/([a-f0-9]{48}\.(jpg|png|webp))$~D', $caminho, $m)) return is_file(DD_BASE . '/storage/uploads/' . $m[1]) ? $caminho : null;
+    // Fotos do painel ficam no banco (tabela arquivos) e as views não consultam o banco.
+    if (preg_match('~^/media/[a-f0-9]{48}\.(jpg|png|webp)$~D', $caminho)) return $caminho;
     if (!str_starts_with($caminho, '/assets/') || str_contains($caminho, '..')) return null;
-    $arquivo = DD_BASE . '/public/' . ltrim($caminho, '/');
+    // Confere na fonte (assets/), que vai junto na função da Vercel; public/assets é cópia do build.
+    $arquivo = DD_BASE . '/' . ltrim($caminho, '/');
     return is_file($arquivo) ? $caminho : null;
 }
 

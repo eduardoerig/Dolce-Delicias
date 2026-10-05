@@ -28,7 +28,7 @@ final class DomainTest extends TestCase {
  public function testPasswordHash(): void {$hash=password_hash('UmaSenhaLonga123',PASSWORD_DEFAULT);self::assertTrue(password_verify('UmaSenhaLonga123',$hash));self::assertFalse(password_verify('errada',$hash));}
  public function testCsrf(): void {$_SESSION=[];$token=Csrf::token();Csrf::check($token);self::assertSame(64,strlen($token));$this->expectException(HttpException::class);Csrf::check('forjado');}
  public function testUploadValidationAndTraversal(): void {
-  $u=new UploadService(sys_get_temp_dir());self::assertNull($u->path('../../etc/passwd'));
+  $u=new UploadService();self::assertNull($u->get('../../etc/passwd'));
   $file=tempnam(sys_get_temp_dir(),'dolce');
   try {file_put_contents($file,base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jfZkAAAAASUVORK5CYII='));self::assertSame('png',$u->validate($file,'image',filesize($file)));file_put_contents($file,'%PDF-1.4' . "\n%%EOF");self::assertSame('pdf',$u->validate($file,'pdf',filesize($file)));file_put_contents($file,'<?php echo 1;');$this->expectException(ValidationException::class);$u->validate($file,'image',filesize($file));} finally {unlink($file);}
  }

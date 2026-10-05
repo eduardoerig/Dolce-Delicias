@@ -32,3 +32,4 @@ imagens-exemplo/originais/
 
 # Referências do usuário (PNG grandes): os WebP otimizados estão em assets/img/recortes/
 imgReferencias-public/*.png
+/dist/

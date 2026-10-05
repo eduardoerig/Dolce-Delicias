@@ -20,7 +20,15 @@ try {
   if($version){$db->beginTransaction();$db->exec(file_get_contents(dirname(__DIR__).'/database/migrations/'.str_replace('.up.sql','.down.sql',$version)));$repo->query('DELETE FROM migrations WHERE version=?',[$version]);$db->commit();echo "Revertida: $version\n";}
  } elseif($command==='seed') {
   require dirname(__DIR__).'/database/seeds/legacy.php';
- } else {fwrite(STDERR,"Uso: php bin/console.php migrate|seed|rollback\n");exit(1);}
+ } elseif($command==='importar-uploads') {
+  // Leva as fotos e PDFs da versão antiga (em disco, storage/uploads) para a tabela arquivos.
+  $uploads=new App\Services\UploadService($db);$total=0;
+  foreach(glob(dirname(__DIR__).'/storage/uploads/*') as $file) {
+   if(!preg_match('/^[a-f0-9]{48}\.(pdf|jpg|png|webp)$/D',basename($file)))continue;
+   $uploads->save(basename($file),(string)file_get_contents($file));$total++;
+  }
+  echo "Arquivos importados: $total\n";
+ } else {fwrite(STDERR,"Uso: php bin/console.php migrate|seed|rollback|importar-uploads\n");exit(1);}
 } catch(Throwable $e) {
  if(isset($db)&&$db->inTransaction())$db->rollBack();
  fwrite(STDERR,$e->getMessage()."\n");exit(1);

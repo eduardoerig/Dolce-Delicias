@@ -19,7 +19,7 @@ final class DatabaseTest extends TestCase {
   $this->admin=$this->repo->save('usuarios',['nome'=>'Admin','login'=>'admin','senha_hash'=>password_hash('TesteSeguro123!',PASSWORD_DEFAULT),'perfil'=>'ADMIN'],null);
   $this->category=$this->repo->save('categorias',['nome'=>'Salgados','slug'=>'salgados'],null);
   $this->unit=$this->repo->save('unidades',['nome'=>'Matriz','slug'=>'matriz','tipo_unidade'=>'MATRIZ'],null);
-  $this->service=new CatalogService($this->repo,new UploadService(sys_get_temp_dir().'/dolce-tests'));
+  $this->service=new CatalogService($this->repo,new UploadService($this->repo->db));
  }
  protected function tearDown(): void {
   if(isset($this->repo)) {if($this->repo->db->inTransaction())$this->repo->db->rollBack();$this->repo->db->exec('SET search_path TO public; DROP SCHEMA '.$this->schema.' CASCADE');}
