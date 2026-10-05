@@ -94,33 +94,33 @@ $iconeInstagram = '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="
 
 <div class="pagina-sobre bg-farinha">
 
-  <section class="sobre-abertura" aria-labelledby="titulo-sobre">
-    <div class="sobre-abertura-grade mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="sobre-abertura-texto">
+  <section class="abertura" aria-labelledby="titulo-sobre">
+    <div class="abertura-grade mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="abertura-texto">
         <nav aria-label="Você está aqui" class="flex items-center gap-2 text-sm font-semibold">
           <a href="/" class="rounded underline-offset-4 hover:underline">Início</a>
           <span aria-hidden="true">/</span>
           <span aria-current="page">A empresa</span>
         </nav>
 
-        <h1 id="titulo-sobre" class="sobre-abertura-titulo">
+        <h1 id="titulo-sobre" class="abertura-titulo">
           <span class="sr-only">A Dolce Delícias: </span><?= e($assinatura !== '' ? $assinatura . '.' : ($chamada !== '' ? $chamada . '.' : 'A Dolce Delícias.')) ?>
         </h1>
 
-        <p class="sobre-abertura-frase">
+        <p class="abertura-frase">
           Salgados artesanais, pães e mini pizzas feitos do zero em Toledo, para festas, escolas e o café do dia a dia.
         </p>
 
-        <div class="sobre-botoes">
-          <a href="/#catalogo" class="sobre-botao sobre-botao-amarelo">Ver o catálogo</a>
+        <div class="botoes-pilula">
+          <a href="/#catalogo" class="botao-pilula botao-pilula-amarelo">Ver o catálogo</a>
           <?php if ($linkZap !== ''): ?>
-            <a href="<?= e($linkZap) ?>" target="_blank" rel="noopener noreferrer" class="sobre-botao sobre-botao-claro"><?= $iconeZap ?>Pedir no WhatsApp</a>
+            <a href="<?= e($linkZap) ?>" target="_blank" rel="noopener noreferrer" class="botao-pilula botao-pilula-claro"><?= $iconeZap ?>Pedir no WhatsApp</a>
           <?php endif; ?>
         </div>
       </div>
 
       <?php if ($fotoOficial): ?>
-        <div class="sobre-abertura-foto">
+        <div class="abertura-foto">
           <img src="<?= e($fotoOficial) ?>" srcset="<?= e((string) dd_imagem('/assets/img/sobre/oficial-640.webp')) ?> 640w, <?= e($fotoOficial) ?> 960w" sizes="(min-width: 64rem) 28rem, 86vw" alt="Mulher de avental da Dolce Delícias na cozinha, de braços cruzados e sorrindo, com bolo, pão e salgados na bancada à frente" width="960" height="1200" fetchpriority="high" decoding="async">
         </div>
       <?php endif; ?>
@@ -151,7 +151,7 @@ $iconeInstagram = '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="
           </div>
         <?php endif; ?>
         <div class="sobre-cozinha-texto">
-          <p class="sobre-rotulo">Nossa história</p>
+          <p class="rotulo-secao">Nossa história</p>
           <h2 id="titulo-institucional">Começou com receitas feitas em casa</h2>
           <?php foreach ((array) $institucional['texto'] as $paragrafo): ?>
             <p><?= e((string) $paragrafo) ?></p>
@@ -165,8 +165,8 @@ $iconeInstagram = '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="
   <?php if ($portfolio !== []): ?>
     <section id="portfolio" class="sobre-frentes" aria-labelledby="titulo-portfolio">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="sobre-centro">
-          <p class="sobre-rotulo">O que fazemos</p>
+        <div class="centro">
+          <p class="rotulo-secao">O que fazemos</p>
           <h2 id="titulo-portfolio">Da festa ao lanche da escola</h2>
         </div>
         <ul class="sobre-frentes-lista">
@@ -183,8 +183,8 @@ $iconeInstagram = '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="
             </li>
           <?php endforeach; ?>
         </ul>
-        <div class="sobre-centro mt-10">
-          <a href="/#catalogo" class="sobre-botao sobre-botao-vermelho">Ver o catálogo</a>
+        <div class="centro mt-10">
+          <a href="/#catalogo" class="botao-pilula botao-pilula-vermelho">Ver o catálogo</a>
         </div>
       </div>
     </section>
@@ -194,8 +194,8 @@ $iconeInstagram = '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="
   <?php if (!empty($institucional['valores'])): ?>
     <section id="valores" class="sobre-crencas" aria-labelledby="titulo-valores">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="sobre-centro">
-          <p class="sobre-rotulo">No que acreditamos</p>
+        <div class="centro">
+          <p class="rotulo-secao">No que acreditamos</p>
           <h2 id="titulo-valores"><?= e($chamada !== '' ? $chamada . '.' : 'No que acreditamos') ?></h2>
         </div>
         <ul class="sobre-crencas-lista">
@@ -237,10 +237,10 @@ $iconeInstagram = '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="
   ?>
   <section id="video" class="sobre-video mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="titulo-video">
     <div class="sobre-video-texto">
-      <p class="sobre-rotulo">A Dolce de perto</p>
+      <p class="rotulo-secao">A Dolce de perto</p>
       <h2 id="titulo-video">Especialistas em lanche escolar</h2>
       <p class="sobre-video-frase">Dá o play e conheça um pouco do nosso dia a dia.</p>
-      <a href="https://www.instagram.com/p/<?= e($videoInstagram) ?>/" target="_blank" rel="noopener noreferrer" class="sobre-link"><?= $iconeInstagram ?>Ver no Instagram</a>
+      <a href="https://www.instagram.com/p/<?= e($videoInstagram) ?>/" target="_blank" rel="noopener noreferrer" class="link-icone"><?= $iconeInstagram ?>Ver no Instagram</a>
     </div>
     <?php // A janela mostra só o cabeçalho e o vídeo; curtidas e comentários do Instagram ficam cortados embaixo. ?>
     <div class="sobre-video-player">
@@ -249,20 +249,20 @@ $iconeInstagram = '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="
   </section>
 
   <?php // O convite final: o que fazer depois de conhecer a Dolce. ?>
-  <section class="sobre-convite mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="titulo-convite">
-    <div class="sobre-convite-caixa">
+  <section class="convite mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="titulo-convite">
+    <div class="convite-caixa">
       <h2 id="titulo-convite">Vamos fazer o seu pedido?</h2>
       <p>
         <?php if ($lugares !== ''): ?><?= e($lugares) ?>. <?php endif; ?>Escolha no catálogo e feche pelo WhatsApp.
       </p>
-      <div class="sobre-botoes">
-        <a href="/#catalogo" class="sobre-botao sobre-botao-amarelo">Ver o catálogo</a>
+      <div class="botoes-pilula">
+        <a href="/#catalogo" class="botao-pilula botao-pilula-amarelo">Ver o catálogo</a>
         <?php if ($linkZap !== ''): ?>
-          <a href="<?= e($linkZap) ?>" target="_blank" rel="noopener noreferrer" class="sobre-botao sobre-botao-claro"><?= $iconeZap ?>Pedir no WhatsApp</a>
+          <a href="<?= e($linkZap) ?>" target="_blank" rel="noopener noreferrer" class="botao-pilula botao-pilula-claro"><?= $iconeZap ?>Pedir no WhatsApp</a>
         <?php endif; ?>
       </div>
       <?php if ($instagram !== ''): ?>
-        <a href="https://www.instagram.com/<?= e($instagram) ?>/" target="_blank" rel="noopener noreferrer" class="sobre-link sobre-link-claro"><?= $iconeInstagram ?>@<?= e($instagram) ?></a>
+        <a href="https://www.instagram.com/<?= e($instagram) ?>/" target="_blank" rel="noopener noreferrer" class="link-icone link-icone-claro"><?= $iconeInstagram ?>@<?= e($instagram) ?></a>
       <?php endif; ?>
     </div>
   </section>

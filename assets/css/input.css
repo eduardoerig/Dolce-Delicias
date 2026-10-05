@@ -1525,26 +1525,6 @@ a.loja-acao:hover {
   text-transform: uppercase;
 }
 
-/* Ação sobre fundo vermelho: o amarelo carimbo, como o botão do herói. */
-.botao-amarelo {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  min-height: 3rem;
-  padding: 0.5rem 1.5rem;
-  border-radius: 999px;
-  background-color: var(--color-accent);
-  color: var(--color-ink);
-  font-size: 1rem;
-  font-weight: 700;
-  transition: background-color 0.15s var(--ease-massa);
-}
-
-.botao-amarelo:hover {
-  background-color: color-mix(in oklab, var(--color-accent) 86%, var(--color-ink));
-}
-
 /* ---------- Herói de cada página ----------
    partials/heroi-foto.php, com texto branco (Seu pedido): foto de fundo
    com uma camada escura por cima. No
@@ -1554,7 +1534,7 @@ a.loja-acao:hover {
      acima de 4.5:1 sobre qualquer foto.
 
    A home, A empresa e Unidades têm heróis próprios (.heroi-cento,
-   .sobre-abertura, .heroi-balcao). */
+   .abertura, que A empresa e Unidades dividem). */
 
 .heroi-foto {
   position: relative;
@@ -2068,121 +2048,6 @@ a.loja-acao:hover {
 @media (min-width: 64rem) {
   .barra-pedido {
     display: none;
-  }
-}
-
-/* ---------- Unidades: herói "balcão" ----------
-   A foto de uma loja (a vendedora arrumando os pães) ocupa o herói; o texto
-   e os dois botões (a matriz, as outras lojas) ficam sobre o marrom. No celular e no tablet em pé a
-   foto vem em cima, esmaecendo no marrom, e o texto embaixo; do computador
-   em diante a foto ocupa tudo e o marrom sobe do lado esquerdo, onde fica o
-   texto: a vendedora, à direita, nunca fica atrás dele. */
-.heroi-balcao {
-  position: relative;
-  isolation: isolate;
-  display: flex;
-  flex-direction: column;
-  min-height: calc(100vh - 4.5rem - 1px);
-  min-height: calc(100svh - 4.5rem - 1px);
-  overflow: hidden;
-  background-color: var(--color-ink);
-  color: #fff;
-}
-
-.heroi-balcao :focus-visible {
-  outline-color: #fff;
-}
-
-.heroi-balcao-foto {
-  position: relative;
-  display: block;
-  flex: none;
-  height: max(15rem, 44svh);
-}
-
-.heroi-balcao-foto img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 22%;
-}
-
-/* O pé da foto esmaece no marrom do texto. */
-.heroi-balcao-foto::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, var(--color-ink) 0, rgb(42 23 16 / 0.6) 22%, rgb(42 23 16 / 0) 48%);
-}
-
-.heroi-balcao-conteudo {
-  position: relative;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: center;
-  margin-top: -2.5rem;
-  padding-bottom: 2.25rem;
-}
-
-.heroi-balcao-titulo {
-  margin-top: 0.75rem;
-  font-size: clamp(2.5rem, 11vw, 6rem);
-  line-height: 0.92;
-  text-transform: uppercase;
-}
-
-.heroi-balcao-frase {
-  max-width: 34rem;
-  margin-top: 0.875rem;
-  font-size: 1.0625rem;
-  line-height: 1.6;
-  color: rgb(255 255 255 / 0.88);
-}
-
-@media (min-width: 48rem) {
-  .heroi-balcao-frase {
-    font-size: 1.1875rem;
-  }
-}
-
-@media (min-width: 64rem) {
-  .heroi-balcao-foto {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    height: auto;
-  }
-
-  .heroi-balcao-foto img {
-    object-position: 64% 30%;
-  }
-
-  /* O marrom sobe da esquerda e some antes da vendedora. */
-  .heroi-balcao-foto::after {
-    background: linear-gradient(90deg, rgb(42 23 16 / 0.96) 0, rgb(42 23 16 / 0.9) 34%, rgb(42 23 16 / 0.45) 52%, rgb(42 23 16 / 0) 68%);
-  }
-
-  .heroi-balcao-conteudo {
-    margin-top: 0;
-    padding-block: 3rem;
-  }
-
-  .heroi-balcao-texto {
-    max-width: min(38rem, 46%);
-  }
-}
-
-/* A foto se aproxima devagar uma vez, ao chegar. */
-@media (prefers-reduced-motion: no-preference) {
-  .heroi-balcao-foto img {
-    animation: balcao-chega 1.6s var(--ease-massa) both;
-  }
-}
-
-@keyframes balcao-chega {
-  from {
-    scale: 1.08;
   }
 }
 
@@ -3224,51 +3089,16 @@ a.loja-acao:hover {
   }
 }
 
-/* ---------- Unidades: matriz em faixa, lojas em cartões ----------
-   A matriz é a única loja que recebe pedidos do site, então ganha a caixa
-   marrom, separada do herói: foto à esquerda, dados em branco à direita,
-   ações em amarelo. As outras lojas vêm em cartões retos ao lado do título
-   (que fica parado no computador). No fim, o convite para encomendar. */
-
-/* Botão de contorno claro, para fundo escuro. */
-.botao-vazado {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  min-height: 3rem;
-  padding: 0.5rem 1.5rem;
-  border: 1.5px solid rgb(255 255 255 / 0.8);
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 700;
-  transition: background-color 0.15s var(--ease-massa);
-}
-
-.botao-vazado:hover {
-  background-color: rgb(255 255 255 / 0.12);
-}
-
-.pagina-unidades .botao-amarelo,
-.pagina-unidades .botao-vazado {
-  border-radius: 0;
-  font-size: 0.875rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.heroi-balcao-botoes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 1.75rem;
-}
+/* ---------- Unidades: matriz em caixa, lojas em cartões ----------
+   Mesmo desenho arredondado de A empresa (a abertura e o convite são as
+   peças .abertura e .convite, mais abaixo). A matriz é a única loja que
+   recebe pedidos do site, então ganha a caixa marrom de cantos redondos:
+   foto à esquerda, dados em branco à direita, ações em amarelo. As outras
+   lojas vêm em cartões brancos numa faixa clara entre curvas. */
 
 /* Matriz. */
-/* A caixa marrom fica separada do herói por um respiro claro, para as duas
-   fotos não emendarem. No celular vai de ponta a ponta. */
 .matriz-faixa {
-  padding-top: 2.5rem;
+  padding: 1rem 1rem 0;
   scroll-margin-top: 2rem;
 }
 
@@ -3278,6 +3108,8 @@ a.loja-acao:hover {
 
 .matriz-faixa-grade {
   display: grid;
+  overflow: hidden;
+  border-radius: 1.5rem;
   background-color: var(--color-ink);
   color: #fff;
 }
@@ -3299,12 +3131,13 @@ a.loja-acao:hover {
 }
 
 .matriz-faixa-texto {
-  padding: 2.5rem 1rem 3rem;
+  padding: 2.25rem 1.5rem 2.75rem;
 }
 
 .matriz-selo {
   display: inline-block;
-  padding: 0.3rem 0.75rem;
+  padding: 0.3rem 0.875rem;
+  border-radius: 999px;
   background-color: var(--color-accent);
   color: var(--color-ink);
   font-size: 0.8125rem;
@@ -3379,44 +3212,25 @@ a.loja-acao:hover {
   text-underline-offset: 4px;
 }
 
-/* Outras lojas: título com a fachada desenhada e os cartões ao lado. */
+/* Outras lojas: título centralizado e os cartões embaixo, na faixa clara
+   entre curvas (.faixa-curva). */
 .lojas-secao {
-  display: grid;
-  gap: 2rem;
-  padding-top: 4rem;
-  padding-bottom: 4.5rem;
   scroll-margin-top: 4.5rem;
-}
-
-.lojas-secao h2 {
-  font-size: clamp(2rem, 7vw, 3rem);
-  line-height: 1.05;
-}
-
-.lojas-secao-cabeca > p {
-  max-width: 26rem;
-  margin-top: 0.75rem;
-  font-size: 1.0625rem;
-  line-height: 1.6;
-  color: var(--color-crust);
-}
-
-.lojas-secao-fachada {
-  display: none;
 }
 
 .lojas-cartoes {
   display: grid;
   gap: 1rem;
+  margin-top: 2.5rem;
 }
 
 .loja-cartao {
   display: flex;
   flex-direction: column;
   gap: 0.625rem;
-  padding: 1.25rem 1rem;
+  padding: 1.5rem 1.25rem;
   border: 1px solid var(--color-linha);
-  border-top: 4px solid var(--color-ink);
+  border-radius: 1.25rem;
   background-color: var(--color-papel);
   scroll-margin-top: 6rem;
 }
@@ -3424,7 +3238,6 @@ a.loja-acao:hover {
 /* Vindo de "Onde encontrar" (/unidades#slug): o cartão certo acende. */
 .loja-cartao:target {
   border-color: var(--color-brand);
-  border-top-color: var(--color-brand);
   box-shadow: 0 0 0 2px var(--color-brand);
 }
 
@@ -3446,53 +3259,10 @@ a.loja-acao:hover {
 }
 
 .pagina-unidades .loja-acao {
-  padding-inline: 0.625rem;
-  border-radius: 0;
-}
-
-/* Fecho: convite para encomendar, só texto. No celular o botão vem embaixo
-   do texto; do tablet em diante, à direita dele. */
-.unidades-fecho {
-  padding-bottom: 4.5rem;
-}
-
-.unidades-fecho-texto {
-  padding: 2rem 1.5rem 2.25rem;
-  background:
-    radial-gradient(circle at 92% 50%, rgb(225 5 30 / 0.5) 0, rgb(225 5 30 / 0) 55%),
-    var(--color-ink);
-  color: #fff;
-}
-
-.unidades-fecho-texto :focus-visible {
-  outline-color: #fff;
-}
-
-.unidades-fecho h2 {
-  font-size: clamp(1.75rem, 6vw, 2.5rem);
-  line-height: 1.05;
-}
-
-.unidades-fecho-texto p {
-  max-width: 30rem;
-  margin-top: 0.5rem;
-  margin-bottom: 1.25rem;
-  line-height: 1.6;
-  color: rgb(255 255 255 / 0.88);
-}
-
-.unidades-fecho .botao-amarelo {
-  border-radius: 0;
-  font-size: 0.875rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  padding-inline: 0.75rem;
 }
 
 @media (min-width: 40rem) {
-  .loja-cartao {
-    padding-inline: 1.25rem;
-  }
-
   .matriz-dados {
     grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
   }
@@ -3502,29 +3272,7 @@ a.loja-acao:hover {
   }
 }
 
-@media (min-width: 48rem) {
-  .unidades-fecho-texto {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    column-gap: 3rem;
-    padding: 3rem;
-  }
-
-  .unidades-fecho-texto .botao-amarelo {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-  }
-
-  .unidades-fecho-texto p {
-    margin-bottom: 0;
-  }
-}
-
 @media (min-width: 64rem) {
-  .heroi-balcao {
-    min-height: min(46rem, calc(100svh - 4.5rem - 1px));
-  }
 
   .matriz-faixa {
     padding: 5rem 2rem 0;
@@ -3547,25 +3295,9 @@ a.loja-acao:hover {
     padding: 3.5rem;
   }
 
-  .lojas-secao {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr);
-    align-items: start;
-    gap: 3rem;
-    padding-top: 6rem;
-    padding-bottom: 6rem;
-  }
-
-  .lojas-secao-cabeca {
-    position: sticky;
-    top: 6.5rem;
-  }
-
-  .lojas-secao-fachada {
-    display: block;
-    width: 100%;
-    max-width: 18rem;
-    height: auto;
-    margin-top: 2rem;
+  .lojas-cartoes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
   }
 }
 
@@ -3575,33 +3307,35 @@ a.loja-acao:hover {
    seções de leitura, fotos e cartões com cantos arredondados, divisórias
    curvas e botões em pílula. A cor e a letra são as da Dolce: vermelho na
    abertura, Alfa Slab nos títulos. Texto nunca passa sobre comida. */
-.pagina-sobre h2 {
+.pagina-sobre h2,
+.lojas-secao h2,
+.convite h2 {
   font-size: clamp(1.875rem, 6vw, 2.75rem);
   line-height: 1.08;
   text-wrap: balance;
 }
 
 /* Rótulo acima do título: cor da marca, caixa normal. */
-.sobre-rotulo {
+.rotulo-secao {
   font-size: 1rem;
   font-weight: 700;
   color: var(--color-brand-escuro);
 }
 
-.sobre-rotulo + h2 {
+.rotulo-secao + h2 {
   margin-top: 0.5rem;
 }
 
-.sobre-centro {
+.centro {
   text-align: center;
 }
 
-.sobre-centro h2 {
+.centro h2 {
   max-width: 40rem;
   margin-inline: auto;
 }
 
-.sobre-centro-frase {
+.centro-frase {
   max-width: 34rem;
   margin: 0.75rem auto 0;
   font-size: 1.125rem;
@@ -3610,13 +3344,13 @@ a.loja-acao:hover {
 }
 
 /* Botões em pílula, como os das referências. */
-.sobre-botoes {
+.botoes-pilula {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
 }
 
-.sobre-botao {
+.botao-pilula {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -3629,34 +3363,34 @@ a.loja-acao:hover {
   transition: background-color 0.15s var(--ease-massa), border-color 0.15s var(--ease-massa);
 }
 
-.sobre-botao-amarelo {
+.botao-pilula-amarelo {
   background-color: var(--color-accent);
   color: var(--color-ink);
 }
 
-.sobre-botao-amarelo:hover {
+.botao-pilula-amarelo:hover {
   background-color: color-mix(in oklab, var(--color-accent) 86%, var(--color-ink));
 }
 
-.sobre-botao-claro {
+.botao-pilula-claro {
   border-color: rgb(255 255 255 / 0.85);
   color: #fff;
 }
 
-.sobre-botao-claro:hover {
+.botao-pilula-claro:hover {
   background-color: rgb(255 255 255 / 0.14);
 }
 
-.sobre-botao-vermelho {
+.botao-pilula-vermelho {
   background-color: var(--color-brand);
   color: #fff;
 }
 
-.sobre-botao-vermelho:hover {
+.botao-pilula-vermelho:hover {
   background-color: var(--color-brand-escuro);
 }
 
-.sobre-link {
+.link-icone {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -3668,20 +3402,20 @@ a.loja-acao:hover {
   text-underline-offset: 4px;
 }
 
-.sobre-link svg {
+.link-icone svg {
   color: var(--color-brand-escuro);
 }
 
 /* 1. Abertura vermelha, terminando numa curva farinha. Branco sobre o
    vermelho passa 4,95:1. */
-.sobre-abertura {
+.abertura {
   position: relative;
   padding-bottom: 4rem;
   background-color: var(--color-brand);
   color: #fff;
 }
 
-.sobre-abertura::after {
+.abertura::after {
   content: "";
   position: absolute;
   inset: auto 0 -1px;
@@ -3690,11 +3424,11 @@ a.loja-acao:hover {
   background-color: var(--color-farinha);
 }
 
-.sobre-abertura :focus-visible {
+.abertura :focus-visible {
   outline-color: #fff;
 }
 
-.sobre-abertura-grade {
+.abertura-grade {
   position: relative;
   z-index: 1;
   display: grid;
@@ -3702,7 +3436,7 @@ a.loja-acao:hover {
   padding-top: 2rem;
 }
 
-.sobre-abertura-titulo {
+.abertura-titulo {
   max-width: 14ch;
   margin-top: 1.25rem;
   font-size: clamp(2.375rem, 9vw, 4.25rem);
@@ -3710,7 +3444,7 @@ a.loja-acao:hover {
   text-wrap: balance;
 }
 
-.sobre-abertura-frase {
+.abertura-frase {
   max-width: 30rem;
   margin-top: 1rem;
   margin-bottom: 1.75rem;
@@ -3718,12 +3452,12 @@ a.loja-acao:hover {
   line-height: 1.6;
 }
 
-.sobre-abertura-foto {
+.abertura-foto {
   justify-self: center;
   width: min(100%, 26rem);
 }
 
-.sobre-abertura-foto img {
+.abertura-foto img {
   display: block;
   width: 100%;
   height: auto;
@@ -3786,7 +3520,7 @@ a.loja-acao:hover {
   border-radius: 1.5rem;
 }
 
-.sobre-cozinha-texto > p:not(.sobre-rotulo) {
+.sobre-cozinha-texto > p:not(.rotulo-secao) {
   max-width: 34rem;
   margin-top: 1rem;
   font-size: 1.0625rem;
@@ -3956,11 +3690,11 @@ a.loja-acao:hover {
 }
 
 /* 8. Convite final: caixa vermelha arredondada, centralizada. */
-.sobre-convite {
+.convite {
   padding-bottom: 5rem;
 }
 
-.sobre-convite-caixa {
+.convite-caixa {
   display: grid;
   justify-items: center;
   gap: 1rem;
@@ -3973,27 +3707,27 @@ a.loja-acao:hover {
   text-align: center;
 }
 
-.sobre-convite-caixa :focus-visible {
+.convite-caixa :focus-visible {
   outline-color: #fff;
 }
 
-.sobre-convite-caixa p {
+.convite-caixa p {
   max-width: 32rem;
   font-size: 1.125rem;
   line-height: 1.6;
 }
 
-.sobre-convite-caixa .sobre-botoes {
+.convite-caixa .botoes-pilula {
   justify-content: center;
   margin-top: 0.5rem;
 }
 
-.sobre-link-claro {
+.link-icone-claro {
   color: #fff;
   text-decoration-color: var(--color-accent);
 }
 
-.sobre-link-claro svg {
+.link-icone-claro svg {
   color: #fff;
 }
 
@@ -4020,22 +3754,22 @@ a.loja-acao:hover {
 }
 
 @media (min-width: 64rem) {
-  .sobre-abertura {
+  .abertura {
     padding-bottom: 5.5rem;
   }
 
-  .sobre-abertura::after {
+  .abertura::after {
     height: 5rem;
   }
 
-  .sobre-abertura-grade {
+  .abertura-grade {
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
     align-items: center;
     gap: 4rem;
     padding-top: 3rem;
   }
 
-  .sobre-abertura-foto {
+  .abertura-foto {
     justify-self: end;
     width: min(100%, 28rem);
   }
@@ -4058,11 +3792,11 @@ a.loja-acao:hover {
     padding-block: 6.5rem;
   }
 
-  .sobre-convite {
+  .convite {
     padding-bottom: 6.5rem;
   }
 
-  .sobre-convite-caixa {
+  .convite-caixa {
     padding: 4rem 3rem;
   }
 }
@@ -4143,6 +3877,67 @@ a.loja-acao:hover {
 
   .zap-flutuante:hover {
     translate: none;
+  }
+}
+
+/* Faixa clara entre curvas, como "O que fazemos" em A empresa. */
+.faixa-curva {
+  position: relative;
+  margin-top: 3.5rem;
+  padding-block: 5rem;
+  background-color: var(--color-polvilho);
+}
+
+.faixa-curva::before,
+.faixa-curva::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  height: 2.5rem;
+  background-color: var(--color-farinha);
+}
+
+.faixa-curva::before {
+  top: -1px;
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+}
+
+.faixa-curva::after {
+  bottom: -1px;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+
+.pagina-unidades .convite {
+  margin-top: 3.5rem;
+}
+
+/* Abertura com foto deitada (Unidades): no celular a foto em pé da loja;
+   do computador em diante a deitada, mais larga. */
+picture.abertura-foto {
+  display: block;
+}
+
+@media (min-width: 64rem) {
+  .abertura-grade-larga {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  }
+
+  .abertura-foto-larga {
+    width: min(100%, 36rem);
+  }
+
+  .abertura-foto-larga img {
+    aspect-ratio: 3 / 2;
+    object-position: 60% 35%;
+  }
+
+  .faixa-curva {
+    margin-top: 5rem;
+    padding-block: 6.5rem;
+  }
+
+  .pagina-unidades .convite {
+    margin-top: 5rem;
   }
 }
 }

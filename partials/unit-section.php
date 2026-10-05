@@ -85,9 +85,9 @@ $icone = [
         </dl>
 
         <div class="matriz-acoes">
-          <a href="/#catalogo" class="botao-amarelo">Fazer um pedido</a>
+          <a href="/#catalogo" class="botao-pilula botao-pilula-amarelo">Fazer um pedido</a>
           <?php if ($whatsapp !== ''): ?>
-            <a href="https://wa.me/<?= e($whatsapp) ?>?text=<?= $msgUnidade ?>" target="_blank" rel="noopener noreferrer" class="botao-vazado"><span class="h-5 w-5"><?= $icone['zap'] ?></span>WhatsApp</a>
+            <a href="https://wa.me/<?= e($whatsapp) ?>?text=<?= $msgUnidade ?>" target="_blank" rel="noopener noreferrer" class="botao-pilula botao-pilula-claro"><span class="h-5 w-5"><?= $icone['zap'] ?></span>WhatsApp</a>
           <?php endif; ?>
           <?php if ($temPdf): ?>
             <a href="<?= e($pdf) ?>" download class="matriz-link"><span class="h-4 w-4"><?= $icone['pdf'] ?></span>Catálogo em PDF</a>

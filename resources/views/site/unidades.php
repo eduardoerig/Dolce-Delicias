@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * unidades.php — onde estão as lojas.
  *
- * Mesmo desenho de A empresa (cantos retos, fotos até a borda da tela). A
+ * Mesmo desenho de A empresa (cantos redondos, faixas com curvas). A
  * pergunta de quem chega é "qual fica perto, está aberta, como falo com
  * ela". Então a página responde nessa ordem:
  *
@@ -31,50 +31,58 @@ $descricaoPagina = 'Endereço, horário e WhatsApp de cada loja da Dolce Delíci
 include DD_BASE . '/partials/header.php';
 ?>
 
-<div class="pagina-institucional pagina-unidades bg-farinha">
+<?php
+/*
+ * Desenho arredondado, o mesmo de A empresa: abertura vermelha com a foto
+ * ao lado e curva no pé, a matriz numa caixa marrom de cantos redondos, as
+ * outras lojas em cartões numa faixa clara entre curvas e o convite final
+ * numa caixa vermelha. Botões em pílula.
+ */
+$fotoLoja    = dd_imagem('/assets/img/heroi/loja-1600.jpg');
+$fotoLojaCel = dd_imagem('/assets/img/heroi/loja-celular-780.jpg');
+$fotoLojaCel3x = dd_imagem('/assets/img/heroi/loja-celular-1170.jpg');
 
-  <?php
-  /*
-   * Herói "balcão": a foto de uma loja (a vendedora arrumando os pães) ocupa
-   * o herói; o texto fica sobre o marrom que sobe do lado esquerdo (no
-   * celular, a foto vem em cima e o texto embaixo). Dois caminhos: a matriz,
-   * que recebe os pedidos do site, e a lista das outras lojas.
-   */
-  $fotoLarga  = dd_imagem('/assets/img/heroi/loja-2400.jpg');
-  $fotoMedia  = dd_imagem('/assets/img/heroi/loja-1600.jpg');
-  $fotoCel    = dd_imagem('/assets/img/heroi/loja-celular-780.jpg');
-  $fotoCel3x  = dd_imagem('/assets/img/heroi/loja-celular-1170.jpg');
-  ?>
-  <section class="heroi-balcao" aria-labelledby="titulo-unidades">
-    <?php if ($fotoCel && $fotoMedia): ?>
-      <picture class="heroi-balcao-foto">
-        <source media="(min-width: 48rem)" srcset="<?= e($fotoMedia) ?> 1600w<?= $fotoLarga ? ', ' . e($fotoLarga) . ' 2400w' : '' ?>" sizes="100vw" width="2400" height="1600">
-        <img src="<?= e($fotoCel) ?>" srcset="<?= e($fotoCel) ?> 780w<?= $fotoCel3x ? ', ' . e($fotoCel3x) . ' 1170w' : '' ?>" sizes="100vw" alt="" width="780" height="1100" fetchpriority="high" decoding="async">
-      </picture>
-    <?php endif; ?>
+// WhatsApp da matriz para o convite final. Número vazio ou de exemplo não
+// vira botão — ver dd_whatsapp().
+$zapMatriz = dd_whatsapp(dd_matriz());
+$linkZap   = $zapMatriz !== ''
+    ? 'https://wa.me/' . $zapMatriz . '?text=' . rawurlencode('Olá! Vim pelo site da Dolce Delícias e quero fazer um pedido.')
+    : '';
+$iconeZap = '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.5 8.5 0 1 1 21 11.5Z"/></svg>';
+?>
 
-    <div class="heroi-balcao-conteudo mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="heroi-balcao-texto">
+<div class="pagina-unidades bg-farinha">
+
+  <section class="abertura" aria-labelledby="titulo-unidades">
+    <div class="abertura-grade abertura-grade-larga mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="abertura-texto">
         <nav aria-label="Você está aqui" class="flex items-center gap-2 text-sm font-semibold">
           <a href="/" class="rounded underline-offset-4 hover:underline">Início</a>
           <span aria-hidden="true">/</span>
           <span aria-current="page">Unidades</span>
         </nav>
-        <h1 id="titulo-unidades" class="heroi-balcao-titulo">Nossas unidades</h1>
-        <p class="heroi-balcao-frase">
+        <h1 id="titulo-unidades" class="abertura-titulo">Nossas unidades</h1>
+        <p class="abertura-frase">
           <?= e((string) count($unidades)) ?> lojas. O pedido feito pelo site vai para a matriz;
           nas outras você compra no balcão ou pelo WhatsApp de cada uma.
         </p>
 
-        <div class="heroi-balcao-botoes">
+        <div class="botoes-pilula">
           <?php foreach ($matrizes as $matrizAtalho): ?>
-            <a href="#<?= e((string) $matrizAtalho['slug']) ?>" class="botao-amarelo">Ver a matriz</a>
+            <a href="#<?= e((string) $matrizAtalho['slug']) ?>" class="botao-pilula botao-pilula-amarelo">Ver a matriz</a>
           <?php endforeach; ?>
           <?php if ($lojas !== []): ?>
-            <a href="#outras-lojas" class="botao-vazado">Outras <?= e((string) count($lojas)) ?> lojas</a>
+            <a href="#outras-lojas" class="botao-pilula botao-pilula-claro">Outras <?= e((string) count($lojas)) ?> lojas</a>
           <?php endif; ?>
         </div>
       </div>
+
+      <?php if ($fotoLoja && $fotoLojaCel): ?>
+        <picture class="abertura-foto abertura-foto-larga">
+          <source media="(min-width: 64rem)" srcset="<?= e($fotoLoja) ?> 1600w" sizes="36rem" width="1600" height="1067">
+          <img src="<?= e($fotoLojaCel) ?>" srcset="<?= e($fotoLojaCel) ?> 780w<?= $fotoLojaCel3x ? ', ' . e($fotoLojaCel3x) . ' 1170w' : '' ?>" sizes="86vw" alt="Atendente sorrindo enquanto arruma pães numa cesta, na prateleira da loja" width="780" height="1100" fetchpriority="high" decoding="async">
+        </picture>
+      <?php endif; ?>
     </div>
   </section>
 
@@ -83,27 +91,32 @@ include DD_BASE . '/partials/header.php';
   <?php endforeach; ?>
 
   <?php if ($lojas !== []): ?>
-    <section id="outras-lojas" class="lojas-secao mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="titulo-lojas">
-      <div class="lojas-secao-cabeca">
-        <h2 id="titulo-lojas">Outras lojas</h2>
-        <p>Balcão e WhatsApp de cada loja. Cada uma tem o próprio catálogo.</p>
-        <?php $fachadaClasse = 'lojas-secao-fachada'; include DD_BASE . '/partials/ilustra-fachada.php'; ?>
-      </div>
-      <ul class="lojas-cartoes">
-        <?php foreach ($lojas as $unidade): ?>
-          <?php include DD_BASE . '/partials/unit-section.php'; ?>
-        <?php endforeach; ?>
-      </ul>
-    </section>
+    <div class="faixa-curva">
+      <section id="outras-lojas" class="lojas-secao mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="titulo-lojas">
+        <div class="centro">
+          <p class="rotulo-secao">Perto de você</p>
+          <h2 id="titulo-lojas">Outras lojas</h2>
+          <p class="centro-frase">Balcão e WhatsApp de cada loja. Cada uma tem o próprio catálogo.</p>
+        </div>
+        <ul class="lojas-cartoes">
+          <?php foreach ($lojas as $unidade): ?>
+            <?php include DD_BASE . '/partials/unit-section.php'; ?>
+          <?php endforeach; ?>
+        </ul>
+      </section>
+    </div>
   <?php endif; ?>
 
-  <?php // Fecho: quem chegou até aqui pela loja pode fazer o pedido pelo site. ?>
-  <section class="unidades-fecho" aria-labelledby="titulo-fecho">
-    <div class="unidades-fecho-caixa mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="unidades-fecho-texto">
-        <h2 id="titulo-fecho">Quer encomendar?</h2>
-        <p>Monte o pedido no site e feche pelo WhatsApp da matriz, que prepara a encomenda.</p>
-        <a href="/#catalogo" class="botao-amarelo">Ver o catálogo</a>
+  <?php // Convite final: quem chegou até aqui pela loja pode fazer o pedido pelo site. ?>
+  <section class="convite mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="titulo-convite">
+    <div class="convite-caixa">
+      <h2 id="titulo-convite">Quer encomendar?</h2>
+      <p>Monte o pedido no site e feche pelo WhatsApp da matriz, que prepara a encomenda.</p>
+      <div class="botoes-pilula">
+        <a href="/#catalogo" class="botao-pilula botao-pilula-amarelo">Ver o catálogo</a>
+        <?php if ($linkZap !== ''): ?>
+          <a href="<?= e($linkZap) ?>" target="_blank" rel="noopener noreferrer" class="botao-pilula botao-pilula-claro"><?= $iconeZap ?>Pedir no WhatsApp</a>
+        <?php endif; ?>
       </div>
     </div>
   </section>
