@@ -439,6 +439,19 @@ details.dropdown:not([open]) > .dropdown-content {
   font-weight: 700;
 }
 
+/* A legend do fieldset é desenhada em cima da borda do grupo: o espaço de
+   cima ia para baixo dela e o título grudava no fio acima. Flutuando com
+   largura total, ela entra no fluxo como o título de "Preço por peça", e
+   todos os grupos ficam com o mesmo respiro. */
+.filtro-grupo legend {
+  float: left;
+  width: 100%;
+}
+
+.filtro-grupo legend + * {
+  clear: both;
+}
+
 .filtro-opcao {
   display: flex;
   align-items: center;
@@ -500,15 +513,17 @@ details.dropdown:not([open]) > .dropdown-content {
   color: var(--color-ink);
 }
 
-/* Escolha única em segmentos (era "Portion size" na referência). */
+/* Escolha única em segmentos (era "Portion size" na referência). A largura
+   de cada um parte do texto: "Encomenda" ganha mais espaço que "Tudo" e
+   não encosta nas bordas. */
 .segmentos {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: flex;
   gap: 0.375rem;
 }
 
 .segmentos label {
   position: relative;
+  flex: 1 1 auto;
   cursor: pointer;
 }
 
@@ -524,7 +539,7 @@ details.dropdown:not([open]) > .dropdown-content {
   align-items: center;
   justify-content: center;
   min-height: 2.5rem;
-  padding: 0 0.25rem;
+  padding: 0 0.625rem;
   border: 1px solid var(--color-linha);
   border-radius: 0.625rem;
   background-color: var(--color-papel);
