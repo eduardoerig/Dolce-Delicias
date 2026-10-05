@@ -33,14 +33,14 @@ include DD_BASE . '/partials/header.php';
 
 <?php
 /*
- * Desenho arredondado, o mesmo de A empresa: abertura vermelha com a foto
- * ao lado e curva no pé, a matriz numa caixa marrom de cantos redondos, as
- * outras lojas em cartões numa faixa clara entre curvas e o convite final
- * numa caixa vermelha. Botões em pílula.
+ * Desenho arredondado, o mesmo de A empresa: abertura com a foto da loja de
+ * fundo (escurecida onde fica o texto) e curva no pé, a matriz numa caixa
+ * marrom de cantos redondos, as outras lojas em cartões numa faixa clara
+ * entre curvas e o convite final numa caixa vermelha. Botões em pílula.
  */
-$fotoLoja    = dd_imagem('/assets/img/heroi/loja-1600.jpg');
-$fotoLojaCel = dd_imagem('/assets/img/heroi/loja-celular-780.jpg');
-$fotoLojaCel3x = dd_imagem('/assets/img/heroi/loja-celular-1170.jpg');
+$fotoLoja    = dd_imagem('/assets/img/heroi/loja-1600.webp');
+$fotoLojaCel = dd_imagem('/assets/img/heroi/loja-celular-780.webp');
+$fotoLojaCel3x = dd_imagem('/assets/img/heroi/loja-celular-1170.webp');
 
 // WhatsApp da matriz para o convite final. Número vazio ou de exemplo não
 // vira botão — ver dd_whatsapp().
@@ -53,8 +53,15 @@ $iconeZap = '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="curren
 
 <div class="pagina-unidades bg-farinha">
 
-  <section class="abertura" aria-labelledby="titulo-unidades">
-    <div class="abertura-grade abertura-grade-larga mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  <section class="abertura abertura-com-foto" aria-labelledby="titulo-unidades">
+    <?php // A foto da loja é o fundo: no celular a em pé, do computador em diante a deitada. O marrom escurece o lado do texto. ?>
+    <?php if ($fotoLoja && $fotoLojaCel): ?>
+      <picture class="abertura-fundo">
+        <source media="(min-width: 48rem)" srcset="<?= e($fotoLoja) ?> 1600w" sizes="100vw" width="1600" height="1067">
+        <img src="<?= e($fotoLojaCel) ?>" srcset="<?= e($fotoLojaCel) ?> 780w<?= $fotoLojaCel3x ? ', ' . e($fotoLojaCel3x) . ' 1170w' : '' ?>" sizes="100vw" alt="" width="780" height="1100" fetchpriority="high" decoding="async">
+      </picture>
+    <?php endif; ?>
+    <div class="abertura-grade mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="abertura-texto">
         <nav aria-label="Você está aqui" class="flex items-center gap-2 text-sm font-semibold">
           <a href="/" class="rounded underline-offset-4 hover:underline">Início</a>
@@ -76,13 +83,6 @@ $iconeZap = '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="curren
           <?php endif; ?>
         </div>
       </div>
-
-      <?php if ($fotoLoja && $fotoLojaCel): ?>
-        <picture class="abertura-foto abertura-foto-larga">
-          <source media="(min-width: 64rem)" srcset="<?= e($fotoLoja) ?> 1600w" sizes="36rem" width="1600" height="1067">
-          <img src="<?= e($fotoLojaCel) ?>" srcset="<?= e($fotoLojaCel) ?> 780w<?= $fotoLojaCel3x ? ', ' . e($fotoLojaCel3x) . ' 1170w' : '' ?>" sizes="86vw" alt="Atendente sorrindo enquanto arruma pães numa cesta, na prateleira da loja" width="780" height="1100" fetchpriority="high" decoding="async">
-        </picture>
-      <?php endif; ?>
     </div>
   </section>
 

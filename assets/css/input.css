@@ -3911,24 +3911,61 @@ a.loja-acao:hover {
   margin-top: 3.5rem;
 }
 
-/* Abertura com foto deitada (Unidades): no celular a foto em pé da loja;
-   do computador em diante a deitada, mais larga. */
-picture.abertura-foto {
-  display: block;
+/* Abertura com foto de fundo (Unidades): a foto da loja no lugar do
+   vermelho, cortada para cobrir. O marrom escurece onde fica o texto (75% ou
+   mais embaixo do texto: branco passa 4,5:1 sobre qualquer trecho da foto).
+   No celular o marrom cobre de cima para baixo, onde o texto fica; do tablet
+   em diante, da esquerda para a direita, e a vendedora fica à mostra. */
+.abertura-com-foto {
+  isolation: isolate;
+  min-height: min(38rem, calc(100svh - 4.5rem));
+  display: flex;
+  align-items: center;
+  padding-block: 1rem 6rem;
+  background-color: var(--color-ink);
+}
+
+.abertura-com-foto .abertura-grade {
+  width: 100%;
+}
+
+.abertura-fundo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.abertura-fundo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 70% 20%;
+}
+
+.abertura-fundo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(42 23 16 / 0.9) 0, rgb(42 23 16 / 0.82) 60%, rgb(42 23 16 / 0.45) 100%);
+}
+
+@media (min-width: 48rem) {
+  .abertura-fundo img {
+    object-position: 65% 30%;
+  }
+
+  .abertura-fundo::after {
+    background: linear-gradient(90deg, rgb(42 23 16 / 0.94) 0, rgb(42 23 16 / 0.88) 48%, rgb(42 23 16 / 0.4) 70%, rgb(42 23 16 / 0) 86%);
+  }
+
+  .abertura-com-foto .abertura-texto {
+    max-width: min(32rem, 44%);
+  }
 }
 
 @media (min-width: 64rem) {
-  .abertura-grade-larga {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
-  }
-
-  .abertura-foto-larga {
-    width: min(100%, 36rem);
-  }
-
-  .abertura-foto-larga img {
-    aspect-ratio: 3 / 2;
-    object-position: 60% 35%;
+  .abertura-com-foto {
+    min-height: min(42rem, calc(100svh - 4.5rem));
   }
 
   .faixa-curva {
