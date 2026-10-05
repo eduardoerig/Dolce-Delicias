@@ -65,8 +65,8 @@ return [
         'endereco'    => 'Rua das Palmeiras, 410 — Centro',
         'whatsapp'    => '5543999259373', // WhatsApp oficial (perfil @dolcedeliciasoficial): recebe os pedidos do site
         'horario'     => 'Seg a sex, 6h às 20h · Sáb e dom, 6h às 14h', // FICTÍCIO
-        'preparo'     => '48 horas para encomendas · balcão na hora', // FICTÍCIO
-        'sobre'       => 'A primeira loja e a cozinha central da Dolce. É daqui que saem as encomendas do site. Tem balcão com café, mesas e estacionamento na rua de trás.', // FICTÍCIO
+        'preparo'     => 'Encomendas com 48 horas de antecedência', // FICTÍCIO
+        'sobre'       => 'A primeira loja e a cozinha central da Dolce. É daqui que saem as encomendas do site.', // FICTÍCIO
         'mapaUrl'     => '', // FICTÍCIO: sem endereço real, sem link de mapa
         'imagem'      => '/assets/img/unidades/matriz.jpg', // FICTÍCIO
         'catalogoPdf' => '/catalogos/matriz.pdf',
@@ -82,8 +82,8 @@ return [
         'endereco'    => 'Av. Brasil, 1.250 — Jardim América',
         'whatsapp'    => '55000000000', // A FAZER: número real (o de exemplo não vira botão)
         'horario'     => 'Seg a sáb, 6h às 20h', // FICTÍCIO
-        'preparo'     => '48 horas para encomendas · balcão na hora', // FICTÍCIO
-        'sobre'       => 'Loja de esquina com balcão e café. Atende as escolas do bairro com o lanche do recreio.', // FICTÍCIO
+        'preparo'     => 'Encomendas com 48 horas de antecedência', // FICTÍCIO
+        'sobre'       => 'Atende as escolas do bairro com o lanche do recreio.', // FICTÍCIO
         'mapaUrl'     => '', // FICTÍCIO: sem endereço real, sem link de mapa
         'imagem'      => '/assets/img/unidades/unidade-1.jpg', // FICTÍCIO
         'catalogoPdf' => '/catalogos/unidade-1.pdf',
@@ -99,7 +99,7 @@ return [
         'endereco'    => 'Rua Sete de Setembro, 88 — Vila Nova',
         'whatsapp'    => '55000000000', // A FAZER: número real (o de exemplo não vira botão)
         'horario'     => 'Seg a sáb, 6h às 20h', // FICTÍCIO
-        'preparo'     => '48 horas para encomendas · balcão na hora', // FICTÍCIO
+        'preparo'     => 'Encomendas com 48 horas de antecedência', // FICTÍCIO
         'sobre'       => 'Perto do terminal de ônibus: o movimento forte é no café da manhã, com pão de queijo e salgado assado saindo cedo.', // FICTÍCIO
         'mapaUrl'     => '', // FICTÍCIO: sem endereço real, sem link de mapa
         'imagem'      => '/assets/img/unidades/unidade-2.jpg', // FICTÍCIO
@@ -116,7 +116,7 @@ return [
         'endereco'    => 'Rua das Acácias, 302 — Santa Mônica',
         'whatsapp'    => '55000000000', // A FAZER: número real (o de exemplo não vira botão)
         'horario'     => 'Seg a sáb, 6h às 20h', // FICTÍCIO
-        'preparo'     => '48 horas para encomendas · balcão na hora', // FICTÍCIO
+        'preparo'     => 'Encomendas com 48 horas de antecedência', // FICTÍCIO
         'sobre'       => 'Loja com mesas na calçada, café e salgado quente o dia todo.', // FICTÍCIO
         'mapaUrl'     => '', // FICTÍCIO: sem endereço real, sem link de mapa
         'imagem'      => '/assets/img/unidades/unidade-3.jpg', // FICTÍCIO
@@ -133,7 +133,7 @@ return [
         'endereco'    => 'Av. Independência, 2.040 — Boa Vista',
         'whatsapp'    => '55000000000', // A FAZER: número real (o de exemplo não vira botão)
         'horario'     => 'Seg a sáb, 6h às 20h', // FICTÍCIO
-        'preparo'     => '48 horas para encomendas · balcão na hora', // FICTÍCIO
+        'preparo'     => 'Encomendas com 48 horas de antecedência', // FICTÍCIO
         'sobre'       => 'A maior depois da matriz: vitrine de doces e retirada de encomendas com hora marcada.', // FICTÍCIO
         'mapaUrl'     => '', // FICTÍCIO: sem endereço real, sem link de mapa
         'imagem'      => '/assets/img/unidades/unidade-4.jpg', // FICTÍCIO
@@ -150,7 +150,7 @@ return [
         'endereco'    => 'Rua dos Ipês, 57 — Parque das Flores',
         'whatsapp'    => '55000000000', // A FAZER: número real (o de exemplo não vira botão)
         'horario'     => 'Seg a sáb, 6h às 20h', // FICTÍCIO
-        'preparo'     => '48 horas para encomendas · balcão na hora', // FICTÍCIO
+        'preparo'     => 'Encomendas com 48 horas de antecedência', // FICTÍCIO
         'sobre'       => 'A loja mais nova, perto das faculdades. Café, salgado e lanche rápido entre as aulas.', // FICTÍCIO
         'mapaUrl'     => '', // FICTÍCIO: sem endereço real, sem link de mapa
         'imagem'      => '/assets/img/unidades/unidade-5.jpg', // FICTÍCIO

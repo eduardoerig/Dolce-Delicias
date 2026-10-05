@@ -71,6 +71,9 @@ foreach ($produtos as $p) {
 $restricoes = array_values(array_filter(['vegano', 'sem lactose', 'sem glúten', 'sem carne'],
     static fn (string $tag): bool => (bool) array_filter($produtos, static fn (array $p): bool => in_array($tag, $p['tags'], true))));
 
+// Itens com promoção: o filtro só aparece se houver algum.
+$emPromocao = count(array_filter($produtos, static fn (array $p): bool => dd_promocoes_produto($p) !== []));
+
 // Teto do filtro de preço: o maior preço por peça, arredondado para cima.
 $unitarios = array_map(static fn (array $p): float => dd_faixa_principal($p)['unitario'], $produtos);
 $precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
@@ -82,7 +85,7 @@ $precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
     <div class="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-8 sm:px-6 md:flex-row md:items-end md:justify-between lg:px-8 lg:py-10">
       <div>
         <h2 id="catalogo-titulo" class="text-4xl sm:text-5xl">Catálogo</h2>
-        <p class="mt-2 text-crust"><?= e($totalProdutos === 1 ? '1 item feito' : $totalProdutos . ' itens feitos') ?> todo dia, por encomenda ou no balcão.</p>
+        <p class="mt-2 text-crust"><?= e($totalProdutos === 1 ? '1 item feito' : $totalProdutos . ' itens feitos') ?> todo dia, por encomenda, com entrega.</p>
       </div>
 
       <form class="busca-pilula w-full md:max-w-md" role="search" data-busca-form>
@@ -136,15 +139,16 @@ $precoTeto = $unitarios !== [] ? (int) ceil(max($unitarios)) : 0;
           </div>
         <?php endif; ?>
 
-        <fieldset class="filtro-grupo">
-          <legend>Como comprar</legend>
-          <div class="segmentos">
-            <label><input type="radio" name="linha" value="" data-filter-line checked><span>Tudo</span></label>
-            <label><input type="radio" name="linha" value="ENCOMENDA" data-filter-line><span>Encomenda</span></label>
-            <label><input type="radio" name="linha" value="BALCAO" data-filter-line><span>Balcão</span></label>
-          </div>
-          <p class="filtro-dica">Encomenda é pedido antecipado; balcão, compra na loja.</p>
-        </fieldset>
+        <?php if ($emPromocao > 0): ?>
+          <fieldset class="filtro-grupo">
+            <legend>Promoções</legend>
+            <label class="filtro-opcao">
+              <input type="checkbox" data-filter-promo>
+              <span>Só itens em promoção</span>
+              <small><?= e((string) $emPromocao) ?></small>
+            </label>
+          </fieldset>
+        <?php endif; ?>
 
         <?php if ($restricoes !== []): ?>
           <fieldset class="filtro-grupo">

@@ -513,57 +513,6 @@ details.dropdown:not([open]) > .dropdown-content {
   color: var(--color-ink);
 }
 
-/* Escolha única em segmentos (era "Portion size" na referência). A largura
-   de cada um parte do texto: "Encomenda" ganha mais espaço que "Tudo" e
-   não encosta nas bordas. */
-.segmentos {
-  display: flex;
-  gap: 0.375rem;
-}
-
-.segmentos label {
-  position: relative;
-  flex: 1 1 auto;
-  cursor: pointer;
-}
-
-.segmentos input {
-  position: absolute;
-  opacity: 0;
-  width: 1px;
-  height: 1px;
-}
-
-.segmentos span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 2.5rem;
-  padding: 0 0.625rem;
-  border: 1px solid var(--color-linha);
-  border-radius: 0.625rem;
-  background-color: var(--color-papel);
-  font-size: 0.8125rem;
-  font-weight: 600;
-}
-
-.segmentos label:hover span {
-  border-color: var(--color-campo);
-}
-
-/* Marcado: preenchido de vermelho (contraste de luminância, não só de cor). */
-.segmentos input:checked + span {
-  border-color: var(--color-brand);
-  background-color: var(--color-brand);
-  color: #fff;
-  font-weight: 700;
-}
-
-.segmentos input:focus-visible + span {
-  outline: 3px solid var(--color-brand);
-  outline-offset: 2px;
-}
-
 /* Preço por peça: trilho com borda, parte escolhida em vermelho. */
 .faixa-preco {
   --pct: 100%;
@@ -812,26 +761,6 @@ details.dropdown:not([open]) > .dropdown-content {
   color: var(--color-crust);
   white-space: nowrap;
   text-overflow: ellipsis;
-}
-
-.cartao-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.125rem 0.75rem;
-  margin-top: 0.125rem;
-  font-size: 0.75rem;
-  color: var(--color-crust);
-}
-
-.cartao-meta span {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.cartao-meta svg {
-  width: 0.875rem;
-  height: 0.875rem;
 }
 
 .cartao-rodape {

@@ -611,19 +611,15 @@ SVG;
 }
 
 /**
- * A regra da promoção numa frase, sem ponto final: "Toda quarta-feira, só na
- * encomenda". Sem agenda: "Vale na encomenda e no balcão".
+ * A regra da promoção numa frase, sem ponto final: "Toda quarta-feira". Sem
+ * agenda: "Vale em qualquer pedido". Não há mais balcão: tudo é pedido com
+ * entrega, então o tipo de atendimento não entra na frase.
  */
 function dd_promocao_regra(array $promocao): string
 {
-    $onde = match ((string) ($promocao['tipo_atendimento'] ?? 'AMBOS')) {
-        'ENCOMENDA' => 'só na encomenda',
-        'BALCAO'    => 'só no balcão',
-        default     => 'na encomenda e no balcão',
-    };
     $quando = trim((string) ($promocao['agenda'] ?? ''));
 
-    return ($quando !== '' ? $quando . ', ' : 'Vale ') . $onde;
+    return $quando !== '' ? $quando : 'Vale em qualquer pedido';
 }
 
 /** Os produtos do catálogo que entram na promoção, na ordem do catálogo. */

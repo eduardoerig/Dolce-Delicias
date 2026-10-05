@@ -119,8 +119,8 @@ return [
             'texto'  => 'Cantinas e refeitórios de escola e a Lancheira Feliz, com lanches lúdicos pensados para as crianças.',
         ],
         [
-            'titulo' => 'Balcão e café',
-            'texto'  => 'Salgado saindo na hora, pães e, agora, café para acompanhar.',
+            'titulo' => 'Pães e café',
+            'texto'  => 'Pães, mini pizzas e, agora, café para acompanhar o pedido.',
         ],
     ],
 

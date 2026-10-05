@@ -148,7 +148,7 @@ if (alavancaDrawer && painelCarrinho) {
 /* ===========================================================================
  * 4. CATÁLOGO: BUSCA, FILTROS, ORDEM E PÁGINAS
  * Tudo no próprio DOM: o PHP já imprimiu todos os cards, e os data-* de cada
- * <article> (partials/product-card.php) dizem categoria, linha, etiquetas,
+ * <article> (partials/product-card.php) dizem categoria, promoção, etiquetas,
  * preço por peça e destaque. Sem JavaScript, a grade inteira aparece.
  * ======================================================================== */
 
@@ -185,7 +185,7 @@ if (grade) {
   function lerFiltros() {
     return {
       categorias: categorias.filter((c) => c.checked).map((c) => c.value),
-      linha: document.querySelector('[data-filter-line]:checked')?.value || '',
+      promo: document.querySelector('[data-filter-promo]')?.checked || false,
       tags: Array.from(document.querySelectorAll('[data-filter-tag]:checked')).map((el) => el.value),
       // No teto, o filtro de preço está desligado.
       precoMax: preco && Number(preco.value) < Number(preco.max) ? Number(preco.value) : null,
@@ -196,7 +196,7 @@ if (grade) {
     if (termo && !(card.dataset.busca || '').includes(termo)) return false;
     // Várias categorias marcadas somam (Salgados OU Doces).
     if (f.categorias.length && !f.categorias.includes(card.dataset.categoria)) return false;
-    if (f.linha && card.dataset.linha !== 'AMBOS' && card.dataset.linha !== f.linha) return false;
+    if (f.promo && card.dataset.promo !== '1') return false;
     // Restrições se acumulam: vegano E sem lactose.
     const etiquetas = (card.dataset.tags || '').split(',');
     if (!f.tags.every((t) => etiquetas.includes(t))) return false;
@@ -278,7 +278,7 @@ if (grade) {
     grade.classList.toggle('oculto', achados.length === 0);
     semResultado?.classList.toggle('oculto', achados.length > 0);
 
-    const filtrando = termo !== '' || f.categorias.length > 0 || f.linha !== '' || f.tags.length > 0 || f.precoMax !== null;
+    const filtrando = termo !== '' || f.categorias.length > 0 || f.promo || f.tags.length > 0 || f.precoMax !== null;
     let texto;
     if (achados.length === 0) texto = 'Nenhum item encontrado';
     // A concordância segue o total, não o filtrado: "1 de 18 itens".
@@ -290,7 +290,7 @@ if (grade) {
     // "Todas" fica marcada exatamente quando nenhuma categoria específica está.
     if (todas) todas.checked = f.categorias.length === 0;
 
-    const ligados = f.categorias.length + (f.linha ? 1 : 0) + f.tags.length + (f.precoMax !== null ? 1 : 0);
+    const ligados = f.categorias.length + (f.promo ? 1 : 0) + f.tags.length + (f.precoMax !== null ? 1 : 0);
     document.querySelectorAll('[data-filtros-contagem]').forEach((el) => {
       el.textContent = String(ligados);
       el.classList.toggle('oculto', ligados === 0);
@@ -307,7 +307,7 @@ if (grade) {
     if (todas.checked) categorias.forEach((c) => { c.checked = false; });
     filtrar();
   });
-  document.querySelectorAll('[data-filter-line], [data-filter-tag]').forEach((el) => el.addEventListener('change', () => filtrar()));
+  document.querySelectorAll('[data-filter-promo], [data-filter-tag]').forEach((el) => el.addEventListener('change', () => filtrar()));
   preco?.addEventListener('input', () => {
     atualizarPreco();
     filtrar();
@@ -346,8 +346,8 @@ if (grade) {
     if (campoBusca) campoBusca.value = '';
     categorias.forEach((c) => { c.checked = false; });
     document.querySelectorAll('[data-filter-tag]').forEach((el) => { el.checked = false; });
-    const tudo = document.querySelector('[data-filter-line][value=""]');
-    if (tudo) tudo.checked = true;
+    const promo = document.querySelector('[data-filter-promo]');
+    if (promo) promo.checked = false;
     if (preco) preco.value = preco.max;
     atualizarPreco();
     filtrar();

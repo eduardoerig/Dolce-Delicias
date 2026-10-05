@@ -25,23 +25,15 @@ $faixa      = dd_faixa_principal($produto);
 $disponivel = ($produto['disponivel'] ?? true) !== false;
 $imagem     = dd_imagem($produto['imagem'] ?? null);
 $url        = '/produtos/' . rawurlencode((string) $produto['slug']);
-$linhaCard  = (string) ($produto['linha'] ?? 'AMBOS');
 $ofertas    = dd_promocoes_produto($produto);
 $selo       = $ofertas !== [] ? (trim((string) ($ofertas[0]['selo'] ?? '')) ?: 'Promoção') : '';
-
-// Como se compra, em uma palavra: é o que a referência chamava de "porção".
-$comoCompra = match ($linhaCard) {
-    'ENCOMENDA' => 'Encomenda',
-    'BALCAO'    => 'Balcão',
-    default     => 'Encomenda e balcão',
-};
 ?>
 <article
   class="cartao"
   data-produto
   data-slug="<?= e((string) $produto['slug']) ?>"
   data-categoria="<?= e((string) $produto['categoria']) ?>"
-  data-linha="<?= e($linhaCard) ?>"
+  data-promo="<?= $ofertas !== [] ? '1' : '0' ?>"
   data-tags="<?= e(implode(',', $produto['tags'])) ?>"
   data-busca="<?= e(dd_indice_busca($produto)) ?>"
   data-nome="<?= e(dd_ascii((string) $produto['nome'])) ?>"
@@ -77,19 +69,6 @@ $comoCompra = match ($linhaCard) {
     <?php if (trim((string) ($produto['descricao'] ?? '')) !== ''): ?>
       <p class="cartao-descricao"><?= e((string) $produto['descricao']) ?></p>
     <?php endif; ?>
-
-    <p class="cartao-meta">
-      <span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9.5 12 4l9 5.5v9L12 23l-9-4.5z"/><path d="M3 9.5 12 15l9-5.5M12 15v8"/></svg>
-        <?= e($comoCompra) ?>
-      </span>
-      <?php if ($faixa['temMinimo'] && $faixa['min'] > 1): ?>
-        <span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h10M4 17h6"/></svg>
-          mín. <?= e((string) $faixa['min']) ?> un
-        </span>
-      <?php endif; ?>
-    </p>
 
     <div class="cartao-rodape">
       <p class="cartao-preco">

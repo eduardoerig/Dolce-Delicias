@@ -71,7 +71,7 @@ $iconeZap = '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="curren
         <h1 id="titulo-unidades" class="abertura-titulo">Nossas unidades</h1>
         <p class="abertura-frase">
           <?= e((string) count($unidades)) ?> lojas. O pedido feito pelo site vai para a matriz;
-          nas outras você compra no balcão ou pelo WhatsApp de cada uma.
+          nas outras você pede pelo WhatsApp de cada uma. Tudo com entrega.
         </p>
 
         <div class="botoes-pilula">
@@ -96,7 +96,7 @@ $iconeZap = '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="curren
         <div class="centro">
           <p class="rotulo-secao">Perto de você</p>
           <h2 id="titulo-lojas">Outras lojas</h2>
-          <p class="centro-frase">Balcão e WhatsApp de cada loja. Cada uma tem o próprio catálogo.</p>
+          <p class="centro-frase">WhatsApp e catálogo de cada loja. Os pedidos são entregues.</p>
         </div>
         <ul class="lojas-cartoes">
           <?php foreach ($lojas as $unidade): ?>

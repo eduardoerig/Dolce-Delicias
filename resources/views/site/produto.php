@@ -57,12 +57,6 @@ $faixas       = $faixas ?: [dd_faixa(['valor' => 0, 'por' => 'unidade'])];
 $faixa        = $faixas[0];
 $temVariacoes = count($faixas) > 1;
 
-$linhaProduto = (string) ($produto['linha'] ?? 'AMBOS');
-$comoCompra   = match ($linhaProduto) {
-    'ENCOMENDA' => 'Encomenda',
-    'BALCAO'    => 'Balcão',
-    default     => 'Encomenda e balcão',
-};
 $disponivel   = ($produto['disponivel'] ?? true) !== false;
 $imagem       = dd_imagem($produto['imagem'] ?? null);
 $sabores      = $produto['sabores'] ?? [];
@@ -70,7 +64,7 @@ $relacionados = dd_relacionados($produto, 4);
 $ofertas      = dd_promocoes_produto($produto);
 
 // "atacado"/"varejo" são calculadas a partir de "Como é vendido", e balcão/encomenda
-// já estão na ficha ("Como compra"): aqui só repetiriam.
+// não valem mais para quem compra: tudo é pedido com entrega.
 $etiquetas = array_values(array_filter(
     array_map('strval', $produto['tags'] ?? []),
     static fn (string $t): bool => !in_array(mb_strtolower($t), ['atacado', 'varejo', 'balcao', 'balcão', 'encomenda'], true)
@@ -212,10 +206,6 @@ include DD_BASE . '/partials/header.php';
 
         <?php // A ficha: o que a pessoa precisa saber antes de escolher a quantidade. ?>
         <dl class="produto-ficha">
-          <div>
-            <dt>Como compra</dt>
-            <dd><?= e($comoCompra) ?></dd>
-          </div>
           <div>
             <dt>Pedido mínimo</dt>
             <dd data-ficha-minimo><?= e((string) $faixa['min']) ?> un</dd>
