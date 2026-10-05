@@ -1667,11 +1667,15 @@ a.loja-acao:hover {
 /* "Arraste para baixo": o herói ocupa a tela inteira, e sem o aviso parece
    que a página acaba ali. Fica preso no pé do herói, centralizado. A seta
    quica devagar. */
+/* Centralizado por margem automática, não por translate: o GSAP anima este
+   elemento (data-cento-revela) e engole a propriedade translate do CSS. */
 .heroi-rolar {
   position: absolute;
   bottom: 0.5rem;
-  left: 50%;
-  translate: -50% 0;
+  left: 0;
+  right: 0;
+  width: max-content;
+  margin-inline: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2170,10 +2174,9 @@ a.loja-acao:hover {
     font-size: clamp(2.75rem, 6.4vw, 6.25rem);
   }
 
-  /* A seta fica no meio da área do texto, longe do prato. */
+  /* A seta fica no centro da página, no pé do herói; o prato fica à direita. */
   .heroi-cento .heroi-rolar {
     bottom: 1.25rem;
-    left: calc((100% - var(--prato) / 2) / 2);
   }
 }
 
