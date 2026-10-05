@@ -6,12 +6,12 @@ declare(strict_types=1);
  * partials/unit-section.php — uma loja em unidades.php.
  *
  * Dois desenhos, pela pergunta que cada um responde:
- *   - a matriz vem em destaque, no zigue-zague da página institucional
- *     (.zigue): foto encostada na borda da tela de um lado, dados com rótulo
- *     do outro. É ela que recebe o pedido do site;
- *   - as outras lojas são uma linha da lista (.loja): nome e bairro, endereço,
- *     horário e os três caminhos de contato. Quem procura "a mais perto de
- *     mim" lê a lista de cima para baixo sem abrir nada.
+ *   - a matriz vem em destaque numa faixa marrom (.matriz-faixa): foto
+ *     encostada na borda da tela de um lado, dados com rótulo do outro. É ela
+ *     que recebe o pedido do site;
+ *   - as outras lojas são cartões (.loja-cartao): nome e bairro, endereço,
+ *     horário e os caminhos de contato. Quem procura "a mais perto de mim"
+ *     passa os olhos pelos cartões sem abrir nada.
  *
  * O id é o slug da loja: /unidades#unidade-3 cai direto nela (a página do
  * produto usa isso em "Onde encontrar"), e :target a realça.
@@ -55,53 +55,54 @@ $icone = [
 ];
 ?>
 <?php if ($ehMatriz): ?>
-  <section id="<?= e($slug) ?>" class="zigue loja-matriz" aria-labelledby="titulo-<?= e($slug) ?>">
-    <?php if ($foto): ?>
-      <img src="<?= e($foto) ?>" alt="Foto da <?= e((string) $unidade['nome']) ?>" class="zigue-foto" width="1600" height="1000" decoding="async">
-    <?php else: ?>
-      <?php // INTEGRAÇÃO FUTURA: foto da fachada, cadastrada no painel em Unidades. ?>
-      <div class="zigue-foto loja-matriz-fachada"><?php $fachadaClasse = 'w-full max-w-sm'; include __DIR__ . '/ilustra-fachada.php'; ?></div>
-    <?php endif; ?>
-
-    <div class="zigue-texto">
-      <p class="loja-selo">Recebe os pedidos do site</p>
-      <h2 id="titulo-<?= e($slug) ?>" class="mt-4"><?= e($nomeLoja) ?></h2>
-      <?php if ($bairro !== ''): ?><p class="mt-1 font-semibold text-crust"><?= e($bairro) ?></p><?php endif; ?>
-      <?php if ($sobre !== ''): ?><p class="mt-4 max-w-prose leading-relaxed text-crust"><?= e($sobre) ?></p><?php endif; ?>
-
-      <dl class="loja-dados">
-        <?php if ($endereco !== ''): ?>
-          <div><dt><?= $icone['endereco'] ?>Endereço</dt><dd><?= e($endereco) ?></dd></div>
-        <?php endif; ?>
-        <?php if ($horario !== ''): ?>
-          <div><dt><?= $icone['horario'] ?>Horário</dt><dd><?= e($horario) ?></dd></div>
-        <?php endif; ?>
-        <?php if ($preparo !== ''): ?>
-          <div><dt><?= $icone['preparo'] ?>Prazo</dt><dd><?= e($preparo) ?></dd></div>
-        <?php endif; ?>
-      </dl>
-
-      <div class="mt-6 flex flex-wrap items-center gap-3">
-        <a href="/#catalogo" class="botao-primario">Fazer um pedido</a>
-        <?php if ($whatsapp !== ''): ?>
-          <a href="https://wa.me/<?= e($whatsapp) ?>?text=<?= $msgUnidade ?>" target="_blank" rel="noopener noreferrer" class="botao-secundario"><span class="h-5 w-5"><?= $icone['zap'] ?></span>WhatsApp</a>
-        <?php endif; ?>
-        <?php if ($temPdf): ?>
-          <a href="<?= e($pdf) ?>" download class="link-acao"><span class="h-4 w-4"><?= $icone['pdf'] ?></span>Catálogo em PDF</a>
-        <?php endif; ?>
-        <?php if ($mapa !== ''): ?>
-          <a href="<?= e($mapa) ?>" target="_blank" rel="noopener noreferrer" class="link-acao"><span class="h-4 w-4"><?= $icone['mapa'] ?></span>Ver no mapa</a>
+  <section id="<?= e($slug) ?>" class="matriz-faixa" aria-labelledby="titulo-<?= e($slug) ?>">
+    <div class="matriz-faixa-grade">
+      <div class="matriz-faixa-foto">
+        <?php if ($foto): ?>
+          <img src="<?= e($foto) ?>" alt="Foto da <?= e((string) $unidade['nome']) ?>" width="1600" height="1000" loading="lazy" decoding="async">
+        <?php else: ?>
+          <?php // INTEGRAÇÃO FUTURA: foto da fachada, cadastrada no painel em Unidades. ?>
+          <div class="matriz-faixa-desenho"><?php $fachadaClasse = 'w-full max-w-sm'; include __DIR__ . '/ilustra-fachada.php'; ?></div>
         <?php endif; ?>
       </div>
-    </div>
 
+      <div class="matriz-faixa-texto">
+        <p class="matriz-selo">Recebe os pedidos do site</p>
+        <h2 id="titulo-<?= e($slug) ?>"><?= e($nomeLoja) ?></h2>
+        <?php if ($bairro !== ''): ?><p class="matriz-bairro"><?= e($bairro) ?></p><?php endif; ?>
+        <?php if ($sobre !== ''): ?><p class="matriz-sobre"><?= e($sobre) ?></p><?php endif; ?>
+
+        <dl class="matriz-dados">
+          <?php if ($endereco !== ''): ?>
+            <div><dt><?= $icone['endereco'] ?>Endereço</dt><dd><?= e($endereco) ?></dd></div>
+          <?php endif; ?>
+          <?php if ($horario !== ''): ?>
+            <div><dt><?= $icone['horario'] ?>Horário</dt><dd><?= e($horario) ?></dd></div>
+          <?php endif; ?>
+          <?php if ($preparo !== ''): ?>
+            <div><dt><?= $icone['preparo'] ?>Prazo</dt><dd><?= e($preparo) ?></dd></div>
+          <?php endif; ?>
+        </dl>
+
+        <div class="matriz-acoes">
+          <a href="/#catalogo" class="botao-amarelo">Fazer um pedido</a>
+          <?php if ($whatsapp !== ''): ?>
+            <a href="https://wa.me/<?= e($whatsapp) ?>?text=<?= $msgUnidade ?>" target="_blank" rel="noopener noreferrer" class="botao-vazado"><span class="h-5 w-5"><?= $icone['zap'] ?></span>WhatsApp</a>
+          <?php endif; ?>
+          <?php if ($temPdf): ?>
+            <a href="<?= e($pdf) ?>" download class="matriz-link"><span class="h-4 w-4"><?= $icone['pdf'] ?></span>Catálogo em PDF</a>
+          <?php endif; ?>
+          <?php if ($mapa !== ''): ?>
+            <a href="<?= e($mapa) ?>" target="_blank" rel="noopener noreferrer" class="matriz-link"><span class="h-4 w-4"><?= $icone['mapa'] ?></span>Ver no mapa</a>
+          <?php endif; ?>
+        </div>
+      </div>
+    </div>
   </section>
 <?php else: ?>
-  <li id="<?= e($slug) ?>" class="loja">
-    <div class="loja-nome">
-      <h3 class="font-sans text-lg font-bold"><?= e($nomeLoja) ?></h3>
-      <?php if ($bairro !== ''): ?><p class="text-sm font-semibold text-crust"><?= e($bairro) ?></p><?php endif; ?>
-    </div>
+  <li id="<?= e($slug) ?>" class="loja-cartao">
+    <h3><?= e($nomeLoja) ?></h3>
+    <?php if ($bairro !== ''): ?><p class="loja-cartao-bairro"><?= e($bairro) ?></p><?php endif; ?>
 
     <p class="loja-dado"><?= $icone['endereco'] ?><span><span class="sr-only">Endereço: </span><?= e($endereco !== '' ? $endereco : 'Endereço em breve') ?></span></p>
     <p class="loja-dado"><?= $icone['horario'] ?><span><span class="sr-only">Horário: </span><?= e($horario !== '' ? $horario : 'Horário em breve') ?></span></p>

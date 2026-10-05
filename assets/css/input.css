@@ -1431,106 +1431,10 @@ details.dropdown:not([open]) > .dropdown-content {
 }
 
 /* ---------- Unidades ----------
-   Mesmo desenho de A empresa (.pagina-institucional, mais abaixo): a matriz
-   no zigue-zague e as outras lojas numa lista reta de linhas. */
-
-/* Sem foto cadastrada, a fachada desenhada ocupa o lugar dela. */
-.loja-matriz-fachada {
-  display: grid;
-  place-items: center;
-  padding: 2rem;
-  background-color: var(--color-polvilho);
-}
-
-.secao-lojas {
-  padding-top: 3rem;
-  padding-bottom: 5rem;
-  scroll-margin-top: 5rem;
-}
-
-.pagina-institucional .lojas {
-  border-inline: 0;
-  border-radius: 0;
-  background-color: transparent;
-}
-
-.pagina-institucional .loja-selo,
-.pagina-institucional .loja-acao {
-  border-radius: 0;
-}
-
-/* Etiqueta da matriz: diz por que ela vem primeiro. */
-.loja-selo {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.25rem 0.75rem;
-  border-radius: 999px;
-  background-color: var(--color-brand);
-  color: #fff;
-  font-size: 0.8125rem;
-  font-weight: 700;
-}
-
-/* Dados da matriz com rótulo visível: endereço, horário, prazo. */
-.loja-dados {
-  display: grid;
-  gap: 1rem;
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--color-linha);
-}
-
-@media (min-width: 40rem) {
-  .loja-dados {
-    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
-  }
-}
-
-.loja-dados dt {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  color: var(--color-crust);
-}
-
-.loja-dados dt svg {
-  width: 1rem;
-  height: 1rem;
-}
-
-.loja-dados dd {
-  margin-top: 0.25rem;
-  font-weight: 600;
-  line-height: 1.45;
-}
-
-/* Lista das outras lojas. */
-.lojas {
-  overflow: hidden;
-  border: 1px solid var(--color-linha);
-  border-radius: 1.25rem;
-  background-color: var(--color-papel);
-}
-
-.loja {
-  display: grid;
-  gap: 0.75rem;
-  padding: 1.25rem;
-  scroll-margin-top: 6rem;
-}
-
-.loja + .loja {
-  border-top: 1px solid var(--color-linha);
-}
+   Dados e ações de cada loja, usados nos cartões de unidades.php (o desenho
+   da página está em "Unidades: matriz em faixa, lojas em cartões"). */
 
 /* Vindo de "Onde encontrar" (/unidades#slug): a linha certa acende. */
-.loja:target {
-  background-color: color-mix(in oklab, var(--color-brand) 5%, var(--color-papel));
-  box-shadow: inset 4px 0 0 var(--color-brand);
-}
 
 .loja-dado {
   display: flex;
@@ -1588,12 +1492,6 @@ a.loja-acao:hover {
 }
 
 @media (min-width: 64rem) {
-  .loja {
-    grid-template-columns: 13rem minmax(0, 1fr) minmax(0, 0.9fr) auto;
-    align-items: center;
-    gap: 1.5rem;
-    padding: 1.25rem 1.5rem;
-  }
 
   .loja-canais {
     grid-column: 2 / -1;
@@ -1614,14 +1512,9 @@ a.loja-acao:hover {
   cursor: default;
 }
 
-/* ---------- A empresa ----------
-   Desenho de página institucional grande: cantos retos, fotos que encostam
-   na borda da tela, seções coladas em zigue-zague, títulos grandes e textos
-   curtos. A borda da coluna de texto acompanha o contêiner de 80rem do site. */
-
-.pagina-institucional {
-  --sobre-margem: max(1rem, calc((100vw - 80rem) / 2 + 2rem));
-}
+/* ---------- A empresa e Unidades ----------
+   Cantos retos, como o resto do site. O desenho de cada página está em
+   "A empresa: herói da cozinha" e "Unidades: matriz em faixa". */
 
 /* Nesta página os botões também são retos. */
 .pagina-institucional .botao-primario,
@@ -1632,191 +1525,11 @@ a.loja-acao:hover {
   text-transform: uppercase;
 }
 
-/* Zigue-zague: a foto encosta na borda da tela (45% da largura), o texto fica
-   ao lado, e as seções vêm coladas, separadas só pelo próprio espaço. */
-.zigue {
-  display: grid;
-  align-items: center;
-  scroll-margin-top: 5rem;
-}
-
-.zigue-foto {
-  width: 100%;
-  aspect-ratio: 3 / 2;
-  object-fit: cover;
-}
-
-.zigue-texto {
-  padding: 2rem var(--sobre-margem) 2.5rem;
-}
-
-.zigue-texto h2,
-.sobre-empresas h2,
-.secao-lojas h2 {
-  font-size: 2rem;
-  line-height: 1.1;
-}
-
-.zigue-texto > p:not([class]) {
-  margin-top: 1rem;
-  max-width: 36rem;
-  font-size: 1.0625rem;
-  line-height: 1.65;
-  color: var(--color-crust);
-}
-
-@media (min-width: 64rem) {
-  .zigue {
-    grid-template-columns: 45% minmax(0, 1fr);
-    padding-block: 2rem;
-  }
-
-  .zigue-texto {
-    padding: 2rem var(--sobre-margem) 2rem 5rem;
-  }
-
-  /* Uma seção sim, outra não, a foto vai para a direita. */
-  .zigue:nth-child(even) {
-    grid-template-columns: minmax(0, 1fr) 45%;
-  }
-
-  .zigue:nth-child(even) .zigue-foto {
-    order: 2;
-  }
-
-  .zigue:nth-child(even) .zigue-texto {
-    padding: 2rem 5rem 2rem var(--sobre-margem);
-  }
-
-  /* Sem foto, o texto ocupa a largura toda. */
-  .zigue-texto:only-child {
-    grid-column: 1 / -1;
-  }
-
-  .zigue-texto h2,
-  .sobre-empresas h2,
-  .secao-lojas h2 {
-    font-size: 3rem;
-  }
-
-  .zigue-texto > p:not([class]) {
-    font-size: 1.25rem;
-  }
-}
-
-/* Lista simples separada por linhas: serviços e valores. */
-.lista-sobre {
-  margin-top: 1.5rem;
-  max-width: 36rem;
-}
-
-.lista-sobre > li {
-  padding-block: 0.875rem;
-  border-top: 1px solid var(--color-linha);
-}
-
-.lista-sobre h3 {
-  font-family: var(--font-sans);
-  font-size: 1.0625rem;
-  font-weight: 700;
-}
-
-.lista-sobre p {
-  margin-top: 0.25rem;
-  font-size: 0.9375rem;
-  line-height: 1.6;
-  color: var(--color-crust);
-}
-
-.lista-sobre-icone {
-  display: flex;
-  gap: 1rem;
-  align-items: flex-start;
-}
-
-.lista-sobre-icone .valor-icone {
-  flex-shrink: 0;
-}
-
-/* Na meia coluna do zigue-zague, quatro números lado a lado ficam apertados. */
-.zigue-texto .numeros {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  max-width: 36rem;
-}
-
-/* Para empresas: cartões de foto em duas colunas desencontradas, título
-   branco no alto da foto, sem cantos. */
+/* Para empresas: cartões com foto e o pedido de orçamento. */
 .sobre-empresas {
   padding-top: 3rem;
   padding-bottom: 4rem;
   scroll-margin-top: 5rem;
-}
-
-.cartoes-empresa {
-  display: grid;
-  gap: 1rem;
-  margin-top: 2rem;
-}
-
-@media (min-width: 48rem) {
-  .cartoes-empresa {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2rem;
-  }
-
-  /* A coluna da direita desce um pouco: as duas colunas não se alinham. */
-  .cartao-empresa:nth-child(even) {
-    transform: translateY(5rem);
-  }
-
-  .cartoes-empresa:has(.cartao-empresa:nth-child(2)) {
-    padding-bottom: 5rem;
-  }
-}
-
-.cartao-empresa {
-  position: relative;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  background-color: var(--color-brand-escuro);
-  color: #fff;
-}
-
-.cartao-empresa img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* O texto fica sobre um degradê escuro vindo de cima: branco cheio passa de
-   4.5:1 ali. */
-.cartao-empresa-texto {
-  position: relative;
-  z-index: 2;
-  max-width: 30rem;
-  padding: 1.5rem 1.5rem 4rem;
-}
-
-.cartao-empresa:not(.cartao-empresa-sem-foto)::before {
-  content: "";
-  position: absolute;
-  z-index: 1;
-  inset: 0;
-  background: linear-gradient(to bottom, rgb(42 23 16 / 0.9) 0, rgb(42 23 16 / 0.75) 40%, rgb(42 23 16 / 0) 75%);
-}
-
-.cartao-empresa h3 {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  line-height: 1.15;
-}
-
-.cartao-empresa p {
-  margin-top: 0.5rem;
-  font-size: 0.9375rem;
-  line-height: 1.55;
 }
 
 /* Pedido de orçamento: a placa vermelha, reta como o resto da página. */
@@ -1874,86 +1587,6 @@ a.loja-acao:hover {
   from {
     translate: 0 2.5rem;
   }
-}
-
-/* Números da marca: uma linha, número grande e rótulo embaixo. No HTML o dt
-   vem antes do dd, como a <dl> pede; o CSS inverte só no desenho. */
-.numeros {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.25rem 1.5rem;
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--color-linha);
-}
-
-@media (min-width: 48rem) {
-  .numeros {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-.numeros > div {
-  display: flex;
-  flex-direction: column-reverse;
-  justify-content: flex-end;
-  gap: 0.25rem;
-}
-
-.numeros dt {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--color-crust);
-}
-
-.numeros dd {
-  font-family: var(--font-display);
-  font-size: 2.25rem;
-  line-height: 1.05;
-  color: var(--color-brand);
-  overflow-wrap: anywhere;
-}
-
-.numeros dd.numero-longo {
-  font-size: 1.125rem;
-  line-height: 1.6;
-}
-
-/* Linha do tempo em pé: a régua é a borda de cada marco e o ponto é o
-   ::before, então os dois andam juntos. */
-.marcos {
-  display: grid;
-}
-
-.marco {
-  position: relative;
-  padding: 0 0 1.5rem 1.75rem;
-  border-left: 2px solid var(--color-farelo);
-}
-
-/* O último marco fecha a régua. Borda transparente, não removida: tirar os
-   2px desalinha o ponto e o texto dele em relação aos outros. */
-.marco:last-child {
-  padding-bottom: 0;
-  border-left-color: transparent;
-}
-
-.marco-ano {
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: var(--color-brand);
-}
-
-.marco::before {
-  content: "";
-  position: absolute;
-  top: 0.3rem;
-  left: -0.5625rem;
-  width: 1rem;
-  height: 1rem;
-  border: 3px solid var(--color-farinha);
-  border-radius: 999px;
-  background-color: var(--color-brand);
 }
 
 /* "Para empresas": a placa vermelha da marca, com os raios do logo. Texto
@@ -2019,7 +1652,7 @@ a.loja-acao:hover {
      acima de 4.5:1 sobre qualquer foto.
 
    A home, A empresa e Unidades têm heróis próprios (.heroi-cento,
-   .heroi-manifesto, .heroi-balcao). */
+   .sobre-heroi, .heroi-balcao). */
 
 .heroi-foto {
   position: relative;
@@ -2551,168 +2184,6 @@ a.loja-acao:hover {
   }
 }
 
-/* ---------- A empresa: herói "manifesto" ----------
-   Cartaz em fundo claro: a frase da marca em letras grandes e, numa coluna
-   própria à direita, a logo como um selo carimbado. A linha do meio leva uma
-   faixa vermelha que atravessa a tela e passa por trás do selo, que fica na
-   altura dela. O texto nunca fica atrás da arte: cada um tem a sua coluna.
-   --fonte é o tamanho do título e --coluna a largura da coluna do selo; com
-   eles o selo acha a altura da faixa. */
-.heroi-manifesto {
-  position: relative;
-  isolation: isolate;
-  display: flex;
-  flex-direction: column;
-  min-height: calc(100vh - 4.5rem - 1px);
-  min-height: calc(100svh - 4.5rem - 1px);
-  overflow: hidden;
-  background-color: var(--color-polvilho);
-  color: var(--color-ink);
-}
-
-.heroi-manifesto-grade {
-  /* No celular a fonte sai da largura que sobra ao lado do selo (tela −
-     margens − coluna): "COMIDA DE" mede 6,5 vezes a fonte e cabe numa linha
-     só em qualquer celular. */
-  --fonte: max(1.75rem, calc((100vw - 8.5rem) / 6.7));
-  --coluna: 6rem;
-  display: grid;
-  flex: 1;
-  grid-template-columns: minmax(0, 1fr) var(--coluna);
-  gap: 0 0.5rem;
-  /* A linha da grade fica no meio da altura, mas texto e selo começam no
-     mesmo topo: é isso que deixa o selo na altura da faixa. */
-  align-content: center;
-  align-items: start;
-  width: 100%;
-  padding-top: 1.75rem;
-}
-
-.heroi-manifesto-titulo {
-  margin-top: 1.25rem;
-  font-size: var(--fonte);
-  line-height: 0.95;
-  text-transform: uppercase;
-}
-
-.heroi-manifesto-titulo .linha {
-  display: block;
-}
-
-/* A faixa: o fundo vermelho sai das bordas da tela (o herói corta o que
-   sobra) e fica atrás do texto e do selo. Branco sobre o vermelho, em letra
-   de cartaz, passa de 3:1. */
-.heroi-manifesto-titulo .linha-faixa {
-  position: relative;
-  width: fit-content;
-  margin-block: 0.06em;
-  padding-block: 0.04em 0.08em;
-  /* O vermelho também no próprio texto, além da faixa (::before): o
-     contraste fica certo mesmo se o pseudo-elemento não for desenhado. */
-  background-color: var(--color-brand);
-  color: #fff;
-}
-
-.heroi-manifesto-titulo .linha-faixa::before {
-  content: "";
-  position: absolute;
-  inset: 0 -100vw;
-  z-index: -1;
-  background-color: var(--color-brand);
-}
-
-.heroi-manifesto-frase {
-  max-width: 34rem;
-  margin-top: 1.25rem;
-  font-size: 1.0625rem;
-  line-height: 1.6;
-  color: var(--color-crust);
-}
-
-/* O selo fica acima da faixa, centrado na altura dela: o caminho (1,25rem),
-   a margem do título (1,25rem) e uma linha e meia do título, menos meia
-   altura do selo (a logo é 300 × 160). Levemente torto, como carimbo. */
-.heroi-manifesto-arte {
-  position: relative;
-  z-index: 1;
-  align-self: start;
-  padding-top: calc(2.5rem + var(--fonte) * 0.95 * 1.5 - var(--coluna) * 0.267);
-  filter: drop-shadow(0 12px 16px rgb(42 23 16 / 0.28));
-}
-
-/* Logo e um oval cor de farinha atrás dela, girando juntos: sem ele a logo
-   vermelha some na faixa vermelha. */
-.heroi-manifesto-selo {
-  position: relative;
-  rotate: -7deg;
-}
-
-.heroi-manifesto-selo::before {
-  content: "";
-  position: absolute;
-  inset: -5% -4%;
-  border-radius: 50%;
-  background-color: var(--color-farinha);
-}
-
-.heroi-manifesto-arte img {
-  position: relative;
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.heroi-manifesto-numeros {
-  width: 100%;
-  padding-bottom: 1.5rem;
-}
-
-.heroi-manifesto .numeros {
-  margin-top: 1.5rem;
-}
-
-/* Sobre o fundo claro, o vermelho da marca em letra pequena não chega a
-   4.5:1; os números usam o vermelho escuro. */
-.heroi-manifesto .numeros dd {
-  color: var(--color-brand-escuro);
-}
-
-@media (min-width: 48rem) {
-  .heroi-manifesto-grade {
-    --fonte: clamp(2.75rem, 7.4vw, 6.75rem);
-    --coluna: 13rem;
-    gap: 0 2rem;
-  }
-}
-
-@media (min-width: 64rem) {
-  .heroi-manifesto-grade {
-    --coluna: 19rem;
-    gap: 0 4rem;
-    padding-top: 2.5rem;
-  }
-
-  .heroi-manifesto-frase {
-    font-size: 1.25rem;
-  }
-
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  /* O selo é carimbado uma vez: desce grande e torto e assenta. */
-  .heroi-manifesto-selo {
-    animation: selo-carimba 0.7s cubic-bezier(0.3, 1.4, 0.5, 1) 0.2s both;
-  }
-
-  @supports (animation-timeline: view()) {
-    .heroi-manifesto-arte {
-      animation: recorte-profundidade linear both;
-      animation-timeline: view();
-      animation-range: exit 0% exit 100%;
-    }
-  }
-}
-
 @keyframes selo-carimba {
   from {
     opacity: 0;
@@ -2723,7 +2194,7 @@ a.loja-acao:hover {
 
 /* ---------- Unidades: herói "balcão" ----------
    A foto de uma loja (a vendedora arrumando os pães) ocupa o herói; o texto
-   e os atalhos das lojas ficam sobre o marrom. No celular e no tablet em pé a
+   e os dois botões (a matriz, as outras lojas) ficam sobre o marrom. No celular e no tablet em pé a
    foto vem em cima, esmaecendo no marrom, e o texto embaixo; do computador
    em diante a foto ocupa tudo e o marrom sobe do lado esquerdo, onde fica o
    texto: a vendedora, à direita, nunca fica atrás dele. */
@@ -2790,58 +2261,7 @@ a.loja-acao:hover {
   color: rgb(255 255 255 / 0.88);
 }
 
-/* Atalhos: um por loja. A matriz ocupa a linha toda e vem em amarelo. */
-.heroi-balcao-lojas {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.5rem;
-  margin-top: 1.5rem;
-}
-
-.heroi-balcao-lojas li:first-child {
-  grid-column: 1 / -1;
-}
-
-.loja-atalho {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 3rem;
-  padding: 0.5rem 0.875rem;
-  border: 1px solid rgb(255 255 255 / 0.35);
-  background-color: rgb(42 23 16 / 0.35);
-  font-size: 0.9375rem;
-  font-weight: 700;
-  color: #fff;
-  transition: background-color 0.15s var(--ease-massa), border-color 0.15s var(--ease-massa);
-}
-
-.loja-atalho:hover {
-  border-color: #fff;
-  background-color: rgb(255 255 255 / 0.12);
-}
-
-.loja-atalho small {
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.loja-atalho-matriz {
-  border-color: var(--color-accent);
-  background-color: var(--color-accent);
-  color: var(--color-ink);
-}
-
-.loja-atalho-matriz:hover {
-  border-color: var(--color-accent);
-  background-color: color-mix(in oklab, var(--color-accent) 86%, white);
-}
-
 @media (min-width: 48rem) {
-  .heroi-balcao-lojas {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
   .heroi-balcao-frase {
     font-size: 1.1875rem;
   }
@@ -3849,6 +3269,818 @@ a.loja-acao:hover {
 
   .produto-info {
     padding: 0;
+  }
+}
+
+/* ---------- A empresa: herói da cozinha e seções com foto ----------
+   Herói claro: a frase da marca à esquerda e, à direita, a foto das mãos na
+   massa com as coxinhas saltando do canto de baixo e a logo carimbada no
+   canto de cima. A arte tem coluna própria: texto nunca passa sobre comida.
+   Embaixo, os números numa faixa marrom. */
+.sobre-heroi {
+  overflow-x: clip;
+}
+
+.sobre-heroi-grade {
+  display: grid;
+  gap: 2.5rem;
+  padding-top: 1.5rem;
+  padding-bottom: 3.5rem;
+}
+
+.sobre-heroi-titulo {
+  max-width: 12ch;
+  margin-top: 1.25rem;
+  font-size: clamp(2.75rem, 12vw, 5.25rem);
+  line-height: 0.98;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.sobre-heroi-frase {
+  max-width: 32rem;
+  margin-top: 1.25rem;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--color-crust);
+}
+
+/* A arte: a foto deixa espaço à esquerda e embaixo para as coxinhas e em cima
+   para a logo. */
+.sobre-heroi-arte {
+  position: relative;
+  width: min(100%, 30rem);
+  margin-inline: auto;
+  padding: 2.25rem 0 2.5rem 14%;
+}
+
+.sobre-heroi-foto {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.sobre-heroi-coxinhas {
+  position: absolute;
+  bottom: 0;
+  left: -4%;
+  width: 52%;
+  height: auto;
+  filter: drop-shadow(0 14px 16px rgb(42 23 16 / 0.35));
+}
+
+/* A logo num oval de farinha, para o vermelho dela não sumir sobre a foto. */
+.sobre-heroi-selo {
+  position: absolute;
+  top: 0;
+  right: -2%;
+  width: 40%;
+  padding: 0.75rem 0.875rem;
+  border-radius: 50%;
+  background-color: var(--color-farinha);
+  box-shadow: 0 10px 24px rgb(42 23 16 / 0.22);
+  rotate: 8deg;
+}
+
+.sobre-heroi-selo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Números: marrom, número em amarelo de cartaz e rótulo embaixo. */
+.sobre-numeros {
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+}
+
+.sobre-numeros dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem 1rem;
+  padding-top: 1.75rem;
+  padding-bottom: 1.75rem;
+}
+
+.sobre-numeros dl > div {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.sobre-numeros dd {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 6vw, 2.5rem);
+  line-height: 1;
+  color: var(--color-accent);
+  overflow-wrap: anywhere;
+}
+
+.sobre-numeros dt {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* Títulos das seções. */
+.pagina-sobre h2 {
+  font-size: clamp(2rem, 7vw, 3rem);
+  line-height: 1.05;
+}
+
+/* Quem somos: retrato e texto lado a lado. */
+.sobre-quem {
+  display: grid;
+  gap: 2rem;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  scroll-margin-top: 5rem;
+}
+
+.sobre-quem-foto {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: 50% 25%;
+}
+
+@media (min-width: 64rem) {
+  .sobre-quem-foto {
+    aspect-ratio: 4 / 5;
+  }
+}
+
+.sobre-quem-texto {
+  align-self: center;
+}
+
+.sobre-quem-texto p {
+  max-width: 36rem;
+  margin-top: 1rem;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--color-crust);
+}
+
+.sobre-quem-texto h2 + p {
+  margin-top: 1.5rem;
+  font-size: 1.25rem;
+  line-height: 1.55;
+  color: var(--color-ink);
+}
+
+/* O que fazemos: título com o botão ao lado e um cartão com foto por serviço. */
+.sobre-servicos {
+  padding-top: 4rem;
+  padding-bottom: 4.5rem;
+  border-top: 1px solid var(--color-linha);
+  background-color: var(--color-polvilho);
+  scroll-margin-top: 5rem;
+}
+
+.sobre-cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+}
+
+.sobre-servicos-lista,
+.sobre-empresas-lista {
+  display: grid;
+  gap: 1.5rem 1rem;
+  margin-top: 2rem;
+}
+
+/* No celular a foto fica ao lado do texto, para a lista não ficar comprida;
+   do tablet em diante, em cima. */
+.sobre-servico:has(img) {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  column-gap: 1rem;
+}
+
+.sobre-servico img {
+  grid-row: span 2;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  background-color: var(--color-massa);
+}
+
+.sobre-servico h3 {
+  font-size: 1.25rem;
+  line-height: 1.15;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+@media (min-width: 40rem) {
+  .sobre-servico:has(img) {
+    display: block;
+  }
+
+  .sobre-servico img {
+    aspect-ratio: 4 / 3;
+  }
+
+  .sobre-servico h3 {
+    margin-top: 1rem;
+    font-size: 1.375rem;
+  }
+}
+
+.sobre-servico p {
+  margin-top: 0.5rem;
+  line-height: 1.6;
+  color: var(--color-crust);
+}
+
+/* No que acreditamos: a faixa vermelha. Texto branco (4,95:1). */
+.sobre-valores {
+  padding-top: 4rem;
+  padding-bottom: 4.5rem;
+  background-color: var(--color-brand);
+  color: #fff;
+  scroll-margin-top: 5rem;
+}
+
+.sobre-valores-lista {
+  display: grid;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+/* No celular o ícone fica ao lado do texto; do tablet em diante, em cima. */
+.sobre-valores-lista li {
+  display: grid;
+  grid-template-columns: 3.5rem minmax(0, 1fr);
+  column-gap: 1rem;
+}
+
+.sobre-valores-lista .valor-icone {
+  grid-row: span 2;
+  width: 3.5rem;
+  height: 3.5rem;
+  background-color: var(--color-farinha);
+}
+
+@media (min-width: 40rem) {
+  .sobre-valores-lista li {
+    display: block;
+  }
+
+  .sobre-valores-lista .valor-icone {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+}
+
+.sobre-valores-lista .valor-icone svg {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.sobre-valores-lista h3 {
+  font-size: 1.375rem;
+}
+
+@media (min-width: 40rem) {
+  .sobre-valores-lista h3 {
+    margin-top: 1rem;
+    font-size: 1.5rem;
+  }
+}
+
+.sobre-valores-lista p {
+  max-width: 24rem;
+  margin-top: 0.5rem;
+  line-height: 1.6;
+}
+
+/* Nossa história: em pé no celular, deitada no computador. A régua passa
+   pelos pontos de cada marco. */
+.sobre-historia {
+  padding-top: 4.5rem;
+  padding-bottom: 2rem;
+  scroll-margin-top: 5rem;
+}
+
+.linha-tempo {
+  display: grid;
+  gap: 2rem;
+  margin-top: 2.25rem;
+  padding-left: 1.75rem;
+  border-left: 3px solid var(--color-farelo);
+}
+
+.linha-tempo li {
+  position: relative;
+}
+
+.linha-tempo li::before {
+  content: "";
+  position: absolute;
+  top: 0.3rem;
+  left: calc(-1.75rem - 9.5px);
+  width: 1rem;
+  height: 1rem;
+  border: 3px solid var(--color-farinha);
+  border-radius: 50%;
+  background-color: var(--color-brand);
+}
+
+.linha-tempo-ano {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  color: var(--color-brand-escuro);
+}
+
+.linha-tempo h3 {
+  margin-top: 0.25rem;
+  font-size: 1.375rem;
+}
+
+.linha-tempo-texto {
+  max-width: 34rem;
+  margin-top: 0.375rem;
+  line-height: 1.6;
+  color: var(--color-crust);
+}
+
+@media (min-width: 40rem) {
+  .sobre-servicos-lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1.5rem;
+  }
+
+  .sobre-numeros dl {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .sobre-empresas-lista {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 1.5rem;
+  }
+
+  .sobre-valores-lista {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .sobre-heroi-grade {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 4rem;
+    min-height: calc(100svh - 12rem);
+    padding-top: 2.5rem;
+    padding-bottom: 4rem;
+  }
+
+  .sobre-heroi-arte {
+    margin-right: 0;
+  }
+
+  .sobre-quem {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: 5rem;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+
+  .sobre-servicos,
+  .sobre-valores {
+    padding-top: 5.5rem;
+    padding-bottom: 6rem;
+  }
+
+  .sobre-servicos-lista {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .sobre-valores-lista {
+    gap: 3.5rem;
+  }
+
+  .sobre-historia {
+    padding-top: 6rem;
+  }
+
+  .linha-tempo {
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+    gap: 2.5rem;
+    padding-top: 2.25rem;
+    padding-left: 0;
+    border-top: 3px solid var(--color-farelo);
+    border-left: 0;
+  }
+
+  .linha-tempo li::before {
+    top: calc(-2.25rem - 9.5px);
+    left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sobre-heroi-coxinhas {
+    animation: coxinhas-saltam 0.9s var(--ease-massa) 0.15s both;
+  }
+
+  .sobre-heroi-selo {
+    animation: selo-carimba 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.3) 0.6s both;
+  }
+
+  @supports (animation-timeline: view()) {
+    .sobre-heroi-coxinhas {
+      animation:
+        coxinhas-saltam 0.9s var(--ease-massa) 0.15s both,
+        coxinhas-sobem linear both;
+      animation-timeline: auto, scroll();
+      animation-range: normal, 0 70vh;
+    }
+  }
+}
+
+@keyframes coxinhas-saltam {
+  from {
+    opacity: 0;
+    transform: translate(-1.5rem, 2.5rem) rotate(-12deg) scale(0.85);
+  }
+}
+
+@keyframes coxinhas-sobem {
+  to {
+    translate: 0 -3rem;
+  }
+}
+
+/* ---------- Unidades: matriz em faixa, lojas em cartões ----------
+   A matriz é a única loja que recebe pedidos do site, então ganha a faixa
+   caixa marrom, separada do herói: foto à esquerda, dados em branco à
+   direita, ações em amarelo. As outras lojas vêm em cartões retos ao lado do
+   título (que fica parado no computador). No fim, o convite para encomendar
+   com a tigela de bolinhas. */
+
+/* Botão de contorno claro, para fundo escuro. */
+.botao-vazado {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3rem;
+  padding: 0.5rem 1.5rem;
+  border: 1.5px solid rgb(255 255 255 / 0.8);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: background-color 0.15s var(--ease-massa);
+}
+
+.botao-vazado:hover {
+  background-color: rgb(255 255 255 / 0.12);
+}
+
+.pagina-unidades .botao-amarelo,
+.pagina-unidades .botao-vazado {
+  border-radius: 0;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.heroi-balcao-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+/* Matriz. */
+/* A caixa marrom fica separada do herói por um respiro claro, para as duas
+   fotos não emendarem. No celular vai de ponta a ponta. */
+.matriz-faixa {
+  padding-top: 2.5rem;
+  scroll-margin-top: 2rem;
+}
+
+.matriz-faixa :focus-visible {
+  outline-color: #fff;
+}
+
+.matriz-faixa-grade {
+  display: grid;
+  background-color: var(--color-ink);
+  color: #fff;
+}
+
+.matriz-faixa-foto img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+.matriz-faixa-desenho {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  padding: 2rem;
+  background-color: var(--color-polvilho);
+}
+
+.matriz-faixa-texto {
+  padding: 2.5rem 1rem 3rem;
+}
+
+.matriz-selo {
+  display: inline-block;
+  padding: 0.3rem 0.75rem;
+  background-color: var(--color-accent);
+  color: var(--color-ink);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.matriz-faixa h2 {
+  margin-top: 1rem;
+  font-size: clamp(2.5rem, 10vw, 4rem);
+  line-height: 1;
+}
+
+.matriz-bairro {
+  margin-top: 0.375rem;
+  font-weight: 700;
+  color: var(--color-cream);
+}
+
+.matriz-sobre {
+  max-width: 36rem;
+  margin-top: 1rem;
+  line-height: 1.65;
+  color: rgb(255 255 255 / 0.85);
+}
+
+.matriz-dados {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.75rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid rgb(255 255 255 / 0.2);
+}
+
+.matriz-dados dt {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.matriz-dados dt svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.matriz-dados dd {
+  margin-top: 0.25rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.matriz-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  margin-top: 2rem;
+}
+
+.matriz-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 2.75rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+/* Outras lojas: título com a fachada desenhada e os cartões ao lado. */
+.lojas-secao {
+  display: grid;
+  gap: 2rem;
+  padding-top: 4rem;
+  padding-bottom: 4.5rem;
+  scroll-margin-top: 4.5rem;
+}
+
+.lojas-secao h2 {
+  font-size: clamp(2rem, 7vw, 3rem);
+  line-height: 1.05;
+}
+
+.lojas-secao-cabeca > p {
+  max-width: 26rem;
+  margin-top: 0.75rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--color-crust);
+}
+
+.lojas-secao-fachada {
+  display: none;
+}
+
+.lojas-cartoes {
+  display: grid;
+  gap: 1rem;
+}
+
+.loja-cartao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  padding: 1.25rem 1rem;
+  border: 1px solid var(--color-linha);
+  border-top: 4px solid var(--color-ink);
+  background-color: var(--color-papel);
+  scroll-margin-top: 6rem;
+}
+
+/* Vindo de "Onde encontrar" (/unidades#slug): o cartão certo acende. */
+.loja-cartao:target {
+  border-color: var(--color-brand);
+  border-top-color: var(--color-brand);
+  box-shadow: 0 0 0 2px var(--color-brand);
+}
+
+.loja-cartao h3 {
+  font-size: 1.5rem;
+  line-height: 1.1;
+}
+
+.loja-cartao-bairro {
+  margin-top: -0.375rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--color-brand-escuro);
+}
+
+.loja-cartao .loja-acoes {
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+.pagina-unidades .loja-acao {
+  padding-inline: 0.625rem;
+  border-radius: 0;
+}
+
+/* Fecho: convite para encomendar, com a tigela de bolinhas à direita. */
+.unidades-fecho {
+  padding-bottom: 4.5rem;
+}
+
+.unidades-fecho-caixa {
+  position: relative;
+}
+
+.unidades-fecho-texto {
+  padding: 2rem 9.5rem 2rem 1.5rem;
+  background:
+    radial-gradient(circle at 92% 70%, rgb(225 5 30 / 0.5) 0, rgb(225 5 30 / 0) 55%),
+    var(--color-ink);
+  color: #fff;
+}
+
+.unidades-fecho-texto :focus-visible {
+  outline-color: #fff;
+}
+
+.unidades-fecho h2 {
+  font-size: clamp(1.75rem, 6vw, 2.5rem);
+  line-height: 1.05;
+}
+
+.unidades-fecho-texto p {
+  max-width: 30rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1.25rem;
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.88);
+}
+
+.unidades-fecho .botao-amarelo {
+  border-radius: 0;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.unidades-fecho-tigela {
+  position: absolute;
+  right: 1.25rem;
+  bottom: 0;
+  width: 9rem;
+  height: auto;
+  filter: drop-shadow(0 10px 14px rgb(0 0 0 / 0.45));
+  pointer-events: none;
+}
+
+@media (min-width: 40rem) {
+  .loja-cartao {
+    padding-inline: 1.25rem;
+  }
+
+  .matriz-dados {
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  }
+
+  .lojas-cartoes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 48rem) {
+  .unidades-fecho-texto {
+    padding: 3rem 24rem 3rem 3rem;
+  }
+
+  .unidades-fecho-tigela {
+    right: 4rem;
+    width: 18rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .heroi-balcao {
+    min-height: min(46rem, calc(100svh - 4.5rem - 1px));
+  }
+
+  .matriz-faixa {
+    padding: 5rem 2rem 0;
+  }
+
+  .matriz-faixa-grade {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: stretch;
+    max-width: 76rem;
+    margin-inline: auto;
+  }
+
+  .matriz-faixa-foto img {
+    aspect-ratio: auto;
+    min-height: 32rem;
+  }
+
+  .matriz-faixa-texto {
+    align-self: center;
+    padding: 3.5rem;
+  }
+
+  .lojas-secao {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr);
+    align-items: start;
+    gap: 3rem;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+
+  .lojas-secao-cabeca {
+    position: sticky;
+    top: 6.5rem;
+  }
+
+  .lojas-secao-fachada {
+    display: block;
+    width: 100%;
+    max-width: 18rem;
+    height: auto;
+    margin-top: 2rem;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .unidades-fecho-tigela {
+      animation: placa-recorte-sobe linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 50%;
+    }
   }
 }
 }

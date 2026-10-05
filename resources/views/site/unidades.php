@@ -9,11 +9,13 @@ declare(strict_types=1);
  * pergunta de quem chega é "qual fica perto, está aberta, como falo com
  * ela". Então a página responde nessa ordem:
  *
- *   1. a matriz em destaque — é ela que recebe o pedido feito pelo site;
- *   2. as outras lojas numa lista enxuta, uma linha cada: nome e bairro,
- *      endereço, horário e os contatos. Sem foto repetida, sem texto longo.
+ *   1. a matriz em destaque, numa faixa marrom com a foto — é ela que recebe
+ *      o pedido feito pelo site;
+ *   2. as outras lojas em cartões: nome e bairro, endereço, horário e os
+ *      contatos. Sem foto repetida, sem texto longo;
+ *   3. um fecho para quem quer encomendar pelo site.
  *
- * O slug de cada unidade vira o id da linha, então dá para linkar direto:
+ * O slug de cada unidade vira o id do bloco, então dá para linkar direto:
  * /unidades#unidade-3 (a página do produto usa isso em "Onde encontrar").
  */
 
@@ -29,19 +31,15 @@ $descricaoPagina = 'Endereço, horário e WhatsApp de cada loja da Dolce Delíci
 include DD_BASE . '/partials/header.php';
 ?>
 
-<div class="pagina-institucional bg-farinha">
+<div class="pagina-institucional pagina-unidades bg-farinha">
 
   <?php
   /*
    * Herói "balcão": a foto de uma loja (a vendedora arrumando os pães) ocupa
-   * o herói inteiro; o texto e um atalho para cada loja ficam sobre o marrom
-   * que sobe do lado esquerdo (no celular, a foto vem em cima e o texto
-   * embaixo). A pessoa acha a loja dela já na primeira tela. A matriz vem
-   * primeiro, marcada por receber os pedidos do site. Os links usam o slug,
-   * que é o id de cada loja mais abaixo.
+   * o herói; o texto fica sobre o marrom que sobe do lado esquerdo (no
+   * celular, a foto vem em cima e o texto embaixo). Dois caminhos: a matriz,
+   * que recebe os pedidos do site, e a lista das outras lojas.
    */
-  $todasLojas = array_merge($matrizes, $lojas);
-  $nomeCurto  = static fn (array $u): string => trim(explode(' — ', (string) ($u['nome'] ?? ''), 2)[0]);
   $fotoLarga  = dd_imagem('/assets/img/heroi/loja-2400.jpg');
   $fotoMedia  = dd_imagem('/assets/img/heroi/loja-1600.jpg');
   $fotoCel    = dd_imagem('/assets/img/heroi/loja-celular-780.jpg');
@@ -68,39 +66,50 @@ include DD_BASE . '/partials/header.php';
           nas outras você compra no balcão ou pelo WhatsApp de cada uma.
         </p>
 
-        <?php if ($todasLojas !== []): ?>
-          <ul class="heroi-balcao-lojas" aria-label="Ir para uma loja">
-            <?php foreach ($todasLojas as $lojaAtalho): ?>
-              <li>
-                <a href="#<?= e((string) $lojaAtalho['slug']) ?>" class="<?= !empty($lojaAtalho['matriz']) ? 'loja-atalho loja-atalho-matriz' : 'loja-atalho' ?>">
-                  <?= e($nomeCurto($lojaAtalho)) ?>
-                  <?php if (!empty($lojaAtalho['matriz'])): ?><small>recebe os pedidos do site</small><?php endif; ?>
-                </a>
-              </li>
-            <?php endforeach; ?>
-          </ul>
-        <?php endif; ?>
+        <div class="heroi-balcao-botoes">
+          <?php foreach ($matrizes as $matrizAtalho): ?>
+            <a href="#<?= e((string) $matrizAtalho['slug']) ?>" class="botao-amarelo">Ver a matriz</a>
+          <?php endforeach; ?>
+          <?php if ($lojas !== []): ?>
+            <a href="#outras-lojas" class="botao-vazado">Outras <?= e((string) count($lojas)) ?> lojas</a>
+          <?php endif; ?>
+        </div>
       </div>
     </div>
   </section>
 
-  <div>
-    <?php foreach ($matrizes as $unidade): ?>
-      <?php include DD_BASE . '/partials/unit-section.php'; ?>
-    <?php endforeach; ?>
-  </div>
+  <?php foreach ($matrizes as $unidade): ?>
+    <?php include DD_BASE . '/partials/unit-section.php'; ?>
+  <?php endforeach; ?>
 
   <?php if ($lojas !== []): ?>
-    <section id="outras-lojas" class="secao-lojas mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="titulo-lojas">
-      <h2 id="titulo-lojas">Outras lojas</h2>
-      <p class="mt-3 max-w-2xl text-lg leading-relaxed text-crust">Balcão e WhatsApp de cada loja. Cada uma tem o próprio catálogo.</p>
-      <ul class="lojas mt-8">
+    <section id="outras-lojas" class="lojas-secao mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="titulo-lojas">
+      <div class="lojas-secao-cabeca">
+        <h2 id="titulo-lojas">Outras lojas</h2>
+        <p>Balcão e WhatsApp de cada loja. Cada uma tem o próprio catálogo.</p>
+        <?php $fachadaClasse = 'lojas-secao-fachada'; include DD_BASE . '/partials/ilustra-fachada.php'; ?>
+      </div>
+      <ul class="lojas-cartoes">
         <?php foreach ($lojas as $unidade): ?>
           <?php include DD_BASE . '/partials/unit-section.php'; ?>
         <?php endforeach; ?>
       </ul>
     </section>
   <?php endif; ?>
+
+  <?php // Fecho: quem chegou até aqui pela loja pode fazer o pedido pelo site. ?>
+  <section class="unidades-fecho" aria-labelledby="titulo-fecho">
+    <div class="unidades-fecho-caixa mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="unidades-fecho-texto">
+        <h2 id="titulo-fecho">Quer encomendar?</h2>
+        <p>Monte o pedido no site e feche pelo WhatsApp da matriz, que prepara a encomenda.</p>
+        <a href="/#catalogo" class="botao-amarelo">Ver o catálogo</a>
+      </div>
+      <?php if ($tigela = dd_imagem('/assets/img/recortes/tigela-640.webp')): ?>
+        <img class="unidades-fecho-tigela" src="<?= e($tigela) ?>" srcset="<?= e((string) dd_imagem('/assets/img/recortes/tigela-360.webp')) ?> 360w, <?= e($tigela) ?> 640w" sizes="(min-width: 48rem) 20rem, 10rem" alt="" width="640" height="606" loading="lazy" decoding="async">
+      <?php endif; ?>
+    </div>
+  </section>
 </div>
 
 <?php include DD_BASE . '/partials/footer.php'; ?>
