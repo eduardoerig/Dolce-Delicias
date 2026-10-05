@@ -1512,9 +1512,9 @@ a.loja-acao:hover {
   cursor: default;
 }
 
-/* ---------- A empresa e Unidades ----------
-   Cantos retos, como o resto do site. O desenho de cada página está em
-   "A empresa: fotografia" e "Unidades: matriz em faixa". */
+/* ---------- Unidades ----------
+   Cantos retos, como o resto do site. O desenho da página está em
+   "Unidades: matriz em faixa". */
 
 /* Nesta página os botões também são retos. */
 .pagina-institucional .botao-primario,
@@ -1554,7 +1554,7 @@ a.loja-acao:hover {
      acima de 4.5:1 sobre qualquer foto.
 
    A home, A empresa e Unidades têm heróis próprios (.heroi-cento,
-   .sobre-topo, .heroi-balcao). */
+   .sobre-abertura, .heroi-balcao). */
 
 .heroi-foto {
   position: relative;
@@ -3151,153 +3151,9 @@ a.loja-acao:hover {
   }
 }
 
-
-/* ---------- A empresa: fotografia ----------
-   Salgado de verdade em foto grande e faixas que se alternam: marrom no
-   herói e na caixa de empresas, claro em "Quem somos" e na história,
-   polvilho nos serviços, vermelho nos valores. A foto tem coluna própria em
-   todo tamanho: texto nunca passa sobre comida. */
-
-/* Títulos das seções. */
-.pagina-sobre h2 {
-  font-size: clamp(2rem, 7vw, 3rem);
-  line-height: 1.05;
-}
-
-/* O que fazemos: título com o botão ao lado e um cartão com foto por serviço. */
-.sobre-servicos {
-  padding-top: 4rem;
-  padding-bottom: 4.5rem;
-  border-top: 1px solid var(--color-linha);
-  background-color: var(--color-polvilho);
-  scroll-margin-top: 5rem;
-}
-
-.sobre-cabeca {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: end;
-  justify-content: space-between;
-  gap: 1rem 2rem;
-}
-
-.sobre-servicos-lista {
-  display: grid;
-  gap: 1.5rem 1rem;
-  margin-top: 2rem;
-}
-
-/* No celular e no tablet em pé a foto fica ao lado do texto, para a lista
-   não ficar comprida; do tablet deitado em diante, três colunas com a foto
-   em cima. */
-.sobre-servico:has(img) {
-  display: grid;
-  grid-template-columns: 7.5rem minmax(0, 1fr);
-  grid-template-rows: auto 1fr;
-  column-gap: 1rem;
-}
-
-.sobre-servico img {
-  grid-row: span 2;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1;
-  object-fit: cover;
-  background-color: var(--color-massa);
-}
-
-.sobre-servico h3 {
-  font-size: 1.25rem;
-  line-height: 1.15;
-  overflow-wrap: break-word;
-  hyphens: auto;
-}
-
-@media (min-width: 48rem) {
-  .sobre-servico:has(img) {
-    display: block;
-  }
-
-  .sobre-servico img {
-    aspect-ratio: 4 / 3;
-  }
-
-  .sobre-servico h3 {
-    margin-top: 1rem;
-    font-size: 1.375rem;
-  }
-}
-
-.sobre-servico p {
-  margin-top: 0.5rem;
-  line-height: 1.6;
-  color: var(--color-crust);
-}
-
-/* No que acreditamos: a faixa vermelha, enxuta. Texto branco (4,95:1).
-   No computador o título fica à esquerda e os valores à direita, um por
-   linha: o nome em letra de título média e a explicação ao lado, separados
-   por fios. No celular, tudo empilhado. */
-.sobre-valores {
-  padding-top: 3.5rem;
-  padding-bottom: 3.5rem;
-  background-color: var(--color-brand);
-  color: #fff;
-  scroll-margin-top: 5rem;
-}
-
-.sobre-valores-grade {
-  display: grid;
-  gap: 1.5rem;
-}
-
-.sobre-valores-lista {
-  border-top: 1px solid rgb(255 255 255 / 0.4);
-}
-
-.sobre-valores-lista li {
-  padding-block: 1.125rem;
-  border-bottom: 1px solid rgb(255 255 255 / 0.4);
-}
-
-.sobre-valores-lista h3 {
-  font-size: 1.375rem;
-  line-height: 1.15;
-}
-
-.sobre-valores-lista p {
-  max-width: 30rem;
-  margin-top: 0.375rem;
-  line-height: 1.6;
-}
-
-@media (min-width: 48rem) {
-  .sobre-valores-lista li {
-    display: grid;
-    grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
-    align-items: baseline;
-    gap: 2rem;
-  }
-
-  .sobre-valores-lista p {
-    margin-top: 0;
-  }
-}
-
-@media (min-width: 64rem) {
-  .sobre-valores-grade {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-    align-items: start;
-    gap: 4rem;
-  }
-
-  .sobre-valores-lista h3 {
-    font-size: 1.5rem;
-  }
-}
-
-/* Nossa história: em pé no celular, deitada no computador. A régua passa
-   pelos pontos de cada marco. */
+/* ---------- A empresa: linha do tempo ----------
+   Só aparece quando data/empresa.php tiver datas reais. Em pé no celular,
+   deitada no computador; a régua passa pelos pontos de cada marco. */
 .sobre-historia {
   padding-top: 4.5rem;
   padding-bottom: 2rem;
@@ -3346,24 +3202,7 @@ a.loja-acao:hover {
   color: var(--color-crust);
 }
 
-@media (min-width: 48rem) {
-  .sobre-servicos-lista {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    column-gap: 1.5rem;
-  }
-}
-
 @media (min-width: 64rem) {
-
-  .sobre-servicos {
-    padding-top: 5.5rem;
-    padding-bottom: 6rem;
-  }
-
-  .sobre-valores {
-    padding-top: 4.5rem;
-    padding-bottom: 4.5rem;
-  }
 
   .sobre-historia {
     padding-top: 6rem;
@@ -3730,229 +3569,98 @@ a.loja-acao:hover {
   }
 }
 
-/* A empresa: herói marrom. No celular a foto vem em cima (4:3) e o texto
-   embaixo; do computador em diante, texto à esquerda e a foto ocupando a
-   metade direita até a borda da tela. */
-.sobre-topo {
-  background-color: var(--color-ink);
-  color: #fff;
-}
-
-.sobre-topo :focus-visible {
-  outline-color: #fff;
-}
-
-.sobre-topo-grade {
-  display: grid;
-}
-
-.sobre-topo-foto img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  object-position: 50% 45%;
-}
-
-.sobre-topo-texto {
-  padding: 2rem 1rem 2.5rem;
-}
-
-.sobre-topo-titulo {
-  max-width: 13ch;
-  margin-top: 1rem;
-  font-size: clamp(2.5rem, 11vw, 4.75rem);
-  line-height: 0.98;
-  text-transform: uppercase;
+/* ---------- A empresa ----------
+   Desenho inspirado nas páginas "Sobre" de referência (Colab, BGC,
+   Econodata, Sólides): faixas claras e arejadas, conteúdo centralizado nas
+   seções de leitura, fotos e cartões com cantos arredondados, divisórias
+   curvas e botões em pílula. A cor e a letra são as da Dolce: vermelho na
+   abertura, Alfa Slab nos títulos. Texto nunca passa sobre comida. */
+.pagina-sobre h2 {
+  font-size: clamp(1.875rem, 6vw, 2.75rem);
+  line-height: 1.08;
   text-wrap: balance;
 }
 
-.sobre-topo-frase {
-  max-width: 32rem;
-  margin-top: 1.125rem;
-  font-size: 1.0625rem;
-  line-height: 1.6;
-  color: rgb(255 255 255 / 0.88);
+/* Rótulo acima do título: cor da marca, caixa normal. */
+.sobre-rotulo {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-brand-escuro);
 }
 
-.sobre-topo-botoes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 1.75rem;
+.sobre-rotulo + h2 {
+  margin-top: 0.5rem;
 }
 
-.pagina-sobre .botao-amarelo,
-.pagina-sobre .botao-vazado {
-  border-radius: 0;
-  font-size: 0.875rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+.sobre-centro {
+  text-align: center;
 }
 
-/* Números: em amarelo de cartaz, dois por linha, separados do texto por um
-   fio claro. */
-.sobre-topo-numeros {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.25rem 1rem;
-  max-width: 32rem;
-  margin-top: 2.25rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid rgb(255 255 255 / 0.2);
+.sobre-centro h2 {
+  max-width: 40rem;
+  margin-inline: auto;
 }
 
-.sobre-topo-numeros > div {
-  display: flex;
-  flex-direction: column-reverse;
-  justify-content: flex-end;
-  gap: 0.25rem;
-  min-width: 0;
-}
-
-.sobre-topo-numeros dd {
-  font-family: var(--font-display);
-  font-size: clamp(1.375rem, 5vw, 2rem);
-  line-height: 1;
-  color: var(--color-accent);
-  overflow-wrap: anywhere;
-}
-
-.sobre-topo-numeros dt {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--color-cream);
-}
-
-/* Quem somos: texto e a foto da equipe, com um bloco vermelho deslocado atrás. */
-.sobre-quem {
-  display: grid;
-  gap: 2.5rem;
-  padding-top: 4rem;
-  padding-bottom: 4.5rem;
-  scroll-margin-top: 5rem;
-}
-
-.sobre-quem-texto {
-  align-self: center;
-}
-
-.sobre-quem-texto p {
-  max-width: 36rem;
-  margin-top: 1rem;
-  font-size: 1.0625rem;
-  line-height: 1.7;
-  color: var(--color-crust);
-}
-
-.sobre-quem-texto h2 + p {
-  margin-top: 1.5rem;
-  font-size: 1.25rem;
-  line-height: 1.55;
-  color: var(--color-ink);
-}
-
-.sobre-quem-foto {
-  position: relative;
-  width: min(100% - 1.25rem, 30rem);
-}
-
-.sobre-quem-foto::before {
-  content: "";
-  position: absolute;
-  inset: 1.25rem -1.25rem -1.25rem 1.25rem;
-  background-color: var(--color-brand);
-}
-
-.sobre-quem-foto img {
-  position: relative;
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-}
-
-@media (min-width: 40rem) {
-  .sobre-topo-texto {
-    padding-inline: 1.5rem;
-  }
-
-  .sobre-quem-foto {
-    justify-self: center;
-  }
-}
-
-@media (min-width: 64rem) {
-  .sobre-topo-grade {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    min-height: min(46rem, calc(100svh - 4.5rem - 1px));
-  }
-
-  .sobre-topo-foto {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
-  .sobre-topo-foto img {
-    aspect-ratio: auto;
-    object-position: 50% 60%;
-  }
-
-  /* O título e os números medem a metade da tela, não a tela toda. */
-  .sobre-topo-titulo {
-    font-size: clamp(3rem, 5vw, 4.75rem);
-  }
-
-  .sobre-topo-numeros dd {
-    font-size: clamp(1.25rem, 2vw, 2rem);
-  }
-
-  /* A borda esquerda do texto acompanha o contêiner de 80rem do site. */
-  .sobre-topo-texto {
-    grid-column: 1;
-    grid-row: 1;
-    align-self: center;
-    padding: 3.5rem 3.5rem 3.5rem max(2rem, calc((100vw - 80rem) / 2 + 2rem));
-  }
-
-  .sobre-quem {
-    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-    gap: 5rem;
-    padding-top: 6rem;
-    padding-bottom: 6.5rem;
-  }
-
-  .sobre-quem-foto {
-    justify-self: end;
-  }
-}
-
-/* A empresa: o vídeo da marca no fim da página. Texto e link à esquerda, o
-   player do Instagram (vertical) à direita; no celular, um embaixo do outro. */
-.sobre-video {
-  display: grid;
-  gap: 2rem;
-  padding-top: 4rem;
-  padding-bottom: 5rem;
-  scroll-margin-top: 5rem;
-}
-
-.sobre-video-texto p {
-  max-width: 30rem;
-  margin-top: 1rem;
+.sobre-centro-frase {
+  max-width: 34rem;
+  margin: 0.75rem auto 0;
   font-size: 1.125rem;
   line-height: 1.6;
   color: var(--color-crust);
 }
 
-.sobre-video-link {
+/* Botões em pílula, como os das referências. */
+.sobre-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.sobre-botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3rem;
+  padding: 0.5rem 1.5rem;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  font-weight: 700;
+  transition: background-color 0.15s var(--ease-massa), border-color 0.15s var(--ease-massa);
+}
+
+.sobre-botao-amarelo {
+  background-color: var(--color-accent);
+  color: var(--color-ink);
+}
+
+.sobre-botao-amarelo:hover {
+  background-color: color-mix(in oklab, var(--color-accent) 86%, var(--color-ink));
+}
+
+.sobre-botao-claro {
+  border-color: rgb(255 255 255 / 0.85);
+  color: #fff;
+}
+
+.sobre-botao-claro:hover {
+  background-color: rgb(255 255 255 / 0.14);
+}
+
+.sobre-botao-vermelho {
+  background-color: var(--color-brand);
+  color: #fff;
+}
+
+.sobre-botao-vermelho:hover {
+  background-color: var(--color-brand-escuro);
+}
+
+.sobre-link {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   min-height: 2.75rem;
-  margin-top: 1.25rem;
   font-weight: 700;
   text-decoration: underline;
   text-decoration-color: var(--color-brand);
@@ -3960,15 +3668,249 @@ a.loja-acao:hover {
   text-underline-offset: 4px;
 }
 
-.sobre-video-link svg {
+.sobre-link svg {
   color: var(--color-brand-escuro);
 }
 
-/* O player tem altura fixa: o embed do Instagram não informa a proporção. */
+/* 1. Abertura vermelha, terminando numa curva farinha. Branco sobre o
+   vermelho passa 4,95:1. */
+.sobre-abertura {
+  position: relative;
+  padding-bottom: 4rem;
+  background-color: var(--color-brand);
+  color: #fff;
+}
+
+.sobre-abertura::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px;
+  height: 3rem;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  background-color: var(--color-farinha);
+}
+
+.sobre-abertura :focus-visible {
+  outline-color: #fff;
+}
+
+.sobre-abertura-grade {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 2.5rem;
+  padding-top: 2rem;
+}
+
+.sobre-abertura-titulo {
+  max-width: 14ch;
+  margin-top: 1.25rem;
+  font-size: clamp(2.375rem, 9vw, 4.25rem);
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+.sobre-abertura-frase {
+  max-width: 30rem;
+  margin-top: 1rem;
+  margin-bottom: 1.75rem;
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.sobre-abertura-foto {
+  justify-self: center;
+  width: min(100%, 26rem);
+}
+
+.sobre-abertura-foto img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border: 6px solid #fff;
+  border-radius: 1.5rem;
+  box-shadow: 0 24px 48px rgb(42 23 16 / 0.3);
+  rotate: 2deg;
+}
+
+/* 2. Fatos: valores grandes em vermelho, centralizados, com fios entre eles. */
+.sobre-fatos {
+  padding-top: 1rem;
+  padding-bottom: 3.5rem;
+}
+
+.sobre-fatos dl {
+  display: grid;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.sobre-fatos dl > div {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+.sobre-fatos dd {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 7vw, 3rem);
+  line-height: 1;
+  color: var(--color-brand-escuro);
+}
+
+.sobre-fatos dt {
+  font-weight: 600;
+  color: var(--color-crust);
+}
+
+/* 3. Nossa história: foto arredondada e o texto da marca. */
+.sobre-cozinha {
+  padding-block: 3.5rem 4.5rem;
+  scroll-margin-top: 5rem;
+}
+
+.sobre-cozinha-grade {
+  display: grid;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.sobre-cozinha-foto img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: 50% 60%;
+  border-radius: 1.5rem;
+}
+
+.sobre-cozinha-texto > p:not(.sobre-rotulo) {
+  max-width: 34rem;
+  margin-top: 1rem;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--color-crust);
+}
+
+.sobre-cozinha-texto h2 + p {
+  font-size: 1.1875rem;
+  color: var(--color-ink);
+}
+
+/* 4. O que fazemos: faixa polvilho entre curvas, três cartões brancos. */
+.sobre-frentes {
+  position: relative;
+  padding-block: 5rem;
+  background-color: var(--color-polvilho);
+  scroll-margin-top: 5rem;
+}
+
+.sobre-frentes::before,
+.sobre-frentes::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  height: 2.5rem;
+  background-color: var(--color-farinha);
+}
+
+.sobre-frentes::before {
+  top: -1px;
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+}
+
+.sobre-frentes::after {
+  bottom: -1px;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+
+.sobre-frentes-lista {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+}
+
+.sobre-frente {
+  overflow: hidden;
+  border-radius: 1.25rem;
+  background-color: var(--color-papel);
+  box-shadow: 0 1px 0 var(--color-linha);
+}
+
+.sobre-frente img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.sobre-frente-texto {
+  padding: 1.25rem 1.25rem 1.5rem;
+}
+
+.sobre-frente h3 {
+  font-size: 1.375rem;
+  line-height: 1.15;
+}
+
+.sobre-frente p {
+  margin-top: 0.5rem;
+  line-height: 1.6;
+  color: var(--color-crust);
+}
+
+/* 5. No que acreditamos: a frase-tese grande no meio e os valores em três
+   colunas, cada um com um traço vermelho em cima. */
+.sobre-crencas {
+  padding-block: 4.5rem;
+  scroll-margin-top: 5rem;
+}
+
+.sobre-crencas h2 {
+  color: var(--color-brand-escuro);
+}
+
+.sobre-crencas-lista {
+  display: grid;
+  gap: 2rem;
+  margin-top: 2.75rem;
+}
+
+.sobre-crencas-lista li {
+  padding-top: 1.25rem;
+  border-top: 3px solid var(--color-brand);
+}
+
+.sobre-crencas-lista h3 {
+  font-size: 1.375rem;
+  line-height: 1.15;
+}
+
+.sobre-crencas-lista p {
+  margin-top: 0.5rem;
+  line-height: 1.6;
+  color: var(--color-crust);
+}
+
+/* 7. O vídeo, centralizado. O player tem altura fixa: o embed do Instagram
+   não informa a proporção. */
+.sobre-video {
+  padding-block: 3rem 4.5rem;
+  scroll-margin-top: 5rem;
+}
+
 .sobre-video-player {
   width: 100%;
   max-width: 25rem;
+  margin: 2rem auto 0;
+  overflow: hidden;
   border: 1px solid var(--color-linha);
+  border-radius: 1.25rem;
   background-color: var(--color-papel);
 }
 
@@ -3979,102 +3921,115 @@ a.loja-acao:hover {
   border: 0;
 }
 
-@media (min-width: 64rem) {
-  .sobre-video {
-    grid-template-columns: minmax(0, 1fr) 25rem;
-    align-items: center;
-    gap: 5rem;
-    padding-top: 5rem;
-    padding-bottom: 6.5rem;
-  }
-
-  .sobre-video-player {
-    justify-self: end;
-  }
+/* 8. Convite final: caixa vermelha arredondada, centralizada. */
+.sobre-convite {
+  padding-bottom: 5rem;
 }
 
-/* A empresa: a assinatura da marca, no fim da história. Letra de título em
-   vermelho escuro sobre o claro (passa 4,5:1), com um fio vermelho em cima. */
-.sobre-assinatura {
-  max-width: 30rem;
-  margin-top: 1.75rem;
-  padding-top: 1.25rem;
-  border-top: 3px solid var(--color-brand);
-}
-
-.sobre-quem-texto .sobre-assinatura {
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 5vw, 2rem);
-  line-height: 1.15;
-  color: var(--color-brand-escuro);
-}
-
-/* A empresa: o convite final. Caixa marrom (como a matriz em Unidades),
-   texto à esquerda e as ações à direita; no celular, empilhados. */
-.sobre-cta {
-  padding-bottom: 4.5rem;
-}
-
-.sobre-cta-caixa {
+.sobre-convite-caixa {
   display: grid;
-  gap: 1.5rem;
-  padding: 2rem 1.5rem 2.25rem;
+  justify-items: center;
+  gap: 1rem;
+  padding: 2.75rem 1.5rem;
+  border-radius: 1.75rem;
   background:
-    radial-gradient(circle at 90% 50%, rgb(225 5 30 / 0.45) 0, rgb(225 5 30 / 0) 55%),
-    var(--color-ink);
+    radial-gradient(circle at 85% 15%, rgb(252 226 76 / 0.22) 0, rgb(252 226 76 / 0) 45%),
+    var(--color-brand);
   color: #fff;
+  text-align: center;
 }
 
-.sobre-cta-texto p {
-  max-width: 30rem;
-  margin-top: 0.5rem;
-  line-height: 1.6;
-  color: rgb(255 255 255 / 0.88);
-}
-
-.sobre-cta h2 {
-  font-size: clamp(1.75rem, 6vw, 2.5rem);
-  line-height: 1.05;
-}
-
-.sobre-cta-acoes {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem 1.25rem;
-}
-
-.sobre-cta :focus-visible {
+.sobre-convite-caixa :focus-visible {
   outline-color: #fff;
 }
 
-.sobre-cta-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 2.75rem;
-  font-weight: 700;
+.sobre-convite-caixa p {
+  max-width: 32rem;
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.sobre-convite-caixa .sobre-botoes {
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.sobre-link-claro {
   color: #fff;
-  text-decoration: underline;
   text-decoration-color: var(--color-accent);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 4px;
+}
+
+.sobre-link-claro svg {
+  color: #fff;
+}
+
+@media (min-width: 40rem) {
+  .sobre-fatos dl {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .sobre-fatos dl > div + div {
+    border-left: 1px solid var(--color-linha);
+  }
+}
+
+@media (min-width: 48rem) {
+  .sobre-frentes-lista,
+  .sobre-crencas-lista {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .sobre-crencas-lista {
+    gap: 2.5rem;
+  }
 }
 
 @media (min-width: 64rem) {
-  .sobre-cta {
-    padding-bottom: 6rem;
+  .sobre-abertura {
+    padding-bottom: 5.5rem;
   }
 
-  .sobre-cta-caixa {
-    grid-template-columns: minmax(0, 1fr) auto;
+  .sobre-abertura::after {
+    height: 5rem;
+  }
+
+  .sobre-abertura-grade {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
     align-items: center;
-    column-gap: 3rem;
-    padding: 3rem;
+    gap: 4rem;
+    padding-top: 3rem;
   }
 
-  .sobre-cta-acoes {
-    justify-content: flex-end;
+  .sobre-abertura-foto {
+    justify-self: end;
+    width: min(100%, 28rem);
+  }
+
+  .sobre-fatos {
+    padding-bottom: 4.5rem;
+  }
+
+  .sobre-cozinha {
+    padding-block: 4.5rem 6rem;
+  }
+
+  .sobre-cozinha-grade {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 5rem;
+  }
+
+  .sobre-frentes,
+  .sobre-crencas {
+    padding-block: 6.5rem;
+  }
+
+  .sobre-convite {
+    padding-bottom: 6.5rem;
+  }
+
+  .sobre-convite-caixa {
+    padding: 4rem 3rem;
   }
 }
 }
