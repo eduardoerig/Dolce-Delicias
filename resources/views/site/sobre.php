@@ -236,17 +236,16 @@ $iconeInstagram = '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="
   $videoInstagram = 'DFtaWFkPLeO';
   ?>
   <section id="video" class="sobre-video mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="titulo-video">
-    <div class="sobre-centro">
+    <div class="sobre-video-texto">
       <p class="sobre-rotulo">A Dolce de perto</p>
       <h2 id="titulo-video">Especialistas em lanche escolar</h2>
-      <p class="sobre-centro-frase">Dá o play e conheça um pouco do nosso dia a dia.</p>
+      <p class="sobre-video-frase">Dá o play e conheça um pouco do nosso dia a dia.</p>
+      <a href="https://www.instagram.com/p/<?= e($videoInstagram) ?>/" target="_blank" rel="noopener noreferrer" class="sobre-link"><?= $iconeInstagram ?>Ver no Instagram</a>
     </div>
+    <?php // A janela mostra só o cabeçalho e o vídeo; curtidas e comentários do Instagram ficam cortados embaixo. ?>
     <div class="sobre-video-player">
       <iframe src="https://www.instagram.com/p/<?= e($videoInstagram) ?>/embed/" title="Vídeo da Dolce Delícias no Instagram" loading="lazy" allowfullscreen></iframe>
     </div>
-    <p class="sobre-centro mt-5">
-      <a href="https://www.instagram.com/p/<?= e($videoInstagram) ?>/" target="_blank" rel="noopener noreferrer" class="sobre-link"><?= $iconeInstagram ?>Ver no Instagram</a>
-    </p>
   </section>
 
   <?php // O convite final: o que fazer depois de conhecer a Dolce. ?>

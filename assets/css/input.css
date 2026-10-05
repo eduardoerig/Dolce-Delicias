@@ -3729,10 +3729,8 @@ a.loja-acao:hover {
   height: auto;
   aspect-ratio: 4 / 5;
   object-fit: cover;
-  border: 6px solid #fff;
   border-radius: 1.5rem;
   box-shadow: 0 24px 48px rgb(42 23 16 / 0.3);
-  rotate: 2deg;
 }
 
 /* 2. Fatos: valores grandes em vermelho, centralizados, com fios entre eles. */
@@ -3865,7 +3863,7 @@ a.loja-acao:hover {
 }
 
 /* 5. No que acreditamos: a frase-tese grande no meio e os valores em três
-   colunas, cada um com um traço vermelho em cima. */
+   colunas, centralizados. */
 .sobre-crencas {
   padding-block: 4.5rem;
   scroll-margin-top: 5rem;
@@ -3882,8 +3880,9 @@ a.loja-acao:hover {
 }
 
 .sobre-crencas-lista li {
-  padding-top: 1.25rem;
-  border-top: 3px solid var(--color-brand);
+  max-width: 22rem;
+  margin-inline: auto;
+  text-align: center;
 }
 
 .sobre-crencas-lista h3 {
@@ -3897,17 +3896,34 @@ a.loja-acao:hover {
   color: var(--color-crust);
 }
 
-/* 7. O vídeo, centralizado. O player tem altura fixa: o embed do Instagram
-   não informa a proporção. */
+/* 7. O vídeo: no celular, texto centralizado e o player embaixo; no
+   computador, texto à esquerda e o player à direita. A janela do player é
+   mais baixa que o embed do Instagram (que não informa a proporção): mostra o
+   cabeçalho e o vídeo e corta curtidas e comentários. */
 .sobre-video {
+  display: grid;
+  gap: 2rem;
   padding-block: 3rem 4.5rem;
   scroll-margin-top: 5rem;
 }
 
+.sobre-video-texto {
+  text-align: center;
+}
+
+.sobre-video-frase {
+  max-width: 30rem;
+  margin: 0.75rem auto 0.75rem;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--color-crust);
+}
+
 .sobre-video-player {
+  justify-self: center;
   width: 100%;
-  max-width: 25rem;
-  margin: 2rem auto 0;
+  max-width: 22rem;
+  height: 32rem;
   overflow: hidden;
   border: 1px solid var(--color-linha);
   border-radius: 1.25rem;
@@ -3919,6 +3935,24 @@ a.loja-acao:hover {
   width: 100%;
   height: 48rem;
   border: 0;
+}
+
+@media (min-width: 64rem) {
+  .sobre-video {
+    grid-template-columns: minmax(0, 30rem) 22rem;
+    justify-content: center;
+    align-items: center;
+    gap: 5rem;
+    padding-block: 4rem 6rem;
+  }
+
+  .sobre-video-texto {
+    text-align: left;
+  }
+
+  .sobre-video-frase {
+    margin-inline: 0;
+  }
 }
 
 /* 8. Convite final: caixa vermelha arredondada, centralizada. */
