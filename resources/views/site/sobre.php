@@ -54,7 +54,7 @@ include DD_BASE . '/partials/header.php';
  *      modelada à direita (no celular, a foto em cima). Os números no pé;
  *   2. "Quem somos": texto e a foto da equipe, com um bloco vermelho atrás;
  *   3. "O que fazemos": um cartão com foto por serviço;
- *   4. "No que acreditamos": a faixa vermelha em cartaz, um valor por linha;
+ *   4. "No que acreditamos": a faixa vermelha, um valor por linha;
  *   5. "Nossa história": a linha do tempo;
  *   6. o vídeo da marca no Instagram, no player oficial do Instagram.
  *
@@ -165,10 +165,10 @@ $fotoEquipe   = dd_imagem('/assets/img/sobre/oficial-960.webp');
     </section>
   <?php endif; ?>
 
-  <?php // RNF-11 — os valores da marca: cartaz tipográfico, um valor por linha, sem ícone. ?>
+  <?php // RNF-11 — os valores da marca: um por linha, sem ícone. ?>
   <?php if (!empty($institucional['valores'])): ?>
     <section id="valores" class="sobre-valores" aria-labelledby="titulo-valores">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="sobre-valores-grade mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2 id="titulo-valores">No que acreditamos</h2>
         <ul class="sobre-valores-lista">
           <?php foreach ($institucional['valores'] as $valor): ?>
