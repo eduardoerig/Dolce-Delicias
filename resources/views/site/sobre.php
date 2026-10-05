@@ -3,24 +3,21 @@
 declare(strict_types=1);
 
 /**
- * sobre.php — a empresa: quem é, de onde veio, o que faz e o que oferece a
- * outras empresas.
+ * sobre.php — a empresa: quem é, de onde veio e o que faz.
  *
- * Quatro requisitos numa página só, e de propósito:
+ * Três requisitos numa página só, e de propósito:
  *
  *   RF-31  institucional      "quem somos"
  *   RF-21  história           "de onde viemos"
- *   RF-22  portfólio          "o que fazemos"
- *   RF-19  para empresas      "o que fazemos por você"
+ *   RF-22  portfólio          "o que fazemos" (inclui eventos, escolas e empresas)
  *
- * São quatro respostas da MESMA conversa, na ordem em que alguém faria as
- * perguntas. Quatro páginas separadas dariam quatro páginas curtas e um menu
- * inchado — e no celular ninguém navega entre elas.
+ * São três respostas da MESMA conversa, na ordem em que alguém faria as
+ * perguntas. Páginas separadas dariam páginas curtas e um menu inchado — e
+ * no celular ninguém navega entre elas.
  *
  * O desenho (detalhes abaixo, no HTML): herói marrom com a coxinha sendo
  * modelada, cartões com foto para os serviços, a faixa vermelha dos valores,
- * a linha do tempo e a caixa de empresas com o pedido de orçamento, que é o
- * que a página existe para gerar.
+ * a linha do tempo e o vídeo da marca.
  *
  * Todo o texto vem de data/empresa.php. Aqui só existe estrutura: cada seção
  * some sozinha quando o dado dela está vazio.
@@ -29,29 +26,19 @@ declare(strict_types=1);
 require_once DD_BASE . '/partials/bootstrap.php';
 
 $empresa = dd_empresa();
-$matriz  = dd_matriz();
 
 $institucional = (array) ($empresa['institucional'] ?? []);
 $numeros       = (array) ($empresa['numeros'] ?? []);
 $historia      = (array) ($empresa['historia'] ?? []);
 $portfolio     = (array) ($empresa['portfolio'] ?? []);
-$paraEmpresas  = (array) ($empresa['empresas'] ?? []);
 
 $chamada          = rtrim(trim((string) ($institucional['chamada'] ?? '')), '.');
-$temEmpresas      = !empty($paraEmpresas['itens']) || trim((string) ($paraEmpresas['texto'] ?? '')) !== '';
 
 // O total de lojas é contado, nunca cadastrado: assim não diverge de
 // data/units.php quando abrir a próxima.
 $totalUnidades = count(dd_unidades());
 
-// WhatsApp da matriz com a conversa de orçamento já começada (RF-19). Número
-// vazio ou de exemplo não vira botão — ver dd_whatsapp().
-$zapMatriz     = dd_whatsapp($matriz);
-$linkOrcamento = $zapMatriz !== ''
-    ? 'https://wa.me/' . $zapMatriz . '?text=' . rawurlencode('Olá! Vim pelo site e quero um orçamento para a minha empresa.')
-    : '';
-
-$tituloPagina    = 'Sobre a Dolce Delícias — história, portfólio e atendimento a empresas';
+$tituloPagina    = 'Sobre a Dolce Delícias — quem somos, o que fazemos e nossa história';
 $descricaoPagina = 'Quem é a Dolce Delícias, como a padaria começou, o que ela faz e como atende escolas, faculdades, empresas e indústrias.';
 
 include DD_BASE . '/partials/header.php';
@@ -69,8 +56,7 @@ include DD_BASE . '/partials/header.php';
  *   3. "O que fazemos": um cartão com foto por serviço;
  *   4. "No que acreditamos": a faixa vermelha em cartaz, um valor por linha;
  *   5. "Nossa história": a linha do tempo;
- *   6. empresas: a caixa marrom com foto, a lista e o pedido de orçamento;
- *   7. o vídeo da marca no Instagram, no player oficial do Instagram.
+ *   6. o vídeo da marca no Instagram, no player oficial do Instagram.
  *
  * Texto nunca fica sobre comida: a foto tem coluna própria em todo tamanho.
  * Se um arquivo de foto não existir, a seção fica só com o texto. Todo o
@@ -89,7 +75,6 @@ $fotosPortfolio = [
 $fotoTopo     = dd_imagem('/assets/img/sobre/topo-1400.webp');
 // Foto oficial da marca (post do Instagram da Dolce, nov/2025).
 $fotoEquipe   = dd_imagem('/assets/img/sobre/oficial-960.webp');
-$fotoEmpresas = dd_imagem('/assets/img/sobre/empresas-1000.webp');
 ?>
 
 <div class="pagina-institucional pagina-sobre bg-farinha">
@@ -210,50 +195,6 @@ $fotoEmpresas = dd_imagem('/assets/img/sobre/empresas-1000.webp');
           </li>
         <?php endforeach; ?>
       </ol>
-    </section>
-  <?php endif; ?>
-
-  <?php // RF-19 — para empresas e indústrias: a caixa marrom, como a matriz em Unidades. ?>
-  <?php if ($temEmpresas): ?>
-    <section id="empresas" class="sobre-b2b" aria-labelledby="titulo-empresas">
-      <div class="sobre-b2b-grade">
-        <?php if ($fotoEmpresas): ?>
-          <div class="sobre-b2b-foto">
-            <img src="<?= e($fotoEmpresas) ?>" srcset="<?= e((string) dd_imagem('/assets/img/sobre/empresas-640.webp')) ?> 640w, <?= e($fotoEmpresas) ?> 1000w" sizes="(min-width: 64rem) 40rem, 100vw" alt="Colegas de trabalho conversando e lanchando no refeitório" width="1000" height="800" loading="lazy" decoding="async">
-          </div>
-        <?php endif; ?>
-
-        <div class="sobre-b2b-texto">
-          <h2 id="titulo-empresas"><?= e((string) ($paraEmpresas['chamada'] ?? 'Para a sua empresa')) ?></h2>
-          <?php if (trim((string) ($paraEmpresas['texto'] ?? '')) !== ''): ?>
-            <p class="sobre-b2b-frase"><?= e((string) $paraEmpresas['texto']) ?></p>
-          <?php endif; ?>
-
-          <?php if (!empty($paraEmpresas['itens'])): ?>
-            <ul class="sobre-b2b-lista">
-              <?php foreach ($paraEmpresas['itens'] as $item): ?>
-                <li>
-                  <h3><?= e((string) ($item['titulo'] ?? '')) ?></h3>
-                  <p><?= e((string) ($item['texto'] ?? '')) ?></p>
-                </li>
-              <?php endforeach; ?>
-            </ul>
-          <?php endif; ?>
-
-          <div class="mt-8">
-            <?php if ($linkOrcamento !== ''): ?>
-              <a href="<?= e($linkOrcamento) ?>" target="_blank" rel="noopener noreferrer" class="botao-amarelo">
-                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.5 8.5 0 1 1 21 11.5Z"/></svg>
-                Pedir orçamento no WhatsApp
-              </a>
-            <?php else: ?>
-              <?php // INTEGRAÇÃO FUTURA: cadastre o WhatsApp da matriz no painel e o botão liga sozinho. ?>
-              <span class="botao-desligado">WhatsApp em breve</span>
-            <?php endif; ?>
-            <p class="sobre-b2b-nota">A matriz responde pelas <?= e((string) $totalUnidades) ?> unidades.</p>
-          </div>
-        </div>
-      </div>
     </section>
   <?php endif; ?>
 

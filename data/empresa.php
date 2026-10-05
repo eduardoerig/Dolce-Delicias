@@ -7,12 +7,11 @@ declare(strict_types=1);
  * A EMPRESA — conteúdo institucional da Dolce Delícias
  * =============================================================================
  *
- * Alimenta sobre.php inteira. Quatro requisitos moram aqui:
+ * Alimenta sobre.php inteira. Três requisitos moram aqui:
  *
  *   RF-21  história da empresa — origem, trajetória e evolução
  *   RF-22  portfólio — serviços, produtos e locais de atuação
  *   RF-31  institucional — quem somos, atuação e objetivos
- *   RF-19  divulgação para empresas e indústrias
  *
  * Está em data/ e não escrito dentro do template pelo mesmo motivo do catálogo:
  * quem vai reescrever esses textos é o cliente, não quem mexe em PHP. Acrescentar
@@ -35,7 +34,6 @@ declare(strict_types=1);
  *   'numeros'        array   os números da marca: 'valor' + 'rotulo'
  *   'historia'       array   RF-21: marcos, cada um 'ano', 'titulo', 'texto'
  *   'portfolio'      array   RF-22: serviços, cada um 'titulo' e 'texto'
- *   'empresas'       array   RF-19: 'chamada', 'texto', 'itens'
  *
  * Lista vazia esconde a seção correspondente em sobre.php — nenhuma seção fica
  * com título e nada embaixo.
@@ -132,30 +130,6 @@ return [
         [
             'titulo' => 'Lanche escolar',
             'texto'  => 'Lanche do recreio com cardápio combinado com a escola, porção individual e entrega nos dias marcados.',
-        ],
-    ],
-
-    /* ---------------------------------------------------------------------
-     * RF-19 — PARA EMPRESAS E INDÚSTRIAS
-     * ------------------------------------------------------------------ */
-    'empresas' => [
-        'chamada' => 'Sua empresa, abastecida todo mês',
-
-        'texto' => 'Para empresas e indústrias, a matriz monta um contrato mensal: entrega na frequência que a equipe precisa, nota fiscal e faturamento em até 28 dias.',
-
-        'itens' => [
-            [
-                'titulo' => 'Coffee break de reunião',
-                'texto'  => 'A partir de 10 pessoas: salgados, mini sanduíches e docinhos. Peça com 48 horas de antecedência.',
-            ],
-            [
-                'titulo' => 'Lanche de turno',
-                'texto'  => 'Kits individuais para a troca de turno, entregues no horário combinado, de segunda a sábado.',
-            ],
-            [
-                'titulo' => 'Confraternização',
-                'texto'  => 'Festa de fim de ano e comemoração de equipe: a matriz faz o orçamento e entrega a mesa montada.',
-            ],
         ],
     ],
 ];

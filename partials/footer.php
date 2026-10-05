@@ -71,7 +71,6 @@ $temOpiniao = $linkFeedback !== '' || $canaisRodape !== [];
           <ul class="mt-4 space-y-2.5 text-sm">
             <li><a class="rodape-link" href="/sobre">A empresa</a></li>
             <li><a class="rodape-link" href="/unidades">Nossas unidades</a></li>
-            <li><a class="rodape-link" href="/sobre#empresas">Para empresas</a></li>
           </ul>
         </nav>
 

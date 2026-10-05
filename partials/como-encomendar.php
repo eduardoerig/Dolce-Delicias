@@ -66,10 +66,10 @@ $vistos = '<svg class="zap-vistos" viewBox="0 0 18 11" fill="none" stroke="curre
         <?php endforeach; ?>
       </ol>
 
-      <?php // RF-19 — atendimento a empresas tem página própria; aqui só o convite. ?>
+      <?php // Grandes pedidos: o que a Dolce faz para eventos, escolas e empresas está em A empresa. ?>
       <p class="encomendas-empresas">
         Evento, escola ou empresa?
-        <a href="/sobre#empresas">Veja o atendimento para grandes pedidos</a>
+        <a href="/sobre#portfolio">Veja o atendimento para grandes pedidos</a>
       </p>
     </div>
   </div>
