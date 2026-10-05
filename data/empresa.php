@@ -49,9 +49,11 @@ return [
     'institucional' => [
         'chamada' => 'Comida de verdade, feita todo dia',
 
+        // Texto oficial: legenda do post da marca no Instagram
+        // (instagram.com/p/DQu_5Q7DAPS, nov/2025).
         'texto' => [
-            'A Dolce Delícias é uma padaria de família que virou cozinha de salgados. Hoje são seis lojas e uma cozinha central que prepara, todo dia, coxinha, esfirra, empada e pão de queijo para o balcão e para as encomendas por cento.',
-            'Atendemos festas de família, escolas, faculdades e empresas da região. A massa é aberta na casa, o recheio é feito na nossa cozinha e o salgado frita ou assa perto da hora de sair. O plano é crescer sem perder isso.',
+            'A Dolce Delícias é uma empresa que nasceu do zero, construída com dedicação, amor pela cozinha e muita vontade de fazer acontecer. O que começou como pequenas receitas feitas em casa virou uma marca reconhecida pelos seus pães, mini pizzas e salgados artesanais.',
+            'Cada produto carrega o sabor do esforço, da paixão e do sonho que se tornou realidade. Dolce Delícias: feita do zero, feita com coração.',
         ],
 
         // RNF-11: os valores da marca — comida feita com amor, pouco

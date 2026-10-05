@@ -85,7 +85,8 @@ include DD_BASE . '/partials/header.php';
  *   3. "O que fazemos": um cartão com foto por serviço;
  *   4. "No que acreditamos": a faixa vermelha;
  *   5. "Nossa história": a linha do tempo;
- *   6. empresas: a caixa marrom com foto, a lista e o pedido de orçamento.
+ *   6. empresas: a caixa marrom com foto, a lista e o pedido de orçamento;
+ *   7. o vídeo da marca no Instagram, no player oficial do Instagram.
  *
  * Texto nunca fica sobre comida: a foto tem coluna própria em todo tamanho.
  * Se um arquivo de foto não existir, a seção fica só com o texto. Todo o
@@ -102,7 +103,8 @@ $fotosPortfolio = [
 ];
 
 $fotoTopo     = dd_imagem('/assets/img/sobre/topo-1400.webp');
-$fotoEquipe   = dd_imagem('/assets/img/sobre/equipe-960.webp');
+// Foto oficial da marca (post do Instagram da Dolce, nov/2025).
+$fotoEquipe   = dd_imagem('/assets/img/sobre/oficial-960.webp');
 $fotoEmpresas = dd_imagem('/assets/img/sobre/empresas-1000.webp');
 ?>
 
@@ -164,7 +166,7 @@ $fotoEmpresas = dd_imagem('/assets/img/sobre/empresas-1000.webp');
       </div>
       <?php if ($fotoEquipe): ?>
         <div class="sobre-quem-foto">
-          <img src="<?= e($fotoEquipe) ?>" srcset="<?= e((string) dd_imagem('/assets/img/sobre/equipe-640.webp')) ?> 640w, <?= e($fotoEquipe) ?> 960w" sizes="(min-width: 64rem) 30rem, 90vw" alt="Duas padeiras sorrindo enquanto preparam a massa na cozinha" width="960" height="1200" loading="lazy" decoding="async">
+          <img src="<?= e($fotoEquipe) ?>" srcset="<?= e((string) dd_imagem('/assets/img/sobre/oficial-640.webp')) ?> 640w, <?= e($fotoEquipe) ?> 960w" sizes="(min-width: 64rem) 30rem, 90vw" alt="Mulher de avental da Dolce Delícias na cozinha, de braços cruzados e sorrindo, com bolo, pão e salgados na bancada à frente" width="960" height="1200" loading="lazy" decoding="async">
         </div>
       <?php endif; ?>
     </section>
@@ -271,6 +273,29 @@ $fotoEmpresas = dd_imagem('/assets/img/sobre/empresas-1000.webp');
       </div>
     </section>
   <?php endif; ?>
+
+  <?php
+  /*
+   * Vídeo da marca (Reels do Instagram). Fica no player oficial do Instagram
+   * porque o arquivo não está no site; o iframe só carrega quando a pessoa
+   * chega perto dele (loading="lazy"). Para trocar o vídeo, troque o código
+   * do post em $videoInstagram.
+   */
+  $videoInstagram = 'DFtaWFkPLeO';
+  ?>
+  <section id="video" class="sobre-video mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="titulo-video">
+    <div class="sobre-video-texto">
+      <h2 id="titulo-video">A Dolce de perto</h2>
+      <p>Nossa empresa é especializada em lanches escolares. Dá o play e conheça um pouco do nosso dia a dia.</p>
+      <a href="https://www.instagram.com/p/<?= e($videoInstagram) ?>/" target="_blank" rel="noopener noreferrer" class="sobre-video-link">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+        Ver no Instagram
+      </a>
+    </div>
+    <div class="sobre-video-player">
+      <iframe src="https://www.instagram.com/p/<?= e($videoInstagram) ?>/embed/" title="Vídeo da Dolce Delícias no Instagram" loading="lazy" allowfullscreen></iframe>
+    </div>
+  </section>
 </div>
 
 <?php include DD_BASE . '/partials/footer.php'; ?>
