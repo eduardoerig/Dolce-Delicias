@@ -1726,21 +1726,6 @@ a.loja-acao:hover {
   }
 }
 
-/* Desenho do valor da marca, em A empresa. */
-.valor-icone {
-  display: grid;
-  place-items: center;
-  width: 3.5rem;
-  height: 3.5rem;
-  border-radius: 999px;
-  background-color: var(--color-polvilho);
-}
-
-.valor-icone svg {
-  width: 2.25rem;
-  height: 2.25rem;
-}
-
 /* ---------- Avisos curtos ----------
    Limpo: uma linha só, fundo marrom, cantos arredondados, sem faixas nem
    barras. No celular fica embaixo, na largura toda (onde o polegar alcança a
@@ -3257,57 +3242,45 @@ a.loja-acao:hover {
   scroll-margin-top: 5rem;
 }
 
+/* Cartaz: cada valor numa linha, o título em letra grande e a explicação
+   curta ao lado (embaixo, no celular), separados por fios brancos. */
 .sobre-valores-lista {
-  display: grid;
-  gap: 2rem;
   margin-top: 2rem;
+  border-top: 1px solid rgb(255 255 255 / 0.4);
 }
 
-/* No celular o ícone fica ao lado do texto; do tablet em diante, em cima. */
 .sobre-valores-lista li {
-  display: grid;
-  grid-template-columns: 3.5rem minmax(0, 1fr);
-  column-gap: 1rem;
-}
-
-.sobre-valores-lista .valor-icone {
-  grid-row: span 2;
-  width: 3.5rem;
-  height: 3.5rem;
-  background-color: var(--color-farinha);
-}
-
-@media (min-width: 40rem) {
-  .sobre-valores-lista li {
-    display: block;
-  }
-
-  .sobre-valores-lista .valor-icone {
-    width: 4.5rem;
-    height: 4.5rem;
-  }
-}
-
-.sobre-valores-lista .valor-icone svg {
-  width: 2.75rem;
-  height: 2.75rem;
+  padding-block: 1.5rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.4);
 }
 
 .sobre-valores-lista h3 {
-  font-size: 1.375rem;
-}
-
-@media (min-width: 40rem) {
-  .sobre-valores-lista h3 {
-    margin-top: 1rem;
-    font-size: 1.5rem;
-  }
+  font-size: clamp(1.5rem, 7.2vw, 4.25rem);
+  line-height: 1;
+  text-transform: uppercase;
+  text-wrap: balance;
 }
 
 .sobre-valores-lista p {
-  max-width: 24rem;
-  margin-top: 0.5rem;
+  max-width: 26rem;
+  margin-top: 0.75rem;
+  font-size: 1.0625rem;
   line-height: 1.6;
+}
+
+@media (min-width: 48rem) {
+  .sobre-valores-lista li {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 3rem;
+    padding-block: 2rem;
+  }
+
+  .sobre-valores-lista p {
+    margin-top: 0;
+    font-size: 1.125rem;
+  }
 }
 
 /* Nossa história: em pé no celular, deitada no computador. A régua passa
@@ -3365,10 +3338,6 @@ a.loja-acao:hover {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: 1.5rem;
   }
-
-  .sobre-valores-lista {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
 }
 
 @media (min-width: 64rem) {
@@ -3381,10 +3350,6 @@ a.loja-acao:hover {
 
   .sobre-servicos-lista {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .sobre-valores-lista {
-    gap: 3.5rem;
   }
 
   .sobre-historia {

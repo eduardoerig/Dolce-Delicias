@@ -62,15 +62,15 @@ return [
         'valores' => [
             [
                 'titulo' => 'Feito com amor',
-                'texto'  => 'A receita da coxinha é a mesma desde a primeira fornada, e quem está na cozinha hoje aprendeu com quem começou.',
+                'texto'  => 'Cada salgado é fechado à mão, com receita de casa e o mesmo cuidado de quando tudo cabia numa cozinha só.',
             ],
             [
                 'titulo' => 'Pouco industrializado',
-                'texto'  => 'Massa, recheio e molho são feitos aqui. Não compramos salgado congelado pronto para revender.',
+                'texto'  => 'A massa e o recheio são feitos na nossa cozinha. Não revendemos salgado congelado de fábrica.',
             ],
             [
                 'titulo' => 'Buscando ser saudável',
-                'texto'  => 'Metade do cardápio é assada, e já há opções integrais. Uma linha sem lactose está em teste na matriz.',
+                'texto'  => 'Já temos opções assadas e integrais, e seguimos testando receitas mais leves.',
             ],
         ],
     ],
