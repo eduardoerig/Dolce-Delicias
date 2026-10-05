@@ -82,7 +82,7 @@ return [
             ['valor' => 120.00, 'por' => '100 unidades', 'minPedido' => 50],
         ],
         'tags'       => ['atacado', 'coffee break', 'sem carne'],
-        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // PREENCHER: quais lojas vendem
+        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // FICTÍCIO: confirmar quais lojas vendem
         'disponivel' => true,
     ],
 
@@ -99,7 +99,7 @@ return [
         ],
         'sabores'    => ['Muçarela', 'Calabresa', 'Frango com catupiry'], // conferir
         'tags'       => ['atacado', 'festa'],
-        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // PREENCHER: quais lojas vendem
+        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // FICTÍCIO: confirmar quais lojas vendem
         'disponivel' => true,
     ],
 
@@ -116,7 +116,7 @@ return [
         ],
         'sabores'    => ['Frango', 'Palmito', 'Camarão'], // conferir
         'tags'       => ['atacado', 'festa'],
-        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // PREENCHER: quais lojas vendem
+        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // FICTÍCIO: confirmar quais lojas vendem
         'disponivel' => true,
     ],
 
@@ -133,7 +133,7 @@ return [
         ],
         'sabores'    => ['Frango', 'Carne', 'Presunto e queijo'], // conferir
         'tags'       => ['atacado', 'escola'],
-        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // PREENCHER: quais lojas vendem
+        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // FICTÍCIO: confirmar quais lojas vendem
         'disponivel' => true,
     ],
 
@@ -150,7 +150,7 @@ return [
         ],
         'sabores'    => ['Carne', 'Frango', 'Queijo'], // conferir
         'tags'       => ['atacado', 'festa'],
-        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // PREENCHER: quais lojas vendem
+        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // FICTÍCIO: confirmar quais lojas vendem
         'disponivel' => true,
     ],
 
@@ -175,7 +175,7 @@ return [
             'Quibe',
         ],
         'tags'       => ['atacado', 'festa', 'mais vendido'],
-        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // PREENCHER: quais lojas vendem
+        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // FICTÍCIO: confirmar quais lojas vendem
         'disponivel' => true,
     ],
 
@@ -191,7 +191,7 @@ return [
             ['valor' => 60.00, 'por' => '45 unidades'],
         ],
         'tags'       => ['atacado', 'festa', 'combo'],
-        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // PREENCHER: quais lojas vendem
+        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // FICTÍCIO: confirmar quais lojas vendem
         'disponivel' => true,
     ],
 
@@ -207,7 +207,7 @@ return [
             ['valor' => 4.20, 'por' => 'unidade', 'minPedido' => 25],
         ],
         'tags'       => ['atacado', 'festa', 'faculdade'],
-        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // PREENCHER: quais lojas vendem
+        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // FICTÍCIO: confirmar quais lojas vendem
         'disponivel' => true,
     ],
 
@@ -223,7 +223,7 @@ return [
             ['valor' => 3.20, 'por' => 'unidade', 'minPedido' => 25],
         ],
         'tags'       => ['atacado', 'coffee break'],
-        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // PREENCHER: quais lojas vendem
+        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // FICTÍCIO: confirmar quais lojas vendem
         'disponivel' => true,
     ],
 
@@ -239,7 +239,7 @@ return [
             ['valor' => 120.00, 'por' => '100 unidades'],
         ],
         'tags'       => ['atacado', 'coffee break'],
-        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // PREENCHER: quais lojas vendem
+        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // FICTÍCIO: confirmar quais lojas vendem
         'disponivel' => true,
     ],
 
@@ -256,7 +256,7 @@ return [
         ],
         'sabores'    => ['Baunilha', 'Chocolate', 'Red velvet'], // conferir
         'tags'       => ['atacado', 'festa', 'personalizado'],
-        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // PREENCHER: quais lojas vendem
+        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // FICTÍCIO: confirmar quais lojas vendem
         'disponivel' => true,
     ],
 
@@ -278,7 +278,7 @@ return [
             ['valor' => 8.00, 'por' => 'unidade'],
         ],
         'tags'       => ['varejo', 'balcão'],
-        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // PREENCHER: quais lojas vendem
+        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // FICTÍCIO: confirmar quais lojas vendem
         'disponivel' => true,
     ],
 
@@ -294,7 +294,7 @@ return [
             ['valor' => 9.00, 'por' => 'unidade'],
         ],
         'tags'       => ['varejo', 'balcão'],
-        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // PREENCHER: quais lojas vendem
+        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // FICTÍCIO: confirmar quais lojas vendem
         'disponivel' => true,
     ],
 
@@ -310,7 +310,7 @@ return [
             ['valor' => 4.00, 'por' => 'unidade'],
         ],
         'tags'       => ['varejo', 'balcão'],
-        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // PREENCHER: quais lojas vendem
+        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // FICTÍCIO: confirmar quais lojas vendem
         'disponivel' => true,
     ],
 
@@ -326,7 +326,7 @@ return [
             ['valor' => 6.99, 'por' => 'unidade'],
         ],
         'tags'       => ['varejo', 'balcão', 'vegano', 'sem lactose'], // conferir
-        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // PREENCHER: quais lojas vendem
+        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // FICTÍCIO: confirmar quais lojas vendem
         'disponivel' => true,
     ],
 
@@ -342,7 +342,7 @@ return [
             ['valor' => 8.00, 'por' => 'unidade'],
         ],
         'tags'       => ['varejo', 'balcão', 'vegano', 'sem lactose'], // conferir
-        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // PREENCHER: quais lojas vendem
+        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // FICTÍCIO: confirmar quais lojas vendem
         'disponivel' => true,
     ],
 
@@ -358,7 +358,7 @@ return [
             ['valor' => 20.00, 'por' => 'unidade'],
         ],
         'tags'       => ['varejo', 'balcão', 'almoço'],
-        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // PREENCHER: quais lojas vendem
+        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // FICTÍCIO: confirmar quais lojas vendem
         'disponivel' => true,
     ],
 
@@ -374,7 +374,7 @@ return [
             ['valor' => 6.00, 'por' => 'unidade'],
         ],
         'tags'       => ['varejo', 'balcão', 'vegano', 'sem lactose'], // conferir
-        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // PREENCHER: quais lojas vendem
+        'unidades'   => ['matriz', 'unidade-1', 'unidade-2', 'unidade-3', 'unidade-4', 'unidade-5'], // FICTÍCIO: confirmar quais lojas vendem
         'disponivel' => true,
     ],
 

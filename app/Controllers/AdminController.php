@@ -21,8 +21,9 @@ final class AdminController {
   $matriz=array_values(array_filter($units,fn($u)=>$u['tipo_unidade']==='MATRIZ' && $u['ativa']))[0]??null;
   if(!$matriz) $attention[]=['danger','Nenhuma matriz ativa','Os pedidos do site precisam de uma matriz ativa com WhatsApp.','/admin/unidades','Ver unidades'];
   elseif(\App\Models\AdminUi::placeholderPhone($matriz['whatsapp']??'')) $attention[]=['danger','WhatsApp da matriz não configurado','Os pedidos do site estão indo para um número de exemplo.','/admin/unidades/'.$matriz['id_unidade'].'/editar','Corrigir agora'];
-  $sample=count(array_filter($units,fn($u)=>$u['ativa'] && (str_contains(mb_strtoupper($u['nome'].' '.($u['endereco']??'')),'PREENCHER'))));
-  if($sample) $attention[]=['warning',$sample.($sample>1?' unidades com dados de exemplo':' unidade com dados de exemplo'),'Troque nome e endereço pelos dados reais.','/admin/unidades','Revisar'];
+  // Os dados fictícios da importação não dizem mais PREENCHER; o WhatsApp de exemplo continua denunciando a unidade não configurada.
+  $sample=count(array_filter($units,fn($u)=>$u['ativa'] && (str_contains(mb_strtoupper($u['nome'].' '.($u['endereco']??'')),'PREENCHER') || \App\Models\AdminUi::placeholderPhone($u['whatsapp']??''))));
+  if($sample) $attention[]=['warning',$sample.($sample>1?' unidades com dados de exemplo':' unidade com dados de exemplo'),'Troque nome, endereço e WhatsApp pelos dados reais.','/admin/unidades','Revisar'];
   $noPhoto=count(array_filter($this->repo->activeProducts(),fn($p)=>!dd_imagem($p['imagem'])));
   if($noPhoto) $attention[]=['warning',$noPhoto.($noPhoto>1?' produtos sem foto':' produto sem foto'),'Produtos com foto vendem mais.','/admin/produtos?filtro=sem-foto','Adicionar fotos'];
   if($stats['indisponiveis']) $attention[]=['warning',$stats['indisponiveis'].($stats['indisponiveis']>1?' produtos sem unidade':' produto sem unidade'),'Não aparecem para compra porque nenhuma unidade ativa vende.','/admin/produtos?filtro=indisponiveis','Resolver'];

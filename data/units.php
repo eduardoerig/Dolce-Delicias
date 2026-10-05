@@ -15,8 +15,10 @@ declare(strict_types=1);
  * da página (<script id="units-data">) para o JavaScript montar o link do WhatsApp
  * da matriz, que é quem recebe pedido pelo site.
  *
- * >>> TUDO QUE ESTÁ MARCADO COM "PREENCHER" É PLACEHOLDER <<<
- * Substitua pelos dados reais antes de publicar. Em especial:
+ * >>> BAIRROS, ENDEREÇOS E TEXTOS SÃO FICTÍCIOS <<<
+ * Foram inventados para o site não ficar com buracos. Substitua pelos dados
+ * reais antes de publicar (o que está marcado com "A FAZER" ainda falta). Em
+ * especial:
  *   - 'whatsapp'    : número real, só dígitos, com 55 + DDD (ex.: 5511987654321).
  *                     Enquanto for 55000000000, o botão de WhatsApp abre um chat
  *                     inválido — é de propósito, para ninguém publicar sem trocar.
@@ -59,102 +61,102 @@ return [
     [
         'id'          => 1,
         'slug'        => 'matriz',
-        'nome'        => 'Matriz — PREENCHER bairro',
-        'endereco'    => 'PREENCHER: Rua Exemplo, 000 — Centro, Cidade/UF',
-        'whatsapp'    => '55000000000', // PREENCHER
-        'horario'     => 'Seg a sex, 6h às 20h · Sáb e dom, 6h às 14h', // PREENCHER
-        'preparo'     => '48 horas para encomendas · balcão na hora', // PREENCHER
-        'sobre'       => 'PREENCHER: um parágrafo sobre esta loja — o que ela faz de melhor, se tem mesa e café, estacionamento, quais escolas e empresas da região ela atende.', // PREENCHER
-        'mapaUrl'     => 'https://maps.google.com/?q=PREENCHER', // PREENCHER
-        'imagem'      => '/assets/img/unidades/matriz.jpg', // PREENCHER
+        'nome'        => 'Matriz — Centro',
+        'endereco'    => 'Rua das Palmeiras, 410 — Centro',
+        'whatsapp'    => '55000000000', // A FAZER: número real (o de exemplo não vira botão)
+        'horario'     => 'Seg a sex, 6h às 20h · Sáb e dom, 6h às 14h', // FICTÍCIO
+        'preparo'     => '48 horas para encomendas · balcão na hora', // FICTÍCIO
+        'sobre'       => 'A primeira loja e a cozinha central da Dolce. É daqui que saem as encomendas do site. Tem balcão com café, mesas e estacionamento na rua de trás.', // FICTÍCIO
+        'mapaUrl'     => '', // FICTÍCIO: sem endereço real, sem link de mapa
+        'imagem'      => '/assets/img/unidades/matriz.jpg', // FICTÍCIO
         'catalogoPdf' => '/catalogos/matriz.pdf',
-        'avaliacao'   => '', // PREENCHER: link de avaliação da loja (Google Maps)
-        'canais'      => [], // PREENCHER: [['nome' => 'iFood', 'url' => 'https://...']]
+        'avaliacao'   => '', // A FAZER: link de avaliação da loja (Google Maps)
+        'canais'      => [], // A FAZER: [['nome' => 'iFood', 'url' => 'https://...']]
         'matriz'      => true,
     ],
 
     [
         'id'          => 2,
         'slug'        => 'unidade-1',
-        'nome'        => 'Unidade 1 — PREENCHER bairro',
-        'endereco'    => 'PREENCHER: Av. Exemplo, 000 — Bairro, Cidade/UF',
-        'whatsapp'    => '55000000000', // PREENCHER
-        'horario'     => 'Seg a sáb, 6h às 20h', // PREENCHER
-        'preparo'     => '48 horas para encomendas · balcão na hora', // PREENCHER
-        'sobre'       => 'PREENCHER: um parágrafo sobre esta loja — o que ela faz de melhor, se tem mesa e café, estacionamento, quais escolas e empresas da região ela atende.', // PREENCHER
-        'mapaUrl'     => 'https://maps.google.com/?q=PREENCHER', // PREENCHER
-        'imagem'      => '/assets/img/unidades/unidade-1.jpg', // PREENCHER
+        'nome'        => 'Unidade 1 — Jardim América',
+        'endereco'    => 'Av. Brasil, 1.250 — Jardim América',
+        'whatsapp'    => '55000000000', // A FAZER: número real (o de exemplo não vira botão)
+        'horario'     => 'Seg a sáb, 6h às 20h', // FICTÍCIO
+        'preparo'     => '48 horas para encomendas · balcão na hora', // FICTÍCIO
+        'sobre'       => 'Loja de esquina com balcão e café. Atende as escolas do bairro com o lanche do recreio.', // FICTÍCIO
+        'mapaUrl'     => '', // FICTÍCIO: sem endereço real, sem link de mapa
+        'imagem'      => '/assets/img/unidades/unidade-1.jpg', // FICTÍCIO
         'catalogoPdf' => '/catalogos/unidade-1.pdf',
-        'avaliacao'   => '', // PREENCHER: link de avaliação da loja (Google Maps)
-        'canais'      => [], // PREENCHER: [['nome' => 'iFood', 'url' => 'https://...']]
+        'avaliacao'   => '', // A FAZER: link de avaliação da loja (Google Maps)
+        'canais'      => [], // A FAZER: [['nome' => 'iFood', 'url' => 'https://...']]
         'matriz'      => false,
     ],
 
     [
         'id'          => 3,
         'slug'        => 'unidade-2',
-        'nome'        => 'Unidade 2 — PREENCHER bairro',
-        'endereco'    => 'PREENCHER: Rua Exemplo, 000 — Bairro, Cidade/UF',
-        'whatsapp'    => '55000000000', // PREENCHER
-        'horario'     => 'Seg a sáb, 6h às 20h', // PREENCHER
-        'preparo'     => '48 horas para encomendas · balcão na hora', // PREENCHER
-        'sobre'       => 'PREENCHER: um parágrafo sobre esta loja — o que ela faz de melhor, se tem mesa e café, estacionamento, quais escolas e empresas da região ela atende.', // PREENCHER
-        'mapaUrl'     => 'https://maps.google.com/?q=PREENCHER', // PREENCHER
-        'imagem'      => '/assets/img/unidades/unidade-2.jpg', // PREENCHER
+        'nome'        => 'Unidade 2 — Vila Nova',
+        'endereco'    => 'Rua Sete de Setembro, 88 — Vila Nova',
+        'whatsapp'    => '55000000000', // A FAZER: número real (o de exemplo não vira botão)
+        'horario'     => 'Seg a sáb, 6h às 20h', // FICTÍCIO
+        'preparo'     => '48 horas para encomendas · balcão na hora', // FICTÍCIO
+        'sobre'       => 'Perto do terminal de ônibus: o movimento forte é no café da manhã, com pão de queijo e salgado assado saindo cedo.', // FICTÍCIO
+        'mapaUrl'     => '', // FICTÍCIO: sem endereço real, sem link de mapa
+        'imagem'      => '/assets/img/unidades/unidade-2.jpg', // FICTÍCIO
         'catalogoPdf' => '/catalogos/unidade-2.pdf',
-        'avaliacao'   => '', // PREENCHER: link de avaliação da loja (Google Maps)
-        'canais'      => [], // PREENCHER: [['nome' => 'iFood', 'url' => 'https://...']]
+        'avaliacao'   => '', // A FAZER: link de avaliação da loja (Google Maps)
+        'canais'      => [], // A FAZER: [['nome' => 'iFood', 'url' => 'https://...']]
         'matriz'      => false,
     ],
 
     [
         'id'          => 4,
         'slug'        => 'unidade-3',
-        'nome'        => 'Unidade 3 — PREENCHER bairro',
-        'endereco'    => 'PREENCHER: Rua Exemplo, 000 — Bairro, Cidade/UF',
-        'whatsapp'    => '55000000000', // PREENCHER
-        'horario'     => 'Seg a sáb, 6h às 20h', // PREENCHER
-        'preparo'     => '48 horas para encomendas · balcão na hora', // PREENCHER
-        'sobre'       => 'PREENCHER: um parágrafo sobre esta loja — o que ela faz de melhor, se tem mesa e café, estacionamento, quais escolas e empresas da região ela atende.', // PREENCHER
-        'mapaUrl'     => 'https://maps.google.com/?q=PREENCHER', // PREENCHER
-        'imagem'      => '/assets/img/unidades/unidade-3.jpg', // PREENCHER
+        'nome'        => 'Unidade 3 — Santa Mônica',
+        'endereco'    => 'Rua das Acácias, 302 — Santa Mônica',
+        'whatsapp'    => '55000000000', // A FAZER: número real (o de exemplo não vira botão)
+        'horario'     => 'Seg a sáb, 6h às 20h', // FICTÍCIO
+        'preparo'     => '48 horas para encomendas · balcão na hora', // FICTÍCIO
+        'sobre'       => 'Loja com mesas na calçada, café e salgado quente o dia todo.', // FICTÍCIO
+        'mapaUrl'     => '', // FICTÍCIO: sem endereço real, sem link de mapa
+        'imagem'      => '/assets/img/unidades/unidade-3.jpg', // FICTÍCIO
         'catalogoPdf' => '/catalogos/unidade-3.pdf',
-        'avaliacao'   => '', // PREENCHER: link de avaliação da loja (Google Maps)
-        'canais'      => [], // PREENCHER: [['nome' => 'iFood', 'url' => 'https://...']]
+        'avaliacao'   => '', // A FAZER: link de avaliação da loja (Google Maps)
+        'canais'      => [], // A FAZER: [['nome' => 'iFood', 'url' => 'https://...']]
         'matriz'      => false,
     ],
 
     [
         'id'          => 5,
         'slug'        => 'unidade-4',
-        'nome'        => 'Unidade 4 — PREENCHER bairro',
-        'endereco'    => 'PREENCHER: Av. Exemplo, 000 — Bairro, Cidade/UF',
-        'whatsapp'    => '55000000000', // PREENCHER
-        'horario'     => 'Seg a sáb, 6h às 20h', // PREENCHER
-        'preparo'     => '48 horas para encomendas · balcão na hora', // PREENCHER
-        'sobre'       => 'PREENCHER: um parágrafo sobre esta loja — o que ela faz de melhor, se tem mesa e café, estacionamento, quais escolas e empresas da região ela atende.', // PREENCHER
-        'mapaUrl'     => 'https://maps.google.com/?q=PREENCHER', // PREENCHER
-        'imagem'      => '/assets/img/unidades/unidade-4.jpg', // PREENCHER
+        'nome'        => 'Unidade 4 — Boa Vista',
+        'endereco'    => 'Av. Independência, 2.040 — Boa Vista',
+        'whatsapp'    => '55000000000', // A FAZER: número real (o de exemplo não vira botão)
+        'horario'     => 'Seg a sáb, 6h às 20h', // FICTÍCIO
+        'preparo'     => '48 horas para encomendas · balcão na hora', // FICTÍCIO
+        'sobre'       => 'A maior depois da matriz: vitrine de doces e retirada de encomendas com hora marcada.', // FICTÍCIO
+        'mapaUrl'     => '', // FICTÍCIO: sem endereço real, sem link de mapa
+        'imagem'      => '/assets/img/unidades/unidade-4.jpg', // FICTÍCIO
         'catalogoPdf' => '/catalogos/unidade-4.pdf',
-        'avaliacao'   => '', // PREENCHER: link de avaliação da loja (Google Maps)
-        'canais'      => [], // PREENCHER: [['nome' => 'iFood', 'url' => 'https://...']]
+        'avaliacao'   => '', // A FAZER: link de avaliação da loja (Google Maps)
+        'canais'      => [], // A FAZER: [['nome' => 'iFood', 'url' => 'https://...']]
         'matriz'      => false,
     ],
 
     [
         'id'          => 6,
         'slug'        => 'unidade-5',
-        'nome'        => 'Unidade 5 — PREENCHER bairro',
-        'endereco'    => 'PREENCHER: Rua Exemplo, 000 — Bairro, Cidade/UF',
-        'whatsapp'    => '55000000000', // PREENCHER
-        'horario'     => 'Seg a sáb, 6h às 20h', // PREENCHER
-        'preparo'     => '48 horas para encomendas · balcão na hora', // PREENCHER
-        'sobre'       => 'PREENCHER: um parágrafo sobre esta loja — o que ela faz de melhor, se tem mesa e café, estacionamento, quais escolas e empresas da região ela atende.', // PREENCHER
-        'mapaUrl'     => 'https://maps.google.com/?q=PREENCHER', // PREENCHER
-        'imagem'      => '/assets/img/unidades/unidade-5.jpg', // PREENCHER
+        'nome'        => 'Unidade 5 — Parque das Flores',
+        'endereco'    => 'Rua dos Ipês, 57 — Parque das Flores',
+        'whatsapp'    => '55000000000', // A FAZER: número real (o de exemplo não vira botão)
+        'horario'     => 'Seg a sáb, 6h às 20h', // FICTÍCIO
+        'preparo'     => '48 horas para encomendas · balcão na hora', // FICTÍCIO
+        'sobre'       => 'A loja mais nova, perto das faculdades. Café, salgado e lanche rápido entre as aulas.', // FICTÍCIO
+        'mapaUrl'     => '', // FICTÍCIO: sem endereço real, sem link de mapa
+        'imagem'      => '/assets/img/unidades/unidade-5.jpg', // FICTÍCIO
         'catalogoPdf' => '/catalogos/unidade-5.pdf',
-        'avaliacao'   => '', // PREENCHER: link de avaliação da loja (Google Maps)
-        'canais'      => [], // PREENCHER: [['nome' => 'iFood', 'url' => 'https://...']]
+        'avaliacao'   => '', // A FAZER: link de avaliação da loja (Google Maps)
+        'canais'      => [], // A FAZER: [['nome' => 'iFood', 'url' => 'https://...']]
         'matriz'      => false,
     ],
 ];

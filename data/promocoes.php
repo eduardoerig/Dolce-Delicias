@@ -15,7 +15,7 @@ declare(strict_types=1);
  *   RF-14  a promoção de quarta-feira (e qualquer outra que se repita na semana)
  *   RF-20  as campanhas de baixa temporada — julho, dezembro e janeiro
  *
- * >>> TUDO QUE ESTÁ MARCADO COM "PREENCHER" É PLACEHOLDER <<<
+ * >>> OS TEXTOS MARCADOS COM "FICTÍCIO" SÃO DE EXEMPLO <<<
  * As ofertas abaixo são exemplo. Confirme com a padaria o que vale de verdade,
  * qual o desconto e em quais itens, antes de publicar.
  *
@@ -58,9 +58,9 @@ return [
     [
         'id'    => 1,
         'slug'  => 'quarta-do-salgado',
-        'titulo' => 'Quarta do salgado', // PREENCHER: nome real da promoção
-        'selo'  => 'PREENCHER', // PREENCHER: "20% OFF", "2 por R$ 15"…
-        'texto' => 'PREENCHER: o que entra na promoção, em quais unidades e se vale para encomenda ou só no balcão.',
+        'titulo' => 'Quarta do salgado', // FICTÍCIO
+        'selo'  => '15% OFF', // FICTÍCIO
+        'texto' => 'Toda quarta, salgado frito e assado com desconto no balcão de todas as lojas.',
         'quando' => ['tipo' => 'semanal', 'dias' => [3]], // 3 = quarta-feira
         'ativo' => true,
     ],
@@ -72,9 +72,9 @@ return [
     [
         'id'    => 2,
         'slug'  => 'ferias-escolares',
-        'titulo' => 'Combo de férias', // PREENCHER
-        'selo'  => 'PREENCHER',
-        'texto' => 'PREENCHER: a oferta de julho e janeiro, quando as escolas param. Ex.: combo de lanche para levar para casa.',
+        'titulo' => 'Combo de férias', // FICTÍCIO
+        'selo'  => '10% OFF', // FICTÍCIO
+        'texto' => 'Em julho e janeiro, quando as escolas param: combo de lanche para levar para casa, com salgado, mini sanduíche e suco.',
         'quando' => ['tipo' => 'mensal', 'meses' => [7, 1]],
         'ativo' => true,
     ],
@@ -82,9 +82,9 @@ return [
     [
         'id'    => 3,
         'slug'  => 'festas-de-fim-de-ano',
-        'titulo' => 'Encomendas de fim de ano', // PREENCHER
-        'selo'  => 'PREENCHER',
-        'texto' => 'PREENCHER: a campanha de dezembro — ceia, confraternização de empresa, bandeja de festa.',
+        'titulo' => 'Encomendas de fim de ano', // FICTÍCIO
+        'selo'  => '10% OFF', // FICTÍCIO
+        'texto' => 'Em dezembro, bandejas para a ceia e para a confraternização da empresa, com desconto para pedidos feitos até o dia 10.',
         'quando' => ['tipo' => 'mensal', 'meses' => [12]],
         'ativo' => true,
     ],

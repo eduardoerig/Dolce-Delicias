@@ -80,7 +80,7 @@ Uploads ficam fora de `public/`, com nome aleatório. Imagens: JPEG/PNG/WebP, MI
 
 ## Conteúdo comercial pendente
 
-A base contém números `55000000000`, nomes/endereço/textos `PREENCHER`, fotos ausentes e catálogos de exemplo. O checkout bloqueia o número de exemplo. Substitua dados de unidades, imagens e PDFs no painel antes de uso comercial. Confirme sabores/restrições e textos de `data/empresa.php` com o cliente.
+A base contém números `55000000000`, bairros, endereços e textos fictícios (marcados como FICTÍCIO em `data/`), fotos ausentes e catálogos de exemplo. O checkout bloqueia o número de exemplo. Substitua dados de unidades, imagens e PDFs no painel antes de uso comercial. Confirme sabores/restrições e textos de `data/empresa.php` com o cliente.
 
 As três promoções legadas não definem desconto nem participantes. O seed mantém nome, descrição e agenda, **inativas e sem vínculos inventados**, com valor técnico zero. Complete os campos no painel para ativar. Os PDFs e demais conteúdos de exemplo originais permanecem preservados.
 

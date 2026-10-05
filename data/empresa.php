@@ -18,10 +18,10 @@ declare(strict_types=1);
  * quem vai reescrever esses textos é o cliente, não quem mexe em PHP. Acrescentar
  * um marco na linha do tempo ou um serviço no portfólio é copiar um bloco.
  *
- * >>> TUDO QUE ESTÁ MARCADO COM "PREENCHER" É PLACEHOLDER <<<
- * Nada aqui é informação real sobre a padaria. Datas, números e trajetória
- * precisam vir do cliente — inventar história de empresa é pior que deixar o
- * espaço em branco.
+ * >>> OS TEXTOS ABAIXO SÃO FICTÍCIOS <<<
+ * Foram escritos para o site não ficar com buracos enquanto o cliente não
+ * manda os dados reais. Datas, números, nomes e trajetória NÃO são da
+ * Dolce Delícias: troque tudo pelo texto do cliente antes de publicar.
  *
  * >>> FORA DE ESCOPO <<<
  * RF-32 (divulgação de novos locais e expansão) e RF-33 (fábrica de congelados)
@@ -50,8 +50,8 @@ return [
         'chamada' => 'Comida de verdade, feita todo dia',
 
         'texto' => [
-            'PREENCHER: um parágrafo sobre quem é a Dolce Delícias hoje — o que a padaria faz, para quem, e o que ela entrega de diferente de uma padaria de esquina.',
-            'PREENCHER: um segundo parágrafo sobre a atuação — as regiões e cidades atendidas, o tipo de cliente (escolas, faculdades, empresas, festas de família) e o que a empresa quer ser nos próximos anos.',
+            'A Dolce Delícias é uma padaria de família que virou cozinha de salgados. Hoje são seis lojas e uma cozinha central que prepara, todo dia, coxinha, esfirra, empada e pão de queijo para o balcão e para as encomendas por cento.',
+            'Atendemos festas de família, escolas, faculdades e empresas da região. A massa é aberta na casa, o recheio é feito na nossa cozinha e o salgado frita ou assa perto da hora de sair. O plano é crescer sem perder isso.',
         ],
 
         // RNF-11: os valores da marca — comida feita com amor, pouco
@@ -60,15 +60,15 @@ return [
         'valores' => [
             [
                 'titulo' => 'Feito com amor',
-                'texto'  => 'PREENCHER: o que isso quer dizer na prática — massa aberta na hora, receita da família, quem está na cozinha.',
+                'texto'  => 'A receita da coxinha é a mesma desde a primeira fornada, e quem está na cozinha hoje aprendeu com quem começou.',
             ],
             [
                 'titulo' => 'Pouco industrializado',
-                'texto'  => 'PREENCHER: o que a padaria faz em vez de comprar pronto, e quais ingredientes ela não usa.',
+                'texto'  => 'Massa, recheio e molho são feitos aqui. Não compramos salgado congelado pronto para revender.',
             ],
             [
                 'titulo' => 'Buscando ser saudável',
-                'texto'  => 'PREENCHER: as opções assadas, integrais, veganas ou sem lactose — e o que ainda está sendo desenvolvido.',
+                'texto'  => 'Metade do cardápio é assada, e já há opções integrais. Uma linha sem lactose está em teste na matriz.',
             ],
         ],
     ],
@@ -79,9 +79,9 @@ return [
      * sobre.php, senão os dois divergem no dia em que abrir a próxima loja.
      * ------------------------------------------------------------------ */
     'numeros' => [
-        ['valor' => 'PREENCHER', 'rotulo' => 'anos de história'],
-        ['valor' => 'PREENCHER', 'rotulo' => 'salgados por dia'],
-        ['valor' => 'PREENCHER', 'rotulo' => 'escolas e empresas atendidas'],
+        ['valor' => '18', 'rotulo' => 'anos de história'],
+        ['valor' => '12 mil', 'rotulo' => 'salgados por dia'],
+        ['valor' => '140', 'rotulo' => 'escolas e empresas atendidas'],
     ],
 
     /* ---------------------------------------------------------------------
@@ -90,24 +90,24 @@ return [
      * ------------------------------------------------------------------ */
     'historia' => [
         [
-            'ano'    => 'PREENCHER',
+            'ano'    => '2008',
             'titulo' => 'O começo',
-            'texto'  => 'PREENCHER: como a Dolce Delícias nasceu — quem começou, onde, e o que vendia no primeiro dia.',
+            'texto'  => 'A família começa a fazer coxinha e empada na cozinha de casa, por encomenda, para festas de vizinhos e amigos.',
         ],
         [
-            'ano'    => 'PREENCHER',
+            'ano'    => '2012',
             'titulo' => 'A primeira loja',
-            'texto'  => 'PREENCHER: quando saiu de casa e virou ponto, e o que mudou no dia a dia da família.',
+            'texto'  => 'As encomendas não cabem mais na cozinha de casa. Abre a loja do Centro, que hoje é a matriz, com balcão e café.',
         ],
         [
-            'ano'    => 'PREENCHER',
+            'ano'    => '2016',
             'titulo' => 'As encomendas',
-            'texto'  => 'PREENCHER: quando as escolas e as empresas começaram a pedir por cento, e como isso virou o carro-chefe.',
+            'texto'  => 'Escolas e empresas começam a pedir salgado por cento toda semana. A matriz ganha uma cozinha só para as encomendas.',
         ],
         [
-            'ano'    => 'PREENCHER',
+            'ano'    => '2026',
             'titulo' => 'Hoje',
-            'texto'  => 'PREENCHER: onde a padaria chegou — quantas lojas, quantas pessoas na equipe, o que se faz de melhor.',
+            'texto'  => 'São seis lojas e cerca de 60 pessoas na equipe. A coxinha continua sendo o salgado mais pedido.',
         ],
     ],
 
@@ -117,19 +117,19 @@ return [
     'portfolio' => [
         [
             'titulo' => 'Encomendas por cento',
-            'texto'  => 'PREENCHER: o carro-chefe — salgados assados e fritos, doces e mini lanches, para festa, escola e evento.',
+            'texto'  => 'O carro-chefe: salgados fritos e assados, docinhos e mini lanches, montados em bandeja para festa, escola e evento.',
         ],
         [
             'titulo' => 'Coffee break e eventos',
-            'texto'  => 'PREENCHER: o serviço para empresa e faculdade — bandeja montada, quantas pessoas atende, se inclui bebida.',
+            'texto'  => 'Bandejas de salgado, doce e pão de queijo para reunião, palestra e formatura, de 10 a 300 pessoas. Café e suco sob encomenda.',
         ],
         [
             'titulo' => 'Padaria e balcão',
-            'texto'  => 'PREENCHER: o que se acha na loja todo dia — pães, bolos, lanches, almoço executivo.',
+            'texto'  => 'Nas seis lojas: salgado saindo quente, pão de queijo, bolo, lanche e café, todo dia.',
         ],
         [
             'titulo' => 'Lanche escolar',
-            'texto'  => 'PREENCHER: o atendimento a escolas — entrega recorrente, cardápio combinado, porção individual.',
+            'texto'  => 'Lanche do recreio com cardápio combinado com a escola, porção individual e entrega nos dias marcados.',
         ],
     ],
 
@@ -139,20 +139,20 @@ return [
     'empresas' => [
         'chamada' => 'Sua empresa, abastecida todo mês',
 
-        'texto' => 'PREENCHER: o que a Dolce Delícias oferece para empresa e indústria — volume que dá conta, frequência de entrega, prazo de faturamento, se emite nota, se tem contrato mensal.',
+        'texto' => 'Para empresas e indústrias, a matriz monta um contrato mensal: entrega na frequência que a equipe precisa, nota fiscal e faturamento em até 28 dias.',
 
         'itens' => [
             [
                 'titulo' => 'Coffee break de reunião',
-                'texto'  => 'PREENCHER: tamanho mínimo, o que vem na bandeja, prazo para pedir.',
+                'texto'  => 'A partir de 10 pessoas: salgados, mini sanduíches e docinhos. Peça com 48 horas de antecedência.',
             ],
             [
                 'titulo' => 'Lanche de turno',
-                'texto'  => 'PREENCHER: o atendimento a indústria — entrega recorrente, horário, embalagem individual.',
+                'texto'  => 'Kits individuais para a troca de turno, entregues no horário combinado, de segunda a sábado.',
             ],
             [
                 'titulo' => 'Confraternização',
-                'texto'  => 'PREENCHER: festa de fim de ano e comemoração de equipe, do orçamento à montagem.',
+                'texto'  => 'Festa de fim de ano e comemoração de equipe: a matriz faz o orçamento e entrega a mesa montada.',
             ],
         ],
     ],
