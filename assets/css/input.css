@@ -3411,8 +3411,7 @@ a.loja-acao:hover {
    A matriz é a única loja que recebe pedidos do site, então ganha a caixa
    marrom, separada do herói: foto à esquerda, dados em branco à direita,
    ações em amarelo. As outras lojas vêm em cartões retos ao lado do título
-   (que fica parado no computador). No fim, o convite para encomendar com a
-   pilha de coxinhas. */
+   (que fica parado no computador). No fim, o convite para encomendar. */
 
 /* Botão de contorno claro, para fundo escuro. */
 .botao-vazado {
@@ -3634,25 +3633,16 @@ a.loja-acao:hover {
   border-radius: 0;
 }
 
-/* Fecho: convite para encomendar, com a pilha de coxinhas à direita. */
+/* Fecho: convite para encomendar, só texto. No celular o botão vem embaixo
+   do texto; do tablet em diante, à direita dele. */
 .unidades-fecho {
   padding-bottom: 4.5rem;
 }
 
-.unidades-fecho-caixa {
-  position: relative;
-}
-
-/* No celular as coxinhas ficam no alto da caixa, à direita, passando da
-   borda de cima; o texto começa abaixo delas e usa a largura toda. */
-.unidades-fecho {
-  padding-top: 2rem;
-}
-
 .unidades-fecho-texto {
-  padding: 5.5rem 1.5rem 2.25rem;
+  padding: 2rem 1.5rem 2.25rem;
   background:
-    radial-gradient(circle at 92% 70%, rgb(225 5 30 / 0.5) 0, rgb(225 5 30 / 0) 55%),
+    radial-gradient(circle at 92% 50%, rgb(225 5 30 / 0.5) 0, rgb(225 5 30 / 0) 55%),
     var(--color-ink);
   color: #fff;
 }
@@ -3681,18 +3671,6 @@ a.loja-acao:hover {
   text-transform: uppercase;
 }
 
-/* Do tablet em diante, a pilha de coxinhas passa um pouco da borda de baixo
-   da caixa, como se estivesse apoiada na frente dela. */
-.unidades-fecho-recorte {
-  position: absolute;
-  top: -2.25rem;
-  right: 2rem;
-  width: 8.5rem;
-  height: auto;
-  filter: drop-shadow(0 10px 14px rgb(0 0 0 / 0.45));
-  pointer-events: none;
-}
-
 @media (min-width: 40rem) {
   .loja-cartao {
     padding-inline: 1.25rem;
@@ -3709,18 +3687,20 @@ a.loja-acao:hover {
 
 @media (min-width: 48rem) {
   .unidades-fecho-texto {
-    padding: 3rem 24rem 3rem 3rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 3rem;
+    padding: 3rem;
   }
 
-  .unidades-fecho {
-    padding-top: 0;
+  .unidades-fecho-texto .botao-amarelo {
+    grid-column: 2;
+    grid-row: 1 / span 2;
   }
 
-  .unidades-fecho-recorte {
-    top: auto;
-    right: 3.5rem;
-    bottom: -1.5rem;
-    width: 20rem;
+  .unidades-fecho-texto p {
+    margin-bottom: 0;
   }
 }
 
@@ -3769,22 +3749,6 @@ a.loja-acao:hover {
     max-width: 18rem;
     height: auto;
     margin-top: 2rem;
-  }
-}
-
-@media (min-width: 48rem) and (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    .unidades-fecho-recorte {
-      animation: recorte-sobe linear both;
-      animation-timeline: view();
-      animation-range: entry 0% cover 50%;
-    }
-  }
-}
-
-@keyframes recorte-sobe {
-  from {
-    translate: 0 2.5rem;
   }
 }
 
