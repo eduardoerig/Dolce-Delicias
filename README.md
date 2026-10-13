@@ -2,7 +2,7 @@
 
 Site estático: HTML, CSS e JavaScript puro. A única biblioteca é o GSAP
 (`assets/js/vendor/`), usada nas animações da home. Sem build, sem npm, sem servidor
-próprio. A versão antiga em PHP + PostgreSQL está no repositório privado [Dolce-Delicias-php](https://github.com/eduardoerig/Dolce-Delicias-php).
+próprio.
 
 ## Rodar no computador
 
