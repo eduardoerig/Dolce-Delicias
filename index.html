@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dolce" class="sem-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- ALTERAR: título da aba e descrição que aparece no Google -->
+<title>Dolce Delícias — encomendas de salgados, assados e doces</title>
+<meta name="description" content="Padaria e panificadora que atende escolas, faculdades, eventos e encomendas. Monte seu pedido no site e feche no WhatsApp da matriz.">
+<meta name="theme-color" content="#E1051E">
+<link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+
+<!-- O site tem um tema só (claro). Isto apenas avisa que o JS está vivo: sem JS,
+     a classe .sem-js fica e o painel de filtros do celular aparece aberto no lugar. -->
+<script>document.documentElement.classList.remove('sem-js');</script>
+
+<!-- Alfa Slab One: títulos e preços. Figtree: corpo e interface. Baloo 2 (800): só a placa da marca. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&amp;family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Baloo+2:wght@800&amp;display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/app.css">
+
+<script src="assets/js/dados.js" defer></script>
+<script src="assets/js/desenhos.js" defer></script>
+<script src="assets/js/carrinho.js" defer></script>
+<script src="assets/js/site.js" defer></script>
+<script src="assets/js/paginas/inicio.js" defer></script>
+</head>
+<body class="bg-base-100 text-base-content antialiased">
+
+<a href="#conteudo"
+   class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-content">
+  Pular para o conteúdo
+</a>
+
+<div class="drawer drawer-end">
+  <!-- O checkbox é só o mecanismo do drawer: quem controla é o botão [data-cart-open].
+       Fora da tabulação para não virar "caixa de seleção" sem rótulo no cabeçalho. -->
+  <input id="carrinho-toggle" type="checkbox" class="drawer-toggle" tabindex="-1" aria-hidden="true">
+
+  <div class="drawer-content flex min-h-screen flex-col">
+
+    <header class="sticky top-0 z-50 border-b border-linha bg-base-100">
+      <!-- Grade de 3 colunas no computador: as laterais têm a mesma largura (1fr), então o menu fica no centro exato da página. -->
+      <div class="mx-auto grid h-[4.5rem] max-w-7xl grid-cols-[auto_1fr] items-center gap-2 px-3 sm:gap-3 sm:px-6 lg:grid-cols-[1fr_auto_1fr] lg:px-8">
+
+        <a href="index.html" class="flex items-center justify-self-start rounded-xl" aria-label="Dolce Delícias, página inicial">
+          <svg viewBox="0 0 300 160" class="h-9 w-auto drop-shadow-sm sm:h-11" role="img" aria-label="Dolce Delícias">
+  <defs><clipPath id="dd-oval"><ellipse cx="150" cy="80" rx="146" ry="76"/></clipPath></defs>
+  <ellipse cx="150" cy="80" rx="146" ry="76" fill="#E1051E"/>
+  <g clip-path="url(#dd-oval)" fill="#ffffff" opacity="0.22"><g transform="translate(150,80)"><polygon points="0,0 320,-46 320,46" transform="rotate(0)"/><polygon points="0,0 320,-46 320,46" transform="rotate(30)"/><polygon points="0,0 320,-46 320,46" transform="rotate(60)"/><polygon points="0,0 320,-46 320,46" transform="rotate(90)"/><polygon points="0,0 320,-46 320,46" transform="rotate(120)"/><polygon points="0,0 320,-46 320,46" transform="rotate(150)"/><polygon points="0,0 320,-46 320,46" transform="rotate(180)"/><polygon points="0,0 320,-46 320,46" transform="rotate(210)"/><polygon points="0,0 320,-46 320,46" transform="rotate(240)"/><polygon points="0,0 320,-46 320,46" transform="rotate(270)"/><polygon points="0,0 320,-46 320,46" transform="rotate(300)"/><polygon points="0,0 320,-46 320,46" transform="rotate(330)"/></g></g>
+  <ellipse cx="150" cy="80" rx="132" ry="63" fill="none" stroke="#ffffff" stroke-width="3.5"/>
+  <text x="150" y="72" text-anchor="middle" fill="#ffffff" font-family="var(--font-logo, 'Trebuchet MS'), sans-serif" font-size="46" font-weight="800" font-style="italic">Dolce</text>
+  <text x="150" y="116" text-anchor="middle" fill="#FCE24C" font-family="var(--font-logo, 'Trebuchet MS'), sans-serif" font-size="38" font-weight="800">delícias</text>
+</svg>
+        </a>
+
+        <!-- Navegação em telas grandes. Os links com aria-current são marcados por assets/js/conteudo/layout.js. -->
+        <nav class="hidden lg:flex" aria-label="Seções do site">
+          <ul class="flex items-center gap-1">
+            <li>
+              <!-- Catálogo é dropdown: cada unidade tem o PDF dela. -->
+              <details class="dropdown" data-catalog-dropdown>
+                <summary class="flex cursor-pointer list-none items-center gap-1 rounded-xl px-3 py-2 text-[0.95rem] font-semibold text-crust transition-colors hover:text-brand [&::-webkit-details-marker]:hidden">
+                  Catálogo
+                  <svg class="h-4 w-4 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                </summary>
+                <ul class="menu dropdown-content z-[60] mt-2 w-72 gap-0.5 rounded-2xl border border-base-300 bg-papel p-2 shadow-bandeja-alta">
+                  <li><a href="#catalogo" class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Ver catálogo no site</a></li>
+                  <!-- ALTERAR: um item por unidade. O arquivo do PDF fica em catalogos/. -->
+                  <li><a href="catalogos/matriz.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Matriz — Centro<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
+                  <li><a href="catalogos/unidade-1.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Unidade 1 — Jardim América<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
+                  <li><a href="catalogos/unidade-2.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Unidade 2 — Vila Nova<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
+                  <li><a href="catalogos/unidade-3.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Unidade 3 — Santa Mônica<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
+                  <li><a href="catalogos/unidade-4.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Unidade 4 — Boa Vista<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
+                  <li><a href="catalogos/unidade-5.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Unidade 5 — Parque das Flores<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
+                  <li class="mx-3 my-1 border-t border-base-300" aria-hidden="true"></li>
+                  <li><a href="catalogos/completo.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-bold text-brand">Baixar PDF completo<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
+                </ul>
+              </details>
+            </li>
+            <li data-so-com-promocoes hidden>
+              <a href="#promocoes" data-menu-link class="block rounded-xl px-3 py-2 text-[0.95rem] font-semibold text-crust transition-colors hover:text-brand">Promoções</a>
+            </li>
+            <li>
+              <a href="pages/unidades.html" data-menu-link class="block rounded-xl px-3 py-2 text-[0.95rem] font-semibold text-crust transition-colors hover:text-brand">Unidades</a>
+            </li>
+            <li>
+              <a href="pages/sobre.html" data-menu-link class="block rounded-xl px-3 py-2 text-[0.95rem] font-semibold text-crust transition-colors hover:text-brand">A empresa</a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="flex items-center justify-self-end gap-1.5 sm:gap-2">
+          <!-- Busca: na home leva ao campo do catálogo; fora dela, abre a home já na busca -->
+          <a href="#busca" data-focar-busca class="icone-redondo" aria-label="Buscar no catálogo">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          </a>
+
+          <!-- Carrinho: o nome acessível vem do texto escondido, que diz quantos itens há -->
+          <button type="button"
+                  data-cart-open
+                  aria-controls="painel-carrinho"
+                  aria-expanded="false"
+                  class="icone-redondo">
+            <span class="relative inline-flex" data-cart-icon>
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/><circle cx="10" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/>
+              </svg>
+              <span data-cart-badge aria-hidden="true"
+                    class="oculto absolute -right-3 -top-2.5 min-w-[1.35rem] rounded-full border-2 border-base-100 bg-accent px-1 text-center text-[0.7rem] font-bold leading-[1.1rem] text-accent-content">0</span>
+            </span>
+            <span class="sr-only" data-cart-sr aria-live="polite">Carrinho vazio</span>
+          </button>
+
+          <a href="pages/carrinho.html" class="botao-primario hidden sm:inline-flex">Fechar pedido</a>
+
+          <!-- Menu no celular -->
+          <details class="dropdown dropdown-end lg:hidden" data-menu-dropdown>
+            <summary class="icone-redondo list-none [&::-webkit-details-marker]:hidden"
+                     aria-label="Abrir menu de navegação">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+            </summary>
+            <ul class="menu dropdown-content z-[60] mt-2 max-h-[75vh] w-[19rem] flex-nowrap gap-1 overflow-y-auto rounded-2xl border border-base-300 bg-papel p-2 shadow-bandeja-alta">
+              <li><a class="rounded-xl px-3 py-2.5 font-semibold" href="#catalogo">Catálogo</a></li>
+              <li data-so-com-promocoes hidden><a class="rounded-xl px-3 py-2.5 font-semibold" href="#promocoes">Promoções</a></li>
+              <li><a class="rounded-xl px-3 py-2.5 font-semibold" href="pages/unidades.html" data-menu-link>Unidades</a></li>
+              <li><a class="rounded-xl px-3 py-2.5 font-semibold" href="pages/sobre.html" data-menu-link>A empresa</a></li>
+              <li><a class="rounded-xl px-3 py-2.5 font-semibold" href="pages/carrinho.html" data-menu-link>Fechar pedido</a></li>
+
+              <!-- No celular a lista de PDFs entra aqui embaixo. -->
+              <li class="mx-3 my-1 border-t border-base-300" aria-hidden="true"></li>
+              <li class="px-3 pb-1 pt-1 text-xs font-semibold text-crust">Catálogos em PDF</li>
+              <!-- ALTERAR: um item por unidade. O arquivo do PDF fica em catalogos/. -->
+              <li><a href="catalogos/matriz.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Matriz — Centro<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
+              <li><a href="catalogos/unidade-1.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Unidade 1 — Jardim América<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
+              <li><a href="catalogos/unidade-2.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Unidade 2 — Vila Nova<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
+              <li><a href="catalogos/unidade-3.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Unidade 3 — Santa Mônica<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
+              <li><a href="catalogos/unidade-4.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Unidade 4 — Boa Vista<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
+              <li><a href="catalogos/unidade-5.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Unidade 5 — Parque das Flores<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
+              <li class="mx-3 my-1 border-t border-base-300" aria-hidden="true"></li>
+              <li><a href="catalogos/completo.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-bold text-brand">Baixar PDF completo<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
+            </ul>
+          </details>
+
+        </div>
+      </div>
+    </header>
+
+    <main id="conteudo" class="flex-1">
+
+<!-- ============================================================
+     HERÓI — o cento chegando. Um prato de salgados entra rolando da esquerda
+     e para no fim do herói com só metade à mostra. A posição final é CSS puro:
+     sem JS, ou com menos movimento, o prato já aparece parado. O movimento é
+     do GSAP (assets/js/heroi-cento.js).
+     ============================================================ -->
+<script>
+  // Esconde o prato e o texto antes do primeiro quadro, para o GSAP começar do
+  // zero sem piscar. Se o script não rodar em 3s, tudo aparece no lugar.
+  if (matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+    document.documentElement.classList.add('cento-anima', 'zap-anima');
+    setTimeout(function () { document.documentElement.classList.remove('cento-anima', 'zap-anima'); }, 3000);
+  }
+</script>
+<script src="assets/js/vendor/gsap.min.js" defer></script>
+<script src="assets/js/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/js/heroi-cento.js" defer></script>
+<script src="assets/js/encomendas-zap.js" defer></script>
+
+<section class="heroi-cento" aria-labelledby="heroi-titulo" data-heroi-cento>
+  <div class="heroi-cento-prato" aria-hidden="true" data-cento-prato>
+    <img src="assets/img/recortes/cento-400.webp" srcset="assets/img/recortes/cento-400.webp 400w, assets/img/recortes/cento-640.webp 640w, assets/img/recortes/cento-1000.webp 985w" sizes="(min-width: 48rem) min(100svh, 64vw), 118vw" alt="" width="985" height="985" fetchpriority="high" decoding="async">
+  </div>
+
+  <div class="heroi-cento-conteudo mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="heroi-cento-texto">
+      <!-- leading abaixo de 1 é o que dá cara de cartaz: as linhas se tocam. -->
+      <!-- ALTERAR: título, frase e botões do topo da home -->
+      <h1 id="heroi-titulo" class="heroi-cento-titulo">
+        <span class="block" data-cento-revela>Encomende</span>
+        <span class="block" data-cento-revela>o cento.</span>
+      </h1>
+
+      <p class="heroi-cento-frase" data-cento-revela>A gente cuida do resto: salgados, assados e doces feitos no dia da sua festa. Você só fecha pelo WhatsApp.</p>
+
+      <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3" data-cento-revela>
+        <a href="#catalogo" class="botao-primario heroi-cta w-full sm:w-auto">Montar meu pedido</a>
+        <a href="#encomendas" class="hidden min-h-11 items-center font-semibold underline decoration-white/60 decoration-2 underline-offset-4 hover:decoration-white sm:inline-flex">Como funciona</a>
+      </div>
+
+      <!-- Garantias. ALTERAR: o prazo de preparo da matriz. -->
+      <ul class="heroi-garantias" data-cento-revela>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Entrega no seu endereço</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Encomendas com 48 horas de antecedência</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Sem cadastro, sem pagar no site</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- No celular a pessoa arrasta; no computador ela rola. O link leva ao catálogo. -->
+  <a href="#catalogo" class="heroi-rolar" data-cento-revela>
+    <span class="sm:hidden">Arraste para baixo</span>
+    <span class="hidden sm:inline">Role para baixo</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v15"/><path d="m6 13 6 6 6-6"/></svg>
+  </a>
+</section>
+
+<!-- PROMOÇÕES — RF-14 e RF-20. Antes do catálogo de propósito: no celular é a
+     segunda coisa depois do herói. Sem promoção visível, nada é desenhado. -->
+<div data-promocoes></div>
+
+<!-- ============================================================
+     CATÁLOGO — faixa com título e busca, filtros na lateral, grade com
+     paginação. Os cards e os filtros são desenhados por inicio.js; quem
+     filtra, ordena e pagina é assets/js/ui.js (seção 4), pelos data-*.
+     ============================================================ -->
+<section id="catalogo" class="bg-farinha" aria-labelledby="catalogo-titulo">
+
+  <div class="border-b border-linha bg-polvilho">
+    <div class="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-8 sm:px-6 md:flex-row md:items-end md:justify-between lg:px-8 lg:py-10">
+      <div>
+        <!-- ALTERAR: título do catálogo -->
+        <h2 id="catalogo-titulo" class="text-4xl sm:text-5xl">Catálogo</h2>
+        <p class="mt-2 text-crust"><span data-total-texto>Itens feitos</span> todo dia, por encomenda, com entrega.</p>
+      </div>
+
+      <form class="busca-pilula w-full md:max-w-md" role="search" data-busca-form>
+        <label for="busca" class="sr-only">Buscar no catálogo</label>
+        <svg class="h-5 w-5 shrink-0 text-crust" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="busca" type="search" data-busca-input
+               placeholder="Buscar coxinha, cupcake, bebida…"
+               autocomplete="off" enterkeyhint="search"
+               aria-describedby="contagem-catalogo">
+        <button type="submit" class="botao-primario">Buscar</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:grid lg:grid-cols-[15.5rem_minmax(0,1fr)] lg:items-start lg:gap-8 lg:px-8 lg:py-10">
+
+    <!-- Filtros: coluna fixa no computador, painel por cima no celular -->
+    <section id="filtros" class="filtros-painel" aria-labelledby="filtros-titulo" data-filtros-painel>
+      <div class="filtros-cabeca">
+        <h3 id="filtros-titulo" class="font-sans text-lg font-bold">Filtros</h3>
+        <button type="button" class="filtros-limpar" data-limpar-filtros>Limpar</button>
+        <button type="button" class="filtros-fechar" data-fechar-filtros aria-label="Fechar filtros">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+
+      <div class="filtros-corpo" data-filtros-corpo></div>
+
+      <!-- Só no celular: o painel cobre a grade, então precisa de uma saída que diga o resultado. -->
+      <div class="filtros-pe">
+        <button type="button" class="botao-primario w-full" data-fechar-filtros data-ver-itens>Ver itens</button>
+      </div>
+    </section>
+    <div class="filtros-fundo" data-fechar-filtros hidden></div>
+
+    <div class="min-w-0">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <p id="contagem-catalogo" class="font-semibold" data-contagem aria-live="polite"></p>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" class="botao-filtros lg:hidden" data-abrir-filtros aria-controls="filtros" aria-expanded="false">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+            Filtros
+            <span data-filtros-contagem class="oculto"></span>
+          </button>
+          <label for="ordenar" class="sr-only">Ordenar por</label>
+          <select id="ordenar" class="seletor-ordem" data-ordenar>
+            <option value="destaque">Ordenar: Recomendados</option>
+            <option value="preco-asc">Menor preço por peça</option>
+            <option value="preco-desc">Maior preço por peça</option>
+            <option value="nome">Nome (A–Z)</option>
+          </select>
+        </div>
+      </div>
+
+      <div data-grade-produtos class="mt-4 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4"></div>
+
+      <!-- Busca sem resultado -->
+      <div data-sem-resultado class="oculto flex flex-col items-center gap-3 rounded-bandeja border border-linha bg-papel px-6 py-14 text-center">
+        <p class="text-xl font-bold">Nenhum item com esses filtros</p>
+        <p class="max-w-sm text-sm leading-relaxed text-crust">
+          Tente outra palavra ou limpe os filtros. Se for algo especial, a matriz faz sob encomenda pelo WhatsApp.
+        </p>
+        <button type="button" data-limpar-filtros class="botao-primario mt-1">Limpar filtros</button>
+      </div>
+
+      <nav class="paginacao" aria-label="Páginas do catálogo" data-paginacao hidden></nav>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     COMO ENCOMENDAR — os passos ao lado do celular com a conversa do pedido.
+     A conversa é decorativa (aria-hidden): os passos dizem o mesmo em texto.
+     O GSAP (assets/js/encomendas-zap.js) faz o braço entrar e as mensagens chegarem.
+     ============================================================ -->
+<section id="encomendas" class="encomendas" aria-labelledby="titulo-encomendas" data-encomendas>
+  <div class="encomendas-conteudo">
+    <div class="encomendas-texto">
+      <!-- ALTERAR: textos do "Como encomendar" -->
+      <h2 id="titulo-encomendas" class="text-3xl sm:text-4xl">Como encomendar</h2>
+      <p class="encomendas-frase">Você escolhe aqui no site e fecha com a matriz no WhatsApp.</p>
+
+      <ol class="encomendas-passos">
+        <li>
+          <span class="encomendas-numero">1</span>
+          <div>
+            <h3>Monte o pedido</h3>
+            <p>Adicione os itens. O mínimo de cada produto já vem respeitado.</p>
+          </div>
+        </li>
+        <li>
+          <span class="encomendas-numero">2</span>
+          <div>
+            <h3>Diga onde entregar</h3>
+            <p>O endereço da entrega e a forma de pagamento. Nada é cobrado no site.</p>
+          </div>
+        </li>
+        <li>
+          <span class="encomendas-numero">3</span>
+          <div>
+            <h3>Feche no WhatsApp</h3>
+            <p>A conversa abre com o pedido escrito. A data e o valor final são combinados ali.</p>
+          </div>
+        </li>
+      </ol>
+
+      <p class="encomendas-empresas">
+        Evento, escola ou empresa?
+        <a href="pages/sobre.html#portfolio">Veja o atendimento para grandes pedidos</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="encomendas-palco" aria-hidden="true">
+    <div class="encomendas-celular" data-zap-celular>
+      <div class="zap-tela">
+        <div class="zap-app">
+          <div class="zap-topo">
+            <div class="zap-status">
+              <span>10:24</span>
+              <svg viewBox="0 0 34 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/><rect x="22" y="1.5" width="10" height="9" rx="2.5" fill="none" stroke="currentColor"/><rect x="23.5" y="3" width="7" height="6" rx="1.2"/></svg>
+            </div>
+            <div class="zap-contato">
+              <svg class="zap-voltar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg>
+              <span class="zap-avatar"><img src="assets/img/logo.svg" alt="" width="40" height="40" loading="lazy"></span>
+              <span class="zap-nome"><strong>Dolce Delícias</strong><small>online</small></span>
+            </div>
+          </div>
+
+          <div class="zap-conversa">
+            <span class="zap-dia">Hoje</span>
+            <p class="zap-msg zap-eu zap-lido" data-zap-msg>
+              Olá! Quero fazer uma encomenda pelo site da Dolce Delícias.
+              <span class="zap-itens">• 1 cento de Coxinha<br>• 1 cento de Mini Esfirras</span>
+              <span class="zap-hora">10:24 <svg class="zap-vistos" viewBox="0 0 18 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m1 6 3.2 3.2L11 2.4"/><path d="m7.2 9.2.2.2L14.4 2.4"/></svg></span>
+            </p>
+            <p class="zap-msg zap-loja zap-digitando" data-zap-digitando><i></i><i></i><i></i></p>
+            <p class="zap-msg zap-loja" data-zap-msg>
+              Oi! Recebemos seu pedido e já separamos tudo para a sua festa.
+              <span class="zap-hora">10:25</span>
+            </p>
+            <p class="zap-msg zap-loja zap-foto" data-zap-msg>
+              <img src="assets/img/recortes/cento-400.webp" alt="" width="400" height="400" loading="lazy" decoding="async">
+              Seu cento vai sair assim.
+              <span class="zap-hora">10:25</span>
+            </p>
+          </div>
+
+          <div class="zap-barra">
+            <span class="zap-campo">Mensagem</span>
+            <span class="zap-mic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3.5 3.5 0 0 0 3.5-3.5v-6a3.5 3.5 0 1 0-7 0v6A3.5 3.5 0 0 0 12 15Zm6-3.5a1 1 0 1 0-2 0 4 4 0 0 1-8 0 1 1 0 1 0-2 0 6 6 0 0 0 5 5.9V20H9a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-2v-2.6a6 6 0 0 0 5-5.9Z"/></svg></span>
+          </div>
+        </div>
+      </div>
+      <img class="encomendas-foto" src="assets/img/recortes/celular-1100.webp" srcset="assets/img/recortes/celular-640.webp 640w, assets/img/recortes/celular-1100.webp 1094w" sizes="(min-width: 64rem) min(46vw, 40rem), 118vw" alt="" width="1094" height="1519" loading="lazy" decoding="async">
+    </div>
+  </div>
+</section>
+
+    </main>
+
+    <!-- Marrom torrado: fecha a página com cor e deixa a placa vermelha do logo saltar. -->
+    <footer id="contato" class="rodape">
+      <div class="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:grid-cols-2 sm:px-6 lg:grid-cols-[1.4fr_1fr_1fr_1.3fr_1.3fr] lg:gap-8 lg:px-8 lg:py-14">
+
+        <div>
+          <svg viewBox="0 0 300 160" class="h-12 w-auto" role="img" aria-label="Dolce Delícias">
+  <defs><clipPath id="dd-oval"><ellipse cx="150" cy="80" rx="146" ry="76"/></clipPath></defs>
+  <ellipse cx="150" cy="80" rx="146" ry="76" fill="#E1051E"/>
+  <g clip-path="url(#dd-oval)" fill="#ffffff" opacity="0.22"><g transform="translate(150,80)"><polygon points="0,0 320,-46 320,46" transform="rotate(0)"/><polygon points="0,0 320,-46 320,46" transform="rotate(30)"/><polygon points="0,0 320,-46 320,46" transform="rotate(60)"/><polygon points="0,0 320,-46 320,46" transform="rotate(90)"/><polygon points="0,0 320,-46 320,46" transform="rotate(120)"/><polygon points="0,0 320,-46 320,46" transform="rotate(150)"/><polygon points="0,0 320,-46 320,46" transform="rotate(180)"/><polygon points="0,0 320,-46 320,46" transform="rotate(210)"/><polygon points="0,0 320,-46 320,46" transform="rotate(240)"/><polygon points="0,0 320,-46 320,46" transform="rotate(270)"/><polygon points="0,0 320,-46 320,46" transform="rotate(300)"/><polygon points="0,0 320,-46 320,46" transform="rotate(330)"/></g></g>
+  <ellipse cx="150" cy="80" rx="132" ry="63" fill="none" stroke="#ffffff" stroke-width="3.5"/>
+  <text x="150" y="72" text-anchor="middle" fill="#ffffff" font-family="var(--font-logo, 'Trebuchet MS'), sans-serif" font-size="46" font-weight="800" font-style="italic">Dolce</text>
+  <text x="150" y="116" text-anchor="middle" fill="#FCE24C" font-family="var(--font-logo, 'Trebuchet MS'), sans-serif" font-size="38" font-weight="800">delícias</text>
+</svg>
+          <p class="mt-4 max-w-xs text-sm leading-relaxed">
+            Padaria e panificadora. Salgados, assados e doces para escolas, eventos e encomendas em 6 unidades.<!-- ALTERAR: número de lojas -->
+          </p>
+        </div>
+
+        <nav aria-labelledby="rodape-cardapio">
+          <h2 id="rodape-cardapio" class="rodape-titulo">Cardápio</h2>
+          <ul class="mt-4 space-y-2.5 text-sm">
+            <li><a class="rodape-link" href="#catalogo">Catálogo</a></li>
+            <li data-so-com-promocoes hidden><a class="rodape-link" href="#promocoes">Promoções</a></li>
+            <li><a class="rodape-link" href="pages/carrinho.html">Meu pedido</a></li>
+          </ul>
+        </nav>
+
+        <nav aria-labelledby="rodape-dolce">
+          <h2 id="rodape-dolce" class="rodape-titulo">A Dolce</h2>
+          <ul class="mt-4 space-y-2.5 text-sm">
+            <li><a class="rodape-link" href="pages/sobre.html">A empresa</a></li>
+            <li><a class="rodape-link" href="pages/unidades.html">Nossas unidades</a></li>
+          </ul>
+        </nav>
+
+        <div>
+          <h2 class="rodape-titulo">Matriz</h2>
+          <!-- ALTERAR: endereço, horário, prazo e WhatsApp da matriz (o mesmo número está em dados/unidades.json) -->
+          <address class="mt-4 space-y-2 text-sm not-italic">
+            <p>Rua das Palmeiras, 410 — Centro</p>
+            <p>Seg a sex, 6h às 20h · Sáb e dom, 6h às 14h</p>
+            <p>Encomendas com 48 horas de antecedência</p>
+          </address>
+          <a href="https://wa.me/5543999259373" target="_blank" rel="noopener noreferrer" class="botao-primario mt-4">Falar no WhatsApp</a>
+        </div>
+
+        <!-- ALTERAR: o link abre o WhatsApp da matriz com a frase pronta. -->
+        <div>
+          <h2 class="rodape-titulo">Sua opinião</h2>
+          <p class="mt-4 text-sm leading-relaxed">Conte o que achou do atendimento. Elogio e reclamação ajudam do mesmo jeito.</p>
+          <a href="https://wa.me/5543999259373?text=Ol%C3%A1!%20Quero%20deixar%20um%20coment%C3%A1rio%20sobre%20o%20atendimento%20da%20Dolce%20Del%C3%ADcias." target="_blank" rel="noopener noreferrer" class="rodape-link mt-3 inline-flex min-h-11 items-center text-sm font-bold text-cream underline underline-offset-4">Deixar meu comentário</a>
+        </div>
+      </div>
+
+      <div class="rodape-base">
+        <div class="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+          <p class="text-xs">
+            © 2026<!-- ALTERAR: ano --> Dolce Delícias. Os pedidos são fechados pelo WhatsApp da matriz.
+          </p>
+          <a href="https://instagram.com/dolcedeliciasoficial" target="_blank" rel="noopener noreferrer"
+             class="icone-redondo" aria-label="Instagram da Dolce Delícias (@dolcedeliciasoficial)">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </footer>
+
+  </div><!-- /drawer-content -->
+
+  <!-- Carrinho lateral. A lista é desenhada por assets/js/cart.js a partir do
+       localStorage['dolce_cart']; aqui só existe a casca e o estado vazio. O painel
+       recebe `inert` enquanto está fechado (assets/js/ui.js). -->
+  <div class="drawer-side z-[70]">
+    <label for="carrinho-toggle" class="drawer-overlay" aria-hidden="true"></label>
+
+    <div id="painel-carrinho"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="titulo-carrinho"
+         class="gaveta-carrinho flex flex-col bg-papel text-base-content">
+
+      <div class="gaveta-cabeca">
+        <h2 id="titulo-carrinho">Seu pedido</h2>
+        <span class="gaveta-contagem" data-cart-count>0 itens</span>
+        <!-- Primeiro [data-cart-close] do painel: é nele que o foco entra ao abrir. -->
+        <button type="button" data-cart-close class="gaveta-fechar" aria-label="Fechar o pedido">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+
+      <!-- Estado vazio -->
+      <div data-cart-empty class="gaveta-vazio">
+        <span class="gaveta-vazio-icone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/><circle cx="10" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/>
+        </svg></span>
+        <p class="text-lg font-bold">Seu pedido está vazio</p>
+        <p class="max-w-xs text-sm leading-relaxed text-crust">Escolha os itens no catálogo. Eles ficam guardados neste aparelho até você fechar o pedido.</p>
+        <a href="#catalogo" data-cart-close class="botao-primario mt-2">Ver o catálogo</a>
+      </div>
+
+      <!-- Itens (desenhados por assets/js/cart.js) -->
+      <ul data-cart-items class="oculto min-h-0 flex-1 divide-y divide-linha overflow-y-auto overscroll-contain px-5"></ul>
+
+      <!-- Fechamento: o drawer não fecha o pedido, leva para /carrinho, onde ficam endereço e pagamento. -->
+      <div data-cart-footer class="oculto gaveta-rodape">
+        <div class="flex items-baseline justify-between gap-4">
+          <span class="text-sm font-semibold text-crust">Total estimado</span>
+          <span class="text-2xl font-bold" data-cart-total>R$ 0,00</span>
+        </div>
+        <a href="pages/carrinho.html" class="botao-primario mt-4 w-full">Revisar e fechar pedido</a>
+        <div class="mt-2 text-center">
+          <button type="button" data-cart-clear class="link-discreto">Esvaziar o pedido</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /drawer -->
+
+<!-- Botão flutuante do WhatsApp. ALTERAR: número da matriz no link. -->
+<aside aria-label="Atendimento pelo WhatsApp">
+  <a class="zap-flutuante" href="https://wa.me/5543999259373?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20Dolce%20Del%C3%ADcias." target="_blank" rel="noopener noreferrer" aria-label="Falar com a Dolce no WhatsApp">
+    <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16.04 3C8.86 3 3.02 8.82 3.02 15.98c0 2.29.6 4.53 1.75 6.5L3 29l6.7-1.75a13.02 13.02 0 0 0 6.33 1.62h.01c7.18 0 13.02-5.82 13.02-12.98C29.06 8.82 23.22 3 16.04 3Zm0 23.68h-.01c-1.94 0-3.85-.52-5.51-1.51l-.4-.23-3.98 1.04 1.06-3.87-.26-.4a10.7 10.7 0 0 1-1.65-5.73c0-5.95 4.85-10.79 10.81-10.79 5.96 0 10.8 4.84 10.8 10.79 0 5.96-4.85 10.7-10.86 10.7Zm5.93-8.06c-.32-.16-1.92-.95-2.22-1.06-.3-.11-.51-.16-.73.16-.21.32-.84 1.06-1.03 1.27-.19.21-.38.24-.7.08-.32-.16-1.37-.5-2.6-1.6-.96-.86-1.61-1.91-1.8-2.23-.19-.32-.02-.49.14-.65.15-.14.32-.37.48-.56.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.73-1.75-1-2.4-.26-.63-.53-.54-.73-.55h-.62c-.21 0-.56.08-.86.4-.3.32-1.13 1.1-1.13 2.69s1.16 3.12 1.32 3.33c.16.21 2.28 3.47 5.52 4.87.77.33 1.37.53 1.84.68.77.24 1.48.21 2.03.13.62-.09 1.92-.78 2.19-1.54.27-.75.27-1.4.19-1.54-.08-.13-.29-.21-.62-.37Z"/></svg>
+    <span class="zap-flutuante-texto">Fale com a gente</span>
+  </a>
+</aside>
+
+<!-- Avisos curtos (item adicionado, item removido). Preenchido por assets/js/ui.js. -->
+<section class="avisos" data-toast-area aria-label="Avisos"></section>
+<p class="sr-only" data-aviso-leitor aria-live="polite" aria-atomic="true"></p>
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+[
+    {
+        "slug": "quarta-do-salgado",
+        "titulo": "Quarta do salgado",
+        "selo": "15% OFF",
+        "texto": "Toda quarta, salgado frito e assado com desconto no balcão de todas as lojas.",
+        "ativa": false,
+        "quando": {
+            "tipo": "semanal",
+            "dias": [
+                3
+            ],
+            "meses": [],
+            "de": null,
+            "ate": null
+        },
+        "produtos": [],
+        "unidades": []
+    },
+    {
+        "slug": "ferias-escolares",
+        "titulo": "Combo de férias",
+        "selo": "10% OFF",
+        "texto": "Em julho e janeiro, quando as escolas param: combo de lanche para levar para casa, com salgado, mini sanduíche e suco.",
+        "ativa": false,
+        "quando": {
+            "tipo": "mensal",
+            "dias": [],
+            "meses": [
+                7,
+                1
+            ],
+            "de": null,
+            "ate": null
+        },
+        "produtos": [],
+        "unidades": []
+    },
+    {
+        "slug": "festas-de-fim-de-ano",
+        "titulo": "Encomendas de fim de ano",
+        "selo": "10% OFF",
+        "texto": "Em dezembro, bandejas para a ceia e para a confraternização da empresa, com desconto para pedidos feitos até o dia 10.",
+        "ativa": false,
+        "quando": {
+            "tipo": "mensal",
+            "dias": [],
+            "meses": [
+                12
+            ],
+            "de": null,
+            "ate": null
+        },
+        "produtos": [],
+        "unidades": []
+    }
+]

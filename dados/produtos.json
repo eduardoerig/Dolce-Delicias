@@ -1,0 +1,546 @@
+[
+    {
+        "slug": "pao-de-queijo",
+        "nome": "Pão de Queijo",
+        "descricao": "Massa de polvilho com queijo curado, assado na hora. Sai do forno crocante por fora e macio por dentro.",
+        "categoria": "Assados",
+        "imagem": "assets/img/produtos/pao-de-queijo.jpg",
+        "destaque": true,
+        "preco": {
+            "valor": 120,
+            "por": "100 unidades",
+            "minPedido": 50,
+            "passo": null
+        },
+        "tags": [
+            "atacado",
+            "coffee break",
+            "sem carne"
+        ],
+        "sabores": [],
+        "unidades": [
+            "matriz",
+            "unidade-1",
+            "unidade-2",
+            "unidade-3",
+            "unidade-4",
+            "unidade-5"
+        ],
+        "disponivel": true
+    },
+    {
+        "slug": "mini-pizza",
+        "nome": "Mini Pizza",
+        "descricao": "Disco individual com molho de tomate caseiro e muçarela. Vai ao forno e já pode ir para a bandeja.",
+        "categoria": "Assados",
+        "imagem": "assets/img/produtos/mini-pizza.jpg",
+        "destaque": true,
+        "preco": {
+            "valor": 220,
+            "por": "100 unidades",
+            "minPedido": null,
+            "passo": null
+        },
+        "tags": [
+            "atacado",
+            "festa"
+        ],
+        "sabores": [
+            "Muçarela",
+            "Calabresa",
+            "Frango com catupiry"
+        ],
+        "unidades": [
+            "matriz",
+            "unidade-1",
+            "unidade-2",
+            "unidade-3",
+            "unidade-4",
+            "unidade-5"
+        ],
+        "disponivel": true
+    },
+    {
+        "slug": "empadinha",
+        "nome": "Empadinha",
+        "descricao": "Massa amanteigada que desmancha na boca, recheio generoso até a borda.",
+        "categoria": "Assados",
+        "imagem": "assets/img/produtos/empadinha.jpg",
+        "destaque": false,
+        "preco": {
+            "valor": 220,
+            "por": "100 unidades",
+            "minPedido": null,
+            "passo": null
+        },
+        "tags": [
+            "atacado",
+            "festa"
+        ],
+        "sabores": [
+            "Frango",
+            "Palmito",
+            "Camarão"
+        ],
+        "unidades": [
+            "matriz",
+            "unidade-1",
+            "unidade-2",
+            "unidade-3",
+            "unidade-4",
+            "unidade-5"
+        ],
+        "disponivel": true
+    },
+    {
+        "slug": "assadinhos",
+        "nome": "Assadinhos",
+        "descricao": "Mix de salgados assados em massa leve — a opção mais pedida por quem quer fugir da fritura.",
+        "categoria": "Assados",
+        "imagem": "assets/img/produtos/assadinhos.jpg",
+        "destaque": false,
+        "preco": {
+            "valor": 160,
+            "por": "100 unidades",
+            "minPedido": null,
+            "passo": null
+        },
+        "tags": [
+            "atacado",
+            "escola"
+        ],
+        "sabores": [
+            "Frango",
+            "Carne",
+            "Presunto e queijo"
+        ],
+        "unidades": [
+            "matriz",
+            "unidade-1",
+            "unidade-2",
+            "unidade-3",
+            "unidade-4",
+            "unidade-5"
+        ],
+        "disponivel": true
+    },
+    {
+        "slug": "mini-esfirras",
+        "nome": "Mini Esfirras",
+        "descricao": "Abertas, do tamanho de uma mordida, com recheio temperado na hora.",
+        "categoria": "Assados",
+        "imagem": "assets/img/produtos/mini-esfirras.jpg",
+        "destaque": false,
+        "preco": {
+            "valor": 160,
+            "por": "100 unidades",
+            "minPedido": null,
+            "passo": null
+        },
+        "tags": [
+            "atacado",
+            "festa"
+        ],
+        "sabores": [
+            "Carne",
+            "Frango",
+            "Queijo"
+        ],
+        "unidades": [
+            "matriz",
+            "unidade-1",
+            "unidade-2",
+            "unidade-3",
+            "unidade-4",
+            "unidade-5"
+        ],
+        "disponivel": true
+    },
+    {
+        "slug": "salgados-fritos",
+        "nome": "Salgados Fritos",
+        "descricao": "O cento clássico de festa. Você escolhe os sabores na hora da encomenda e a gente monta a bandeja.",
+        "categoria": "Salgados",
+        "imagem": "assets/img/produtos/salgados-fritos.jpg",
+        "destaque": true,
+        "preco": {
+            "valor": 85,
+            "por": "100 unidades",
+            "minPedido": null,
+            "passo": null
+        },
+        "tags": [
+            "atacado",
+            "festa",
+            "mais vendido"
+        ],
+        "sabores": [
+            "Coxinha de frango",
+            "Bolinha de queijo",
+            "Pastel de carne",
+            "Palitinho de carne",
+            "Enroladinho de salsicha",
+            "Trouxinha de presunto e queijo",
+            "Quibe"
+        ],
+        "unidades": [
+            "matriz",
+            "unidade-1",
+            "unidade-2",
+            "unidade-3",
+            "unidade-4",
+            "unidade-5"
+        ],
+        "disponivel": true
+    },
+    {
+        "slug": "combo-festa",
+        "nome": "Combo Festa",
+        "descricao": "45 peças montadas: 25 salgados fritos, 10 mini pizzas e 10 empadinhas. Resolve a mesa pequena.",
+        "categoria": "Combos",
+        "imagem": "assets/img/produtos/combo-festa.jpg",
+        "destaque": true,
+        "preco": {
+            "valor": 60,
+            "por": "45 unidades",
+            "minPedido": null,
+            "passo": null
+        },
+        "tags": [
+            "atacado",
+            "festa",
+            "combo"
+        ],
+        "sabores": [],
+        "unidades": [
+            "matriz",
+            "unidade-1",
+            "unidade-2",
+            "unidade-3",
+            "unidade-4",
+            "unidade-5"
+        ],
+        "disponivel": true
+    },
+    {
+        "slug": "mini-hamburguer",
+        "nome": "Mini Hambúrguer",
+        "descricao": "Pão brioche pequeno, hambúrguer artesanal e queijo derretido. Entregue montado e embalado.",
+        "categoria": "Lanches",
+        "imagem": "assets/img/produtos/mini-hamburguer.jpg",
+        "destaque": false,
+        "preco": {
+            "valor": 4.2,
+            "por": "unidade",
+            "minPedido": 25,
+            "passo": null
+        },
+        "tags": [
+            "atacado",
+            "festa",
+            "faculdade"
+        ],
+        "sabores": [],
+        "unidades": [
+            "matriz",
+            "unidade-1",
+            "unidade-2",
+            "unidade-3",
+            "unidade-4",
+            "unidade-5"
+        ],
+        "disponivel": true
+    },
+    {
+        "slug": "mini-sanduiche-pate-frango",
+        "nome": "Mini Sanduíche com Patê de Frango",
+        "descricao": "Pão macio sem casca e patê de frango feito na casa. Clássico de coffee break e reunião.",
+        "categoria": "Lanches",
+        "imagem": "assets/img/produtos/mini-sanduiche.jpg",
+        "destaque": false,
+        "preco": {
+            "valor": 3.2,
+            "por": "unidade",
+            "minPedido": 25,
+            "passo": null
+        },
+        "tags": [
+            "atacado",
+            "coffee break"
+        ],
+        "sabores": [],
+        "unidades": [
+            "matriz",
+            "unidade-1",
+            "unidade-2",
+            "unidade-3",
+            "unidade-4",
+            "unidade-5"
+        ],
+        "disponivel": true
+    },
+    {
+        "slug": "cookies",
+        "nome": "Cookies",
+        "descricao": "Casquinha crocante e miolo úmido, com gotas de chocolate meio amargo.",
+        "categoria": "Doces",
+        "imagem": "assets/img/produtos/cookies.jpg",
+        "destaque": false,
+        "preco": {
+            "valor": 120,
+            "por": "100 unidades",
+            "minPedido": null,
+            "passo": null
+        },
+        "tags": [
+            "atacado",
+            "coffee break"
+        ],
+        "sabores": [],
+        "unidades": [
+            "matriz",
+            "unidade-1",
+            "unidade-2",
+            "unidade-3",
+            "unidade-4",
+            "unidade-5"
+        ],
+        "disponivel": true
+    },
+    {
+        "slug": "cupcakes",
+        "nome": "Cupcakes",
+        "descricao": "Bolinho macio com cobertura em bico. A gente ajusta a cor do chantilly ao tema da festa.",
+        "categoria": "Doces",
+        "imagem": "assets/img/produtos/cupcakes.jpg",
+        "destaque": false,
+        "preco": {
+            "valor": 350,
+            "por": "100 unidades",
+            "minPedido": 30,
+            "passo": null
+        },
+        "tags": [
+            "atacado",
+            "festa",
+            "personalizado"
+        ],
+        "sabores": [
+            "Baunilha",
+            "Chocolate",
+            "Red velvet"
+        ],
+        "unidades": [
+            "matriz",
+            "unidade-1",
+            "unidade-2",
+            "unidade-3",
+            "unidade-4",
+            "unidade-5"
+        ],
+        "disponivel": true
+    },
+    {
+        "slug": "coxinha-balcao",
+        "nome": "Coxinha",
+        "descricao": "Frango desfiado temperado, massa fina e fritura na hora do pedido.",
+        "categoria": "Salgados",
+        "imagem": "assets/img/produtos/coxinha.jpg",
+        "destaque": true,
+        "preco": {
+            "valor": 8,
+            "por": "unidade",
+            "minPedido": null,
+            "passo": null
+        },
+        "tags": [
+            "varejo",
+            "balcão"
+        ],
+        "sabores": [],
+        "unidades": [
+            "matriz",
+            "unidade-1",
+            "unidade-2",
+            "unidade-3",
+            "unidade-4",
+            "unidade-5"
+        ],
+        "disponivel": true
+    },
+    {
+        "slug": "empadinha-balcao",
+        "nome": "Empadinha de Frango",
+        "descricao": "A mesma empadinha do cento, vendida quentinha na vitrine.",
+        "categoria": "Salgados",
+        "imagem": "assets/img/produtos/empadinha-balcao.jpg",
+        "destaque": false,
+        "preco": {
+            "valor": 9,
+            "por": "unidade",
+            "minPedido": null,
+            "passo": null
+        },
+        "tags": [
+            "varejo",
+            "balcão"
+        ],
+        "sabores": [],
+        "unidades": [
+            "matriz",
+            "unidade-1",
+            "unidade-2",
+            "unidade-3",
+            "unidade-4",
+            "unidade-5"
+        ],
+        "disponivel": true
+    },
+    {
+        "slug": "fatia-de-bolo",
+        "nome": "Fatia de Bolo",
+        "descricao": "Fatia generosa do bolo do dia. Pergunte qual saiu hoje.",
+        "categoria": "Doces",
+        "imagem": "assets/img/produtos/fatia-de-bolo.jpg",
+        "destaque": false,
+        "preco": {
+            "valor": 4,
+            "por": "unidade",
+            "minPedido": null,
+            "passo": null
+        },
+        "tags": [
+            "varejo",
+            "balcão"
+        ],
+        "sabores": [],
+        "unidades": [
+            "matriz",
+            "unidade-1",
+            "unidade-2",
+            "unidade-3",
+            "unidade-4",
+            "unidade-5"
+        ],
+        "disponivel": true
+    },
+    {
+        "slug": "cafe-expresso",
+        "nome": "Café Expresso",
+        "descricao": "Grão torrado na semana, extraído na xícara pequena.",
+        "categoria": "Bebidas",
+        "imagem": "assets/img/produtos/cafe-expresso.jpg",
+        "destaque": false,
+        "preco": {
+            "valor": 6.99,
+            "por": "unidade",
+            "minPedido": null,
+            "passo": null
+        },
+        "tags": [
+            "varejo",
+            "balcão",
+            "vegano",
+            "sem lactose"
+        ],
+        "sabores": [],
+        "unidades": [
+            "matriz",
+            "unidade-1",
+            "unidade-2",
+            "unidade-3",
+            "unidade-4",
+            "unidade-5"
+        ],
+        "disponivel": true
+    },
+    {
+        "slug": "suco-maracuja",
+        "nome": "Suco de Maracujá",
+        "descricao": "Polpa batida na hora, copo de 400 ml.",
+        "categoria": "Bebidas",
+        "imagem": "assets/img/produtos/suco-maracuja.jpg",
+        "destaque": false,
+        "preco": {
+            "valor": 8,
+            "por": "unidade",
+            "minPedido": null,
+            "passo": null
+        },
+        "tags": [
+            "varejo",
+            "balcão",
+            "vegano",
+            "sem lactose"
+        ],
+        "sabores": [],
+        "unidades": [
+            "matriz",
+            "unidade-1",
+            "unidade-2",
+            "unidade-3",
+            "unidade-4",
+            "unidade-5"
+        ],
+        "disponivel": true
+    },
+    {
+        "slug": "strogonoff-executivo",
+        "nome": "Strogonoff Executivo",
+        "descricao": "Prato do dia com arroz, batata palha e salada. Servido no almoço, enquanto durar.",
+        "categoria": "Almoço",
+        "imagem": "assets/img/produtos/strogonoff.jpg",
+        "destaque": true,
+        "preco": {
+            "valor": 20,
+            "por": "unidade",
+            "minPedido": null,
+            "passo": null
+        },
+        "tags": [
+            "varejo",
+            "balcão",
+            "almoço"
+        ],
+        "sabores": [],
+        "unidades": [
+            "matriz",
+            "unidade-1",
+            "unidade-2",
+            "unidade-3",
+            "unidade-4",
+            "unidade-5"
+        ],
+        "disponivel": true
+    },
+    {
+        "slug": "coca-cola-lata",
+        "nome": "Coca-Cola Lata",
+        "descricao": "Lata de 350 ml, sempre gelada.",
+        "categoria": "Bebidas",
+        "imagem": "assets/img/produtos/coca-lata.jpg",
+        "destaque": false,
+        "preco": {
+            "valor": 6,
+            "por": "unidade",
+            "minPedido": null,
+            "passo": null
+        },
+        "tags": [
+            "varejo",
+            "balcão",
+            "vegano",
+            "sem lactose"
+        ],
+        "sabores": [],
+        "unidades": [
+            "matriz",
+            "unidade-1",
+            "unidade-2",
+            "unidade-3",
+            "unidade-4",
+            "unidade-5"
+        ],
+        "disponivel": true
+    }
+]

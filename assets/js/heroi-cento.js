@@ -1,71 +1,36 @@
-/**
- * assets/js/heroi-cento.js — o prato do herói da home rolando (GSAP).
- *
- * O prato entra pela esquerda, girando como uma roda, e para na posição que o
- * CSS já define (metade à mostra). O giro acompanha a distância: uma volta a
- * cada 2πr percorridos, então ele parece rolar de verdade em vez de deslizar.
- * A mesma curva no x e na rotação mantém essa conta em todos os quadros,
- * inclusive no leve recuo do fim. O texto aparece em seguida, linha a linha.
- *
- * Ao rolar a página, o prato continua rodando para a direita, preso à
- * rolagem (ScrollTrigger com scrub).
- *
- * Quem pediu menos movimento não vê nada disso: gsap.matchMedia só cria as
- * animações com prefers-reduced-motion: no-preference, e o CSS sozinho deixa
- * o prato parado no lugar. A classe "cento-anima" (posta no <html> pelo
- * herói) esconde prato e texto até o primeiro quadro; aqui ela sai.
- */
+// Animação do topo da home: o prato de salgados entra rolando pela esquerda.
+// Quem pediu "menos movimento" no sistema vê o prato parado.
 
-const { gsap, ScrollTrigger } = window;
 const heroi = document.querySelector('[data-heroi-cento]');
-const prato = heroi?.querySelector('[data-cento-prato]');
-const raiz = document.documentElement;
+const prato = document.querySelector('[data-cento-prato]');
+const querMovimento = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
 
-if (!gsap || !ScrollTrigger || !heroi || !prato) {
-  raiz.classList.remove('cento-anima');
-} else {
+if (window.gsap && heroi && prato && querMovimento) {
   gsap.registerPlugin(ScrollTrigger);
 
-  const imagem = prato.querySelector('img');
-  const revela = heroi.querySelectorAll('[data-cento-revela]');
-  const graus = (distancia, diametro) => (distancia / (diametro / 2)) * (180 / Math.PI);
+  const tamanho = prato.offsetWidth;
+  const inicio = -(prato.getBoundingClientRect().left + tamanho);
 
-  const mm = gsap.matchMedia();
+  // Quantos graus o prato gira para andar uma distância (como uma roda).
+  function giro(distancia) {
+    return (distancia / (tamanho / 2)) * (180 / Math.PI);
+  }
 
-  mm.add('(prefers-reduced-motion: no-preference)', () => {
-    // Medido na posição final, antes de qualquer transform do GSAP: de onde
-    // até onde o prato rola, saindo todo para fora da borda esquerda.
-    const diametro = prato.offsetWidth;
-    const inicioX = -(prato.getBoundingClientRect().left - heroi.getBoundingClientRect().left + diametro);
+  gsap.fromTo(prato,
+    { x: inicio, rotation: giro(inicio), autoAlpha: 1 },
+    { x: 0, rotation: 0, duration: 1.9, ease: 'back.out(1.15)' });
 
-    const entrada = gsap.timeline({
-      defaults: { ease: 'power3.out' },
-      onStart: () => raiz.classList.remove('cento-anima'),
-    });
+  gsap.fromTo('[data-cento-revela]',
+    { y: 18, autoAlpha: 0 },
+    { y: 0, autoAlpha: 1, duration: 0.7, delay: 0.6, stagger: 0.08 });
 
-    entrada
-      .fromTo(prato,
-        { x: inicioX, rotation: graus(inicioX, diametro), autoAlpha: 1 },
-        { x: 0, rotation: 0, autoAlpha: 1, duration: 1.9, ease: 'back.out(1.15)' })
-      .fromTo(revela,
-        { y: 18, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, duration: 0.7, stagger: 0.08, clearProps: 'transform' },
-        0.6);
-
-    // Ao sair da tela, o prato segue rodando para a direita: meio diâmetro,
-    // com o giro proporcional.
-    gsap.to(imagem, {
-      x: () => imagem.offsetWidth * 0.5,
-      rotation: () => graus(imagem.offsetWidth * 0.5, imagem.offsetWidth),
-      ease: 'none',
-      scrollTrigger: {
-        trigger: heroi,
-        // Começa já no primeiro pixel rolado (o herói fica abaixo do topo fixo).
-        start: () => `top ${heroi.getBoundingClientRect().top + window.scrollY}px`,
-        end: 'bottom top',
-        scrub: 0.6,
-        invalidateOnRefresh: true,
-      },
-    });
+  // Ao rolar a página, o prato continua rodando para a direita.
+  gsap.to(prato.querySelector('img'), {
+    x: tamanho / 2,
+    rotation: giro(tamanho / 2),
+    ease: 'none',
+    scrollTrigger: { trigger: heroi, start: 'top top', end: 'bottom top', scrub: 0.6 },
   });
 }
+
+document.documentElement.classList.remove('cento-anima');

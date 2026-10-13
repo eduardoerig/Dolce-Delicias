@@ -1,17 +1,80 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "npm run build && rm -rf dist && mkdir -p dist && cp -r public/assets dist/assets",
-  "outputDirectory": "dist",
-  "regions": ["gru1"],
-  "functions": {
-    "api/index.php": {
-      "runtime": "vercel-php@0.7.3",
-      "excludeFiles": "{node_modules/**,public/assets/**,dist/**,tests/**,docs/**,imgReferencias-public/**,imagens-exemplo/**,storage/**}"
+  "redirects": [
+    {
+      "source": "/produtos",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/produtos/:slug",
+      "destination": "/pages/produto.html?slug=:slug",
+      "permanent": true
+    },
+    {
+      "source": "/unidades",
+      "destination": "/pages/unidades.html",
+      "permanent": true
+    },
+    {
+      "source": "/sobre",
+      "destination": "/pages/sobre.html",
+      "permanent": true
+    },
+    {
+      "source": "/carrinho",
+      "destination": "/pages/carrinho.html",
+      "permanent": true
+    },
+    {
+      "source": "/index.php",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/unidades.php",
+      "destination": "/pages/unidades.html",
+      "permanent": true
+    },
+    {
+      "source": "/sobre.php",
+      "destination": "/pages/sobre.html",
+      "permanent": true
+    },
+    {
+      "source": "/carrinho.php",
+      "destination": "/pages/carrinho.html",
+      "permanent": true
+    },
+    {
+      "source": "/produto.php",
+      "destination": "/pages/produto.html",
+      "permanent": true
+    },
+    {
+      "source": "/catalogos/:arquivo/download",
+      "destination": "/catalogos/:arquivo.pdf",
+      "permanent": true
     }
-  },
-  "routes": [
-    { "src": "/assets/(.*)", "headers": { "Cache-Control": "public, max-age=3600" }, "continue": true },
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/api/index.php" }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600"
+        }
+      ]
+    },
+    {
+      "source": "/dados/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    }
   ]
 }

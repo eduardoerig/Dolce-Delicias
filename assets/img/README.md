@@ -2,18 +2,21 @@
 
 Nada aqui é definitivo, exceto `logo.svg` (usado como favicon).
 
-O site **não quebra sem foto**: `dd_imagem()` em `partials/bootstrap.php` checa se o
-arquivo existe de verdade. Se não existir, ele desenha um placeholder texturizado
-com o ícone da categoria. Ou seja: você pode deixar o caminho da foto já cadastrado
-em `data/products.php` antes de a foto chegar.
+O site **não quebra sem foto**: produto ou unidade com `imagem` vazia (`null`) em
+`dados/*.json` ganha um desenho no lugar (`assets/js/desenhos.js`) — um
+ícone pela categoria do produto ou a fachada da loja.
 
 ## Onde cada imagem entra
 
 | Pasta | O que vai aqui | Quem aponta para ela |
 |---|---|---|
-| `produtos/` | foto de cada item do catálogo | campo `imagem` em `data/products.php` |
-| `unidades/` | fachada de cada loja | campo `imagem` em `data/units.php` |
-| (raiz) | `logo.svg` — placa oval da marca | favicon em `partials/header.php` |
+| `produtos/` | foto de cada item do catálogo | campo `imagem` em `dados/produtos.json` |
+| `unidades/` | fachada de cada loja | campo `imagem` em `dados/unidades.json` |
+| `heroi/`, `recortes/`, `sobre/` | fotos fixas das páginas | os `.html` da raiz |
+| (raiz) | `logo.svg` — placa oval da marca | favicon dos `.html` |
+
+Com o Sanity, as fotos de produtos e unidades passam a ser imagens do próprio
+Sanity e os campos `imagem` recebem a URL do CDN.
 
 ## Como nomear
 
@@ -21,7 +24,6 @@ Use o mesmo `slug` do cadastro. Exemplos:
 
 ```
 assets/img/produtos/pao-de-queijo.jpg
-assets/img/produtos/salgados-fritos.jpg
 assets/img/unidades/matriz.jpg
 ```
 
@@ -31,20 +33,11 @@ assets/img/unidades/matriz.jpg
 |---|---|---|
 | Card e página de produto | 4:3 | 1200 × 900 px |
 | Fachada de unidade | 16:10 | 1280 × 800 px |
-| Banner do herói | 4:3 | 1600 × 1200 px |
 
 JPG com qualidade ~80 dá conta. Se puder, gere também `.webp`.
 
-## Banner do herói
-
-Ainda **não** vem daqui. O herói tem um espaço reservado marcado em `index.php`
-(bloco "ESPAÇO RESERVADO"), porque a imagem deve vir do back-end quando ele existir.
-Para colocar uma foto fixa enquanto isso, troque o miolo daquele contêiner por uma
-tag `img` com `object-cover`, mantendo a proporção 4/3.
-
 ## Logo
 
-`logo.svg` é uma reconstrução da placa oval vermelha com os raios brancos, feita para
-o site funcionar sem depender de arquivo externo. Quando chegar o vetor oficial da
-marca, substitua este arquivo **e** a função `dd_logo()` em `partials/bootstrap.php`
-(a versão inline existe para herdar a fonte display da página).
+`logo.svg` é uma reconstrução da placa oval vermelha com os raios brancos. Quando
+chegar o vetor oficial da marca, substitua este arquivo **e** o SVG da placa no topo e no rodapé de cada `.html`
+(a versão inline existe para herdar a fonte da página).
