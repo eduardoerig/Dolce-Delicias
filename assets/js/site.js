@@ -63,6 +63,11 @@ function cardDoProduto(produto) {
       </button>`;
   }
 
+  let destaque = '0';
+  if (produto.destaque) {
+    destaque = '1';
+  }
+
   let temPromocao = '0';
   if (promocoes.length > 0) {
     temPromocao = '1';
@@ -76,7 +81,7 @@ function cardDoProduto(produto) {
       data-busca="${limpar(semAcento(produto.nome + ' ' + produto.categoria + ' ' + produto.descricao + ' ' + produto.tags.join(' ')))}"
       data-nome="${limpar(semAcento(produto.nome))}"
       data-unitario="${faixa.unitario}"
-      data-destaque="${produto.destaque ? '1' : '0'}">
+      data-destaque="${destaque}">
       <a href="${link}" class="cartao-foto" tabindex="-1" aria-hidden="true">${foto}</a>
       ${selo}
       <div class="cartao-corpo">

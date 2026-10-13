@@ -235,7 +235,7 @@ function ordenarCards(cards) {
 
 function filtrar() {
   const grade = document.querySelector('[data-grade-produtos]');
-  const todosOsCards = Array.from(grade.querySelectorAll('[data-produto]'));
+  const todosOsCards = grade.querySelectorAll('[data-produto]');
 
   const encontrados = [];
   for (const card of todosOsCards) {
@@ -263,7 +263,7 @@ function filtrar() {
     }
   }
 
-  document.querySelector('[data-sem-resultado]').classList.toggle('oculto', encontrados.length > 0);
+  esconder(document.querySelector('[data-sem-resultado]'), encontrados.length > 0);
 
   let texto = encontrados.length + ' itens';
   if (totalDePaginas > 1) {

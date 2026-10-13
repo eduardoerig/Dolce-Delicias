@@ -10,6 +10,8 @@ Onde esses arquivos aparecem no site:
 
 ## Os arquivos aqui são PLACEHOLDER
 
+TODO (R, G): montar o catálogo real de cada loja e o completo da rede, com o mesmo nome de arquivo.
+
 Os PDFs desta pasta foram gerados só para os botões terem o que baixar durante o
 desenvolvimento. **Não envie isto para o cliente.** Substitua cada um pelo catálogo
 real, mantendo o nome do arquivo.

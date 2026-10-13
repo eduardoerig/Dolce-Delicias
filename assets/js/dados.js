@@ -1,6 +1,10 @@
 // Busca produtos, unidades e promoções (pasta dados/) e guarda em "site".
 // ALTERAR: para usar o Sanity, troque o endereço em buscarJson() pela consulta do Sanity.
 
+// TODO (E): criar o projeto e o Studio do Sanity (npm create sanity) e publicar com sanity deploy.
+// TODO (E, R): modelar no Sanity os tipos produto, unidade e promoção com os mesmos campos de dados/*.json.
+// TODO (E): importar os JSON atuais para o Sanity (sanity dataset import).
+
 let site = null;
 
 // As páginas ficam em "pages/"; o index fica na raiz.
@@ -43,6 +47,7 @@ async function carregarDados() {
   }
 }
 
+// TODO (E): trocar este fetch pela consulta GROQ à API do Sanity e liberar o CORS (npx sanity cors add).
 async function buscarJson(endereco) {
   const resposta = await fetch(RAIZ + endereco);
   return resposta.json();
@@ -50,6 +55,8 @@ async function buscarJson(endereco) {
 
 // ---------- Produtos ----------
 
+// TODO (R, G): levantar preços reais, pedido mínimo e prazo de cada item (hoje são valores de exemplo em dados/produtos.json).
+// TODO (R, G): marcar em dados/produtos.json quais lojas vendem cada produto (campo unidades; vazio = todas).
 function prepararProduto(produto) {
   // Sem lista de unidades = vendido em todas.
   if (produto.unidades.length === 0) {
@@ -109,6 +116,9 @@ function buscarProduto(slug) {
 }
 
 // ---------- Promoções ----------
+
+// TODO (LD, PW): escrever as promoções reais (semana, dezembro, julho/janeiro) em dados/promocoes.json,
+// com produtos e unidades ligados e "ativa": true. Hoje as 3 estão inativas.
 
 function hojeEmTexto() {
   const hoje = new Date();

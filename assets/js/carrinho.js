@@ -134,20 +134,20 @@ function mostrarCarrinho() {
 
   for (const lista of document.querySelectorAll('[data-cart-items]')) {
     lista.innerHTML = html;
-    lista.classList.toggle('oculto', vazio);
+    esconder(lista, vazio);
   }
   for (const bloco of document.querySelectorAll('[data-cart-empty]')) {
-    bloco.classList.toggle('oculto', !vazio);
+    esconder(bloco, !vazio);
   }
   for (const bloco of document.querySelectorAll('[data-cart-footer]')) {
-    bloco.classList.toggle('oculto', vazio);
+    esconder(bloco, vazio);
   }
   for (const total of document.querySelectorAll('[data-cart-total]')) {
     total.textContent = dinheiro(totalDoCarrinho(itens));
   }
   for (const bolinha of document.querySelectorAll('[data-cart-badge]')) {
     bolinha.textContent = itens.length;
-    bolinha.classList.toggle('oculto', vazio);
+    esconder(bolinha, vazio);
   }
   for (const texto of document.querySelectorAll('[data-cart-count]')) {
     texto.textContent = contagem;
@@ -157,9 +157,19 @@ function mostrarCarrinho() {
   }
 }
 
+// Esconde o elemento quando "esconde" for verdadeiro; senão, mostra.
+function esconder(elemento, esconde) {
+  if (esconde) {
+    elemento.classList.add('oculto');
+  } else {
+    elemento.classList.remove('oculto');
+  }
+}
+
 // ---------- Fechar o pedido no WhatsApp ----------
 
 // ALTERAR: o texto da mensagem que chega no WhatsApp da matriz.
+// TODO (LD, LH, PW): testar o pedido completo até o WhatsApp em celulares Android e iOS reais.
 function mensagemDoPedido(itens, endereco, pagamento, observacao) {
   const linhas = [];
   linhas.push('Olá! Quero fazer uma encomenda pelo site da Dolce Delícias.');

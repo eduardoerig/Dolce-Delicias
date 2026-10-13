@@ -17,6 +17,46 @@ python -m http.server 8000
 e acesse `http://localhost:8000`. Abrir o `index.html` direto pelo arquivo
 (`file://`) não funciona: o navegador bloqueia a leitura de `dados/*.json`.
 
+## O que falta fazer (TODO)
+
+No código, cada pendência está marcada com `TODO (iniciais)`. Para achar as suas,
+busque por `TODO` no VS Code (Ctrl+Shift+F). Horas e status ficam na planilha
+"Horas - Grupo 3".
+
+**E**
+- Criar o projeto e o Studio do Sanity e publicar (`assets/js/dados.js`).
+- Importar os JSON atuais para o Sanity e ligar o site à API (`buscarJson()` em `dados.js`).
+- Configurar papéis e acesso no Sanity.
+- Publicar o site na Vercel, apontar o domínio e configurar o backup do conteúdo.
+
+**E, R**
+- Modelar no Sanity os tipos produto, unidade e promoção (`dados.js`).
+
+**R, G**
+- Dados reais das 6 lojas e fotos das fachadas (`pages/unidades.html`).
+- Preços, pedido mínimo, prazos e lojas de cada produto (`dados.js`, `dados/produtos.json`).
+- Sessão de fotos dos produtos (`assets/js/desenhos.js`).
+- Catálogos em PDF de cada loja (`catalogos/`).
+- Cadastrar fotos e PDFs no Sanity; treinar a equipe da confeitaria no Studio.
+
+**G**
+- Tratar e recortar as fotos (`assets/img/README.md`).
+
+**LD, LH**
+- Texto de apresentação de cada loja (`pages/unidades.html`).
+
+**LD, LH, PW**
+- Revisar a história e o institucional (`pages/sobre.html`).
+- Aviso de privacidade (`pages/carrinho.html`).
+- Testar o pedido em celulares reais (`assets/js/carrinho.js`) e testar o Studio.
+- Homologar o conteúdo com o cliente; manual de uso do Studio.
+
+**LD, PW**
+- Promoções reais em `dados/promocoes.json` (`dados.js`).
+
+**LH, LD, PW**
+- Revisão visual do site (`index.html`).
+
 ## Pastas
 
 ```

@@ -1,4 +1,6 @@
 // Desenhos usados quando falta foto.
+// TODO (R, G): fazer a sessão de fotos dos produtos; as fotos atuais em assets/img/produtos/ são de exemplo.
+// TODO (G): tratar e recortar as fotos no tamanho e nome definidos em assets/img/README.md.
 
 const crosta = 'stroke="#a9561a" stroke-width="1.8" stroke-linejoin="round"';
 
