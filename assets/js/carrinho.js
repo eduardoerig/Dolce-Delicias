@@ -81,7 +81,7 @@ function totalDoCarrinho(itens) {
 
 function fotoDoItem(item) {
   if (item.imagem) {
-    return `<img src="${RAIZ}${limpar(item.imagem)}" alt="">`;
+    return `<img src="${limpar(caminhoArquivo(item.imagem))}" alt="">`;
   }
   return `<span class="item-pedido-sem-foto">${iconeProduto(item.categoria, item.nome)}</span>`;
 }

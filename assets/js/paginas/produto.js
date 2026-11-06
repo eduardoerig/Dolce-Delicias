@@ -35,7 +35,7 @@ function paginaDoProduto(produto) {
 
   let foto = `<span class="produto-sem-foto" role="img" aria-label="Foto de ${limpar(produto.nome)} ainda não cadastrada">${iconeProduto(produto.categoria, produto.nome)}</span>`;
   if (produto.imagem) {
-    foto = `<img src="../${limpar(produto.imagem)}" alt="${limpar(produto.nome)}" width="960" height="720">`;
+    foto = `<img src="${limpar(caminhoArquivo(produto.imagem))}" alt="${limpar(produto.nome)}" width="960" height="720">`;
   }
 
   let selo = '';

@@ -47,7 +47,7 @@ function cardDoProduto(produto) {
 
   let foto = `<span class="cartao-sem-foto">${iconeProduto(produto.categoria, produto.nome)}</span>`;
   if (produto.imagem) {
-    foto = `<img src="${RAIZ}${limpar(produto.imagem)}" alt="" loading="lazy" width="480" height="360">`;
+    foto = `<img src="${limpar(caminhoArquivo(produto.imagem))}" alt="" loading="lazy" width="480" height="360">`;
   }
 
   let selo = '';

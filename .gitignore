@@ -10,3 +10,7 @@ Desktop.ini
 .vscode/
 
 .env
+
+studio/node_modules/
+studio/dist/
+studio/.sanity/

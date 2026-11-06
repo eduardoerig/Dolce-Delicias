@@ -54,7 +54,7 @@ function mostrarPromocoes() {
     for (const produto of promocao.produtosDaPromocao.slice(0, 4)) {
       let foto = iconeProduto(produto.categoria, produto.nome);
       if (produto.imagem) {
-        foto = `<img src="${RAIZ}${limpar(produto.imagem)}" alt="" loading="lazy">`;
+        foto = `<img src="${limpar(caminhoArquivo(produto.imagem))}" alt="" loading="lazy">`;
       }
       fotos += `
         <li>
