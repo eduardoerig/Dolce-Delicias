@@ -1,2 +1,10 @@
-import {defineCliConfig} from 'sanity/cli';
-export default defineCliConfig({api:{projectId:'wdisx8zs',dataset:'production'}});
+import { defineCliConfig } from 'sanity/cli';
+export default defineCliConfig({
+    api: {
+        projectId: 'wdisx8zs',
+        dataset: 'production',
+    },
+    project: {
+        basePath: '/studio',
+    },
+});
