@@ -1,10 +1,3 @@
-// Busca produtos, unidades e promoções (pasta dados/) e guarda em "site".
-// ALTERAR: para usar o Sanity, troque o endereço em buscarJson() pela consulta do Sanity.
-
-// TODO (E): criar o projeto e o Studio do Sanity (npm create sanity) e publicar com sanity deploy.
-// TODO (E, R): modelar no Sanity os tipos produto, unidade e promoção com os mesmos campos de dados/*.json.
-// TODO (E): importar os JSON atuais para o Sanity (sanity dataset import).
-
 let site = null;
 
 // As páginas ficam em "pages/"; o index fica na raiz.
@@ -19,9 +12,7 @@ function pagina(nome) {
 }
 
 async function carregarDados() {
-  const produtos = await buscarJson('dados/produtos.json');
-  const unidades = await buscarJson('dados/unidades.json');
-  const promocoes = await buscarJson('dados/promocoes.json');
+  const {produtos, unidades, promocoes} = await buscarCatalogo();
 
   site = {
     produtos: produtos,
@@ -47,10 +38,55 @@ async function carregarDados() {
   }
 }
 
-// TODO (E): trocar este fetch pela consulta GROQ à API do Sanity e liberar o CORS (npx sanity cors add).
-async function buscarJson(endereco) {
-  const resposta = await fetch(RAIZ + endereco);
+// A leitura pública não precisa de token. Nunca coloque tokens privados neste arquivo.
+const SANITY = {projectId:'wdisx8zs', dataset:'production', apiVersion:'2025-02-19'};
+async function buscarCatalogo() {
+  const imagem = '"imagem": coalesce(foto.asset->url, imagemLocal)';
+  const consulta = `{
+    "produtos": *[_type == "produto"] | order(ordem asc, _createdAt asc){
+      ..., "slug": slug.current, "categoria": categoria->nome, ${imagem},
+      "tags": coalesce(tags, []), "sabores": coalesce(sabores, []),
+      "unidades": coalesce(unidades[]->slug.current, [])
+    },
+    "unidades": *[_type == "unidade"] | order(ordem asc, _createdAt asc){
+      ..., "slug": slug.current, ${imagem}, "canais": coalesce(canais, []),
+      "catalogoPdf": coalesce(catalogo.asset->url, catalogoPdf)
+    },
+    "promocoes": *[_type == "promocao"] | order(ordem asc, _createdAt asc){
+      ..., "slug": slug.current, "produtos": coalesce(produtos[]->slug.current, []),
+      "unidades": coalesce(unidades[]->slug.current, []),
+      "quando": {"tipo": coalesce(quando.tipo, "sempre"), "dias": coalesce(quando.dias, []),
+        "meses": coalesce(quando.meses, []), "de": quando.de, "ate": quando.ate}
+    }
+  }`;
+  const url = `https://${SANITY.projectId}.api.sanity.io/v${SANITY.apiVersion}/data/query/${SANITY.dataset}?perspective=published&query=${encodeURIComponent(consulta)}`;
+  const resposta = await fetch(url, {signal: AbortSignal.timeout(12000)});
+  if (!resposta.ok) throw new Error('Falha ao consultar Sanity: ' + resposta.status);
+  const dados = await resposta.json();
+  if (dados.error || !dados.result) throw new Error('Resposta inválida do Sanity');
+  // Projeto novo: usa o catálogo original até a primeira importação.
+  // Após importar, um catálogo vazio no Sanity continua vazio (não ressuscita produtos excluídos).
+  if (!dados.result.unidades.length && !dados.result.produtos.length) {
+    const marca = await fetch(`https://${SANITY.projectId}.api.sanity.io/v${SANITY.apiVersion}/data/query/${SANITY.dataset}?query=${encodeURIComponent('*[_id == "catalogo-importado"][0]._id')}`, {signal:AbortSignal.timeout(12000)});
+    if (!marca.ok) throw new Error('Falha ao verificar importação');
+    if (!(await marca.json()).result) {
+      console.info('Sanity ainda vazio: exibindo o catálogo local. Execute a importação.');
+      const [produtos, unidades, promocoes] = await Promise.all(['produtos','unidades','promocoes'].map(buscarJson));
+      return {produtos,unidades,promocoes};
+    }
+  }
+  return dados.result;
+}
+async function buscarJson(nome) {
+  const resposta = await fetch(RAIZ + 'dados/' + nome + '.json');
+  if (!resposta.ok) throw new Error('Falha ao carregar ' + nome);
   return resposta.json();
+}
+function caminhoArquivo(valor) {
+  if (!valor) return '';
+  if (/^https:\/\//i.test(valor)) return valor;
+  if (/^[a-z][a-z0-9+.-]*:/i.test(valor) || valor.startsWith('//')) return '';
+  return RAIZ + valor;
 }
 
 // ---------- Produtos ----------
@@ -145,6 +181,7 @@ function promocaoAparece(promocao) {
     return false;
   }
 
+  if (!promocao.unidades.length) promocao.unidades = site.unidades.map(u => u.slug);
   const hoje = hojeEmTexto();
   if (promocao.quando.de && hoje < promocao.quando.de) {
     return false;
