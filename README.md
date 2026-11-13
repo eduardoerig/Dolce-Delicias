@@ -1,8 +1,9 @@
 # Dolce Delícias
 
 Site estático: HTML, CSS e JavaScript puro. A única biblioteca é o GSAP
-(`assets/js/vendor/`), usada nas animações da home. Sem build, sem npm, sem servidor
-próprio.
+(`assets/js/vendor/`), usada nas animações da home. **O site da loja não passa por
+build** — os arquivos são publicados como estão. O único passo de build existente é
+o do Sanity Studio (pasta `studio/`), que a Vercel compila e publica em `/studio`.
 
 ## Rodar no computador
 
@@ -73,7 +74,51 @@ assets/js/vendor/      GSAP
 assets/img/            fotos
 dados/*.json           produtos, unidades e promoções
 catalogos/*.pdf        catálogo de cada unidade
-vercel.json            redirecionamentos de endereços antigos
+studio/                Sanity Studio (compilado para /studio)
+scripts/build.mjs      monta a pasta public/ que a Vercel publica
+scripts/servidor-local.mjs   servidor de teste com as regras da Vercel
+vercel.json            build, redirecionamentos antigos e rotas do /studio
+```
+
+## Publicar na Vercel
+
+Um único projeto Vercel, com **Root Directory = raiz do repositório** (nunca
+`studio`). O `vercel.json` já traz tudo:
+
+| Ajuste         | Valor                                  |
+| -------------- | -------------------------------------- |
+| Root Directory | `.` (raiz)                             |
+| Framework      | Other                                  |
+| Install        | `npm --prefix studio ci`               |
+| Build          | `node scripts/build.mjs`               |
+| Output         | `public`                               |
+
+O build copia a loja para `public/` e compila o Studio para `public/studio`.
+Resultado: `/` é a loja e `/studio` é o painel, no mesmo domínio.
+
+### Liberar o domínio no Sanity (obrigatório)
+
+O Sanity só aceita pedidos de domínios cadastrados. Sem isso o painel abre na
+tela "Connect this Studio to your project" e **não é possível entrar**.
+
+Em <https://www.sanity.io/manage/project/wdisx8zs/api> → **CORS origins**, adicione:
+
+- `https://dolcedelicias.vercel.app`
+- `http://localhost:3000` (para testar no computador)
+
+Se usar um domínio próprio no futuro, adicione também.
+
+A loja não depende dessa liberação: as consultas do catálogo saem pelo próprio
+domínio (`/sanity/...`, ver `rewrites` no `vercel.json`) e a Vercel repassa para a
+API do Sanity. Isso mantém o site funcionando mesmo em endereços de prévia, que
+mudam a cada deploy.
+
+Para testar no computador antes de publicar:
+
+```bash
+npm --prefix studio ci   # só na primeira vez
+npm run build
+npm run dev              # http://localhost:3000  e  /studio
 ```
 
 Os scripts são comuns (sem `import`): cada página carrega, na ordem,

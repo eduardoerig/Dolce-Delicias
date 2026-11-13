@@ -39,7 +39,32 @@ async function carregarDados() {
 }
 
 // A leitura pública não precisa de token. Nunca coloque tokens privados neste arquivo.
+//
+// A consulta passa pelo próprio domínio (/sanity/...), e a Vercel repassa para a API
+// do Sanity (ver "rewrites" em vercel.json). Assim o navegador não faz requisição
+// entre domínios e o site não depende da lista de origens liberadas no painel do
+// Sanity — inclusive nos endereços de prévia da Vercel, que mudam a cada deploy.
 const SANITY = {projectId:'wdisx8zs', dataset:'production', apiVersion:'2025-02-19'};
+function consultaSanity(parametros) {
+  return RAIZ + 'sanity/v' + SANITY.apiVersion + '/data/query/' + SANITY.dataset + '?' + parametros;
+}
+// Reserva: fala direto com a API (só funciona se este domínio estiver liberado em
+// Sanity > API > CORS origins). Serve para o site não depender de uma coisa só.
+function consultaSanityDireta(parametros) {
+  return 'https://' + SANITY.projectId + '.api.sanity.io/v' + SANITY.apiVersion +
+    '/data/query/' + SANITY.dataset + '?' + parametros;
+}
+async function pedirSanity(parametros) {
+  for (const url of [consultaSanity(parametros), consultaSanityDireta(parametros)]) {
+    try {
+      const resposta = await fetch(url, {signal: AbortSignal.timeout(12000)});
+      if (resposta.ok) return resposta;
+    } catch (erro) {
+      // tenta o próximo endereço
+    }
+  }
+  throw new Error('Falha ao consultar Sanity');
+}
 async function buscarCatalogo() {
   const imagem = '"imagem": coalesce(foto.asset->url, imagemLocal)';
   const consulta = `{
@@ -59,15 +84,14 @@ async function buscarCatalogo() {
         "meses": coalesce(quando.meses, []), "de": quando.de, "ate": quando.ate}
     }
   }`;
-  const url = `https://${SANITY.projectId}.api.sanity.io/v${SANITY.apiVersion}/data/query/${SANITY.dataset}?perspective=published&query=${encodeURIComponent(consulta)}`;
-  const resposta = await fetch(url, {signal: AbortSignal.timeout(12000)});
+  const resposta = await pedirSanity('perspective=published&query=' + encodeURIComponent(consulta));
   if (!resposta.ok) throw new Error('Falha ao consultar Sanity: ' + resposta.status);
   const dados = await resposta.json();
   if (dados.error || !dados.result) throw new Error('Resposta inválida do Sanity');
   // Projeto novo: usa o catálogo original até a primeira importação.
   // Após importar, um catálogo vazio no Sanity continua vazio (não ressuscita produtos excluídos).
   if (!dados.result.unidades.length && !dados.result.produtos.length) {
-    const marca = await fetch(`https://${SANITY.projectId}.api.sanity.io/v${SANITY.apiVersion}/data/query/${SANITY.dataset}?query=${encodeURIComponent('*[_id == "catalogo-importado"][0]._id')}`, {signal:AbortSignal.timeout(12000)});
+    const marca = await pedirSanity('query=' + encodeURIComponent('*[_id == "catalogo-importado"][0]._id'));
     if (!marca.ok) throw new Error('Falha ao verificar importação');
     if (!(await marca.json()).result) {
       console.info('Sanity ainda vazio: exibindo o catálogo local. Execute a importação.');

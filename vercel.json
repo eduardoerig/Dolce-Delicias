@@ -1,5 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "node scripts/build.mjs",
+  "installCommand": "npm --prefix studio ci --no-audit --no-fund",
+  "outputDirectory": "public",
   "redirects": [
     {
       "source": "/produtos",
@@ -57,6 +60,24 @@
       "permanent": true
     }
   ],
+  "rewrites": [
+    {
+      "source": "/sanity/:path*",
+      "destination": "https://wdisx8zs.api.sanity.io/:path*"
+    },
+    {
+      "source": "/studio",
+      "destination": "/studio/index.html"
+    },
+    {
+      "source": "/studio/:path*",
+      "destination": "/studio/index.html"
+    },
+    {
+      "source": "/static/:path*",
+      "destination": "/studio/static/:path*"
+    }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)",
@@ -69,6 +90,15 @@
     },
     {
       "source": "/dados/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/studio/index.html",
       "headers": [
         {
           "key": "Cache-Control",

@@ -14,3 +14,7 @@ Desktop.ini
 studio/node_modules/
 studio/dist/
 studio/.sanity/
+
+# Montado pelo `npm run build` (site + Studio). Não vai para o Git.
+public/
+node_modules/
