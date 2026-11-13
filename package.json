@@ -1,0 +1,13 @@
+{
+  "name": "dolce-delicias",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Loja Dolce Delícias (HTML, CSS e JS puros) + Sanity Studio em /studio",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/servidor-local.mjs"
+  },
+  "engines": {
+    "node": "22.x"
+  }
+}
