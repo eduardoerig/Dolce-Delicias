@@ -6,7 +6,7 @@ alguns produtos diferentes, por isso o catálogo é separado por loja.
 
 Onde esses arquivos aparecem no site:
 
-- **Menu "Catálogo"** do topo — todas as unidades e o **PDF completo**.
+- **Menu "Catálogo"** do topo — as unidades 1 a 5 e o **PDF completo** (que serve à matriz).
 - **Página de unidades** — botão de catálogo em cada loja.
 
 ## Os arquivos aqui são PLACEHOLDER
