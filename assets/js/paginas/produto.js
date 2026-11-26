@@ -126,7 +126,6 @@ function blocoDePromocoes(promocoes) {
   return `
     <section class="produto-ofertas">
       <ul class="grid gap-2">${html}</ul>
-      <p class="mt-2 text-xs leading-relaxed text-crust">O site mostra o preço cheio; o desconto é aplicado pela matriz no fechamento pelo WhatsApp.</p>
     </section>`;
 }
 

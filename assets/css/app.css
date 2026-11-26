@@ -3931,6 +3931,16 @@ details.dropdown:not([open]) > .dropdown-content {
     font-weight: 700;
     white-space: nowrap;
   }
+  .item-pedido-cheio {
+    color: var(--color-crust);
+    font-weight: 400;
+    margin-right: .375rem;
+  }
+  .item-pedido-promo {
+    font-size: .75rem;
+    font-weight: 700;
+    color: var(--color-brand);
+  }
   .item-pedido-acoes {
     display: flex;
     align-items: center;
