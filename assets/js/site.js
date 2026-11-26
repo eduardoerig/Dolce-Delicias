@@ -145,7 +145,12 @@ function fecharGaveta() {
 document.addEventListener('click', function (evento) {
   if (evento.target.closest('[data-cart-open]')) {
     abrirGaveta();
-  } else if (evento.target.closest('[data-cart-close]') || evento.target.closest('.drawer-overlay')) {
+  } else if (evento.target.closest('.drawer-overlay')) {
+    // O overlay é um <label for="carrinho-toggle">: sem isto, o navegador marca o checkbox
+    // de novo depois de fecharGaveta() e a gaveta reabre travada (inert).
+    evento.preventDefault();
+    fecharGaveta();
+  } else if (evento.target.closest('[data-cart-close]')) {
     fecharGaveta();
   }
 });
