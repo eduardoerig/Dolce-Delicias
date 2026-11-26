@@ -30,10 +30,11 @@ function preencherTopo() {
     }
   }
 
-  // O link "Promoções" só aparece se houver promoção.
-  if (site.promocoes.length > 0) {
+  // O link "Promoções" já vem visível no HTML (o caso comum) e só some sem promoção,
+  // para o menu não pular para o lado a cada troca de página.
+  if (site.promocoes.length === 0) {
     for (const item of document.querySelectorAll('[data-so-com-promocoes]')) {
-      item.hidden = false;
+      item.hidden = true;
     }
   }
 }
