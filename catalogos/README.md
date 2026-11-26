@@ -1,6 +1,7 @@
 # Catálogos em PDF
 
-Um PDF por unidade, mais um PDF com o catálogo completo da rede. Cada unidade tem
+Um PDF por unidade, mais um PDF com o catálogo completo da rede. A matriz não tem PDF
+próprio: os links dela apontam para o `completo.pdf`. Cada unidade tem
 alguns produtos diferentes, por isso o catálogo é separado por loja.
 
 Onde esses arquivos aparecem no site:
