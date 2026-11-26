@@ -175,32 +175,55 @@ document.addEventListener('click', function (evento) {
 
 // ---------- Avisos curtos ----------
 
-function mostrarAviso(titulo, detalhe, foto) {
+const DURACAO_AVISO = 4000;
+const ICONE_SUCESSO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>';
+const ICONE_ERRO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+const ICONE_FECHAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+
+// tipo: 'sucesso' ou 'erro'.
+function mostrarAviso(tipo, titulo, detalhe) {
   const area = document.querySelector('[data-toast-area]');
 
-  let html = '';
-  if (foto) {
-    html += `<span class="aviso-foto">${foto}</span>`;
+  let icone = ICONE_SUCESSO;
+  if (tipo === 'erro') {
+    icone = ICONE_ERRO;
   }
-  html += `<div class="aviso-texto"><p class="aviso-titulo"><span>${limpar(titulo)}</span></p>`;
+
+  let html = `<span class="aviso-icone">${icone}</span>`;
+  html += `<div class="aviso-texto"><p class="aviso-titulo">${limpar(titulo)}</p>`;
   if (detalhe) {
     html += `<p class="aviso-detalhe">${limpar(detalhe)}</p>`;
   }
   html += '</div>';
+  html += `<button type="button" class="aviso-fechar" aria-label="Fechar aviso">${ICONE_FECHAR}</button>`;
+  html += '<span class="aviso-tempo" aria-hidden="true"></span>';
 
   const aviso = document.createElement('div');
-  aviso.className = 'aviso aviso-neutro';
-  if (foto) {
-    aviso.className = 'aviso aviso-marca';
-  }
+  aviso.className = 'aviso aviso-' + tipo;
+  aviso.style.setProperty('--aviso-tempo', DURACAO_AVISO + 'ms');
   aviso.innerHTML = html;
   area.append(aviso);
 
   // Leitor de tela também ouve o aviso.
-  document.querySelector('[data-aviso-leitor]').textContent = titulo;
+  let leitura = titulo;
+  if (tipo === 'erro') {
+    leitura = 'Erro: ' + titulo;
+  }
+  document.querySelector('[data-aviso-leitor]').textContent = leitura;
 
-  setTimeout(function () {
-    aviso.remove();
-  }, 4000);
+  // O ✕ e o fim do tempo podem chegar juntos: fecha uma vez só.
+  let fechado = false;
+  function fechar() {
+    if (fechado) {
+      return;
+    }
+    fechado = true;
+    aviso.classList.add('saindo');
+    setTimeout(function () {
+      aviso.remove();
+    }, 200);
+  }
+  aviso.querySelector('.aviso-fechar').addEventListener('click', fechar);
+  setTimeout(fechar, DURACAO_AVISO);
 }
 

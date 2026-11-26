@@ -48,7 +48,7 @@ function adicionarAoCarrinho(novo) {
   }
 
   salvarCarrinho(itens);
-  mostrarAviso(novo.nome, novo.qtd + " un no pedido", fotoDoItem(novo));
+  mostrarAviso("sucesso", novo.nome + " adicionado", novo.qtd + " un no pedido");
 }
 
 function mudarQuantidade(id, quantidade) {
@@ -74,7 +74,7 @@ function removerDoCarrinho(id) {
     }
   }
   salvarCarrinho(restantes);
-  mostrarAviso("Item removido do pedido.");
+  mostrarAviso("sucesso", "Item removido do pedido.");
 }
 
 // O desconto vale sobre o subtotal da linha (preço x quantidade) e é calculado na hora, nunca guardado.
@@ -295,13 +295,13 @@ function fecharPedido() {
   const itens = lerCarrinho();
   if (itens.length === 0) {
     // ALTERAR: avisos que aparecem no canto da tela.
-    mostrarAviso("Adicione pelo menos um item antes de fechar o pedido.");
+    mostrarAviso("erro", "Adicione pelo menos um item antes de fechar o pedido.");
     return;
   }
 
   const numero = numeroWhatsapp(site.matriz);
   if (numero === "") {
-    mostrarAviso("A matriz ainda não tem WhatsApp cadastrado.");
+    mostrarAviso("erro", "A matriz ainda não tem WhatsApp cadastrado.");
     return;
   }
 
@@ -310,7 +310,7 @@ function fecharPedido() {
   if (campoEndereco) {
     endereco = campoEndereco.value.trim();
     if (endereco === "") {
-      mostrarAviso("Informe o endereço da entrega.");
+      mostrarAviso("erro", "Informe o endereço da entrega.");
       campoEndereco.focus();
       return;
     }
@@ -391,7 +391,7 @@ document.addEventListener("click", function (evento) {
 
   if (clicado.closest("[data-cart-clear]")) {
     salvarCarrinho([]);
-    mostrarAviso("Pedido esvaziado.");
+    mostrarAviso("sucesso", "Pedido esvaziado.");
   }
 });
 
