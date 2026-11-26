@@ -93,7 +93,6 @@ function mostrarPromocoes() {
         <!-- ALTERAR: título e aviso da seção de promoções -->
         <h2 id="titulo-promocoes" class="text-3xl sm:text-4xl">Promoções</h2>
         <ul class="ofertas-lista">${ofertas}</ul>
-        <p class="mt-4 text-sm leading-relaxed text-crust">O site mostra o preço cheio; o desconto é aplicado pela matriz no fechamento pelo WhatsApp.</p>
       </div>
     </section>`;
 }

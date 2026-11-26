@@ -314,6 +314,31 @@ function promocoesDoProduto(produto) {
   return lista;
 }
 
+// Desconto só vale se a promoção vale hoje na matriz (onde o pedido é feito).
+// Entre várias, ganha a de maior desconto.
+function melhorPromocao(slug) {
+  if (!site || !site.matriz) {
+    return null;
+  }
+  let melhor = null;
+  for (let i = 0; i < site.promocoes.length; i++) {
+    const promocao = site.promocoes[i];
+    if (!promocao.valeHoje || !(promocao.desconto > 0) || !promocao.unidades.includes(site.matriz.slug)) {
+      continue;
+    }
+    for (let j = 0; j < promocao.produtosDaPromocao.length; j++) {
+      if (promocao.produtosDaPromocao[j].slug === slug && (!melhor || promocao.desconto > melhor.desconto)) {
+        melhor = promocao;
+      }
+    }
+  }
+  return melhor;
+}
+
+function valorComDesconto(valor, desconto) {
+  return Math.round(valor * (100 - desconto)) / 100;
+}
+
 // ---------- Ajudantes ----------
 
 function dinheiro(valor) {

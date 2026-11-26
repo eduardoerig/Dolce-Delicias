@@ -5,6 +5,7 @@
   "description": "Loja Dolce Delícias (HTML, CSS e JS puros) + Sanity Studio em /studio",
   "scripts": {
     "build": "node scripts/build.mjs",
+    "test": "node --test tests/",
     "dev": "node scripts/servidor-local.mjs"
   },
   "engines": {
