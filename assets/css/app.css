@@ -3482,6 +3482,10 @@ details.dropdown:not([open]) > .dropdown-content {
     font-size: 0.75rem;
     color: var(--color-crust);
   }
+  .cartao-preco s {
+    font-size: 0.8125rem;
+    color: var(--color-crust);
+  }
   .botao-mais {
     position: relative;
     display: grid;
