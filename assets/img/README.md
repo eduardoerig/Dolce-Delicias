@@ -1,6 +1,6 @@
 # Imagens
 
-Nada aqui é definitivo, exceto `logo.svg` (usado como favicon).
+Nada aqui é definitivo, exceto a logo (`logo.webp` e `logo-icone.png`).
 
 O site **não quebra sem foto**: produto ou unidade com `imagem` vazia (`null`) em
 `dados/*.json` ganha um desenho no lugar (`assets/js/desenhos.js`) — um
@@ -13,7 +13,7 @@ O site **não quebra sem foto**: produto ou unidade com `imagem` vazia (`null`) 
 | `produtos/` | foto de cada item do catálogo | campo `imagem` em `dados/produtos.json` |
 | `unidades/` | fachada de cada loja | campo `imagem` em `dados/unidades.json` |
 | `heroi/`, `recortes/`, `sobre/` | fotos fixas das páginas | os `.html` da raiz |
-| (raiz) | `logo.svg` — placa oval da marca | favicon dos `.html` |
+| (raiz) | `logo.webp` — logo oficial; `logo-icone.png` — a mesma, quadrada | topo e rodapé dos `.html`, README; favicon e avatar do WhatsApp |
 
 Com o Sanity, as fotos de produtos e unidades passam a ser imagens do próprio
 Sanity e os campos `imagem` recebem a URL do CDN.
@@ -38,6 +38,6 @@ JPG com qualidade ~80 dá conta. Se puder, gere também `.webp`.
 
 ## Logo
 
-`logo.svg` é uma reconstrução da placa oval vermelha com os raios brancos. Quando
-chegar o vetor oficial da marca, substitua este arquivo **e** o SVG da placa no topo e no rodapé de cada `.html`
-(a versão inline existe para herdar a fonte da página).
+`logo.webp` (640 px de largura, fundo transparente) e `logo-icone.png` (192 × 192) saem da
+logo oficial em PNG. Para trocar a logo, substitua os dois arquivos mantendo os nomes;
+se a proporção mudar, ajuste `width`/`height` das `<img>` no topo e no rodapé de cada `.html`.
