@@ -1,8 +1,9 @@
 // Página do pedido: repete no resumo a forma de pagamento escolhida.
 
 iniciarPagina(function () {
-  for (const opcao of document.querySelectorAll('[data-pedido-pagamento]')) {
-    opcao.addEventListener('change', mostrarPagamento);
+  const opcoes = document.querySelectorAll('[data-pedido-pagamento]');
+  for (let i = 0; i < opcoes.length; i++) {
+    opcoes[i].addEventListener('change', mostrarPagamento);
   }
   mostrarPagamento();
 });

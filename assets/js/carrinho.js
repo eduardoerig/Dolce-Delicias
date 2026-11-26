@@ -2,7 +2,7 @@
 // O pedido é fechado abrindo o WhatsApp da matriz com a mensagem pronta.
 
 function lerCarrinho() {
-  const texto = localStorage.getItem('dolce_cart');
+  const texto = localStorage.getItem("dolce_cart");
   if (!texto) {
     return [];
   }
@@ -14,13 +14,13 @@ function lerCarrinho() {
 }
 
 function salvarCarrinho(itens) {
-  localStorage.setItem('dolce_cart', JSON.stringify(itens));
+  localStorage.setItem("dolce_cart", JSON.stringify(itens));
   mostrarCarrinho();
 }
 
 // A quantidade nunca fica abaixo do mínimo e anda de "passo" em "passo".
 function ajustarQuantidade(quantidade, minimo, passo) {
-  if (!(quantidade > minimo)) {
+  if (quantidade <= minimo) {
     return minimo;
   }
   const passos = Math.round((quantidade - minimo) / passo);
@@ -31,27 +31,35 @@ function adicionarAoCarrinho(novo) {
   const itens = lerCarrinho();
   let achou = false;
 
-  for (const item of itens) {
-    if (item.id === novo.id) {
-      item.qtd = ajustarQuantidade(item.qtd + novo.qtd, item.min, item.passo);
+  for (let i = 0; i < itens.length; i++) {
+    if (itens[i].id === novo.id) {
+      itens[i].qtd = ajustarQuantidade(
+        itens[i].qtd + novo.qtd,
+        itens[i].min,
+        itens[i].passo,
+      );
       achou = true;
     }
   }
 
-  if (!achou) {
+  if (achou === false) {
     novo.qtd = ajustarQuantidade(novo.qtd, novo.min, novo.passo);
     itens.push(novo);
   }
 
   salvarCarrinho(itens);
-  mostrarAviso(novo.nome, novo.qtd + ' un no pedido', fotoDoItem(novo));
+  mostrarAviso(novo.nome, novo.qtd + " un no pedido", fotoDoItem(novo));
 }
 
 function mudarQuantidade(id, quantidade) {
   const itens = lerCarrinho();
-  for (const item of itens) {
-    if (item.id === id) {
-      item.qtd = ajustarQuantidade(quantidade, item.min, item.passo);
+  for (let i = 0; i < itens.length; i++) {
+    if (itens[i].id === id) {
+      itens[i].qtd = ajustarQuantidade(
+        quantidade,
+        itens[i].min,
+        itens[i].passo,
+      );
     }
   }
   salvarCarrinho(itens);
@@ -60,19 +68,19 @@ function mudarQuantidade(id, quantidade) {
 function removerDoCarrinho(id) {
   const itens = lerCarrinho();
   const restantes = [];
-  for (const item of itens) {
-    if (item.id !== id) {
-      restantes.push(item);
+  for (let i = 0; i < itens.length; i++) {
+    if (itens[i].id !== id) {
+      restantes.push(itens[i]);
     }
   }
   salvarCarrinho(restantes);
-  mostrarAviso('Item removido do pedido.');
+  mostrarAviso("Item removido do pedido.");
 }
 
 function totalDoCarrinho(itens) {
   let total = 0;
-  for (const item of itens) {
-    total = total + item.preco * item.qtd;
+  for (let i = 0; i < itens.length; i++) {
+    total = total + itens[i].preco * itens[i].qtd;
   }
   return total;
 }
@@ -87,12 +95,12 @@ function fotoDoItem(item) {
 }
 
 function linhaDoCarrinho(item) {
-  const link = pagina('produto.html?slug=' + encodeURIComponent(item.slug));
+  const link = pagina("produto.html?slug=" + encodeURIComponent(item.slug));
   const nome = limpar(item.nome);
 
-  let menosDesligado = '';
+  let menosDesligado = "";
   if (item.qtd <= item.min) {
-    menosDesligado = 'disabled';
+    menosDesligado = "disabled";
   }
 
   return `
@@ -122,47 +130,54 @@ function mostrarCarrinho() {
   const itens = lerCarrinho();
   const vazio = itens.length === 0;
 
-  let html = '';
-  for (const item of itens) {
-    html = html + linhaDoCarrinho(item);
+  let html = "";
+  for (let i = 0; i < itens.length; i++) {
+    html = html + linhaDoCarrinho(itens[i]);
   }
 
-  let contagem = itens.length + ' itens';
+  let contagem = itens.length + " itens";
   if (itens.length === 1) {
-    contagem = '1 item';
+    contagem = "1 item";
   }
 
-  for (const lista of document.querySelectorAll('[data-cart-items]')) {
-    lista.innerHTML = html;
-    esconder(lista, vazio);
+  const listas = document.querySelectorAll("[data-cart-items]");
+  for (let i = 0; i < listas.length; i++) {
+    listas[i].innerHTML = html;
+    esconder(listas[i], vazio);
   }
-  for (const bloco of document.querySelectorAll('[data-cart-empty]')) {
-    esconder(bloco, !vazio);
+  const vazios = document.querySelectorAll("[data-cart-empty]");
+  for (let i = 0; i < vazios.length; i++) {
+    esconder(vazios[i], !vazio);
   }
-  for (const bloco of document.querySelectorAll('[data-cart-footer]')) {
-    esconder(bloco, vazio);
+  const rodapes = document.querySelectorAll("[data-cart-footer]");
+  for (let i = 0; i < rodapes.length; i++) {
+    esconder(rodapes[i], vazio);
   }
-  for (const total of document.querySelectorAll('[data-cart-total]')) {
-    total.textContent = dinheiro(totalDoCarrinho(itens));
+  const totais = document.querySelectorAll("[data-cart-total]");
+  for (let i = 0; i < totais.length; i++) {
+    totais[i].textContent = dinheiro(totalDoCarrinho(itens));
   }
-  for (const bolinha of document.querySelectorAll('[data-cart-badge]')) {
-    bolinha.textContent = itens.length;
-    esconder(bolinha, vazio);
+  const bolinhas = document.querySelectorAll("[data-cart-badge]");
+  for (let i = 0; i < bolinhas.length; i++) {
+    bolinhas[i].textContent = itens.length;
+    esconder(bolinhas[i], vazio);
   }
-  for (const texto of document.querySelectorAll('[data-cart-count]')) {
-    texto.textContent = contagem;
+  const contagens = document.querySelectorAll("[data-cart-count]");
+  for (let i = 0; i < contagens.length; i++) {
+    contagens[i].textContent = contagem;
   }
-  for (const texto of document.querySelectorAll('[data-cart-sr]')) {
-    texto.textContent = 'Carrinho com ' + contagem;
+  const leitores = document.querySelectorAll("[data-cart-sr]");
+  for (let i = 0; i < leitores.length; i++) {
+    leitores[i].textContent = "Carrinho com " + contagem;
   }
 }
 
 // Esconde o elemento quando "esconde" for verdadeiro; senão, mostra.
 function esconder(elemento, esconde) {
   if (esconde) {
-    elemento.classList.add('oculto');
+    elemento.classList.add("oculto");
   } else {
-    elemento.classList.remove('oculto');
+    elemento.classList.remove("oculto");
   }
 }
 
@@ -172,85 +187,101 @@ function esconder(elemento, esconde) {
 // TODO (LD, LH, PW): testar o pedido completo até o WhatsApp em celulares Android e iOS reais.
 function mensagemDoPedido(itens, endereco, pagamento, observacao) {
   const linhas = [];
-  linhas.push('Olá! Quero fazer uma encomenda pelo site da Dolce Delícias.');
-  linhas.push('');
-  linhas.push('Unidade: ' + site.matriz.nome);
-  linhas.push('Entrega: ' + (endereco || 'endereço a combinar na conversa'));
-  linhas.push('');
+  linhas.push("Olá! Quero fazer uma encomenda pelo site da Dolce Delícias.");
+  linhas.push("");
+  linhas.push("Unidade: " + site.matriz.nome);
+  linhas.push("Entrega: " + (endereco || "endereço a combinar na conversa"));
+  linhas.push("");
 
-  for (const item of itens) {
-    linhas.push('• ' + item.qtd + 'x ' + item.nome + ' (' + item.por + ') — ' + dinheiro(item.preco * item.qtd));
+  for (let i = 0; i < itens.length; i++) {
+    linhas.push(
+      "• " +
+        itens[i].qtd +
+        "x " +
+        itens[i].nome +
+        " (" +
+        itens[i].por +
+        ") — " +
+        dinheiro(itens[i].preco * itens[i].qtd),
+    );
   }
 
-  linhas.push('');
-  linhas.push('Total estimado: ' + dinheiro(totalDoCarrinho(itens)));
-  linhas.push('Forma de pagamento: ' + pagamento);
-  linhas.push('Preços cheios. Promoções confirmadas pela matriz no fechamento.');
+  linhas.push("");
+  linhas.push("Total estimado: " + dinheiro(totalDoCarrinho(itens)));
+  linhas.push("Forma de pagamento: " + pagamento);
+  linhas.push(
+    "Preços cheios. Promoções confirmadas pela matriz no fechamento.",
+  );
 
   if (site.matriz.preparo) {
-    linhas.push('Preparo mínimo: ' + site.matriz.preparo);
+    linhas.push("Preparo mínimo: " + site.matriz.preparo);
   }
   if (observacao) {
-    linhas.push('');
-    linhas.push('Observação: ' + observacao);
+    linhas.push("");
+    linhas.push("Observação: " + observacao);
   }
 
-  return linhas.join('\n');
+  return linhas.join("\n");
 }
 
 function fecharPedido() {
   const itens = lerCarrinho();
   if (itens.length === 0) {
     // ALTERAR: avisos que aparecem no canto da tela.
-    mostrarAviso('Adicione pelo menos um item antes de fechar o pedido.');
+    mostrarAviso("Adicione pelo menos um item antes de fechar o pedido.");
     return;
   }
 
   const numero = numeroWhatsapp(site.matriz);
-  if (numero === '') {
-    mostrarAviso('A matriz ainda não tem WhatsApp cadastrado.');
+  if (numero === "") {
+    mostrarAviso("A matriz ainda não tem WhatsApp cadastrado.");
     return;
   }
 
-  const campoEndereco = document.querySelector('[data-pedido-endereco]');
-  let endereco = '';
+  const campoEndereco = document.querySelector("[data-pedido-endereco]");
+  let endereco = "";
   if (campoEndereco) {
     endereco = campoEndereco.value.trim();
-    if (endereco === '') {
-      mostrarAviso('Informe o endereço da entrega.');
+    if (endereco === "") {
+      mostrarAviso("Informe o endereço da entrega.");
       campoEndereco.focus();
       return;
     }
   }
 
-  let pagamento = 'A combinar no WhatsApp';
-  const pagamentoMarcado = document.querySelector('[data-pedido-pagamento]:checked');
+  let pagamento = "A combinar no WhatsApp";
+  const pagamentoMarcado = document.querySelector(
+    "[data-pedido-pagamento]:checked",
+  );
   if (pagamentoMarcado) {
     pagamento = pagamentoMarcado.value;
   }
 
-  let observacao = '';
-  const campoObservacao = document.querySelector('[data-cart-obs]');
+  let observacao = "";
+  const campoObservacao = document.querySelector("[data-cart-obs]");
   if (campoObservacao) {
     observacao = campoObservacao.value.trim();
   }
 
   const mensagem = mensagemDoPedido(itens, endereco, pagamento, observacao);
-  window.open('https://wa.me/' + numero + '?text=' + encodeURIComponent(mensagem), '_blank');
+  window.open(
+    "https://wa.me/" + numero + "?text=" + encodeURIComponent(mensagem),
+    "_blank",
+  );
 }
 
 // ---------- Cliques ----------
 
-document.addEventListener('click', function (evento) {
+document.addEventListener("click", function (evento) {
   const clicado = evento.target;
 
-  const botaoAdicionar = clicado.closest('[data-add]');
+  const botaoAdicionar = clicado.closest("[data-add]");
   if (botaoAdicionar) {
     const dados = botaoAdicionar.dataset;
     let quantidade = Number(dados.min);
 
     // Na página do produto, usa a quantidade escolhida.
-    const campoQuantidade = document.querySelector('[data-qty-input]');
+    const campoQuantidade = document.querySelector("[data-qty-input]");
     if (dados.usaQty !== undefined && campoQuantidade) {
       quantidade = Number(campoQuantidade.value);
     }
@@ -270,41 +301,44 @@ document.addEventListener('click', function (evento) {
     return;
   }
 
-  const linha = clicado.closest('[data-item]');
+  const linha = clicado.closest("[data-item]");
   if (linha) {
     const id = linha.dataset.item;
-    const campo = linha.querySelector('[data-item-qtd]');
+    const campo = linha.querySelector("[data-item-qtd]");
     const atual = Number(campo.value);
     const passo = Number(campo.step);
 
-    if (clicado.closest('[data-item-remove]')) {
+    if (clicado.closest("[data-item-remove]")) {
       removerDoCarrinho(id);
-    } else if (clicado.closest('[data-item-mais]')) {
+    } else if (clicado.closest("[data-item-mais]")) {
       mudarQuantidade(id, atual + passo);
-    } else if (clicado.closest('[data-item-menos]')) {
+    } else if (clicado.closest("[data-item-menos]")) {
       mudarQuantidade(id, atual - passo);
     }
     return;
   }
 
-  if (clicado.closest('[data-cart-checkout]')) {
+  if (clicado.closest("[data-cart-checkout]")) {
     fecharPedido();
   }
 
-  if (clicado.closest('[data-cart-clear]')) {
+  if (clicado.closest("[data-cart-clear]")) {
     salvarCarrinho([]);
-    mostrarAviso('Pedido esvaziado.');
+    mostrarAviso("Pedido esvaziado.");
   }
 });
 
 // Digitou a quantidade direto no campo.
-document.addEventListener('change', function (evento) {
-  if (evento.target.matches('[data-item-qtd]')) {
-    const linha = evento.target.closest('[data-item]');
+document.addEventListener("change", function (evento) {
+  if (evento.target.matches("[data-item-qtd]")) {
+    const linha = evento.target.closest("[data-item]");
     mudarQuantidade(linha.dataset.item, Number(evento.target.value));
   }
 });
 
-const ICONE_MENOS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg>';
-const ICONE_MAIS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
-const ICONE_LIXEIRA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13h10l1-13"/><path d="M9 7V4h6v3"/></svg>';
+const ICONE_MENOS =
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg>';
+const ICONE_MAIS =
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+const ICONE_LIXEIRA =
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13h10l1-13"/><path d="M9 7V4h6v3"/></svg>';

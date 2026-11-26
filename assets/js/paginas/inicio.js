@@ -15,8 +15,9 @@ iniciarPagina(function () {
   // Veio da página do produto clicando na categoria.
   const categoria = new URLSearchParams(location.search).get('categoria');
   if (categoria) {
-    for (const caixa of document.querySelectorAll('[data-filter-category]')) {
-      caixa.checked = caixa.value === categoria;
+    const caixas = document.querySelectorAll('[data-filter-category]');
+    for (let i = 0; i < caixas.length; i++) {
+      caixas[i].checked = caixas[i].value === categoria;
     }
   }
   filtrar();
@@ -42,7 +43,8 @@ function mostrarPromocoes() {
   }
 
   let ofertas = '';
-  for (const promocao of site.promocoes) {
+  for (let i = 0; i < site.promocoes.length; i++) {
+    const promocao = site.promocoes[i];
     let quando = 'Programe-se';
     let classeQuando = 'oferta-quando';
     if (promocao.valeHoje) {
@@ -51,7 +53,9 @@ function mostrarPromocoes() {
     }
 
     let fotos = '';
-    for (const produto of promocao.produtosDaPromocao.slice(0, 4)) {
+    const produtos = promocao.produtosDaPromocao.slice(0, 4);
+    for (let j = 0; j < produtos.length; j++) {
+      const produto = produtos[j];
       let foto = iconeProduto(produto.categoria, produto.nome);
       if (produto.imagem) {
         foto = `<img src="${limpar(caminhoArquivo(produto.imagem))}" alt="" loading="lazy">`;
@@ -99,26 +103,28 @@ function mostrarPromocoes() {
 function mostrarFiltros() {
   // Conta quantos produtos tem em cada categoria.
   const categorias = {};
-  for (const produto of site.produtos) {
-    if (categorias[produto.categoria]) {
-      categorias[produto.categoria] = categorias[produto.categoria] + 1;
+  for (let i = 0; i < site.produtos.length; i++) {
+    const categoria = site.produtos[i].categoria;
+    if (categorias[categoria]) {
+      categorias[categoria] = categorias[categoria] + 1;
     } else {
-      categorias[produto.categoria] = 1;
+      categorias[categoria] = 1;
     }
   }
 
   let html = '<fieldset class="filtro-grupo"><legend>Categoria</legend>';
   html += opcaoDeFiltro('data-filter-category-todas checked', '', 'Todas', site.produtos.length);
-  for (const nome in categorias) {
-    html += opcaoDeFiltro('data-filter-category', nome, nome, categorias[nome]);
+  const nomes = Object.keys(categorias);
+  for (let i = 0; i < nomes.length; i++) {
+    html += opcaoDeFiltro('data-filter-category', nomes[i], nomes[i], categorias[nomes[i]]);
   }
   html += '</fieldset>';
 
   // Filtro de preço: vai de R$ 1 até o maior preço por peça.
   let maiorPreco = 0;
-  for (const produto of site.produtos) {
-    if (produto.faixa.unitario > maiorPreco) {
-      maiorPreco = produto.faixa.unitario;
+  for (let i = 0; i < site.produtos.length; i++) {
+    if (site.produtos[i].faixa.unitario > maiorPreco) {
+      maiorPreco = site.produtos[i].faixa.unitario;
     }
   }
   maiorPreco = Math.ceil(maiorPreco);
@@ -136,9 +142,9 @@ function mostrarFiltros() {
   }
 
   let restricoes = '';
-  for (const restricao of RESTRICOES) {
-    if (algumProdutoTem(restricao)) {
-      restricoes += opcaoDeFiltro('data-filter-tag', restricao, restricao, '');
+  for (let i = 0; i < RESTRICOES.length; i++) {
+    if (algumProdutoTem(RESTRICOES[i])) {
+      restricoes += opcaoDeFiltro('data-filter-tag', RESTRICOES[i], RESTRICOES[i], '');
     }
   }
   if (restricoes) {
@@ -158,8 +164,8 @@ function opcaoDeFiltro(atributo, valor, texto, quantidade) {
 }
 
 function algumProdutoTem(tag) {
-  for (const produto of site.produtos) {
-    if (produto.tags.includes(tag)) {
+  for (let i = 0; i < site.produtos.length; i++) {
+    if (site.produtos[i].tags.includes(tag)) {
       return true;
     }
   }
@@ -170,8 +176,8 @@ function algumProdutoTem(tag) {
 
 function mostrarProdutos() {
   let html = '';
-  for (const produto of site.produtos) {
-    html += cardDoProduto(produto);
+  for (let i = 0; i < site.produtos.length; i++) {
+    html += cardDoProduto(site.produtos[i]);
   }
   document.querySelector('[data-grade-produtos]').innerHTML = html;
   document.querySelector('[data-total-texto]').textContent = site.produtos.length + ' itens feitos';
@@ -185,8 +191,9 @@ function cardPassaNosFiltros(card) {
   }
 
   const categoriasMarcadas = [];
-  for (const caixa of document.querySelectorAll('[data-filter-category]:checked')) {
-    categoriasMarcadas.push(caixa.value);
+  const caixasDeCategoria = document.querySelectorAll('[data-filter-category]:checked');
+  for (let i = 0; i < caixasDeCategoria.length; i++) {
+    categoriasMarcadas.push(caixasDeCategoria[i].value);
   }
   if (categoriasMarcadas.length > 0 && !categoriasMarcadas.includes(card.dataset.categoria)) {
     return false;
@@ -198,8 +205,9 @@ function cardPassaNosFiltros(card) {
   }
 
   const tagsDoCard = card.dataset.tags.split(',');
-  for (const caixa of document.querySelectorAll('[data-filter-tag]:checked')) {
-    if (!tagsDoCard.includes(caixa.value)) {
+  const caixasDeTag = document.querySelectorAll('[data-filter-tag]:checked');
+  for (let i = 0; i < caixasDeTag.length; i++) {
+    if (!tagsDoCard.includes(caixasDeTag[i].value)) {
       return false;
     }
   }
@@ -238,9 +246,9 @@ function filtrar() {
   const todosOsCards = grade.querySelectorAll('[data-produto]');
 
   const encontrados = [];
-  for (const card of todosOsCards) {
-    if (cardPassaNosFiltros(card)) {
-      encontrados.push(card);
+  for (let i = 0; i < todosOsCards.length; i++) {
+    if (cardPassaNosFiltros(todosOsCards[i])) {
+      encontrados.push(todosOsCards[i]);
     }
   }
   ordenarCards(encontrados);
@@ -253,8 +261,8 @@ function filtrar() {
   const ultimo = primeiro + PRODUTOS_POR_PAGINA;
 
   // Esconde todos e mostra só os da página atual, na ordem escolhida.
-  for (const card of todosOsCards) {
-    card.classList.add('oculto');
+  for (let i = 0; i < todosOsCards.length; i++) {
+    todosOsCards[i].classList.add('oculto');
   }
   for (let i = 0; i < encontrados.length; i++) {
     grade.append(encontrados[i]);
@@ -318,8 +326,9 @@ function ligarFiltros() {
   const filtros = document.querySelector('[data-filtros-corpo]');
   filtros.addEventListener('change', function (evento) {
     if (evento.target.matches('[data-filter-category-todas]')) {
-      for (const caixa of document.querySelectorAll('[data-filter-category]')) {
-        caixa.checked = false;
+      const caixas = document.querySelectorAll('[data-filter-category]');
+      for (let i = 0; i < caixas.length; i++) {
+        caixas[i].checked = false;
       }
     }
     paginaAtual = 1;
@@ -351,8 +360,9 @@ function ligarFiltros() {
     }
   });
 
-  for (const botao of document.querySelectorAll('[data-limpar-filtros]')) {
-    botao.addEventListener('click', limparFiltros);
+  const botoesLimpar = document.querySelectorAll('[data-limpar-filtros]');
+  for (let i = 0; i < botoesLimpar.length; i++) {
+    botoesLimpar[i].addEventListener('click', limparFiltros);
   }
 
   // No celular, os filtros abrem por cima da tela.
@@ -362,8 +372,9 @@ function ligarFiltros() {
     painel.classList.add('aberto');
     fundo.hidden = false;
   });
-  for (const botao of document.querySelectorAll('[data-fechar-filtros]')) {
-    botao.addEventListener('click', function () {
+  const botoesFechar = document.querySelectorAll('[data-fechar-filtros]');
+  for (let i = 0; i < botoesFechar.length; i++) {
+    botoesFechar[i].addEventListener('click', function () {
       painel.classList.remove('aberto');
       fundo.hidden = true;
     });
@@ -372,8 +383,9 @@ function ligarFiltros() {
 
 function limparFiltros() {
   document.getElementById('busca').value = '';
-  for (const caixa of document.querySelectorAll('[data-filtros-corpo] input[type=checkbox]')) {
-    caixa.checked = false;
+  const caixas = document.querySelectorAll('[data-filtros-corpo] input[type=checkbox]');
+  for (let i = 0; i < caixas.length; i++) {
+    caixas[i].checked = false;
   }
   const preco = document.querySelector('[data-filter-preco]');
   preco.value = preco.max;
