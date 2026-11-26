@@ -119,6 +119,24 @@ function caminhoArquivo(valor) {
   return RAIZ + valor;
 }
 
+// Link de um PDF. O enviado pelo Sanity fica em outro domínio, onde o navegador
+// ignora o "download" e abre o arquivo; o ?dl= pede ao Sanity para baixar.
+function linkDoPdf(valor) {
+  const arquivo = caminhoArquivo(valor);
+  if (arquivo.startsWith('https://cdn.sanity.io/')) {
+    return arquivo + '?dl=';
+  }
+  return arquivo;
+}
+
+// O catálogo completo é o PDF enviado na matriz; sem envio, o arquivo da pasta.
+function pdfCompleto() {
+  if (site.matriz && /^https:\/\//i.test(site.matriz.catalogoPdf || '')) {
+    return linkDoPdf(site.matriz.catalogoPdf);
+  }
+  return RAIZ + 'catalogos/completo.pdf';
+}
+
 // ---------- Produtos ----------
 
 // TODO (R, G): levantar preços reais, pedido mínimo e prazo de cada item (hoje são valores de exemplo em dados/produtos.json).

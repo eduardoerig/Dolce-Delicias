@@ -19,6 +19,11 @@ real, mantendo o nome do arquivo.
 
 ## De onde vem o link
 
-No menu "Catálogo", os itens das lojas são montados pelo `assets/js/site.js` com o nome
-e o "Caminho do catálogo local" (ou o PDF enviado) de cada unidade no Sanity. O "PDF
-completo" e os cartões de `pages/unidades.html` continuam escritos no HTML (procure por `ALTERAR`).
+Tudo vem do cadastro de unidades no Sanity (menu "Catálogo" pelo `assets/js/site.js`,
+cartões de `pages/unidades.html` pelo `assets/js/paginas/unidades.js`):
+
+- **Cada loja:** o PDF enviado em "Enviar catálogo PDF"; sem envio, o arquivo indicado
+  em "Caminho do catálogo local" (os desta pasta).
+- **PDF completo:** o PDF enviado na **matriz**; sem envio, o `completo.pdf` desta pasta.
+
+O PDF enviado pelo Sanity é baixado direto (o link leva `?dl=`).

@@ -45,7 +45,7 @@ function preencherTopo() {
   let pdfs = '';
   for (let i = 0; i < site.unidades.length; i++) {
     const unidade = site.unidades[i];
-    const arquivo = caminhoArquivo(unidade.catalogoPdf);
+    const arquivo = linkDoPdf(unidade.catalogoPdf);
     if (unidade.matriz || !arquivo) {
       continue;
     }
@@ -54,6 +54,10 @@ function preencherTopo() {
   const lugares = document.querySelectorAll('[data-pdfs-unidades]');
   for (let i = 0; i < lugares.length; i++) {
     lugares[i].insertAdjacentHTML('beforebegin', pdfs);
+  }
+  const completos = document.querySelectorAll('[data-pdf-completo]');
+  for (let i = 0; i < completos.length; i++) {
+    completos[i].href = pdfCompleto();
   }
 }
 
