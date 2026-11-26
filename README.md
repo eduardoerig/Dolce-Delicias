@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/img/logo.svg" alt="Dolce Delícias" width="260">
+<img src="assets/img/logo.webp" alt="Dolce Delícias" width="260">
 
 ### Salgados, doces e encomendas — loja online da Dolce Delícias
 
@@ -35,7 +35,7 @@ vêm do **Sanity**, e o pedido é fechado pelo **WhatsApp** da matriz.
 | ![](https://img.shields.io/badge/-%20%20%20%20-2A1710?style=flat-square) | `ink` | `#2A1710` | textos |
 
 As cores ficam como variáveis no início de `assets/css/app.css` (`--color-brand`, …).
-Fontes: **Alfa Slab One** (títulos), **Baloo 2** (logo) e **Figtree** (texto).
+Fontes: **Alfa Slab One** (títulos) e **Figtree** (texto).
 
 ## Rodar no computador
 
