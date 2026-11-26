@@ -270,9 +270,15 @@ function mensagemDoPedido(itens, endereco, pagamento, observacao) {
   }
   linhas.push("Total estimado: " + dinheiro(resumo.total));
   linhas.push("Forma de pagamento: " + pagamento);
-  linhas.push(
-    "Preços cheios. Promoções confirmadas pela matriz no fechamento.",
-  );
+  if (resumo.desconto > 0) {
+    linhas.push(
+      "Desconto de promoção calculado pelo site; a matriz confirma no fechamento.",
+    );
+  } else {
+    linhas.push(
+      "Preços cheios. Promoções confirmadas pela matriz no fechamento.",
+    );
+  }
 
   if (site.matriz.preparo) {
     linhas.push("Preparo mínimo: " + site.matriz.preparo);

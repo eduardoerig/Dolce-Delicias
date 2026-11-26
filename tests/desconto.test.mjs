@@ -64,10 +64,13 @@ test('mensagem do WhatsApp mostra de/por e Descontos', () => {
   const msg = cart.mensagemDoPedido([{slug: 'p1', nome: 'Pão', por: '100 un', preco: 1.2, qtd: 100}], 'Rua X', 'Pix', '');
   assert.match(msg, /• 100x Pão \(100 un\) — de R\$ 120,00 por R\$ 102,00 \(B −15%\)/);
   assert.match(msg, /Descontos: − R\$ 18,00\nTotal estimado: R\$ 102,00/);
+  assert.match(msg, /Desconto de promoção calculado pelo site; a matriz confirma no fechamento\./);
+  assert.doesNotMatch(msg, /Preços cheios/);
 });
 test('mensagem sem desconto fica igual à de hoje', () => {
   const msg = cart.mensagemDoPedido([{slug: 'p9', nome: 'Suco', por: 'un', preco: 3, qtd: 10}], '', 'Pix', '');
   assert.doesNotMatch(msg, /Descontos|de R\$/);
+  assert.match(msg, /Preços cheios\. Promoções confirmadas pela matriz no fechamento\./);
   assert.match(msg, /• 10x Suco \(un\) — R\$ 30,00\n\nTotal estimado: R\$ 30,00/);
 });
 test('linha do carrinho: promo só quando há desconto', () => {
