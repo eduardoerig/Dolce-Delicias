@@ -39,7 +39,25 @@ function preencherTopo() {
       itens[i].hidden = true;
     }
   }
+
+  // PDFs das lojas no menu "Catálogo": nome e arquivo vêm do cadastro no Sanity.
+  // A matriz fica de fora, porque o dela é o "Baixar PDF completo".
+  let pdfs = '';
+  for (let i = 0; i < site.unidades.length; i++) {
+    const unidade = site.unidades[i];
+    const arquivo = caminhoArquivo(unidade.catalogoPdf);
+    if (unidade.matriz || !arquivo) {
+      continue;
+    }
+    pdfs += `<li><a href="${limpar(arquivo)}" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">${limpar(unidade.nome)}${ICONE_BAIXAR}</a></li>`;
+  }
+  const lugares = document.querySelectorAll('[data-pdfs-unidades]');
+  for (let i = 0; i < lugares.length; i++) {
+    lugares[i].insertAdjacentHTML('beforebegin', pdfs);
+  }
 }
+
+const ICONE_BAIXAR = '<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>';
 
 // ---------- Card de produto (usado na home e na página do produto) ----------
 

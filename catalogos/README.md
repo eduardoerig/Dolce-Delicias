@@ -19,5 +19,6 @@ real, mantendo o nome do arquivo.
 
 ## De onde vem o link
 
-Os links estão escritos direto no menu "Catálogo" de cada `.html` e nos cartões de
-`pages/unidades.html` (procure por `ALTERAR`). Trocou ou criou um PDF, ajuste os links ali.
+No menu "Catálogo", os itens das lojas são montados pelo `assets/js/site.js` com o nome
+e o "Caminho do catálogo local" (ou o PDF enviado) de cada unidade no Sanity. O "PDF
+completo" e os cartões de `pages/unidades.html` continuam escritos no HTML (procure por `ALTERAR`).
