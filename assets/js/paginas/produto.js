@@ -85,9 +85,9 @@ function paginaDoProduto(produto) {
 function etiquetas(produto) {
   const escondidas = ['atacado', 'varejo', 'balcao', 'balcão', 'encomenda'];
   let html = '';
-  for (const tag of produto.tags) {
-    if (!escondidas.includes(tag)) {
-      html += `<li>${limpar(tag)}</li>`;
+  for (let i = 0; i < produto.tags.length; i++) {
+    if (!escondidas.includes(produto.tags[i])) {
+      html += `<li>${limpar(produto.tags[i])}</li>`;
     }
   }
   if (html === '') {
@@ -102,7 +102,8 @@ function blocoDePromocoes(promocoes) {
   }
 
   let html = '';
-  for (const promocao of promocoes) {
+  for (let i = 0; i < promocoes.length; i++) {
+    const promocao = promocoes[i];
     let quando = 'Programe-se';
     let classeQuando = 'oferta-quando';
     if (promocao.valeHoje) {
@@ -165,8 +166,8 @@ function blocoDeSabores(produto) {
     return '';
   }
   let html = '';
-  for (const sabor of produto.sabores) {
-    html += `<li>${limpar(sabor)}</li>`;
+  for (let i = 0; i < produto.sabores.length; i++) {
+    html += `<li>${limpar(produto.sabores[i])}</li>`;
   }
   return `
     <section class="produto-bloco">
@@ -179,7 +180,8 @@ function blocoDeSabores(produto) {
 
 function blocoDeLojas(produto) {
   let html = '';
-  for (const unidade of site.unidades) {
+  for (let i = 0; i < site.unidades.length; i++) {
+    const unidade = site.unidades[i];
     if (!produto.unidades.includes(unidade.slug)) {
       continue;
     }
@@ -206,7 +208,8 @@ function blocoDeLojas(produto) {
 function blocoDeRelacionados(produto) {
   let cards = '';
   let quantos = 0;
-  for (const outro of site.produtos) {
+  for (let i = 0; i < site.produtos.length; i++) {
+    const outro = site.produtos[i];
     if (outro !== produto && outro.categoria === produto.categoria && outro.disponivel && quantos < 4) {
       cards += cardDoProduto(outro);
       quantos++;

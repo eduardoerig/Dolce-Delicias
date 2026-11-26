@@ -23,18 +23,20 @@ async function iniciarPagina(desenharPagina) {
 function preencherTopo() {
   // Marca no menu a página em que a pessoa está.
   const paginaAtual = location.pathname.split('/').pop();
-  for (const link of document.querySelectorAll('[data-menu-link]')) {
-    if (link.getAttribute('href') === paginaAtual) {
-      link.setAttribute('aria-current', 'page');
-      link.classList.add('font-bold');
+  const links = document.querySelectorAll('[data-menu-link]');
+  for (let i = 0; i < links.length; i++) {
+    if (links[i].getAttribute('href') === paginaAtual) {
+      links[i].setAttribute('aria-current', 'page');
+      links[i].classList.add('font-bold');
     }
   }
 
   // O link "Promoções" já vem visível no HTML (o caso comum) e só some sem promoção,
   // para o menu não pular para o lado a cada troca de página.
   if (site.promocoes.length === 0) {
-    for (const item of document.querySelectorAll('[data-so-com-promocoes]')) {
-      item.hidden = true;
+    const itens = document.querySelectorAll('[data-so-com-promocoes]');
+    for (let i = 0; i < itens.length; i++) {
+      itens[i].hidden = true;
     }
   }
 }
@@ -113,17 +115,19 @@ function dadosDoBotao(produto) {
 
 // Clicou fora de um menu aberto: fecha.
 document.addEventListener('click', function (evento) {
-  for (const menu of document.querySelectorAll('details.dropdown[open]')) {
-    if (!menu.contains(evento.target)) {
-      menu.open = false;
+  const menus = document.querySelectorAll('details.dropdown[open]');
+  for (let i = 0; i < menus.length; i++) {
+    if (!menus[i].contains(evento.target)) {
+      menus[i].open = false;
     }
   }
 });
 
 document.addEventListener('keydown', function (evento) {
   if (evento.key === 'Escape') {
-    for (const menu of document.querySelectorAll('details.dropdown[open]')) {
-      menu.open = false;
+    const menus = document.querySelectorAll('details.dropdown[open]');
+    for (let i = 0; i < menus.length; i++) {
+      menus[i].open = false;
     }
     fecharGaveta();
   }

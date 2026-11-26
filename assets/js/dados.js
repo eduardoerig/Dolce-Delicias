@@ -21,19 +21,19 @@ async function carregarDados() {
     matriz: null,
   };
 
-  for (const unidade of unidades) {
-    if (unidade.matriz) {
-      site.matriz = unidade;
+  for (let i = 0; i < unidades.length; i++) {
+    if (unidades[i].matriz) {
+      site.matriz = unidades[i];
     }
   }
 
-  for (const produto of produtos) {
-    prepararProduto(produto);
+  for (let i = 0; i < produtos.length; i++) {
+    prepararProduto(produtos[i]);
   }
 
-  for (const promocao of promocoes) {
-    if (promocaoAparece(promocao)) {
-      site.promocoes.push(promocao);
+  for (let i = 0; i < promocoes.length; i++) {
+    if (promocaoAparece(promocoes[i])) {
+      site.promocoes.push(promocoes[i]);
     }
   }
 }
@@ -55,9 +55,10 @@ function consultaSanityDireta(parametros) {
     '/data/query/' + SANITY.dataset + '?' + parametros;
 }
 async function pedirSanity(parametros) {
-  for (const url of [consultaSanity(parametros), consultaSanityDireta(parametros)]) {
+  const urls = [consultaSanity(parametros), consultaSanityDireta(parametros)];
+  for (let i = 0; i < urls.length; i++) {
     try {
-      const resposta = await fetch(url, {signal: AbortSignal.timeout(12000)});
+      const resposta = await fetch(urls[i], {signal: AbortSignal.timeout(12000)});
       if (resposta.ok) return resposta;
     } catch (erro) {
       // tenta o próximo endereço
@@ -95,7 +96,12 @@ async function buscarCatalogo() {
     if (!marca.ok) throw new Error('Falha ao verificar importação');
     if (!(await marca.json()).result) {
       console.info('Sanity ainda vazio: exibindo o catálogo local. Execute a importação.');
-      const [produtos, unidades, promocoes] = await Promise.all(['produtos','unidades','promocoes'].map(buscarJson));
+      const nomes = ['produtos', 'unidades', 'promocoes'];
+      const pedidos = [];
+      for (let i = 0; i < nomes.length; i++) {
+        pedidos.push(buscarJson(nomes[i]));
+      }
+      const [produtos, unidades, promocoes] = await Promise.all(pedidos);
       return {produtos,unidades,promocoes};
     }
   }
@@ -120,8 +126,8 @@ function caminhoArquivo(valor) {
 function prepararProduto(produto) {
   // Sem lista de unidades = vendido em todas.
   if (produto.unidades.length === 0) {
-    for (const unidade of site.unidades) {
-      produto.unidades.push(unidade.slug);
+    for (let i = 0; i < site.unidades.length; i++) {
+      produto.unidades.push(site.unidades[i].slug);
     }
   }
 
@@ -167,9 +173,9 @@ function calcularPreco(preco) {
 }
 
 function buscarProduto(slug) {
-  for (const produto of site.produtos) {
-    if (produto.slug === slug) {
-      return produto;
+  for (let i = 0; i < site.produtos.length; i++) {
+    if (site.produtos[i].slug === slug) {
+      return site.produtos[i];
     }
   }
   return null;
@@ -205,7 +211,12 @@ function promocaoAparece(promocao) {
     return false;
   }
 
-  if (!promocao.unidades.length) promocao.unidades = site.unidades.map(u => u.slug);
+  // Sem lista de unidades = vale em todas.
+  if (promocao.unidades.length === 0) {
+    for (let i = 0; i < site.unidades.length; i++) {
+      promocao.unidades.push(site.unidades[i].slug);
+    }
+  }
   const hoje = hojeEmTexto();
   if (promocao.quando.de && hoje < promocao.quando.de) {
     return false;
@@ -216,8 +227,8 @@ function promocaoAparece(promocao) {
 
   // Precisa ter pelo menos um produto vendido numa das lojas da promoção.
   promocao.produtosDaPromocao = [];
-  for (const slug of promocao.produtos) {
-    const produto = buscarProduto(slug);
+  for (let i = 0; i < promocao.produtos.length; i++) {
+    const produto = buscarProduto(promocao.produtos[i]);
     if (produto && vendidoEmAlgumaLoja(produto, promocao.unidades)) {
       promocao.produtosDaPromocao.push(produto);
     }
@@ -238,8 +249,8 @@ function promocaoAparece(promocao) {
 }
 
 function vendidoEmAlgumaLoja(produto, lojas) {
-  for (const loja of lojas) {
-    if (produto.unidades.includes(loja)) {
+  for (let i = 0; i < lojas.length; i++) {
+    if (produto.unidades.includes(lojas[i])) {
       return true;
     }
   }
@@ -248,9 +259,9 @@ function vendidoEmAlgumaLoja(produto, lojas) {
 
 function nomesDasLojas(slugs) {
   const nomes = [];
-  for (const unidade of site.unidades) {
-    if (slugs.includes(unidade.slug)) {
-      nomes.push(unidade.nome);
+  for (let i = 0; i < site.unidades.length; i++) {
+    if (slugs.includes(site.unidades[i].slug)) {
+      nomes.push(site.unidades[i].nome);
     }
   }
   return nomes.join(', ');
@@ -264,16 +275,16 @@ function agendaEmTexto(quando) {
 
   if (quando.tipo === 'semanal') {
     const nomes = [];
-    for (const dia of quando.dias) {
-      nomes.push(dias[dia]);
+    for (let i = 0; i < quando.dias.length; i++) {
+      nomes.push(dias[quando.dias[i]]);
     }
     return nomes.join(' e ');
   }
 
   if (quando.tipo === 'mensal') {
     const nomes = [];
-    for (const mes of quando.meses) {
-      nomes.push(meses[mes]);
+    for (let i = 0; i < quando.meses.length; i++) {
+      nomes.push(meses[quando.meses[i]]);
     }
     return 'Em ' + nomes.join(' e ');
   }
@@ -295,9 +306,9 @@ function dataCurta(data) {
 
 function promocoesDoProduto(produto) {
   const lista = [];
-  for (const promocao of site.promocoes) {
-    if (promocao.produtosDaPromocao.includes(produto)) {
-      lista.push(promocao);
+  for (let i = 0; i < site.promocoes.length; i++) {
+    if (site.promocoes[i].produtosDaPromocao.includes(produto)) {
+      lista.push(site.promocoes[i]);
     }
   }
   return lista;
