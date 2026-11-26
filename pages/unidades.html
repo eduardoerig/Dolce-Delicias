@@ -24,7 +24,7 @@
 <script src="../assets/js/desenhos.js" defer></script>
 <script src="../assets/js/carrinho.js" defer></script>
 <script src="../assets/js/site.js" defer></script>
-<script src="../assets/js/paginas/basico.js" defer></script>
+<script src="../assets/js/paginas/unidades.js" defer></script>
 </head>
 <body class="bg-base-100 text-base-content antialiased">
 
@@ -60,15 +60,9 @@
                 </summary>
                 <ul class="menu dropdown-content z-[60] mt-2 w-72 gap-0.5 rounded-2xl border border-base-300 bg-papel p-2 shadow-bandeja-alta">
                   <li><a href="../index.html#catalogo" class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Ver catálogo no site</a></li>
-                  <!-- ALTERAR: um item por unidade. O arquivo do PDF fica em catalogos/. -->
-                  <li><a href="../catalogos/matriz.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Matriz — Centro<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
-                  <li><a href="../catalogos/unidade-1.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Unidade 1 — Jardim América<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
-                  <li><a href="../catalogos/unidade-2.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Unidade 2 — Vila Nova<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
-                  <li><a href="../catalogos/unidade-3.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Unidade 3 — Santa Mônica<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
-                  <li><a href="../catalogos/unidade-4.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Unidade 4 — Boa Vista<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
-                  <li><a href="../catalogos/unidade-5.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Unidade 5 — Parque das Flores<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
-                  <li class="mx-3 my-1 border-t border-base-300" aria-hidden="true"></li>
-                  <li><a href="../catalogos/completo.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-bold text-brand">Baixar PDF completo<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
+                  <!-- As lojas entram aqui pelo site.js, com o nome e o PDF cadastrados no Sanity. -->
+                  <li class="mx-3 my-1 border-t border-base-300" aria-hidden="true" data-pdfs-unidades></li>
+                  <li><a href="../catalogos/completo.pdf" download data-pdf-completo class="flex items-center gap-2 rounded-xl px-3 py-2 font-bold text-brand">Baixar PDF completo<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
                 </ul>
               </details>
             </li>
@@ -124,15 +118,9 @@
               <!-- No celular a lista de PDFs entra aqui embaixo. -->
               <li class="mx-3 my-1 border-t border-base-300" aria-hidden="true"></li>
               <li class="px-3 pb-1 pt-1 text-xs font-semibold text-crust">Catálogos em PDF</li>
-              <!-- ALTERAR: um item por unidade. O arquivo do PDF fica em catalogos/. -->
-              <li><a href="../catalogos/matriz.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Matriz — Centro<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
-              <li><a href="../catalogos/unidade-1.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Unidade 1 — Jardim América<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
-              <li><a href="../catalogos/unidade-2.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Unidade 2 — Vila Nova<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
-              <li><a href="../catalogos/unidade-3.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Unidade 3 — Santa Mônica<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
-              <li><a href="../catalogos/unidade-4.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Unidade 4 — Boa Vista<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
-              <li><a href="../catalogos/unidade-5.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium">Unidade 5 — Parque das Flores<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
-              <li class="mx-3 my-1 border-t border-base-300" aria-hidden="true"></li>
-              <li><a href="../catalogos/completo.pdf" download class="flex items-center gap-2 rounded-xl px-3 py-2 font-bold text-brand">Baixar PDF completo<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
+              <!-- As lojas entram aqui pelo site.js, com o nome e o PDF cadastrados no Sanity. -->
+              <li class="mx-3 my-1 border-t border-base-300" aria-hidden="true" data-pdfs-unidades></li>
+              <li><a href="../catalogos/completo.pdf" download data-pdf-completo class="flex items-center gap-2 rounded-xl px-3 py-2 font-bold text-brand">Baixar PDF completo<svg class="ml-auto h-4 w-4 shrink-0 opacity-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></a></li>
             </ul>
           </details>
 
@@ -167,40 +155,20 @@
         <!-- ALTERAR: título e frase do topo -->
         <h1 id="titulo-unidades" class="abertura-titulo">Nossas unidades</h1>
         <p class="abertura-frase">
-          6 lojas. O pedido feito pelo site vai para a matriz;
+          <span data-qtd-lojas>6</span> lojas. O pedido feito pelo site vai para a matriz;
           nas outras você pede pelo WhatsApp de cada uma. Tudo com entrega.
         </p>
         <div class="botoes-pilula">
           <a href="#matriz" class="botao-pilula botao-pilula-amarelo">Ver a matriz</a>
-          <a href="#outras-lojas" class="botao-pilula botao-pilula-claro">Outras 5 lojas</a>
+          <a href="#outras-lojas" class="botao-pilula botao-pilula-claro" data-qtd-outras>Outras 5 lojas</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ALTERAR: dados da matriz -->
+  <!-- Os dados da matriz vêm do Sanity (assets/js/paginas/unidades.js). -->
   <section id="matriz" class="matriz-faixa" aria-labelledby="titulo-matriz">
-    <div class="matriz-faixa-grade">
-      <div class="matriz-faixa-foto">
-        <img src="../assets/img/unidades/matriz.jpg" alt="Foto da Matriz — Centro" width="1600" height="1000" loading="lazy">
-      </div>
-      <div class="matriz-faixa-texto">
-        <p class="matriz-selo">Recebe os pedidos do site</p>
-        <h2 id="titulo-matriz">Matriz</h2>
-        <p class="matriz-bairro">Centro</p>
-        <p class="matriz-sobre">A primeira loja e a cozinha central da Dolce. É daqui que saem as encomendas do site.</p>
-        <dl class="matriz-dados">
-          <div><dt><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>Endereço</dt><dd>Rua das Palmeiras, 410 — Centro</dd></div>
-          <div><dt><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Horário</dt><dd>Seg a sex, 6h às 20h · Sáb e dom, 6h às 14h</dd></div>
-          <div><dt><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.2a2 2 0 0 0-.6-1.4L12 12l-4.4 4.4a2 2 0 0 0-.6 1.4V22"/><path d="M7 2v4.2a2 2 0 0 0 .6 1.4L12 12l4.4-4.4a2 2 0 0 0 .6-1.4V2"/></svg>Prazo</dt><dd>Encomendas com 48 horas de antecedência</dd></div>
-        </dl>
-        <div class="matriz-acoes">
-          <a href="../index.html#catalogo" class="botao-pilula botao-pilula-amarelo">Fazer um pedido</a>
-          <a href="https://wa.me/5543999259373?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20Dolce%20Del%C3%ADcias%20e%20quero%20falar%20com%20a%20Matriz%20%E2%80%94%20Centro." target="_blank" rel="noopener noreferrer" class="botao-pilula botao-pilula-claro"><span class="h-5 w-5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.5 8.5 0 1 1 21 11.5Z"/></svg></span>WhatsApp</a>
-          <a href="../catalogos/matriz.pdf" download class="matriz-link"><span class="h-4 w-4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></span>Catálogo em PDF</a>
-        </div>
-      </div>
-    </div>
+    <div class="matriz-faixa-grade" data-matriz></div>
   </section>
 
   <div class="faixa-curva">
@@ -210,62 +178,8 @@
         <h2 id="titulo-lojas">Outras lojas</h2>
         <p class="centro-frase">WhatsApp e catálogo de cada loja. Os pedidos são entregues.</p>
       </div>
-      <ul class="lojas-cartoes">
-        <!-- ALTERAR: Unidade 1 — Jardim América -->
-        <li id="unidade-1" class="loja-cartao">
-          <h3>Unidade 1</h3>
-          <p class="loja-cartao-bairro">Jardim América</p>
-          <p class="loja-dado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg><span>Av. Brasil, 1.250 — Jardim América</span></p>
-          <p class="loja-dado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Seg a sáb, 6h às 20h</span></p>
-          <div class="loja-acoes">
-            <span class="loja-acao loja-acao-off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.5 8.5 0 1 1 21 11.5Z"/></svg><span>Em breve</span></span><!-- ALTERAR: troque por um link do WhatsApp quando tiver o número -->
-            <a href="../catalogos/unidade-1.pdf" download class="loja-acao"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg><span>Catálogo</span></a>
-          </div>
-        </li>
-        <!-- ALTERAR: Unidade 2 — Vila Nova -->
-        <li id="unidade-2" class="loja-cartao">
-          <h3>Unidade 2</h3>
-          <p class="loja-cartao-bairro">Vila Nova</p>
-          <p class="loja-dado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg><span>Rua Sete de Setembro, 88 — Vila Nova</span></p>
-          <p class="loja-dado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Seg a sáb, 6h às 20h</span></p>
-          <div class="loja-acoes">
-            <span class="loja-acao loja-acao-off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.5 8.5 0 1 1 21 11.5Z"/></svg><span>Em breve</span></span><!-- ALTERAR: troque por um link do WhatsApp quando tiver o número -->
-            <a href="../catalogos/unidade-2.pdf" download class="loja-acao"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg><span>Catálogo</span></a>
-          </div>
-        </li>
-        <!-- ALTERAR: Unidade 3 — Santa Mônica -->
-        <li id="unidade-3" class="loja-cartao">
-          <h3>Unidade 3</h3>
-          <p class="loja-cartao-bairro">Santa Mônica</p>
-          <p class="loja-dado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg><span>Rua das Acácias, 302 — Santa Mônica</span></p>
-          <p class="loja-dado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Seg a sáb, 6h às 20h</span></p>
-          <div class="loja-acoes">
-            <span class="loja-acao loja-acao-off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.5 8.5 0 1 1 21 11.5Z"/></svg><span>Em breve</span></span><!-- ALTERAR: troque por um link do WhatsApp quando tiver o número -->
-            <a href="../catalogos/unidade-3.pdf" download class="loja-acao"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg><span>Catálogo</span></a>
-          </div>
-        </li>
-        <!-- ALTERAR: Unidade 4 — Boa Vista -->
-        <li id="unidade-4" class="loja-cartao">
-          <h3>Unidade 4</h3>
-          <p class="loja-cartao-bairro">Boa Vista</p>
-          <p class="loja-dado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg><span>Av. Independência, 2.040 — Boa Vista</span></p>
-          <p class="loja-dado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Seg a sáb, 6h às 20h</span></p>
-          <div class="loja-acoes">
-            <span class="loja-acao loja-acao-off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.5 8.5 0 1 1 21 11.5Z"/></svg><span>Em breve</span></span><!-- ALTERAR: troque por um link do WhatsApp quando tiver o número -->
-            <a href="../catalogos/unidade-4.pdf" download class="loja-acao"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg><span>Catálogo</span></a>
-          </div>
-        </li>
-        <!-- ALTERAR: Unidade 5 — Parque das Flores -->
-        <li id="unidade-5" class="loja-cartao">
-          <h3>Unidade 5</h3>
-          <p class="loja-cartao-bairro">Parque das Flores</p>
-          <p class="loja-dado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg><span>Rua dos Ipês, 57 — Parque das Flores</span></p>
-          <p class="loja-dado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Seg a sáb, 6h às 20h</span></p>
-          <div class="loja-acoes">
-            <span class="loja-acao loja-acao-off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.5 8.5 0 1 1 21 11.5Z"/></svg><span>Em breve</span></span><!-- ALTERAR: troque por um link do WhatsApp quando tiver o número -->
-            <a href="../catalogos/unidade-5.pdf" download class="loja-acao"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg><span>Catálogo</span></a>
-          </div>
-        </li>
+      <ul class="lojas-cartoes" data-lojas>
+        <!-- Os cartões das lojas são montados pelo assets/js/paginas/unidades.js com os dados do Sanity. -->
       </ul>
     </section>
   </div>
