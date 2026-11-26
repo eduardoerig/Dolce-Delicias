@@ -77,12 +77,33 @@ function removerDoCarrinho(id) {
   mostrarAviso("Item removido do pedido.");
 }
 
-function totalDoCarrinho(itens) {
+// O desconto vale sobre o subtotal da linha (preço x quantidade) e é calculado na hora, nunca guardado.
+function valoresDoItem(item) {
+  const cheio = item.preco * item.qtd;
+  const promocao = melhorPromocao(item.slug);
+  if (promocao === null) {
+    return { cheio: cheio, final: cheio, promocao: null };
+  }
+  return {
+    cheio: cheio,
+    final: valorComDesconto(cheio, promocao.desconto),
+    promocao: promocao,
+  };
+}
+
+function resumoDoCarrinho(itens) {
+  let subtotal = 0;
   let total = 0;
   for (let i = 0; i < itens.length; i++) {
-    total = total + itens[i].preco * itens[i].qtd;
+    const valores = valoresDoItem(itens[i]);
+    subtotal = subtotal + valores.cheio;
+    total = total + valores.final;
   }
-  return total;
+  return {
+    subtotal: Math.round(subtotal * 100) / 100,
+    desconto: Math.round((subtotal - total) * 100) / 100,
+    total: Math.round(total * 100) / 100,
+  };
 }
 
 // ---------- Desenho do carrinho (gaveta lateral e página carrinho.html) ----------
@@ -98,6 +119,15 @@ function linhaDoCarrinho(item) {
   const link = pagina("produto.html?slug=" + encodeURIComponent(item.slug));
   const nome = limpar(item.nome);
 
+  const valores = valoresDoItem(item);
+  let subtotal = dinheiro(valores.cheio);
+  let promo = "";
+  if (valores.promocao !== null) {
+    subtotal = `<s class="item-pedido-cheio">${dinheiro(valores.cheio)}</s> ${dinheiro(valores.final)}`;
+    promo = `
+          <p class="item-pedido-promo">${limpar(valores.promocao.titulo)} −${valores.promocao.desconto}% · válido na ${limpar(site.matriz.nome)}</p>`;
+  }
+
   let menosDesligado = "";
   if (item.qtd <= item.min) {
     menosDesligado = "disabled";
@@ -112,8 +142,8 @@ function linhaDoCarrinho(item) {
             <a href="${link}">${nome}</a>
             <span>${limpar(item.por)}</span>
           </p>
-          <span class="item-pedido-subtotal">${dinheiro(item.preco * item.qtd)}</span>
-        </div>
+          <span class="item-pedido-subtotal">${subtotal}</span>
+        </div>${promo}
         <div class="item-pedido-acoes">
           <div class="seletor-qtd seletor-qtd-sm">
             <button type="button" data-item-menos aria-label="Diminuir ${nome}" ${menosDesligado}>${ICONE_MENOS}</button>
@@ -153,9 +183,22 @@ function mostrarCarrinho() {
   for (let i = 0; i < rodapes.length; i++) {
     esconder(rodapes[i], vazio);
   }
+  const resumo = resumoDoCarrinho(itens);
   const totais = document.querySelectorAll("[data-cart-total]");
   for (let i = 0; i < totais.length; i++) {
-    totais[i].textContent = dinheiro(totalDoCarrinho(itens));
+    totais[i].textContent = dinheiro(resumo.total);
+  }
+  const subtotais = document.querySelectorAll("[data-cart-subtotal]");
+  for (let i = 0; i < subtotais.length; i++) {
+    subtotais[i].textContent = dinheiro(resumo.subtotal);
+  }
+  const descontos = document.querySelectorAll("[data-cart-desconto]");
+  for (let i = 0; i < descontos.length; i++) {
+    descontos[i].textContent = "− " + dinheiro(resumo.desconto);
+  }
+  const linhasDesconto = document.querySelectorAll("[data-cart-linha-desconto]");
+  for (let i = 0; i < linhasDesconto.length; i++) {
+    esconder(linhasDesconto[i], resumo.desconto === 0);
   }
   const bolinhas = document.querySelectorAll("[data-cart-badge]");
   for (let i = 0; i < bolinhas.length; i++) {
@@ -194,6 +237,20 @@ function mensagemDoPedido(itens, endereco, pagamento, observacao) {
   linhas.push("");
 
   for (let i = 0; i < itens.length; i++) {
+    const valores = valoresDoItem(itens[i]);
+    let preco = dinheiro(valores.cheio);
+    if (valores.promocao !== null) {
+      preco =
+        "de " +
+        dinheiro(valores.cheio) +
+        " por " +
+        dinheiro(valores.final) +
+        " (" +
+        valores.promocao.titulo +
+        " −" +
+        valores.promocao.desconto +
+        "%)";
+    }
     linhas.push(
       "• " +
         itens[i].qtd +
@@ -202,12 +259,16 @@ function mensagemDoPedido(itens, endereco, pagamento, observacao) {
         " (" +
         itens[i].por +
         ") — " +
-        dinheiro(itens[i].preco * itens[i].qtd),
+        preco,
     );
   }
 
+  const resumo = resumoDoCarrinho(itens);
   linhas.push("");
-  linhas.push("Total estimado: " + dinheiro(totalDoCarrinho(itens)));
+  if (resumo.desconto > 0) {
+    linhas.push("Descontos: − " + dinheiro(resumo.desconto));
+  }
+  linhas.push("Total estimado: " + dinheiro(resumo.total));
   linhas.push("Forma de pagamento: " + pagamento);
   linhas.push(
     "Preços cheios. Promoções confirmadas pela matriz no fechamento.",
