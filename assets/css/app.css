@@ -5119,6 +5119,11 @@ details.dropdown:not([open]) > .dropdown-content {
     font-weight: 800;
     line-height: 1;
   }
+  .produto-preco-cheio {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-crust);
+  }
   .produto-ficha {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));

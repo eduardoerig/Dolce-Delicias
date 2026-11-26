@@ -32,15 +32,31 @@ function paginaNaoEncontrada() {
 function paginaDoProduto(produto) {
   const faixa = produto.faixa;
   const promocoes = promocoesDoProduto(produto);
+  const promocaoComDesconto = melhorPromocao(produto.slug);
 
   let foto = `<span class="produto-sem-foto" role="img" aria-label="Foto de ${limpar(produto.nome)} ainda não cadastrada">${iconeProduto(produto.categoria, produto.nome)}</span>`;
   if (produto.imagem) {
     foto = `<img src="${limpar(caminhoArquivo(produto.imagem))}" alt="${limpar(produto.nome)}" width="960" height="720">`;
   }
 
+  // Com desconto valendo hoje, o selo é o dessa promoção, para bater com o preço riscado.
+  let promocaoDoSelo = promocoes[0];
+  if (promocaoComDesconto) {
+    promocaoDoSelo = promocaoComDesconto;
+  }
+
   let selo = '';
-  if (promocoes.length > 0) {
-    selo = `<span class="produto-foto-selo">${limpar(promocoes[0].selo || 'Promoção')}</span>`;
+  if (promocaoDoSelo) {
+    selo = `<span class="produto-foto-selo">${limpar(promocaoDoSelo.selo || 'Promoção')}</span>`;
+  }
+
+  let valor = faixa.valor;
+  let porPeca = faixa.unitario;
+  let precoCheio = '';
+  if (promocaoComDesconto) {
+    valor = valorComDesconto(faixa.valor, promocaoComDesconto.desconto);
+    porPeca = valorComDesconto(faixa.unitario, promocaoComDesconto.desconto);
+    precoCheio = `<p class="produto-preco-cheio">de <s>${dinheiro(faixa.valor)}</s> por</p>`;
   }
 
   return `
@@ -63,14 +79,15 @@ function paginaDoProduto(produto) {
         ${etiquetas(produto)}
         ${blocoDePromocoes(promocoes)}
         <div class="produto-compra">
+          ${precoCheio}
           <p class="produto-preco">
             <span class="text-lg font-bold">R$</span>
-            <span class="produto-preco-valor">${faixa.valor.toFixed(2).replace('.', ',')}</span>
+            <span class="produto-preco-valor">${valor.toFixed(2).replace('.', ',')}</span>
             <span class="text-base font-semibold text-crust">/ ${limpar(faixa.porCurto)}</span>
           </p>
           <dl class="produto-ficha">
             <div><dt>Pedido mínimo</dt><dd>${faixa.min} un</dd></div>
-            <div><dt>Por peça</dt><dd>${dinheiro(faixa.unitario)}</dd></div>
+            <div><dt>Por peça</dt><dd>${dinheiro(porPeca)}</dd></div>
           </dl>
           ${blocoDeCompra(produto)}
         </div>
@@ -236,11 +253,17 @@ function ligarQuantidade(produto) {
     return;
   }
   const faixa = produto.faixa;
+  const promocaoComDesconto = melhorPromocao(produto.slug);
 
   function atualizar() {
     const quantidade = ajustarQuantidade(Number(campo.value), faixa.min, faixa.passo);
     campo.value = quantidade;
-    document.querySelector('[data-subtotal]').textContent = dinheiro(quantidade * faixa.unitario);
+    // Desconto sobre o subtotal, como no carrinho, para os dois valores baterem.
+    let subtotal = quantidade * faixa.unitario;
+    if (promocaoComDesconto) {
+      subtotal = valorComDesconto(subtotal, promocaoComDesconto.desconto);
+    }
+    document.querySelector('[data-subtotal]').textContent = dinheiro(subtotal);
     document.querySelector('[data-qty-menos]').disabled = quantidade <= faixa.min;
   }
 
