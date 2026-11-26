@@ -53,9 +53,18 @@ function cardDoProduto(produto) {
     foto = `<img src="${limpar(caminhoArquivo(produto.imagem))}" alt="" loading="lazy" width="480" height="360">`;
   }
 
+  // Com desconto valendo hoje, o selo é o dessa promoção, para bater com o preço riscado.
+  const promocaoComDesconto = melhorPromocao(produto.slug);
+  let promocaoDoSelo = promocoes[0];
+  let preco = `<strong>${dinheiro(faixa.valor)}</strong>`;
+  if (promocaoComDesconto) {
+    promocaoDoSelo = promocaoComDesconto;
+    preco = `<s>${dinheiro(faixa.valor)}</s> <strong>${dinheiro(valorComDesconto(faixa.valor, promocaoComDesconto.desconto))}</strong>`;
+  }
+
   let selo = '';
-  if (promocoes.length > 0) {
-    selo = `<p class="cartao-selos"><span class="selo selo-promo">${limpar(promocoes[0].selo || 'Promoção')}</span></p>`;
+  if (promocaoDoSelo) {
+    selo = `<p class="cartao-selos"><span class="selo selo-promo">${limpar(promocaoDoSelo.selo || 'Promoção')}</span></p>`;
   }
 
   let botao = '<span class="cartao-indisponivel">Indisponível hoje</span>';
@@ -91,7 +100,7 @@ function cardDoProduto(produto) {
         <h3 class="cartao-nome"><a href="${link}">${limpar(produto.nome)}</a></h3>
         <p class="cartao-descricao">${limpar(produto.descricao)}</p>
         <div class="cartao-rodape">
-          <p class="cartao-preco"><strong>${dinheiro(faixa.valor)}</strong> <span>/ ${limpar(faixa.porCurto)}</span></p>
+          <p class="cartao-preco">${preco} <span>/ ${limpar(faixa.porCurto)}</span></p>
           ${botao}
         </div>
       </div>
